@@ -7,7 +7,7 @@ volumes:
   ldap_config: {}
 services:
   ldap:
-    image: dcm4che/slapd-dcm4chee:2.6.6-33.0
+    image: dcm4che/slapd-dcm4chee:2.6.5-31.2
     logging:
       driver: json-file
       options:
@@ -20,7 +20,7 @@ services:
       - ldap_data:/var/lib/openldap/openldap-data
       - ldap_config:/etc/openldap/slapd.d
   db:
-    image: dcm4che/postgres-dcm4chee:16.4-33
+    image: dcm4che/postgres-dcm4chee:15.4-31
     logging:
       driver: json-file
       options:
@@ -34,7 +34,7 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
   arc:
-    image: dcm4che/dcm4chee-arc-psql:5.33.0
+    image: dcm4che/dcm4chee-arc-psql:5.31.2
     logging:
       driver: json-file
       options:

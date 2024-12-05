@@ -979,7 +979,13 @@ class GDALFileTileSource(GDALBaseFileTileSource, metaclass=LruCacheMetaclass):
             if ds.GetProjection():
                 return True
             if ds.GetGeoTransform(can_return_null=True):
-                return True
+                w = ds.RasterXSize
+                h = ds.RasterYSize
+                trans = ds.GetGeoTransform(can_return_null=True)
+                cornersy = [trans[3] + x * trans[4] + y * trans[5]
+                            for x, y in {(0, 0), (0, h), (w, 0), (w, h)}]
+                if min(cornersy) >= -90 and max(cornersy) <= 90:
+                    return True
             if ds.GetDriver().ShortName in {'NITF', 'netCDF'}:
                 return True
         return False

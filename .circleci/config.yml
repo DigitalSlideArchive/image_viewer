@@ -9,8 +9,11 @@ commands:
   tox:
     description: "Run tox"
     parameters:
-      env:
+      toxenv:
         type: string
+      environ:
+        type: string
+        default: ""
     steps:
       - run:
           name: Upgrade pip
@@ -25,9 +28,9 @@ commands:
           name: Run tests via tox
           # Piping through cat does less buffering of the output but can
           # consume the exit code
-          # command: PYTEST_ADDOPTS=--forked tox -e << parameters.env >> | cat; test ${PIPESTATUS[0]} -eq 0
-          # command: PYTEST_ADDOPTS="--reruns=3 --numprocesses=0" tox -e << parameters.env >> | cat; test ${PIPESTATUS[0]} -eq 0
-          command: COVERAGE_CORE=sysmon PYTEST_NUMPROCESSES=3 PYTEST_ADDOPTS="--reruns=3" tox -e << parameters.env >> | cat; test ${PIPESTATUS[0]} -eq 0
+          # command: PYTEST_ADDOPTS=--forked tox -e << parameters.toxenv >> | cat; test ${PIPESTATUS[0]} -eq 0
+          # command: PYTEST_ADDOPTS="--reruns=3 --numprocesses=0" tox -e << parameters.toxenv >> | cat; test ${PIPESTATUS[0]} -eq 0
+          command: COVERAGE_CORE=sysmon PYTEST_NUMPROCESSES=3 PYTEST_ADDOPTS="--reruns=3" << parameters.environ >> tox -e << parameters.toxenv >> | cat; test ${PIPESTATUS[0]} -eq 0
   switchpython:
     description: "Upgrade python"
     parameters:
@@ -38,7 +41,8 @@ commands:
           name: Upgrade pyenv
           command: |
             sudo rm -rf /opt/circleci/.pyenv
-            curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
+            sudo bash -c 'curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | PYENV_ROOT=/opt/circleci/.pyenv bash'
+            sudo chmod -R 777 /opt/circleci/.pyenv/
             pyenv install --list list
       - run:
           name: Use pyenv to install python
@@ -75,7 +79,7 @@ commands:
             docker-compose -f ./.circleci/dcm4chee/auth-docker-compose.yml up -d
             export DICOMWEB_TEST_URL=http://localhost:8008/dcm4chee-arc/aets/DCM4CHEE/rs
             echo "export DICOMWEB_TEST_URL=$DICOMWEB_TEST_URL" >> $BASH_ENV
-            pip install dicomweb_client 'python-keycloak<4.1'
+            pip install dicomweb_client tenacity 'python-keycloak<4.1'
 
             # Wait up to 60 seconds for keycloak to be ready
             echo 'Waiting for keycloak to start...'
@@ -114,6 +118,9 @@ commands:
           command: |
             echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
             echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - restore_cache:
+          name: Restore nvm cache
+          key: v1-nvm-cache-<< parameters.node >>
       - run:
           name: Switch node versions
           command: |
@@ -121,6 +128,11 @@ commands:
             nvm alias default << parameters.node >>
             NODE_DIR=$(dirname $(which node))
             echo "export PATH=$NODE_DIR:\$PATH" >> $BASH_ENV
+      - save_cache:
+          name: Save nvm cache
+          key: v1-nvm-cache-<< parameters.node >>
+          paths:
+            - /opt/circleci/.nvm/.cache
       - run:
           name: Check node versions
           command: |
@@ -162,7 +174,7 @@ jobs:
           version: "3.8"
           node: v14
       - tox:
-          env: test-py38
+          toxenv: test-py38
       - coverage
       - store_artifacts:
           path: build/test/artifacts
@@ -176,7 +188,7 @@ jobs:
           version: "3.9"
           node: v14
       - tox:
-          env: test-py39
+          toxenv: test-py39
       - coverage
       - store_artifacts:
           path: build/test/artifacts
@@ -190,7 +202,7 @@ jobs:
           version: "3.10"
           node: v14
       - tox:
-          env: test-py310
+          toxenv: test-py310
       - coverage
       - store_artifacts:
           path: build/test/artifacts
@@ -204,7 +216,7 @@ jobs:
           version: "3.11"
           node: v14
       - tox:
-          env: test-py311
+          toxenv: test-py311
       - coverage
       - store_artifacts:
           path: build/test/artifacts
@@ -218,7 +230,22 @@ jobs:
           version: "3.12"
           node: v14
       - tox:
-          env: test-py312
+          toxenv: test-py312
+      - coverage
+      - store_artifacts:
+          path: build/test/artifacts
+  py313:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large
+    steps:
+      - checkout
+      - allservices:
+          version: "3.13"
+          node: v14
+      - tox:
+          toxenv: test-py313
+          environ: TOX_VERBOSE=4 TOX_PREFER_BINARY=1
       - coverage
       - store_artifacts:
           path: build/test/artifacts
@@ -233,7 +260,7 @@ jobs:
           name: Permissions for link checker
           command: find /root -type d -exec chmod 755 {} \+
       - tox:
-          env: docs,lint,lintclient,notebook
+          toxenv: docs,lint,lintclient,notebook
       - store_artifacts:
           path: build/docs
       - persist_to_workspace:
@@ -245,7 +272,7 @@ jobs:
     steps:
       - checkout
       - tox:
-          env: compare-py311
+          toxenv: compare-py311
       - store_artifacts:
           path: build/tox/compare.txt
       - store_artifacts:
@@ -256,7 +283,7 @@ jobs:
     steps:
       - checkout
       - tox:
-          env: type
+          toxenv: type
   wheels:
     executor: toxandnode
     steps:
@@ -372,6 +399,13 @@ workflows:
             branches:
               ignore:
                 - gh-pages
+      - py313:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore:
+                - gh-pages
       - lint_and_docs:
           filters:
             tags:
@@ -415,6 +449,7 @@ workflows:
             - py310
             - py311
             - py312
+            - py313
             - lint_and_docs
             - type
             - wheels
@@ -430,6 +465,7 @@ workflows:
             - py310
             - py311
             - py312
+            - py313
             - lint_and_docs
             - type
             - wheels
@@ -455,6 +491,7 @@ workflows:
       - py310
       - py311
       - py312
+      - py313
       - lint_and_docs
       - type
       - compare

@@ -479,10 +479,16 @@ def testYAMLConfigFile(server, admin, user, fsAssetstore):
     groupA = Group().createGroup('Group A', admin)
 
     resp = server.request(
+        path='/folder/%s/yaml_config/.large_image_config.yaml' % str(colFolderB['_id']),
+        method='GET')
+    assert utilities.respStatus(resp) == 200
+    assert resp.json.get('itemList') is not None
+
+    resp = server.request(
         path='/folder/%s/yaml_config/sample.json' % str(colFolderB['_id']),
         method='GET')
     assert utilities.respStatus(resp) == 200
-    assert resp.json['itemList'] is not None
+    assert resp.json.get('itemList') is None
 
     colFolderConfig = Folder().createFolder(
         collection, '.config', parentType='collection',

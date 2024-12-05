@@ -160,7 +160,7 @@ def cpu_count(logical: bool = True) -> int:
     try:
         import psutil
 
-        count = min(count, psutil.cpu_count(logical))
+        count = min(count, psutil.cpu_count(logical) or count)
     except ImportError:
         pass
     return max(1, count)

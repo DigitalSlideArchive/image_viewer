@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional, Tuple, cast
+from typing import Any, Dict, Optional, Tuple, Union, cast
 
 import numpy as np
 import PIL
@@ -8,7 +8,7 @@ import PIL.ImageDraw
 
 from .. import exceptions
 from ..constants import TILE_FORMAT_IMAGE, TILE_FORMAT_NUMPY, TILE_FORMAT_PIL
-from .utilities import _encodeImage, _imageToNumpy, _imageToPIL
+from .utilities import ImageBytes, _encodeImage, _imageToNumpy, _imageToPIL
 
 
 class LazyTileDict(dict):
@@ -159,6 +159,48 @@ class LazyTileDict(dict):
                     :th, :tw, :retile.shape[2]]  # type: ignore[misc]
         return cast(np.ndarray, retile)
 
+    def _resample(self, tileData: Union[ImageBytes, PIL.Image.Image, bytes, np.ndarray]) -> Tuple[
+        Union[ImageBytes, PIL.Image.Image, bytes, np.ndarray], Optional[PIL.Image.Image],
+    ]:
+        """
+        If we need to resample a tile, use PIL if it is uint8 or we are using
+        a specific resampling mode that is PIL-specific.  Otherwise, use
+        skimage if available.
+
+        :param tileData: the image to scale.
+        :returns: tileData, pilData.  pilData will be None if the results are a
+            numpy array.
+        """
+        pilData = None
+        if self.resample in (False, None) or not self.requestedScale:
+            return tileData, pilData
+        pilResize = True
+        if (isinstance(tileData, np.ndarray) and tileData.dtype.kind != np.uint8 and
+                TILE_FORMAT_NUMPY in self.format and self.resample in {True, 2, 3}):
+            try:
+                import skimage.transform
+                pilResize = False
+            except ImportError:
+                pass
+        if pilResize:
+            pilData = _imageToPIL(tileData)
+
+            self['width'] = max(1, int(
+                pilData.size[0] / self.requestedScale))
+            self['height'] = max(1, int(
+                pilData.size[1] / self.requestedScale))
+            pilData = tileData = pilData.resize(
+                (self['width'], self['height']),
+                resample=getattr(PIL.Image, 'Resampling', PIL.Image).LANCZOS
+                if self.resample is True else self.resample)
+        else:
+            tileData = skimage.transform.resize(
+                cast(np.ndarray, tileData),
+                (self['width'], self['height'],
+                 cast(np.ndarray, tileData).shape[2]),  # type: ignore[misc]
+                order=3 if self.resample is True else self.resample)
+        return tileData, pilData
+
     def __getitem__(self, key: str, *args, **kwargs) -> Any:
         """
         If this is the first time either the tile or format key is requested,
@@ -187,16 +229,7 @@ class LazyTileDict(dict):
             pilData = None
             # resample if needed
             if self.resample not in (False, None) and self.requestedScale:
-                pilData = _imageToPIL(tileData)
-
-                self['width'] = max(1, int(
-                    pilData.size[0] / self.requestedScale))
-                self['height'] = max(1, int(
-                    pilData.size[1] / self.requestedScale))
-                pilData = tileData = pilData.resize(
-                    (self['width'], self['height']),
-                    resample=getattr(PIL.Image, 'Resampling', PIL.Image).LANCZOS
-                    if self.resample is True else self.resample)
+                tileData, pilData = self._resample(tileData)
 
             tileFormat = (TILE_FORMAT_PIL if isinstance(tileData, PIL.Image.Image)
                           else (TILE_FORMAT_NUMPY if isinstance(tileData, np.ndarray)

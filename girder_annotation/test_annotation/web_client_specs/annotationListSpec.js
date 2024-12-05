@@ -39,7 +39,11 @@ describe('AnnotationListWidget', function () {
                 };
 
                 this.once('g:beforeFirstRender', function () {
-                    window.geo.util.mockWebglRenderer();
+                    try {
+                        window.geo.util.mockWebglRenderer();
+                    } catch (err) {
+                        // if this is already mocked, do nothing.
+                    }
                 });
                 initialize.apply(this, _.rest(arguments));
             });

@@ -24,75 +24,6 @@ div.large_image_container+span
   div.large_image_container
     min-width 480px
 
-ul.g-item-list
-  &.li-item-list
-    display table
-    background #fff
-
-    >li
-      display table-row
-
-      &.li-item-list-header
-        padding-bottom 5px
-
-      >span.li-item-list-header
-        display table-cell
-        font-weight bold
-        text-align center
-        border-bottom 1px solid #888
-        padding 0 5px
-
-        &.sortable
-          &:after
-            color black
-            content "\002b65"
-            padding-left 5px
-
-          &.down:after
-            content "\002b63"
-
-          &.up:after
-            content "\002b61"
-
-      >.li-item-list-cell
-        display table-cell
-        padding 4px 3px 3px
-        vertical-align top
-
-        &.li-column-record-size
-          div
-            float none
-            margin-left 0
-            padding 0 10px
-
-        &.li-column-record-controls
-          white-space nowrap
-
-      >span.li-item-list-cell:first-child
-        padding-left 5px
-
-      >span.li-item-list-cell:last-child
-        padding-right 5px
-
-      >span.li-column-metadata
-        padding-left 5px
-        padding-right 5px
-
-      div.large_image_thumbnail
-        display flex
-        align-items flex-end
-        justify-content center
-        width inherit
-
-    span.g-item-list-label
-      font-weight bold
-      font-size 14px
-      color black
-      padding-right 5px
-
-    span.large_image_metadata
-      display inline-block
-
   &.li-item-list[layout_mode="grid"]
     display block
 
@@ -107,8 +38,12 @@ ul.g-item-list
     &>li>.li-item-list-cell
       display inline-block
 
-.li-item-list-filter
-  padding-left 12px
+ul.g-item-list[metadata-columns="0"]
+  .li-column-record-size
+    text-wrap no-wrap
+
+  .li-column-record-name
+    width 100%
 
 @media (min-width 768px)
   .modal-dialog.li-item-list-dialog
@@ -118,15 +53,6 @@ ul.g-item-list
   .modal-dialog.li-item-list-dialog
     width 70%
     max-width 1000px
-
-.li-flatten-item-list
-  font-size 14px
-  display inline-block
-  margin-left 20px
-
-  label
-    padding-left 5px
-    font-weight normal
 
 .li-item-list-filter-clear
   cursor pointer

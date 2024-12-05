@@ -13,8 +13,6 @@
 import os
 import sys
 
-import sphinx_rtd_theme
-
 docs_dir = os.path.dirname(__file__)
 sys.path.insert(0, os.path.abspath(os.path.join(docs_dir, '..', '..')))
 
@@ -62,7 +60,6 @@ exclude_patterns = ['_build/**.ipynb', '**.ipynb_checkpoints', 'format_table.rst
 # a list of builtin themes.
 #
 html_theme = 'sphinx_rtd_theme'
-html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 pygments_style = 'sphinx'
 

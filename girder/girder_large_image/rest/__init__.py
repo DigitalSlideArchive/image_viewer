@@ -1,3 +1,4 @@
+import collections
 import json
 
 from girder import logger
@@ -9,7 +10,7 @@ from girder.models.folder import Folder
 from girder.models.item import Item
 
 
-def addSystemEndpoints(apiRoot):
+def addSystemEndpoints(apiRoot):  # noqa
     """
     This adds endpoints to routes that already exist in Girder.
 
@@ -29,6 +30,9 @@ def addSystemEndpoints(apiRoot):
         if text and text.startswith('_recurse_:'):
             recurse = True
             text = text.split('_recurse_:', 1)[1]
+        group = None
+        if text and text.startswith('_group_:') and len(text.split(':', 2)) >= 3:
+            _, group, text = text.split(':', 2)
         if filters is None and text and text.startswith('_filter_:'):
             try:
                 filters = json.loads(text.split('_filter_:', 1)[1].strip())
@@ -40,9 +44,10 @@ def addSystemEndpoints(apiRoot):
                 logger.debug('Item find filters: %s', json.dumps(filters))
             except Exception:
                 pass
-        if recurse:
+        if recurse or group:
             return _itemFindRecursive(
-                self, origItemFind, folderId, text, name, limit, offset, sort, filters)
+                self, origItemFind, folderId, text, name, limit, offset, sort,
+                filters, recurse, group)
         return origItemFind(folderId, text, name, limit, offset, sort, filters)
 
     @boundHandler(apiRoot.item)
@@ -58,7 +63,59 @@ def addSystemEndpoints(apiRoot):
         altFolderFind._origFunc = origFolderFind
 
 
-def _itemFindRecursive(self, origItemFind, folderId, text, name, limit, offset, sort, filters):
+def _groupingPipeline(initialPipeline, cbase, grouping, sort=None):
+    """
+    Modify the recursive pipeline to add grouping and counts.
+
+    :param initialPipeline: a pipeline to extend.
+    :param cbase: a unique value for each grouping set.
+    :param grouping: a dictionary where 'keys' is a list of data to group by
+        and, optionally, 'counts' is a dictionary of data to count as keys and
+        names where to add the results.  For instance, this could be
+        {'keys': ['meta.dicom.PatientID'], 'counts': {
+        'meta.dicom.StudyInstanceUID': 'meta._count.studycount',
+        'meta.dicom.SeriesInstanceUID': 'meta._count.seriescount'}}
+    :param sort: an optional list of (key, direction) tuples
+    """
+    for gidx, gr in enumerate(grouping['keys']):
+        grsort = [(gr, 1)] + (sort or []) + [('_id', 1)]
+        initialPipeline.extend([{
+            '$match': {gr: {'$exists': True}},
+        }, {
+            '$sort': collections.OrderedDict(grsort),
+        }, {
+            '$group': {
+                '_id': f'${gr}',
+                'firstOrder': {'$first': '$$ROOT'},
+            },
+        }])
+        groupStep = initialPipeline[-1]['$group']
+        if not gidx and grouping['counts']:
+            for cidx, (ckey, cval) in enumerate(grouping['counts'].items()):
+                groupStep[f'count_{cbase}_{cidx}'] = {'$addToSet': f'${ckey}'}
+                cparts = cval.split('.')
+                centry = {cparts[-1]: {'$size': f'$count_{cbase}_{cidx}'}}
+                for cidx in range(len(cparts) - 2, -1, -1):
+                    centry = {
+                        cparts[cidx]: {
+                            '$mergeObjects': [
+                                '$firstOrder.' + '.'.join(cparts[:cidx + 1]),
+                                centry,
+                            ],
+                        },
+                    }
+                initialPipeline.append({'$set': {'firstOrder': {
+                    '$mergeObjects': ['$firstOrder', centry]}}})
+        initialPipeline.append({'$replaceRoot': {'newRoot': '$firstOrder'}})
+    initialPipeline.append({'$set': {'meta._grouping': {
+        'keys': grouping['keys'],
+        'values': [f'${key}' for key in grouping['keys']],
+    }}})
+
+
+def _itemFindRecursive(  # noqa
+        self, origItemFind, folderId, text, name, limit, offset, sort, filters,
+        recurse=True, group=None):
     """
     If a recursive search within a folderId is specified, use an aggregation to
     find all folders that are descendants of the specified folder.  If there
@@ -73,20 +130,25 @@ def _itemFindRecursive(self, origItemFind, folderId, text, name, limit, offset, 
     from bson.objectid import ObjectId
 
     if folderId:
-        pipeline = [
-            {'$match': {'_id': ObjectId(folderId)}},
-            {'$graphLookup': {
-                'from': 'folder',
-                'connectFromField': '_id',
-                'connectToField': 'parentId',
-                'depthField': '_depth',
-                'as': '_folder',
-                'startWith': '$_id',
-            }},
-            {'$group': {'_id': '$_folder._id'}},
-        ]
-        children = [ObjectId(folderId)] + next(Folder().collection.aggregate(pipeline))['_id']
-        if len(children) > 1:
+        user = self.getCurrentUser()
+        if recurse:
+            pipeline = [
+                {'$match': {'_id': ObjectId(folderId)}},
+                {'$graphLookup': {
+                    'from': 'folder',
+                    'connectFromField': '_id',
+                    'connectToField': 'parentId',
+                    'depthField': '_depth',
+                    'as': '_folder',
+                    'startWith': '$_id',
+                }},
+                {'$match': Folder().permissionClauses(user, AccessType.READ, '_folder.')},
+                {'$group': {'_id': '$_folder._id'}},
+            ]
+            children = [ObjectId(folderId)] + next(Folder().collection.aggregate(pipeline))['_id']
+        else:
+            children = [ObjectId(folderId)]
+        if len(children) > 1 or group:
             filters = (filters.copy() if filters else {})
             if text:
                 filters['$text'] = {
@@ -95,10 +157,62 @@ def _itemFindRecursive(self, origItemFind, folderId, text, name, limit, offset, 
             if name:
                 filters['name'] = name
             filters['folderId'] = {'$in': children}
-            user = self.getCurrentUser()
             if isinstance(sort, list):
                 sort.append(('parentId', 1))
-            return Item().findWithPermissions(filters, offset, limit, sort=sort, user=user)
+
+            # This is taken from girder.utility.acl_mixin.findWithPermissions,
+            # except it adds a grouping stage
+            initialPipeline = [
+                {'$match': filters},
+            ]
+            if group is not None:
+                if not isinstance(group, list):
+                    group = [gr for gr in group.split(',') if gr]
+                groups = []
+                idx = 0
+                while idx < len(group):
+                    if group[idx] != '_count_':
+                        if not len(groups) or groups[-1]['counts']:
+                            groups.append({'keys': [], 'counts': {}})
+                        groups[-1]['keys'].append(group[idx])
+                        idx += 1
+                    else:
+                        if idx + 3 <= len(group):
+                            groups[-1]['counts'][group[idx + 1]] = group[idx + 2]
+                        idx += 3
+                for gidx, grouping in enumerate(groups):
+                    _groupingPipeline(initialPipeline, gidx, grouping, sort)
+            fullPipeline = initialPipeline
+            countPipeline = initialPipeline + [
+                {'$count': 'count'},
+            ]
+            if sort is not None:
+                fullPipeline.append({'$sort': collections.OrderedDict(sort)})
+            if limit:
+                fullPipeline.append({'$limit': limit + (offset or 0)})
+            if offset:
+                fullPipeline.append({'$skip': offset})
+
+            logger.debug('Find item pipeline %r', fullPipeline)
+
+            options = {
+                'allowDiskUse': True,
+                'cursor': {'batchSize': 0},
+            }
+            result = Item().collection.aggregate(fullPipeline, **options)
+
+            def count():
+                try:
+                    return next(iter(
+                        Item().collection.aggregate(countPipeline, **options)))['count']
+                except StopIteration:
+                    # If there are no values, this won't return the count, in
+                    # which case it is zero.
+                    return 0
+
+            result.count = count
+            result.fromAggregate = True
+            return result
     return origItemFind(folderId, text, name, limit, offset, sort, filters)
 
 

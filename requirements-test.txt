@@ -29,8 +29,9 @@ girder/.
 girder_annotation/.
 
 # Extras from main setup.py
-pylibmc>=1.5.1
 matplotlib
+pylibmc>=1.5.1
+redis
 simplejpeg
 
 # External dependencies

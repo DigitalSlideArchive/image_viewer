@@ -1,97 +1,149 @@
-ul.g-item-list.li-item-list(layout_mode=(itemList.layout || {}).mode || '')
+- var metadataCount = itemList.columns.filter((col) => col.type === 'metadata').length
+<div>
   - var colNames = [];
-  li.li-item-list-header
-    if checkboxes
-      span.li-item-list-header
-    for column, colidx in itemList.columns
-      if column.type !== 'image' || hasAnyLargeImage
-        span.li-item-list-header(
-            class=((column.type === 'record' && column.value !== 'controls') || column.type === 'metadata' ? 'sortable' : '') + ' ' + (sort && sort[0].type === column.type && ('' + sort[0].value === '' + column.value) ? sort[0].dir : ''),
-            column_type=column.type, column_value=column.value)
-          if column.title !== undefined
-            - colNames[colidx] = column.title
-          else
-            - colNames[colidx] = `${column.value.substr(0, 1).toUpperCase()}${column.value.substr(1)}`
-          = colNames[colidx]
-  each item in items
-    li.g-item-list-entry(class=(highlightItem && item.id === selectedItemId ? 'g-selected' : ''), public=(isParentPublic ? 'true' : 'false'), style=(itemList.layout || {}).mode == 'grid' ? ('max-width: ' + parseInt((itemList.layout || {})['max-width'] || 250) + 'px') : '')
-      if checkboxes
-        span.li-item-list-cell
-          input.g-list-checkbox(type="checkbox", g-item-cid=item.cid)
-      for column, colidx in itemList.columns
-        if column.type !== 'image' || hasAnyLargeImage
-          -
-            var divtype = column.type !== 'record' || column.value !== 'controls' ? 'a' : 'span';
-            var classes = divtype == 'a' ? ['g-item-list-link']: [];
-            if (('' + column.type + column.value).match(/^[a-zA-Z][a-zA-Z0-9-_]*$/))  classes.push(`li-column-${column.type}-${column.value}`);
-            if (('' + column.type).match(/^[a-zA-Z][a-zA-Z0-9-_]*$/))  classes.push(`li-column-${column.type}`);
-            var skip = false;
-            (column.only || []).forEach((only) => {
-              if (!(only || {}).match) {
-                return;
-              }
-              var onlyval = (only.type === 'record' && only.value === 'name') ? item.name() : (only.type === 'record' && only.value === 'description') ? item.get(only.value) : '';
-              if (only.type === 'metadata') {
-                onlyval = item.get('meta') || {};
-                only.value.split('.').forEach((part) => {
-                  onlyval = (onlyval || {})[part];
-                })
-              }
-              if (onlyval.match(new RegExp(only.match, 'i')) === null) {
-                skip = true;
-              }
-            });
-          #{divtype}.li-item-list-cell(class=classes.join(' '), g-item-cid=item.cid, href=`#item/${item.id}`, title=colNames[colidx])
-            if !skip && column.label
-              span.g-item-list-label
-                = column.label
-            if skip
-              //- ignore
-            else if column.type === 'record'
-              if column.value === 'name'
-                span.g-item-list-link
-                  i.icon-doc-text-inv
-                  = item.name()
-              else if column.value === 'controls'
-                if downloadLinks
-                  a(title="Download item", href=item.downloadUrl())
-                    i.icon-download
-                if viewLinks
-                  a.g-view-inline(title="View in browser", target="_blank", rel="noopener noreferrer",
-                      href=item.downloadUrl({contentDisposition: 'inline'}))
-                    i.icon-eye
-              else if column.value === 'size'
-                .g-item-size= formatSize(item.get('size'))
-              else if column.value === 'description'
-                = item.get(column.value)
-            else if column.type === 'image' && item.get('largeImage')
-              .large_image_thumbnail(extra-image=column.value !== 'thumbnail' ? column.value : undefined, style=`width: ${column.width || 160}px; height: ${column.height || 100}px`, g-item-cid=column.value === 'thumbnail' ? item.cid : undefined)
-                - var imageName = column.value === 'thumbnail' ? column.value : `images/${column.value}`;
-                img.waiting(deferred-src=`${apiRoot}/item/${item.id}/tiles/${imageName}?width=${column.width || 160}&height=${column.height || 100}`)
-            else if column.type === 'metadata'
-              -
-                let value = item.get('meta') || {}
-                column.value.split('.').forEach((part) => {
-                  value = (value || {})[part];
-                })
-              if column.edit && accessLevel >= AccessType.WRITE
-                - if ((value === '' || value === undefined) && column.default) { value = column.default; }
-                span.large_image_metadata.lientry_edit(column-idx=colidx)
-                  if column.enum
-                    select.input-sm.form-control.g-widget-metadata-value-input.g-widget-metadata-lientry(title=column.description)
-                      for enumval in column.enum
-                        option(value=enumval, selected=('' + enumval) === ('' + value) ? 'selected' : null)
-                          = enumval
+  - var layoutMode = (itemList.layout || {}).mode || 'table';
+  - var layoutWidth = parseInt((itemList.layout || {})['max-width']) || 250
+  <div class="g-edit-table-view-dialog-container"></div>
+  <div class="#{layoutMode == 'grid' ? 'block' : 'table'} border-collapse g-item-list li-item-list max-w-full text-sm text-gray-700 text-center bg-white rounded-lg" width="100%" metadata-columns="#{metadataCount}">
+    if items.length
+      <div class="table-header-group border-b-2 border-zinc-200 tracking-wider text-zinc-500">
+        <div class="table-row">
+          if checkboxes
+            <div class="table-cell text-center w-8">
+            </div>
+          for column, colidx in itemList.columns
+            if column.title !== undefined
+              - colNames[colidx] = column.title
+            else
+              - colNames[colidx] = `${column.value.substr(0, 1).toUpperCase()}${column.value.substr(1)}`
+            - var sortable = (column.type === 'record' && column.value !== 'controls') || column.type === 'metadata'
+            <div class="table-cell li-item-list-header #{sortable ? 'sortable' : ''}" column_type="#{column.type}", column_value="#{column.value}" scope="col">
+              <div class="flex items-left my-2 mx-4">
+                <span>
+                  = colNames[colidx]
+                </span>
+                if sortable
+                  if sort && sort[0].type === column.type && ('' + sort[0].value === '' + column.value)
+                    if sort[0].dir === 'up'
+                      <span class="ml-2 ri-arrow-up-line cursor-pointer sort-indicator"></span>
+                    else
+                      <span class="ml-2 ri-arrow-down-line cursor-pointer sort-indicator"></span>
                   else
-                    input.input-sm.form-control.g-widget-metadata-value-input.g-widget-metadata-column(placeholder=column.description || "Value", value=value, title=column.description)
-              else
-                span.large_image_metadata
-                  = value
-                if value
-                  span.li-item-list-cell-filter(title="Only show items that match this metadata value exactly", filter-value=value, column-value=column.value)
-                    i.icon-filter
-  if (hasMore && !paginated)
-    li.g-show-more
-      a.g-show-more-items
-        i.icon-level-down
-        | Show more items...
+                    <span class="ml-2 ri-arrow-up-down-line cursor-pointer sort-indicator"></span>
+              </div>
+            </div>
+        </div>
+      </div>
+    <div class="#{layoutMode == 'grid' ? 'flex flex-wrap' : 'table-row-group'}">
+      each item in items
+        <div class="#{layoutMode == 'grid' ? 'inline-block flex items-center flex-col' : 'table-row'} g-item-list-entry border-b border-zinc-200 hover:bg-zinc-100 #{(highlightItem && item.id === selectedItemId ? 'g-selected' : '')}" public="#{(isParentPublic ? 'true' : 'false')}" style="#{layoutMode == 'grid' ? ('max-width: ' + layoutWidth + 'px') : ''}">
+          if checkboxes
+            <div class="#{layoutMode == 'grid' ? 'inline-block' : 'table-cell'} align-middle li-item-list-cell w-8">
+              <label class="custom-checkbox -m-1">
+                <input type="checkbox" class="g-list-checkbox" g-item-cid="#{item.cid}">
+              </label>
+            </div>
+          for column, colidx in itemList.columns
+            -
+              var divtype = column.type !== 'record' || column.value !== 'controls' ? 'a' : 'span';
+              var classes = divtype == 'a' ? ['g-item-list-link']: [];
+              if (('' + column.type + column.value).match(/^[a-zA-Z][a-zA-Z0-9-_]*$/))  classes.push(`li-column-${column.type}-${column.value}`);
+              if (('' + column.type).match(/^[a-zA-Z][a-zA-Z0-9-_]*$/))  classes.push(`li-column-${column.type}`);
+              var skip = false;
+              (column.only || []).forEach((only) => {
+                if (!(only || {}).match) {
+                  return;
+                }
+                var onlyval = (only.type === 'record' && only.value === 'name') ? item.name() : (only.type === 'record' && only.value === 'description') ? item.get(only.value) : '';
+                if (only.type === 'metadata') {
+                  onlyval = item.get('meta') || {};
+                  only.value.split('.').forEach((part) => {
+                    onlyval = (onlyval || {})[part];
+                  })
+                }
+                if (onlyval.match(new RegExp(only.match, 'i')) === null) {
+                  skip = true;
+                }
+              });
+            <div class="#{layoutMode == 'grid' ? 'inline-block' : 'table-cell'} align-middle">
+              <#{divtype} class="li-item-list-cell #{classes.join(' ')} flex items-left mx-4" g-item-cid="#{item.cid}" href="#{item._href ? item._href : `#item/${item.id}`}" title="#{colNames[colidx]}" target="#{item._href && item._hrefTarget ? item._hrefTarget : undefined}">
+                if !skip && column.label
+                  = column.label
+                if skip
+                  //- ignore
+                else if column.type === 'record'
+                  if column.value === 'name'
+                    = item.name()
+                  else if column.value === 'controls'
+                    <div class="flex items-center justify-left">
+                      if downloadLinks
+                        <div class="group relative">
+                          <a class="g-li-control hover:bg-zinc-200 px-2 py-1 rounded-full tracking-wider uppercase text-lg" href="#{item.downloadUrl()}" title="Download File" >
+                            <i class="ri-file-download-line"></i>
+                          </a>
+                        </div>
+                      if availableApps && availableApps.items[item.id]
+                        - const apps = Object.entries(availableApps.items[item.id]).sort(([name1, app1], [name2, app2]) => { let diff = (app1.priority || 0) - (app2.priority || 0); return diff ? diff : (registeredApps[name1].name.toLowerCase() > registeredApps[name2].name.toLowerCase() ? 1 : -1); })
+                        for app in apps
+                          <div class="group relative">
+                            <a class="g-li-control g-hui-open-link hover:bg-zinc-200 px-2 py-1 rounded-full tracking-wider uppercase text-lg" title="#{'Open in ' + registeredApps[app[0]].name}", href="#{app[1].url}" target="_blank">
+                              <i class="ri-external-link-line"></i>
+                            </a>
+                          </div>
+                    </div>
+                  else if column.value === 'size'
+                    = formatSize(item.get('size'))
+                  else if column.value === 'description'
+                    = item.get(column.value)
+                else if column.type === 'image' && item.get('largeImage')
+                  .large_image_thumbnail(extra-image=column.value !== 'thumbnail' ? column.value : undefined, style=`width: ${column.width || 160}px; height: ${column.height || 100}px`, g-item-cid=column.value === 'thumbnail' ? item.cid : undefined)
+                    - var imageName = column.value === 'thumbnail' ? column.value : `images/${column.value}`;
+                    img.waiting(deferred-src=`${apiRoot}/item/${item.id}/tiles/${imageName}?width=${column.width || 160}&height=${column.height || 100}`)
+                else if column.type === 'metadata'
+                  -
+                    let value = item.get('meta') || {}
+                    column.value.split('.').forEach((part) => {
+                      value = (value || {})[part];
+                    })
+                  if column.edit && accessLevel >= AccessType.WRITE
+                    - if ((value === '' || value === undefined) && column.default) { value = column.default; }
+                    span.large_image_metadata.lientry_edit(column-idx=colidx)
+                      if column.enum
+                        select.input-sm.form-control.g-widget-metadata-value-input.g-widget-metadata-lientry(title=column.description)
+                          for enumval in column.enum
+                            option(value=enumval, selected=('' + enumval) === ('' + value) ? 'selected' : null)
+                              = enumval
+                      else
+                        input.input-sm.form-control.g-widget-metadata-value-input.g-widget-metadata-column(placeholder=column.description || "Value", value=value, title=column.description)
+                  else
+                    span.large_image_metadata
+                      if column.format === 'text' && value
+                        //- allow long strings to be hyphenated at periods and underscores
+                        != String(value).replace(/&/g, '&amp;').replace(/</, '&lt;').replace(/>/, '&gt;').replace(/"/, '&quot').replace(/'/, '&#39;').replace(/\./g, '.&shy;').replace(/_/g, '_&shy;')
+                      else
+                        = value
+                    if value && column.format !== 'count'
+                      span.li-item-list-cell-filter(title="Only show items that match this metadata value exactly", filter-value=value, column-value=column.value)
+                        i.icon-filter
+              </#{divtype}>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-footer-group border-t border-zinc-200">
+      <div class="table-row">
+        <div colspan="7" class="table-cell p-4">
+          <div class="flex justify-between items-center">
+            <div>
+              if (hasMore && !paginated)
+                <span class="g-show-more text-zinc-500">
+                  <a class="g-show-more-items">
+                    | Show more items...
+                  </a>
+                </span>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

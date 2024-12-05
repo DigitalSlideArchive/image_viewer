@@ -61,11 +61,48 @@ This is used to specify how items appear in item lists.  There are two settings,
     itemList:
       # layout does not need to be specified.
       layout:
+        # The default list (with flatten: false) shows only the items in the
+        # current folder; flattening the list shows items in the current folder
+        # and all subfolders.  This can also be "only", in which case the
+        # flatten option will start enabled and, when flattened, the folder
+        # list will be hidden.
+        flatten: true
         # The default layout is a list.  This can optionally be "grid"
         mode: grid
         # max-width is only used in grid mode.  It is the maximum width in
         # pixels for grid entries.  It defaults to 250.
         max-width: 250
+      # group does not need to be specified.  Instead of listing items
+      # directly, multiple items can be grouped  together.
+      group:
+        # keys is a single metadata value reference (see the column metadata
+        # records), or a list of such records.
+        keys: dicom.PatientID
+        # counts is optional.  If specified, the left side is either a metadata
+        # value references or "_id" to just count total items.  The right side
+        # is where, conceptually, the count is stored in the item.meta record.
+        # to show a column of the counts, add a metadata column with a value
+        # equal to this.  That is, in this example, all items with the same
+        # meta.dicom.PatientID are grouped as a single row, and two count
+        # columns are generated.  The unique values for each group row of
+        # meta.dicom.StudyInstanceUID and counted and that count is added to
+        # meta._count.studiescount.
+        counts:
+          dicom.StudyInstanceUID: _count.studiescount
+          dicom.SeriesInstanceUID: _count.seriescount
+      # navigate does nto need to be specified.  It changes the behavior of
+      # clicking on an item from showing the item page to another action.
+      navigate:
+        # type can be "item": the default, open the item page, "itemList": go
+        # to the named item page, or "open" to open an application
+        type: itemList
+        # if the type is "itemList", the name is the name of the itemList to
+        # display.  If the type is "open", the name is the name of the
+        # registered  application that should be opened by preference (e.g.,
+        # "histomicsui" or "volview").  If that application does not report it
+        # can open the item or no name is specified, the highest priority
+        # application that can open the item will be used.
+        name: studyList
       # show these columns in order from left to right.  Each column has a
       # "type" and "value".  It optionally has a "title" used for the column
       # header, and a "format" used for searching and filtering.  The "label",
@@ -88,7 +125,8 @@ This is used to specify how items appear in item lists.  There are two settings,
           title: Slide Label
         -
           # The "record" type is from the default item record.  The value is
-          # one of "name", "size", or "controls".
+          # one of "name", "description", "created", "updated", "size", or
+          # "controls".
           type: record
           value: name
         -
@@ -102,8 +140,10 @@ This is used to specify how items appear in item lists.  There are two settings,
           # can be a nested key by using dots in its name.
           type: metadata
           value: Stain
-          # "format" can be "text", "number", "category".  Other values may be
-          # specified later.
+          # "format" can be "text", "number", "category", "datetime", "date",
+          # "time".  "datetime", "date", and "time" use the user's browser's
+          # locale to convert the date and/or time to their browser's preferred
+          # format.  Other values may be specified later.
           format: text
         -
           type: metadata
@@ -182,6 +222,45 @@ This is used to specify how items appear in item lists.  There are two settings,
           value: size
 
 If there are no large images in a folder, none of the image columns will appear.
+
+Named Item Lists
+................
+
+Multiple item lists can be stored with specific names.  A default item list can be specified.
+
+::
+
+    ---
+    # If present and the value is a key in the namedItemLists section, that
+    # list will be shown unless the URL routes to a different list.
+    defaultItemList: images
+    # Any number of items can be in the namedItemLists section.  Each name
+    # must be distinct.  The system can show the specific list by routing to
+    # ?namedList=<name> as part of the url after the folder id.
+    namedItemLists:
+      image:
+        layout:
+          mode: list
+        columns:
+          -
+            type: image
+            value: thumbnail
+            title: Thumbnail
+          -
+            type: image
+            value: label
+            title: Slide Label
+          -
+            # The "record" type is from the default item record.  The value is
+            # one of "name", "size", or "controls".
+            type: record
+            value: name
+          -
+            type: record
+            value: size
+          -
+            type: record
+            value: controls
 
 Item Metadata
 .............

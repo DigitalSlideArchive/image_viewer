@@ -391,7 +391,9 @@ def source_compare(sourcePath, opts):  # noqa
             sys.stdout.flush()
 
             # get maxval for other histograms
-            h = ts.histogram(onlyMinMax=True, output=dict(maxWidth=2048, maxHeight=2048), **kwargs)
+            h = ts.histogram(
+                onlyMinMax=True, output=dict(maxWidth=2048, maxHeight=2048),
+                resample=0, **kwargs)
             if 'max' not in h:
                 sys.stdout.write(' fail\n')
                 sys.stdout.flush()
@@ -400,7 +402,7 @@ def source_compare(sourcePath, opts):  # noqa
             maxval = 2 ** (int(math.log(maxval or 1) / math.log(2)) + 1) if maxval > 1 else 1
             # thumbnail histogram
             h = ts.histogram(bins=9, output=dict(maxWidth=256, maxHeight=256),
-                             range=[0, maxval], **kwargs)
+                             range=[0, maxval], resample=0, **kwargs)
             maxchan = len(h['histogram'])
             if maxchan == 4:
                 maxchan = 3
@@ -409,13 +411,13 @@ def source_compare(sourcePath, opts):  # noqa
             sys.stdout.flush()
             # full image histogram
             h = ts.histogram(bins=9, output=dict(maxWidth=2048, maxHeight=2048),
-                             range=[0, maxval], **kwargs)
+                             range=[0, maxval], resample=0, **kwargs)
             result['full_2048_histogram'] = histotext(h, maxchan)
             sys.stdout.write(' %s' % histotext(h, maxchan))
             sys.stdout.flush()
             if opts.full:
                 # at full res
-                h = ts.histogram(bins=9, range=[0, maxval], **kwargs)
+                h = ts.histogram(bins=9, range=[0, maxval], resample=0, **kwargs)
                 result['full_max_histogram'] = histotext(h, maxchan)
                 sys.stdout.write(' %s' % histotext(h, maxchan))
                 sys.stdout.flush()
@@ -426,12 +428,14 @@ def source_compare(sourcePath, opts):  # noqa
                 if not opts.full:
                     h = ts.histogram(
                         bins=9, output=dict(maxWidth=2048, maxHeight=2048),
-                        range=[0, maxval], frame=frames - 1, **kwargs)
+                        range=[0, maxval], frame=frames - 1, resample=0,
+                        **kwargs)
                     result['full_f_2048_histogram'] = histotext(h, maxchan)
                     sys.stdout.write(' %s' % histotext(h, maxchan))
                 else:
                     # at full res
-                    h = ts.histogram(bins=9, range=[0, maxval], frame=frames - 1, **kwargs)
+                    h = ts.histogram(bins=9, range=[0, maxval],
+                                     frame=frames - 1, resample=0, **kwargs)
                     result['full_f_max_histogram'] = histotext(h, maxchan)
                     sys.stdout.write(' %s' % histotext(h, maxchan))
                 sys.stdout.flush()
@@ -444,7 +448,7 @@ def source_compare(sourcePath, opts):  # noqa
                         h = ts.histogram(bins=32, output=dict(
                             maxWidth=int(math.ceil(ts.sizeX / 2 ** (levels - 1 - ll))),
                             maxHeight=int(math.ceil(ts.sizeY / 2 ** (levels - 1 - ll))),
-                        ), range=[0, maxval], frame=f, **kwargs)
+                        ), range=[0, maxval], frame=f, resample=0, **kwargs)
                         t += time.time()
                         result[f'level_{ll}_f_{f}_histogram'] = histotext(h, maxchan)
                         sys.stdout.write('%3d%5d %s' % (ll, f, histotext(h, maxchan)))

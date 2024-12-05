@@ -21,6 +21,10 @@ class TileSourceInefficientError(TileSourceError):
     pass
 
 
+class TileSourceMalformedError(TileSourceError):
+    pass
+
+
 class TileSourceFileNotFoundError(TileSourceError, FileNotFoundError):
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(errno.ENOENT, *args, **kwargs)

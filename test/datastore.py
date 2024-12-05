@@ -116,6 +116,13 @@ registry = {
     'synthetic_ndpi_2024.ndpi': 'sha512:192cdcf551a824277ef70358b8ed6225dca0c5b5d0817fe0d800b72638e0ad9416cd5bc40cb186219da60fd324b676d1b32cc05a276a33b71b485d665a31e42e',  # noqa
     # Synthetic uint16 untiled tiff that can be read with the tiff source
     'synthetic_untiled_16.tiff': 'sha512:f4773fcfa749ba9c2db25319c9e8ad8586dd148de4366dae0393a3703906dace9f11233eafdb24418b598170d6372ef1ca861bf8d7a8212cac21a0eb8636ee77',  # noqa
+    # DICOM with int16 data
+    # Source: TCIA/CMB-LCA_v07_20240828/CMB-LCA/MSB-01459/
+    #   12-22-1959-XR Chest-59125/1002.000000-43033/1-1.dcm
+    'tcia_msb_01459_19591222.dcm': 'sha512:9dea871c3816f149227ece40d35aa5cf655f23412cb7aee72f175f0a74435d8b21aaa2030e7e75b0affbc07c03c205028025a4d5022bfa797bff523fa98315e0',  # noqa
+    # Synthetic Indica Labs tiff; subifds missing tile/strip data and unmarked
+    # float32 pixels rather than uint32
+    'synthetic_indica.tiff': 'sha512:fba7eb2fb5fd12ac242d8b0760440f170f48f9e2434a672cbf230bd8a9ff02fad8f9bdf7225edf2de244f412edfc5205e695031a1d43dd99fe31c3aca11909a1',  # noqa
 }
 
 

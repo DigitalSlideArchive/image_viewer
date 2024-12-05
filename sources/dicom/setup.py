@@ -69,12 +69,13 @@ setup(
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
     ],
     install_requires=[
         f'large-image{limit_version}',
-        'wsidicom>=0.9.0',
-        # Pinned until wsidicom is updated
-        'pydicom<3',
+        'wsidicom>=0.9.0,!=0.21.3',
+        'pydicom<3; python_version < "3.10"',
+        'pydicom; python_version >= "3.10"',
     ],
     extras_require={
         'girder': girder_extras,

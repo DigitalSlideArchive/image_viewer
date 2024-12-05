@@ -1,7 +1,8 @@
-import large_image
 from pathlib import Path
-from format_examples_datastore import EXAMPLES_FOLDER, format_examples, fetch_all
 
+from format_examples_datastore import EXAMPLES_FOLDER, fetch_all, format_examples
+
+import large_image
 
 TABLE_FILE = Path('./format_table.rst')
 NO_MULTIFRAME_SOURCES = ['deepzoom', 'openjpeg', 'openslide']

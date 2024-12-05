@@ -128,7 +128,7 @@ class TestTileSource(TileSource, metaclass=LruCacheMetaclass):
                 }
                 for idx, band in enumerate(bands)}
             if low < 0 or high < 2 or low >= 65536 or high >= 65536:
-                self._dtype = float
+                self._dtype = np.dtype(float)
             elif low >= 256 or high >= 256:
                 self._dtype = np.uint16
         # Used for reporting tile information

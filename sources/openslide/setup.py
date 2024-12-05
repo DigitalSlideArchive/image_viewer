@@ -50,10 +50,16 @@ setup(
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
     ],
     install_requires=[
         f'large-image{limit_version}',
-        'openslide-python>=1.1.0',
+        'openslide-python>=1.4.1',
+        'openslide-bin; platform_system=="Linux" and platform_machine=="x86_64"',
+        'openslide-bin; platform_system=="Linux" and platform_machine=="aarch64"',
+        'openslide-bin; platform_system=="Windows" and platform_machine=="AMD64"',
+        'openslide-bin; platform_system=="Darwin" and platform_machine=="arm64"',
+        'openslide-bin; platform_system=="Darwin" and platform_machine=="x86_64"',
         'tifftools>=1.2.0',
     ],
     extras_require={

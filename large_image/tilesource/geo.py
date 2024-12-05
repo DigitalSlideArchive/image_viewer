@@ -143,7 +143,8 @@ class GDALBaseFileTileSource(GeoBaseFileTileSource):
         }
         style = []
         if hasattr(self, '_style'):
-            styleBands = self.style['bands'] if 'bands' in self.style else [self.style]
+            styleBands = (cast(JSONDict, self.style)['bands']
+                          if 'bands' in cast(JSONDict, self.style) else [self.style])
             for styleBand in styleBands:
 
                 styleBand = styleBand.copy()
@@ -189,7 +190,8 @@ class GDALBaseFileTileSource(GeoBaseFileTileSource):
                 not self._style or 'icc' in self._style and len(self._style) == 1):
             return
         if hasattr(self, '_style'):
-            styleBands = self.style['bands'] if 'bands' in self.style else [self.style]
+            styleBands = (cast(JSONDict, self.style)['bands']
+                          if 'bands' in cast(JSONDict, self.style) else [self.style])
             if not len(styleBands) or (len(styleBands) == 1 and isinstance(
                     styleBands[0].get('band', 1), int) and styleBands[0].get('band', 1) <= 0):
                 del self._style

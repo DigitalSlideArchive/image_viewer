@@ -82,7 +82,7 @@ def _monitor_thread():
                     source._bioimage = None
                 except Exception:
                     pass
-        except AssertionError:
+        except Exception:
             pass
         finally:
             if javabridge.get_env():
@@ -678,6 +678,8 @@ class BioformatsFileTileSource(FileTileSource, metaclass=LruCacheMetaclass):
             fillValue = 0
             if tile.dtype == np.uint16:
                 fillValue = 65535
+            elif tile.dtype == np.int16:
+                fillValue = 32767
             elif tile.dtype == np.uint8:
                 fillValue = 255
             elif tile.dtype.kind == 'f':

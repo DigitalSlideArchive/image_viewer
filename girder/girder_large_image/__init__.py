@@ -428,7 +428,12 @@ def metadataSearchHandler(  # noqa
                 if id in foundIds:
                     continue
                 foundIds.add(id)
-                entry = resultModelInst.load(id=id, user=user, level=level, exc=False)
+                try:
+                    entry = resultModelInst.load(id=id, user=user, level=level, exc=False)
+                except Exception:
+                    # We might have permission to view an annotation but not
+                    # the item
+                    continue
                 if entry is not None and offset:
                     offset -= 1
                     continue
@@ -500,14 +505,17 @@ def adjustConfigForUser(config, user):
     return config
 
 
-def addSettingsToConfig(config, user):
+def addSettingsToConfig(config, user, name=None):
     """
     Add the settings for showing thumbnails and images in item lists to a
     config file if the itemList or itemListDialog options are not set.
 
     :param config: the config dictionary to modify.
     :param user: the current user.
+    :param name: the name of the config file.
     """
+    if name and name != '.large_image_config.yaml':
+        return
     columns = []
 
     showThumbnails = Setting().get(constants.PluginSettings.LARGE_IMAGE_SHOW_THUMBNAILS)
@@ -533,7 +541,7 @@ def addSettingsToConfig(config, user):
                 columns.append({'type': 'image', 'value': value, 'title': value.title()})
 
     columns.append({'type': 'record', 'value': 'name', 'title': 'Name'})
-    columns.append({'type': 'record', 'value': 'controls', 'title': 'Contols'})
+    columns.append({'type': 'record', 'value': 'controls', 'title': 'Controls'})
     columns.append({'type': 'record', 'value': 'size', 'title': 'Size'})
 
     if 'itemList' not in config:
@@ -596,7 +604,7 @@ def yamlConfigFile(folder, name, user):
             folder = Folder().load(folder['parentId'], user=user, level=AccessType.READ)
 
     addConfig = {} if addConfig is None else addConfig
-    addSettingsToConfig(addConfig, user)
+    addSettingsToConfig(addConfig, user, name)
     return addConfig
 
 

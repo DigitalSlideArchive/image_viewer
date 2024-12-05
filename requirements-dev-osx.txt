@@ -13,9 +13,11 @@ girder-jobs>=3.0.3
 -e girder/.
 -e girder_annotation/.
 -e sources/zarr
+
 # Extras from main setup.py
-pylibmc>=1.5.1
 matplotlib
+pylibmc>=1.5.1
+redis
 simplejpeg
 
 # External dependencies

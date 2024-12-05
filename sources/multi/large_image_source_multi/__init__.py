@@ -897,7 +897,8 @@ class MultiFileTileSource(FileTileSource, metaclass=LruCacheMetaclass):
         if params is None:
             params = source.get('params', {})
         ts = openFunc(source['path'], **params)
-        if (self._dtype and np.dtype(ts.dtype).kind == 'f' and self._dtype.kind != 'f' and
+        if (self._dtype and np.dtype(ts.dtype).kind == 'f' and
+                (self._dtype == 'check' or np.dtype(self._dtype).kind != 'f') and
                 'sampleScale' not in source and 'sampleOffset' not in source):
             minval = maxval = 0
             for f in range(ts.frames):

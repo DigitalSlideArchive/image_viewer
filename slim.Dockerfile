@@ -1,5 +1,5 @@
 # Build wheels
-FROM python:3.12.6-slim as build
+FROM python:3.12-slim as build
 
 # Need git for setuptools_scm
 RUN apt-get update \
@@ -19,7 +19,7 @@ RUN echo "pylibmc>=1.5.1\nmatplotlib\npyvips\nsimplejpeg\n" \
 
 
 # Geospatial Sources
-FROM python:3.12.6-slim as geo
+FROM python:3.12-slim as geo
 COPY --from=build /opt/build-context/wheels /opt/wheels
 LABEL maintainer="Kitware, Inc. <kitware@kitware.com>"
 LABEL repo="https://github.com/girder/large_image"
@@ -37,7 +37,7 @@ RUN pip install \
 
 
 # All Sources
-FROM python:3.12.6-slim as all
+FROM python:3.12-slim as all
 COPY --from=build /opt/build-context/wheels /opt/wheels
 LABEL maintainer="Kitware, Inc. <kitware@kitware.com>"
 LABEL repo="https://github.com/girder/large_image"
@@ -52,7 +52,7 @@ RUN pip install \
 
 
 # All Sources and Girder Packages
-FROM python:3.12.6-slim as girder
+FROM python:3.12-slim as girder
 COPY --from=build /opt/build-context/wheels /opt/wheels
 LABEL maintainer="Kitware, Inc. <kitware@kitware.com>"
 LABEL repo="https://github.com/girder/large_image"

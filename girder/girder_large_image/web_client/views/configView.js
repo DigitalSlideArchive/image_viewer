@@ -274,8 +274,58 @@ var ConfigView = View.extend({
                 callback(ConfigView._liconfig);
             }
             return val;
+        }).fail(() => {
+            // fallback matching server values
+            const li = {
+                columns: [
+                    {type: 'record', value: 'name', title: 'Name'},
+                    {type: 'record', value: 'controls', title: 'Controls'},
+                    {type: 'record', value: 'size', title: 'Size'}]
+            };
+            const val = {itemList: li, itemListDialog: li};
+            ConfigView._lastliconfig = folderId;
+            ConfigView._liconfigSettingsRequest = null;
+            ConfigView._liconfig = val;
+            if (callback) {
+                callback(ConfigView._liconfig);
+            }
+            return val;
         });
         return ConfigView._liconfigSettingsRequest;
+    },
+
+    /**
+     * Save the folder config file for the current user.
+     *
+     * @param {string} folderId the folder to get the config for.
+     * @param {Object} content the content of the config as an Object.
+     * @param {function} callback a function to call after the config file is
+     *      saved.
+     * @returns a promise that resolves to the config file values.
+     */
+    saveConfigFile: function (folderId, content, callback) {
+        const userContent = JSON.parse(JSON.stringify(content));
+
+        // Only save the editable views (e.g. the ones the user created)
+        userContent.namedItemLists = {};
+        for (const view in content.namedItemLists) {
+            if (content.namedItemLists[view].edit) {
+                userContent.namedItemLists[view] = content.namedItemLists[view];
+            }
+        }
+        // User should not set the columns that can be used
+        delete userContent.allColumns;
+
+        restRequest({
+            method: 'PUT',
+            url: `folder/${folderId}/yaml_config/.large_image_config.yaml?user_context=true`,
+            data: JSON.stringify(userContent, null, 2),
+            contentType: 'application/json'
+        }).done(() => {
+            if (callback) {
+                callback();
+            }
+        });
     },
 
     /**

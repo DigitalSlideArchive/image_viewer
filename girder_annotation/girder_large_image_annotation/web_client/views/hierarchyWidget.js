@@ -31,7 +31,13 @@ function ownAnnotation(root, folderId) {
 
 function addAccessControl(root) {
     if (root.$('.g-edit-annotation-access').length === 0) {
-        if (root.$('.g-folder-actions-menu > .divider').length > 0) {
+        if (root.$('.g-folder-actions-menu.min-w-48').length > 0) {
+            root.$('.g-folder-actions-menu.min-w-48').append(
+                '<a class="g-edit-annotation-access text-gray-700 block px-3 py-2 text-sm hover:bg-zinc-100 rounded-md">' +
+                    '<i class="ri-lock-line pr-2"></i>Annotation access control' +
+                '</a>'
+            );
+        } else if (root.$('.g-folder-actions-menu > .divider').length > 0) {
             root.$('.g-folder-actions-menu > .divider').before(
                 '<li role="presentation">' +
                     '<a class="g-edit-annotation-access" role="menuitem">' +

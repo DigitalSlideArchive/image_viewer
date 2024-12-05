@@ -281,8 +281,8 @@ Any of the frames of such an image are accessed by adding a ``frame=<integer>`` 
         format=large_image.constants.TILE_FORMAT_NUMPY)
     # nparray will contain data from the middle channel image
 
-Channels, Bands, Samples, and Axes
-----------------------------------
+Channels, Bands, Samples, Axes, and Frames
+------------------------------------------
 
 Various large image formats refer to channels, bands, and samples.  This isn't consistent across different libraries.  In an attempt to harmonize the geospatial and medical image terminology, large_image uses ``bands`` or ``samples`` to refer to image plane components, such as red, green, blue, and alpha.  For geospatial data this can often have additional bands, such as near infrared or panchromatic.  ``channels`` are stored as separate frames and can be interpreted as different imaging modalities.  For example, a fluorescence microscopy image might have DAPI, CY5, and A594 channels.  A common color photograph file has 3 bands (also called samples) and 1 channel.
 
@@ -291,6 +291,10 @@ At times, image ``axes`` are used to indicate the order of data, especially when
 The ``z`` and ``t`` are common enough that they are sometimes considered as primary axes.  ``z`` corresponds to the direction orthogonal to ``x`` and ``y`` and is usually associated with altitude or microscope stage height.  ``t`` is time.
 
 Other axes are supported provided their names are case-insensitively unique.
+
+Many image formats (such as TIFF) can contain multiple images within a single file.  A single image within the file can have multiple bands.  Channels, time series, and other axes are stored as separate images.
+
+By default, the ``getTile``, ``getRegion``, and ``tileIterator`` methods will return all of the bands of a single frame.  The specific bands returned can be modified using the ``style`` parameter.  The specific frame, including any channel or other axes, is specified with the ``frame`` parameter.
 
 Styles - Changing colors, scales, and other properties
 ------------------------------------------------------
@@ -330,25 +334,60 @@ You can also composite a multi-frame image into a false-color output:
 Writing an Image
 ----------------
 
-If you wish to visualize numpy data, large_image can write a tiled tiff.  This requires a tile source that supports writing to be installed.  As of this writing, the ``large-image-source-zarr`` and ``large-image-source-vips`` sources supports this.  If both are installed, the ``large-image-source-zarr`` is the default.
+If you wish to visualize numpy data, ``large_image`` can write a tiled image.
+This requires a tile source that supports writing to be installed.
+As of this writing, the ``large-image-source-zarr`` and ``large-image-source-vips`` sources both support this.
+If both are installed, the ``large-image-source-zarr`` is the default.
+Some of the API options available for ``large-image-source-zarr`` are not available for ``large-image-source-vips``.
 
 .. code-block:: python
 
     import large_image
+
     source = large_image.new()
     for nparray, x, y in fancy_algorithm():
         # We could optionally add a mask to limit the output
         source.addTile(nparray, x, y)
     source.write('/tmp/sample.tiff', lossy=False)
 
-The ``large-image-source-zarr`` can be used to store multiple frame data with arbitrary axes.
+Multiple Frames
+~~~~~~~~~~~~~~~
+
+``large-image-source-zarr`` can be used to store multiframe data with arbitrary axes.
+The example below demonstrates the creation of an image with five axes: T, Z, Y, X, S.
 
 .. code-block:: python
 
     import large_image
+
+    time_values = [0.5, 1.5, 2.5, 3.5]
+    z_values = [3, 6, 9]
+    tile_pos_values = [0, 1024, 2048, 3072, 4096]
+
     source = large_image.new()
-    for nparray, x, y, time, param1 in fancy_algorithm():
-        source.addTile(nparray, x, y, time=time, p1=param1)
+    for t_index, t_value in enumerate(time_values):
+        for z_index, z_value in enumerate(z_values):
+            for y_value in tile_pos_values:
+                for x_value in tile_pos_values:
+
+                    # tile is a numpy array with shape (1024, 1024, 3)
+                    # this shape corresponds to the following axes, respectively: (Y, X, S)
+                    tile = get_my_data_tile(x_value, y_value, z_value, t_value)
+
+                    source.addTile(
+                        tile,
+                        x_value,
+                        y_value,
+                        z=z_index,
+                        time=t_index,
+
+                        # z_value and t_value are optional parameters to store the
+                        # true values at the provided z index and t index
+                        z_value=z_value,
+                        time_value=t_value,
+                    )
+    source.frameUnits = dict(t='ms', z='cm')
+
     # The writer supports a variety of formats
     source.write('/tmp/sample.zarr.zip', lossy=False)
 
@@ -357,18 +396,22 @@ You may also choose to read tiles from one source and write modified tiles to a 
 .. code-block:: python
 
     import large_image
+
     original_source = large_image.open('path/to/original/image.tiff')
     new_source = large_image.new()
     for frame in original_source.getMetadata().get('frames', []):
         for tile in original_source.tileIterator(frame=frame['Frame'], format='numpy'):
-            t, x, y = tile['tile'], tile['x'], tile['y']
+            tile_data, x, y = tile['tile'], tile['x'], tile['y']
             kwargs = {
                 'z': frame['IndexZ'],
                 'c': frame['IndexC'],
             }
-            modified_tile = modify_tile(t)
+            modified_tile = modify_tile(tile_data)
             new_source.addTile(modified_tile, x=x, y=y, **kwargs)
     new_source.write('path/to/new/image.tiff', lossy=False)
+
+Multiple processes
+~~~~~~~~~~~~~~~~~~
 
 In some cases, it may be beneficial to write to a single image from multiple processes or threads:
 
@@ -376,12 +419,14 @@ In some cases, it may be beneficial to write to a single image from multiple pro
 
     import large_image
     import multiprocessing
+
     # Important: Must be a pickleable function
     def add_tile_to_source(tilesource, nparray, position):
         tilesource.addTile(
             nparray,
             **position
         )
+
     source = large_image.new()
     # Important: Maximum size must be allocated before any multiprocess concurrency
     add_tile_to_source(source, np.zeros(1, 1, 3), dict(x=max_x, y=max_y, z=max_z))
@@ -392,5 +437,11 @@ In some cases, it may be beneficial to write to a single image from multiple pro
             [(source, t, t_pos) for t, t_pos in tileset]
         )
     source.write('/tmp/sample.zarr.zip', lossy=False)
+
+
+More examples
+~~~~~~~~~~~~~
+
+To see more examples of using ``large-image-source-zarr`` to write images, see :doc:`notebooks` and the `Zarr Sink Tests <https://github.com/girder/large_image/blob/master/test/test_sink.py>`_.
 
 .. _Girder: https://girder.readthedocs.io/en/latest/

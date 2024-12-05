@@ -86,12 +86,15 @@ class SweepAlgorithm:
             **tiparams,
         ):
             scaled = tile.get('scaled', 1)
+            axisparams = {
+                p['axis']: iteration_id[i] for i, p in enumerate(self.param_order.values())}
+            axisparams.update({
+                p['axis'] + '_value': params[i] for i, p in enumerate(self.param_order.values())})
             if self.overlay:
                 self.addTile(
                     tilesink,
                     tile['tile'], int(tile['x'] * scaled), int(tile['y'] * scaled),
-                    **{p['axis']: iteration_id[i] for i, p in enumerate(
-                        self.param_order.values())})
+                    **axisparams)
             altered_data = self.algorithm(tile['tile'], *params)
             mask = None
             if self.overlay:
@@ -104,7 +107,7 @@ class SweepAlgorithm:
             self.addTile(
                 tilesink,
                 altered_data, int(tile['x'] * scaled), int(tile['y'] * scaled), mask=mask,
-                **{p['axis']: iteration_id[i] for i, p in enumerate(self.param_order.values())})
+                **axisparams)
             if time.time() - lastlogtime > 10:
                 sys.stdout.write(
                     f'Processed {tile["tile_position"]["position"] + 1} of '
@@ -392,8 +395,8 @@ def main(argv):
                 (defaultAxes[0] if len(defaultAxes) else parts[0])
                 if parts[1].isdigit() else parts[1]),
             'range': np.linspace(
-                float(rangevals[0]), float(rangevals[1]),
-                int(rangevals[2]), endpoint=bool(rangevals[3])),
+                float(rangevals[0]), float(rangevals[1]), int(rangevals[2]),
+                endpoint=rangevals[3].lower() not in {'open', 'true', 'on', 'yes', 't'}),
         }
         axesUsed.add(input_params[parts[0]]['axis'].lower())
         if input_params[parts[0]]['axis'].lower() in defaultAxes:

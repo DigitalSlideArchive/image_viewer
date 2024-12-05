@@ -59,13 +59,18 @@ lint.select = [
     "PYI",
     "PT",
     "RSE",
+    "T",  # print statements
 ]
 
 [tool.ruff.lint.per-file-ignores]
 # allow "useless expressions" as it shows output
 # allow non-top level imports
 # allow long lines
-"docs/large_image_examples.ipynb" = ["B018", "E402", "E501"]
+".circleci/dcm4chee/*.py" = ["T201", "T203"]
+"docs/*.ipynb" = ["B018", "E402", "E501", "T201", "T203"]
+"docs/*.py" = ["E501", "T201", "T203"]
+"examples/*" = ["T201", "T203"]
+"test/*" = ["T201", "T203"]
 
 [tool.ruff.lint.flake8-quotes]
 inline-quotes = "single"

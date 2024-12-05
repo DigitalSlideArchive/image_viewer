@@ -6,6 +6,7 @@ from io import BytesIO
 from dicomweb_client import DICOMwebClient
 from pydicom import dcmread
 from requests import Session
+from tenacity import Retrying, stop_after_attempt, wait_exponential
 
 
 def upload_example_data(server_url, token=None):
@@ -22,8 +23,11 @@ def upload_example_data(server_url, token=None):
 
     datasets = []
     for url in download_urls:
-        resp = urllib.request.urlopen(url)
-        data = resp.read()
+        for attempt in Retrying(stop=stop_after_attempt(5),
+                                wait=wait_exponential(multiplier=1, min=0.5, max=5)):
+            with attempt:
+                resp = urllib.request.urlopen(url)
+                data = resp.read()
         dataset = dcmread(BytesIO(data))
         datasets.append(dataset)
 

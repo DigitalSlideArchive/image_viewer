@@ -1,15 +1,84 @@
 # Change Log
 
-## 1.29.12
+## 1.30.3
+
+### Improvements
+
+- Format dates in item lists ([#1707](../../pull/1707))
+- Guard dtype types ([#1711](../../pull/1711), [#1714](../../pull/1714), [#1716](../../pull/1716))
+- Better handle IndicaLabs tiff files ([#1717](../../pull/1717))
+- Better detect files with geotransform data that aren't geospatial ([#1718](../../pull/1718))
+- Better scale float-valued tiles ([#1725](../../pull/1725))
+
+### Changes
+
+- Openslide now requires the binary wheel on appropriate platforms ([#1709](../../pull/1709), [#1710](../../pull/1710))
+
+### Bug Fixes
+
+- Fix an issue searching for annotation metadata on items that a user doesn't have permissions to view ([#1723](../../pull/1723))
+- Fix a typo in a column header ([#1727](../../pull/1727))
+
+## 1.30.2
+
+### Features
+
+- Support setting axis actual values in the zarr sink.  Display these in the frame selector ([#1625](../../pull/1625))
+
+### Improvements
+
+- Speed up recursive item lists ([#1694](../../pull/1694))
+- Better handle images with signed pixel data ([#1695](../../pull/1695))
+- Reduce loading geojs when switching views in Girder ([#1699](../../pull/1699))
+
+### Bug Fixes
+
+- Don't compute channel window in zarr sinks ([#1705](../../pull/1705))
+
+## 1.30.1
+
+### Improvements
+
+- Support generalized application buttons ([#1692](../../pull/1692))
+
+### Bug Fixes
+
+- Don't use a default for yaml config files except .large_image_config.yaml ([#1685](../../pull/1685))
+- Some checks for repeated values in the item lists were wrong ([#1686](../../pull/1686))
+- Better support creating zarr sinks from multiple processes ([#1687](../../pull/1687))
+
+## 1.30.0
+
+### Features
+
+- Add support for Python 3.13 ([#1675](../../pull/1675))
 
 ### Improvements
 
 - Better handle images without enough tile layers ([#1648](../../pull/1648))
 - Add users option to config files; have a default config file ([#1649](../../pull/1649))
+- Remove no longer used code; adjust item list slightly ([#1651](../../pull/1651), [#1668](../../pull/1668))
+- Reduce updates when showing item lists; add a waiting spinner ([#1653](../../pull/1653))
+- Update item lists check for large images when toggling recurse ([#1654](../../pull/1654))
+- Support named item lists ([#1665](../../pull/1665))
+- Add options to group within item lists ([#1666](../../pull/1666))
+- Make the filter field in item lists wider ([#1669](../../pull/1669), [#1671](../../pull/1671))
+- Add a navigate option to item lists ([#1659](../../pull/1659))
+
+### Changes
+
+- Handle a rasterio deprecation ([#1655](../../pull/1655))
+- Handle a variation in a bioformats exception ([#1656](../../pull/1656))
+- Increase logging slow histograms ([#1658](../../pull/1658))
+- Use paginated item lists ([#1664](../../pull/1664))
+- When in-line editing yaml and other files, the tab key now uses spaces ([#1667](../../pull/1667))
+- Changed the parsing of the open parameter in the algorithm progression example ([#1677](../../pull/1677))
 
 ### Bug Fixes
 
 - Fix styling images with empty tile layers ([#1650](../../pull/1650))
+- Add a guard around sorting item lists ([#1663](../../pull/1663))
+- Fix some issues with possible numpy 2.x overflows ([#1672](../../pull/1672))
 
 ## 1.29.11
 

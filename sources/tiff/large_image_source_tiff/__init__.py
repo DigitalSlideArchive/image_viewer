@@ -30,7 +30,9 @@ import tifftools
 
 from large_image.cache_util import LruCacheMetaclass, methodcache
 from large_image.constants import TILE_FORMAT_NUMPY, TILE_FORMAT_PIL, SourcePriority
-from large_image.exceptions import TileSourceError, TileSourceFileNotFoundError
+from large_image.exceptions import (TileSourceError,
+                                    TileSourceFileNotFoundError,
+                                    TileSourceMalformedError)
 from large_image.tilesource import FileTileSource, nearPowerOfTwo
 
 from . import tiff_reader
@@ -90,6 +92,8 @@ class TiffFileTileSource(FileTileSource, metaclass=LruCacheMetaclass):
         try:
             self._initWithTiffTools()
             return
+        except TileSourceMalformedError:
+            raise
         except Exception as exc:
             self.logger.debug('Cannot read with tifftools route; %r', exc)
             lastException = exc
@@ -363,6 +367,10 @@ class TiffFileTileSource(FileTileSource, metaclass=LruCacheMetaclass):
                     if len(subifds) != 1:
                         msg = 'When stored in subifds, each subifd should be a single ifd.'
                         raise TileSourceError(msg)
+                    if (tifftools.Tag.StripOffsets.value not in subifds[0]['tags'] and
+                            tifftools.Tag.TileOffsets.value not in subifds[0]['tags']):
+                        msg = 'Subifd has no strip or tile offsets.'
+                        raise TileSourceMalformedError(msg)
                     level = self._levelFromIfd(subifds[0], info['ifds'][0])
                     if level < self.levels - 1 and frames[-1]['dirs'][level] is None:
                         frames[-1]['dirs'][level] = (idx, subidx + 1)

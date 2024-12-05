@@ -45,11 +45,13 @@ var GeojsImageViewerWidget = ImageViewerWidget.extend({
                 }
                 return this;
             }),
-            $.ajax({ // like $.getScript, but allow caching
-                url: root + '/plugins/large_image/extra/geojs.js' + (BUILD_TIMESTAMP ? '?_=' + BUILD_TIMESTAMP : ''),
-                dataType: 'script',
-                cache: true
-            }))
+            !window.geo
+                ? $.ajax({ // like $.getScript, but allow caching
+                    url: root + '/plugins/large_image/extra/geojs.js' + (BUILD_TIMESTAMP ? '?_=' + BUILD_TIMESTAMP : ''),
+                    dataType: 'script',
+                    cache: true
+                })
+                : true)
             .done(() => {
                 this.trigger('g:beforeFirstRender', this);
                 this.render();

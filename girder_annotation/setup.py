@@ -50,6 +50,7 @@ setup(
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
         'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
     ],
     install_requires=[
         'jsonschema>=2.5.1',
@@ -62,7 +63,7 @@ setup(
             'pandas ; python_version < "3.9"',
             'pandas>=2.2 ; python_version >= "3.9"',
             'python-calamine ; python_version >= "3.9"',
-            'umap-learn',
+            'umap-learn ; python_version < "3.13"',
         ],
         'tasks': [
             f'girder-large-image[tasks]{limit_version}',

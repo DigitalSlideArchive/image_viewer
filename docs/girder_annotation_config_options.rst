@@ -32,7 +32,7 @@ This can be used to specify how annotations are listed on the item page.
       columns:
         -
           # The "record" type is from the default annotation record.  The value
-          # is one of "name", "creator", "created", "updatedId", "updated",
+          # is one of "name", "creator", "created", "updatedId", "updated".
           type: record
           value: name
         -
@@ -43,8 +43,9 @@ This can be used to specify how annotations are listed on the item page.
         -
           type: record
           value: created
-          # A format of date will use the browser's default date format
-          format: date
+          # A format of datetime, date, or time will use the browser's default
+          # date and/or time format
+          format: datetime
         -
           # The "metadata" type is taken from the annotations's
           # "annotation.attributes" contents.  It can be a nested key by using
