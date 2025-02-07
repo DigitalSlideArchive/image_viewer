@@ -54,7 +54,11 @@ pip wheel . --no-deps -w ~/wheels
 cd "$ROOTPATH/sources/dicom"
 cp "$ROOTPATH/README.rst" .
 cp "$ROOTPATH/LICENSE" .
-# TODO build DICOMweb plugin client code when converted
+# Build the client plugin code
+pushd "$ROOTPATH/girder/sources/dicom/large_image_source_dicom/web_client/"
+npm ci
+npm run build
+popd
 python setup.py sdist
 pip wheel . --no-deps -w ~/wheels
 cd "$ROOTPATH/sources/dummy"

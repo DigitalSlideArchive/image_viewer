@@ -1,10 +1,10 @@
-import EditAssetstoreWidget from '@girder/core/views/widgets/EditAssetstoreWidget';
-import { AssetstoreType } from '@girder/core/constants';
-import { wrap } from '@girder/core/utilities/PluginUtils';
-
 import DWASEditFieldsTemplate from '../templates/dicomwebAssetstoreEditFields.pug';
 
 import authOptions from './AuthOptions';
+
+const EditAssetstoreWidget = girder.views.widgets.EditAssetstoreWidget;
+const { AssetstoreType } = girder.constants;
+const { wrap } = girder.utilities.PluginUtils;
 
 /**
  * Adds DICOMweb-specific fields to the edit dialog.

@@ -1,10 +1,9 @@
-import _ from 'underscore';
-
-import AssetstoresView from '@girder/core/views/body/AssetstoresView';
-import { AssetstoreType } from '@girder/core/constants';
-import { wrap } from '@girder/core/utilities/PluginUtils';
-
 import DWASImportButtonTemplate from '../templates/dicomwebAssetstoreImportButton.pug';
+
+const _ = girder._;
+const AssetstoresView = girder.views.body.AssetstoresView;
+const { AssetstoreType } = girder.constants;
+const { wrap } = girder.utilities.PluginUtils;
 
 /**
  * Adds DICOMweb-specific info and an import button to the assetstore list

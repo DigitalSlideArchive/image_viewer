@@ -2,15 +2,7 @@
     "name": "@girder/dicomweb",
     "version": "1.0.0",
     "peerDependencies": {
-        "@girder/core": "*",
-        "@girder/jobs": "*"
-    },
-    "girderPlugin": {
-        "name": "dicomweb",
-        "main": "./main.js",
-        "dependencies": [
-            "jobs"
-        ]
+        "@girder/core": "^5.0.0-beta.0"
     },
     "devDependencies": {
         "@girder/eslint-config": "3.0.0-rc1",
@@ -25,17 +17,23 @@
         "eslint-plugin-underscore": "^0.0.10",
         "nyc": "^15.1.0",
         "phantomjs-prebuilt": "^2.1.16",
+        "pug": "^3.0.3",
         "pug-lint": "^2.6.0",
-        "stylint": "^2.0.0"
+        "stylint": "^2.0.0",
+        "vite": "^5.2.13"
     },
     "scripts": {
+        "build": "vite build",
+        "watch": "vite build watch",
         "lint": "eslint --cache . && pug-lint . && stylint",
         "format": "eslint --cache --fix . && stylint --fix"
     },
     "eslintConfig": {
         "extends": "@girder",
         "root": true,
-        "ignorePatterns": ["dist/**"],
+        "ignorePatterns": [
+            "dist/**"
+        ],
         "globals": {
             "girder": "readonly"
         }

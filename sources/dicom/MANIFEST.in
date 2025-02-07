@@ -1,0 +1,2 @@
+prune large_image_source_dicom/web_client
+recursive-include large_image_source_dicom/web_client/dist/ *

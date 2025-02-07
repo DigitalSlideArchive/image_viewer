@@ -1,14 +1,12 @@
-import $ from 'jquery';
-
-import BrowserWidget from '@girder/core/views/widgets/BrowserWidget';
-import router from '@girder/core/router';
-import View from '@girder/core/views/View';
-import { restRequest } from '@girder/core/rest';
-
-import { assetstoreImportViewMap } from '@girder/core/views/body/AssetstoresView';
-import { AssetstoreType } from '@girder/core/constants';
-
 import DWASImportTemplate from '../templates/assetstoreImport.pug';
+
+const $ = girder.$;
+const BrowserWidget = girder.views.widgets.BrowserWidget;
+const router = girder.router;
+const View = girder.views;
+const { restRequest } = girder.rest;
+const { assetstoreImportViewMap } = girder.views.body.AssetstoresView;
+const { AssetstoreType } = girder.constants;
 
 const DICOMwebImportView = View.extend({
     events: {

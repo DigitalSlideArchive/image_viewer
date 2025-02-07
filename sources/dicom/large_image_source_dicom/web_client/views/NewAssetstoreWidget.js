@@ -1,11 +1,10 @@
-import NewAssetstoreWidget from '@girder/core/views/widgets/NewAssetstoreWidget';
-import { AssetstoreType } from '@girder/core/constants';
-import { wrap } from '@girder/core/utilities/PluginUtils';
-
 import DWASCreateTemplate from '../templates/dicomwebAssetstoreCreate.pug';
 
 import authOptions from './AuthOptions';
 
+const NewAssetstoreWidget = girder.views.widgets.NewAssetstoreWidget;
+const { AssetstoreType } = girder.constants;
+const { wrap } = girder.utilities.PluginUtils;
 /**
  * Add UI for creating new DICOMweb assetstore.
  */

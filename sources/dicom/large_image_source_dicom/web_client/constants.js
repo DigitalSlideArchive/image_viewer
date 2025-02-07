@@ -1,3 +1,3 @@
-import { AssetstoreType } from '@girder/core/constants';
+const { AssetstoreType } = girder.constants;
 
 AssetstoreType.DICOMWEB = 'dicomweb';
