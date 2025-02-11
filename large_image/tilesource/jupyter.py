@@ -346,7 +346,99 @@ class Map:
         self._map = m
         children.append(m)
 
+        self.add_region_indicator()
         return VBox(children)
+
+    def add_region_indicator(self):
+        from ipyleaflet import DrawControl, FullScreenControl, Popup
+        from ipywidgets import HTML
+
+        metadata = self._metadata
+        if self._map is None or metadata is None:
+            return
+
+        self.info_label = HTML()
+        popup = Popup(child=self.info_label)
+        popup.close_popup()
+        draw_control = DrawControl(
+            rectangle=dict(shapeOptions=dict(color='#19a7ff')),
+            # enable drawing other shapes by specifying styling
+            polygon=dict(),
+            circle=dict(),
+            polyline=dict(),
+            circlemarker=dict(),
+            rotate=False,
+            cut=False,
+            edit=False,
+        )
+
+        transformer = None
+        if metadata.get('geospatial'):
+            import pyproj
+
+            transformer = pyproj.Transformer.from_crs(
+                'EPSG:4326',
+                metadata['projection'],
+                always_xy=True,
+            )
+
+        def handle_interaction(**kwargs):
+            coords = kwargs.get('coordinates')
+            if self._map is None or metadata is None or coords is None:
+                return
+            x, y = [coords[1], coords[0]]
+            interaction_type = kwargs.get('type')
+            if interaction_type == 'click':
+                for rectangle in draw_control.data:
+                    rect_coords = rectangle.get('geometry', {}).get('coordinates', [[]])[0]
+                    xmin, xmax = rect_coords[0][0], rect_coords[2][0]
+                    ymin, ymax = rect_coords[0][1], rect_coords[1][1]
+                    width, height = metadata['sizeX'], metadata['sizeY']
+                    x_label, y_label = 'X', 'Y'
+                    if (
+                        x >= xmin and x <= xmax and
+                        y >= ymin and y <= ymax
+                    ):
+                        x0, y0, x1, y1 = None, None, None, None
+                        if transformer is not None:
+                            x_label, y_label = 'Lon', 'Lat'
+                            x0, y0 = transformer.transform(xmin, ymin)
+                            x1, y1 = transformer.transform(xmax, ymax)
+                            bounds = metadata['bounds']
+                            x0, x1 = [
+                                round((v - bounds['xmin']) /
+                                      (bounds['xmax'] - bounds['xmin']) *
+                                      width) for v in [x0, x1]
+                            ]
+                            y0, y1 = [
+                                round((v - bounds['ymax']) /
+                                      (bounds['ymin'] - bounds['ymax']) *
+                                      height) for v in [y1, y0]
+                            ]
+                        else:
+                            xmin, xmax = round(xmin), round(xmax)
+                            ymin, ymax = round(height - ymax), round(height - ymin)
+                            x0, y0, x1, y1 = xmin, ymin, xmax, ymax
+                        self.info_label.value = f'<div>Box {x_label} Range: [{xmin}, {xmax}]</div>'
+                        self.info_label.value += f'<div>Box {y_label} Range: [{ymin}, {ymax}]</div>'
+                        if (
+                            x0 >= 0 and y0 >= 0 and
+                            x1 <= width and y1 <= height
+                        ):
+                            roi = [x0, y0, x1 - x0, y1 - y0]
+                            self.info_label.value += f'<div>ROI: {roi}</div>'
+                        popup.open_popup((rect_coords[1][1], (xmax - xmin) / 2 + xmin))
+                        if popup not in self._map.layers:
+                            self._map.add(popup)
+
+        def handle_draw(target, action, geo_json):
+            if action == 'deleted':
+                popup.close_popup()
+
+        draw_control.on_draw(handle_draw)
+        self._map.on_interaction(handle_interaction)
+        self._map.add(draw_control)
+        self._map.add(FullScreenControl())
 
     @property
     def layer(self) -> Any:

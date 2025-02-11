@@ -91,3 +91,75 @@ async def testJupyterIpyleaflet():
     r = await fetch(f'http://localhost:{port}/metadata')
     r.raise_for_status()
     assert r.content
+
+
+def testJupyterIpyleafletMapRegion():
+    from ipyleaflet import DrawControl
+
+    testDir = os.path.dirname(os.path.realpath(__file__))
+    imagePath = os.path.join(testDir, 'test_files', 'test_orient0.tif')
+    source = large_image.open(imagePath)
+    display = source._map.make_map(
+        source.metadata, source.as_leaflet_layer(), source.getCenter(srs='EPSG:4326'),
+    )
+    assert len(display.children)
+    m = display.children[0]
+    assert len(m.controls)
+
+    height = source.metadata['sizeY']
+    xmin, xmax, ymin, ymax = 10, 90, 30, 100
+    x, y = 50, 100
+    expected = f'<div>Box X Range: [{xmin}, {xmax}]</div>'
+    expected += f'<div>Box Y Range: [{ymin}, {ymax}]</div>'
+    expected += f'<div>ROI: [{xmin}, {ymin}, {xmax - xmin}, {ymax - ymin}]</div>'
+
+    rectangle = [[
+        [xmin, height - ymax],
+        [xmin, height - ymin],
+        [xmax, height - ymax],
+        [xmax, height - ymin],
+    ]]
+    for control in m.controls:
+        if isinstance(control, DrawControl):
+            control.data = [
+                dict(geometry=dict(coordinates=rectangle)),
+            ]
+    for callback in m._interaction_callbacks.callbacks:
+        callback(type='click', coordinates=[y, x])
+    assert source._map.info_label.value == expected
+
+
+def testJupyterIpyleafletMapGeospatialRegion():
+    from ipyleaflet import DrawControl
+
+    testDir = os.path.dirname(os.path.realpath(__file__))
+    imagePath = os.path.join(testDir, 'test_files', 'rgb_geotiff.tiff')
+    source = large_image.open(imagePath, projection='EPSG:3857')
+    display = source._map.make_map(
+        source.metadata, source.as_leaflet_layer(), source.getCenter(srs='EPSG:4326'),
+    )
+    assert len(display.children)
+    m = display.children[0]
+    assert len(m.controls)
+
+    lonmin, lonmax, latmin, latmax = -118, -116, 32.5, 34
+    lon, lat = -117, 33
+    roi = [11562, 7156, 52322, 46301]
+    expected = f'<div>Box Lon Range: [{lonmin}, {lonmax}]</div>'
+    expected += f'<div>Box Lat Range: [{latmin}, {latmax}]</div>'
+    expected += f'<div>ROI: {roi}</div>'
+
+    rectangle = [[
+        [lonmin, latmin],
+        [lonmin, latmax],
+        [lonmax, latmax],
+        [lonmax, latmin],
+    ]]
+    for control in m.controls:
+        if isinstance(control, DrawControl):
+            control.data = [
+                dict(geometry=dict(coordinates=rectangle)),
+            ]
+    for callback in m._interaction_callbacks.callbacks:
+        callback(type='click', coordinates=[lat, lon])
+    assert source._map.info_label.value == expected
