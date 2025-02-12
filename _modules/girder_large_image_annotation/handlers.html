@@ -1,0 +1,297 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>girder_large_image_annotation.handlers &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../girder_large_image_annotation.html">girder_large_image_annotation</a></li>
+      <li class="breadcrumb-item active">girder_large_image_annotation.handlers</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for girder_large_image_annotation.handlers</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cachetools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">orjson</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">large_image.config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">AccessType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.file</span><span class="w"> </span><span class="kn">import</span> <span class="n">File</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.item</span><span class="w"> </span><span class="kn">import</span> <span class="n">Item</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.user</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.models.annotation</span><span class="w"> </span><span class="kn">import</span> <span class="n">Annotation</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">isGeoJSON</span>
+
+<span class="n">_recentIdentifiers</span> <span class="o">=</span> <span class="n">cachetools</span><span class="o">.</span><span class="n">TTLCache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">86400</span><span class="p">)</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_itemFromEvent</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">identifierEnding</span><span class="p">,</span> <span class="n">itemAccessLevel</span><span class="o">=</span><span class="n">AccessType</span><span class="o">.</span><span class="n">READ</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    If an event has a reference and an associated identifier that ends with a</span>
+<span class="sd">    specific string, return the associated item, user, and image file.</span>
+
+<span class="sd">    :param event: the data.process event.</span>
+<span class="sd">    :param identifierEnding: the required end of the identifier.</span>
+<span class="sd">    :returns: a dictionary with item, user, and file if there was a match.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">info</span>
+    <span class="n">identifier</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">reference</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;reference&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">reference</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">reference</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">reference</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span>
+                    <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;identifier&#39;</span><span class="p">),</span> <span class="nb">str</span><span class="p">)):</span>
+                <span class="n">identifier</span> <span class="o">=</span> <span class="n">reference</span><span class="p">[</span><span class="s1">&#39;identifier&#39;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Failed to parse data.process reference: </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">reference</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">identifier</span> <span class="ow">and</span> <span class="s1">&#39;uuid&#39;</span> <span class="ow">in</span> <span class="n">reference</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">reference</span><span class="p">[</span><span class="s1">&#39;uuid&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_recentIdentifiers</span><span class="p">:</span>
+            <span class="n">_recentIdentifiers</span><span class="p">[</span><span class="n">reference</span><span class="p">[</span><span class="s1">&#39;uuid&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">_recentIdentifiers</span><span class="p">[</span><span class="n">reference</span><span class="p">[</span><span class="s1">&#39;uuid&#39;</span><span class="p">]][</span><span class="n">identifier</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span>
+        <span class="n">reprocessFunc</span> <span class="o">=</span> <span class="n">_recentIdentifiers</span><span class="p">[</span><span class="n">reference</span><span class="p">[</span><span class="s1">&#39;uuid&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;_reprocess&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">reprocessFunc</span><span class="p">:</span>
+            <span class="n">reprocessFunc</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">identifier</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">identifier</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">identifierEnding</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">identifier</span> <span class="o">==</span> <span class="s1">&#39;LargeImageAnnotationUpload&#39;</span> <span class="ow">and</span> <span class="s1">&#39;uuid&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reference</span><span class="p">:</span>
+            <span class="n">reference</span><span class="p">[</span><span class="s1">&#39;uuid&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+        <span class="k">if</span> <span class="s1">&#39;userId&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reference</span> <span class="ow">or</span> <span class="s1">&#39;itemId&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reference</span> <span class="ow">or</span> <span class="s1">&#39;fileId&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">reference</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Reference does not contain required information.&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">userId</span> <span class="o">=</span> <span class="n">reference</span><span class="p">[</span><span class="s1">&#39;userId&#39;</span><span class="p">]</span>
+        <span class="n">imageId</span> <span class="o">=</span> <span class="n">reference</span><span class="p">[</span><span class="s1">&#39;fileId&#39;</span><span class="p">]</span>
+
+        <span class="c1"># load models from the database</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">userId</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">imageId</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">AccessType</span><span class="o">.</span><span class="n">READ</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">image</span><span class="p">[</span><span class="s1">&#39;itemId&#39;</span><span class="p">],</span> <span class="n">level</span><span class="o">=</span><span class="n">itemAccessLevel</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;item&#39;</span><span class="p">:</span> <span class="n">item</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="n">user</span><span class="p">,</span> <span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="n">image</span><span class="p">,</span> <span class="s1">&#39;uuid&#39;</span><span class="p">:</span> <span class="n">reference</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;uuid&#39;</span><span class="p">)}</span>
+
+
+<div class="viewcode-block" id="resolveAnnotationGirderIds">
+<a class="viewcode-back" href="../../_build/girder_large_image_annotation/girder_large_image_annotation.html#girder_large_image_annotation.handlers.resolveAnnotationGirderIds">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">resolveAnnotationGirderIds</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">possibleGirderIds</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    If an annotation has references to girderIds, resolve them to actual ids.</span>
+
+<span class="sd">    :param event: a data.process event.</span>
+<span class="sd">    :param results: the results from _itemFromEvent,</span>
+<span class="sd">    :param data: annotation data.</span>
+<span class="sd">    :param possibleGirderIds: a list of annotation elements with girderIds</span>
+<span class="sd">        needing resolution.</span>
+<span class="sd">    :returns: True if all ids were processed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Exclude actual girderIds from resolution</span>
+    <span class="n">girderIds</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">possibleGirderIds</span><span class="p">:</span>
+        <span class="c1"># This will throw an exception if the girderId isn&#39;t well-formed as an</span>
+        <span class="c1"># actual id.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="s1">&#39;girderId&#39;</span><span class="p">],</span> <span class="n">level</span><span class="o">=</span><span class="n">AccessType</span><span class="o">.</span><span class="n">READ</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">girderIds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">girderIds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">girderIds</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="n">idRecord</span> <span class="o">=</span> <span class="n">_recentIdentifiers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;uuid&#39;</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">idRecord</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="s1">&#39;girderId&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">idRecord</span> <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">girderIds</span><span class="p">):</span>
+        <span class="n">idRecord</span><span class="p">[</span><span class="s1">&#39;_reprocess&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">process_annotations</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">girderIds</span><span class="p">:</span>
+        <span class="n">element</span><span class="p">[</span><span class="s1">&#39;girderId&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">idRecord</span><span class="p">[</span><span class="n">element</span><span class="p">[</span><span class="s1">&#39;girderId&#39;</span><span class="p">]][</span><span class="s1">&#39;file&#39;</span><span class="p">][</span><span class="s1">&#39;itemId&#39;</span><span class="p">])</span>
+        <span class="c1"># Currently, all girderIds inside annotations are expected to be</span>
+        <span class="c1"># large images.  In this case, load them and ask if they can be so,</span>
+        <span class="c1"># in case they are small images</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">girder_large_image.models.image_item</span><span class="w"> </span><span class="kn">import</span> <span class="n">ImageItem</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="s1">&#39;girderId&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">createImageItem</span><span class="p">(</span>
+                <span class="n">item</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">childFiles</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">],</span> <span class="n">createJob</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+
+
+<div class="viewcode-block" id="process_annotations">
+<a class="viewcode-back" href="../../_build/girder_large_image_annotation/girder_large_image_annotation.html#girder_large_image_annotation.handlers.process_annotations">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_annotations</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>  <span class="c1"># noqa: C901</span>
+    <span class="c1"># TODO this should become a celery task</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add annotations to an image on a ``data.process`` event&quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">_itemFromEvent</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="s1">&#39;LargeImageAnnotationUpload&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">results</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;item&#39;</span><span class="p">]</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span>
+
+    <span class="n">file</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span>
+        <span class="n">event</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_id&#39;</span><span class="p">),</span>
+        <span class="n">level</span><span class="o">=</span><span class="n">AccessType</span><span class="o">.</span><span class="n">READ</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not load models from the database&#39;</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="nb">int</span><span class="p">(</span><span class="n">large_image</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">getConfig</span><span class="p">(</span>
+                <span class="s1">&#39;max_annotation_input_file_length&#39;</span><span class="p">,</span> <span class="mi">1024</span> <span class="o">**</span> <span class="mi">3</span><span class="p">)):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;File is larger than will be read into memory.  If your &#39;</span>
+                   <span class="s1">&#39;server will permit it, increase the &#39;</span>
+                   <span class="s1">&#39;max_annotation_input_file_length setting.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">with</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="k">as</span> <span class="n">fptr</span><span class="p">:</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="n">chunk</span> <span class="o">=</span> <span class="n">fptr</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1024</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">):</span>
+                    <span class="k">break</span>
+                <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">orjson</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not parse annotation file&#39;</span><span class="p">)</span>
+        <span class="k">raise</span>
+    <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">startTime</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Decoded json in </span><span class="si">%5.3f</span><span class="s1">s&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="n">isGeoJSON</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">data</span><span class="p">]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;annotation&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;annotation&#39;</span> <span class="ow">in</span> <span class="n">entry</span> <span class="k">else</span> <span class="n">entry</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+    <span class="c1"># Check some of the early elements to see if there are any girderIds</span>
+    <span class="c1"># that need resolution.</span>
+    <span class="k">if</span> <span class="s1">&#39;uuid&#39;</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+        <span class="n">girderIds</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">element</span> <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">data</span>
+            <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">annotation</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;elements&#39;</span><span class="p">,</span> <span class="p">[])[:</span><span class="mi">100</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s1">&#39;girderId&#39;</span> <span class="ow">in</span> <span class="n">element</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">girderIds</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">resolveAnnotationGirderIds</span><span class="p">(</span><span class="n">event</span><span class="p">,</span> <span class="n">results</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">girderIds</span><span class="p">):</span>
+                <span class="k">return</span>
+    <span class="k">for</span> <span class="n">annotation</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">Annotation</span><span class="p">()</span><span class="o">.</span><span class="n">createAnnotation</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">annotation</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;Could not create annotation object from data&#39;</span><span class="p">)</span>
+            <span class="k">raise</span>
+    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">file</span><span class="p">[</span><span class="s1">&#39;itemId&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]):</span>
+        <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

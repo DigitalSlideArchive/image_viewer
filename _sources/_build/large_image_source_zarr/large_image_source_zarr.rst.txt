@@ -1,0 +1,21 @@
+large\_image\_source\_zarr package
+==================================
+
+Submodules
+----------
+
+large\_image\_source\_zarr.girder\_source module
+------------------------------------------------
+
+.. automodule:: large_image_source_zarr.girder_source
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: large_image_source_zarr
+   :members:
+   :undoc-members:
+   :show-inheritance:

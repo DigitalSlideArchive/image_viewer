@@ -1,0 +1,619 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using Large Image in Jupyter &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../_static/K.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Using the Zarr Tile Sink" href="zarr_sink_example.html" />
+    <link rel="prev" title="Jupyter Notebook Examples" href="../notebooks.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../notebooks.html">Jupyter Notebook Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Using Large Image in Jupyter</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Using-Local-Files">Using Local Files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Basic-Use">Basic Use</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Geospatial-Sources">Geospatial Sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Girder-Server-Sources">Girder Server Sources</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="zarr_sink_example.html">Using the Zarr Tile Sink</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../notebooks.html">Jupyter Notebook Examples</a></li>
+      <li class="breadcrumb-item active">Using Large Image in Jupyter</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/large_image_examples.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Using-Large-Image-in-Jupyter">
+<h1>Using Large Image in Jupyter<a class="headerlink" href="#Using-Large-Image-in-Jupyter" title="Link to this heading"></a></h1>
+<p>The large_image library has some convenience features for use in Jupyter Notebooks and Jupyter Lab. Different features are available depending on whether your data files are local or on a Girder server.</p>
+<section id="Installation">
+<h2>Installation<a class="headerlink" href="#Installation" title="Link to this heading"></a></h2>
+<p>The large_image library has a variety of tile sources to support a wide range of file formats. Many of these depend on binary libraries. For linux systems, you can install these from python wheels via the <code class="docutils literal notranslate"><span class="pre">--find-links</span></code> option. For other operating systems, you will need to install different libraries depending on what tile sources you wish to use.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This will install large_image, including all sources and many other options</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>large_image<span class="o">[</span>all<span class="o">]</span><span class="w"> </span>--find-links<span class="w"> </span>https://girder.github.io/large_image_wheels
+<span class="c1"># For a smaller set of tile sources, you could also do:</span>
+<span class="c1"># !pip install large_image[pil,rasterio,tifffile]</span>
+
+<span class="c1"># For maximum capabilities in Jupyter, also install ipyleaflet so you can</span>
+<span class="c1"># view zoomable images in the notebook</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span><span class="s1">&#39;ipyleaflet&gt;=0.19&#39;</span>
+
+<span class="c1"># If you are accessing files on a Girder server, it is useful to install girder_client</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>girder_client
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Looking in links: https://girder.github.io/large_image_wheels
+</pre></div></div>
+</div>
+</section>
+<section id="Using-Local-Files">
+<h2>Using Local Files<a class="headerlink" href="#Using-Local-Files" title="Link to this heading"></a></h2>
+<p>When using large_image with local files, when you open a file, large_image returns a tile source. See <a class="reference external" href="https://girder.github.io/large_image">girder.github.io/large_image</a> for documentation on what you can do with this.</p>
+<p>First, we download a few files so we can use them locally.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get a few files so we can use them locally</span>
+<span class="o">!</span>curl<span class="w"> </span>-L<span class="w"> </span>-C<span class="w"> </span>-<span class="w"> </span>-o<span class="w"> </span>TC_NG_SFBay_US_Geo_COG.tif<span class="w"> </span>https://data.kitware.com/api/v1/file/hashsum/sha512/5e56cdb8fb1a02615698a153862c10d5292b1ad42836a6e8bce5627e93a387dc0d3c9b6cfbd539796500bc2d3e23eafd07550f8c214e9348880bbbc6b3b0ea0c/download
+<span class="o">!</span>curl<span class="w"> </span>-L<span class="w"> </span>-C<span class="w"> </span>-<span class="w"> </span>-o<span class="w"> </span>TCGA-AA-A02O-11A-01-BS1.svs<span class="w"> </span>https://data.kitware.com/api/v1/file/hashsum/sha512/1b75a4ec911017aef5c885760a3c6575dacf5f8efb59fb0e011108dce85b1f4e97b8d358f3363c1f5ea6f1c3698f037554aec1620bbdd4cac54e3d5c9c1da1fd/download
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 32.8M  100 32.8M    0     0   103M      0 --:--:-- --:--:-- --:--:--  103M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 59.0M  100 59.0M    0     0  96.9M      0 --:--:-- --:--:-- --:--:-- 96.8M
+</pre></div></div>
+</div>
+</section>
+<section id="Basic-Use">
+<h2>Basic Use<a class="headerlink" href="#Basic-Use" title="Link to this heading"></a></h2>
+<p>The large_image library has a variety of tile sources that support a wide range of formats. In general, you don’t need to know the format of a file, you can just open it.</p>
+<p>Every file has a common interface regardless of its format. The metadata gives a common summary of the data.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+
+<span class="n">ts</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;TCGA-AA-A02O-11A-01-BS1.svs&#39;</span><span class="p">)</span>
+<span class="c1"># The thumbnail method returns a tuple with an image or numpy array and a mime type</span>
+<span class="n">ts</span><span class="o">.</span><span class="n">getThumbnail</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_large_image_examples_6_0.jpg" src="../_images/notebooks_large_image_examples_6_0.jpg" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Every image&#39;s dimensions are in `sizeX` and `sizeY`.  If known, a variety of other information</span>
+<span class="c1"># is provided.</span>
+<span class="n">ts</span><span class="o">.</span><span class="n">metadata</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;levels&#39;: 9,
+ &#39;sizeX&#39;: 55988,
+ &#39;sizeY&#39;: 16256,
+ &#39;tileWidth&#39;: 256,
+ &#39;tileHeight&#39;: 256,
+ &#39;magnification&#39;: 20.0,
+ &#39;mm_x&#39;: 0.0004991,
+ &#39;mm_y&#39;: 0.0004991,
+ &#39;dtype&#39;: &#39;uint8&#39;,
+ &#39;bandCount&#39;: 4}
+</pre></div></div>
+</div>
+<div class="line-block">
+<div class="line">If you have ipyleaflet installed and are using JupyterLab, you can ask the system to proxy requests to an internal tile server that allows you to view the image in a zoomable viewer. There are more options depending on your Jupyter configuration and whether it is running locally or remotely.</div>
+<div class="line">Some environments need different proxy options, like Google CoLab. The system will attempt to determine the correct proxy values by default. If you needed to, you could ask JupyterLab to locally proxy an internal tile server. As an example:</div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">large_image.tilesource.jupyter.IPyLeafletMixin.JUPYTER_PROXY</span> <span class="pre">=</span> <span class="pre">True</span></code></p>
+<p>If ipyleaflet isn’t installed, inspecting a tile source will just show the thumbnail.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Look at our tile source</span>
+<span class="n">ts</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "48f48c57d0454472bf135cf1fac22cea", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<p>If you see a black border on the right and bottom, this is because the ipyleaflet viewer shows areas outside the bounds of the image. We could ask for the image to be served using PNG images so that those areas are transparent</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ts</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;TCGA-AA-A02O-11A-01-BS1.svs&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;PNG&#39;</span><span class="p">)</span>
+<span class="n">ts</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "3b6a54aae908468880216fee266860f4", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<p>The IPyLeaflet map uses a bottom-up y, x coordinate system, not the top-down x, y coordinate system most image system use. The rationale is that this is appropriate for geospatial maps with latitude and longitude, but it doesn’t carry over to pixel coordinates very well. There are some convenience functions to convert coordinates.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">ipyleaflet</span>
+
+<span class="c1"># Get a reference to the IPyLeaflet Map</span>
+<span class="nb">map</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">iplmap</span>
+<span class="c1"># to_map converts pixel coordinates to IPyLeaflet map coordinates.</span>
+<span class="c1"># draw a rectangle that is wider than tall.</span>
+<span class="n">rectangle</span> <span class="o">=</span> <span class="n">ipyleaflet</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">to_map</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span> <span class="n">ts</span><span class="o">.</span><span class="n">to_map</span><span class="p">((</span><span class="mi">10000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">))))</span>
+<span class="nb">map</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">rectangle</span><span class="p">)</span>
+<span class="c1"># draw another rectangle that is the size of the whole image.</span>
+<span class="n">rectangle</span> <span class="o">=</span> <span class="n">ipyleaflet</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">(</span><span class="n">bounds</span><span class="o">=</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">to_map</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span> <span class="n">ts</span><span class="o">.</span><span class="n">to_map</span><span class="p">((</span><span class="n">ts</span><span class="o">.</span><span class="n">sizeX</span><span class="p">,</span> <span class="n">ts</span><span class="o">.</span><span class="n">sizeY</span><span class="p">))))</span>
+<span class="nb">map</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">rectangle</span><span class="p">)</span>
+<span class="c1"># show the map</span>
+<span class="nb">map</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "3b6a54aae908468880216fee266860f4", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+<section id="Geospatial-Sources">
+<h2>Geospatial Sources<a class="headerlink" href="#Geospatial-Sources" title="Link to this heading"></a></h2>
+<p>For geospatial sources, the default viewer shows the image in context on a world map if an appropriate projection is used.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">geots</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;TC_NG_SFBay_US_Geo_COG.tif&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;EPSG:3857&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;PNG&#39;</span><span class="p">)</span>
+<span class="n">geots</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "5150c395482d40fbb80df6cea8fcc4ea", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<p>Geospatial sources have additional metadata and thumbnails.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">geots</span><span class="o">.</span><span class="n">metadata</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;levels&#39;: 15,
+ &#39;sizeX&#39;: 4194304,
+ &#39;sizeY&#39;: 4194304,
+ &#39;tileWidth&#39;: 256,
+ &#39;tileHeight&#39;: 256,
+ &#39;magnification&#39;: None,
+ &#39;mm_x&#39;: 1381.876143450579,
+ &#39;mm_y&#39;: 1381.876143450579,
+ &#39;dtype&#39;: &#39;uint8&#39;,
+ &#39;bandCount&#39;: 3,
+ &#39;geospatial&#39;: True,
+ &#39;sourceLevels&#39;: 6,
+ &#39;sourceSizeX&#39;: 4323,
+ &#39;sourceSizeY&#39;: 4323,
+ &#39;bounds&#39;: {&#39;ll&#39;: {&#39;x&#39;: -13660993.43811085, &#39;y&#39;: 4502326.297712617},
+  &#39;ul&#39;: {&#39;x&#39;: -13660993.43811085, &#39;y&#39;: 4586806.951318035},
+  &#39;lr&#39;: {&#39;x&#39;: -13594198.136883384, &#39;y&#39;: 4502326.297712617},
+  &#39;ur&#39;: {&#39;x&#39;: -13594198.136883384, &#39;y&#39;: 4586806.951318035},
+  &#39;srs&#39;: &#39;epsg:3857&#39;,
+  &#39;xmin&#39;: -13660993.43811085,
+  &#39;xmax&#39;: -13594198.136883384,
+  &#39;ymin&#39;: 4502326.297712617,
+  &#39;ymax&#39;: 4586806.951318035},
+ &#39;projection&#39;: &#39;epsg:3857&#39;,
+ &#39;sourceBounds&#39;: {&#39;ll&#39;: {&#39;x&#39;: -122.71879201711467, &#39;y&#39;: 37.45219874192699},
+  &#39;ul&#39;: {&#39;x&#39;: -122.71879201711467, &#39;y&#39;: 38.052231141926995},
+  &#39;lr&#39;: {&#39;x&#39;: -122.11875961711466, &#39;y&#39;: 37.45219874192699},
+  &#39;ur&#39;: {&#39;x&#39;: -122.11875961711466, &#39;y&#39;: 38.052231141926995},
+  &#39;srs&#39;: &#39;+proj=longlat +datum=WGS84 +no_defs&#39;,
+  &#39;xmin&#39;: -122.71879201711467,
+  &#39;xmax&#39;: -122.11875961711466,
+  &#39;ymin&#39;: 37.45219874192699,
+  &#39;ymax&#39;: 38.052231141926995},
+ &#39;bands&#39;: {1: {&#39;min&#39;: 5.0,
+   &#39;max&#39;: 255.0,
+   &#39;mean&#39;: 56.164648651261,
+   &#39;stdev&#39;: 45.505628098154,
+   &#39;interpretation&#39;: &#39;red&#39;},
+  2: {&#39;min&#39;: 2.0,
+   &#39;max&#39;: 255.0,
+   &#39;mean&#39;: 61.590676043792,
+   &#39;stdev&#39;: 35.532493975171,
+   &#39;interpretation&#39;: &#39;green&#39;},
+  3: {&#39;min&#39;: 1.0,
+   &#39;max&#39;: 255.0,
+   &#39;mean&#39;: 47.00898008224,
+   &#39;stdev&#39;: 29.470217162239,
+   &#39;interpretation&#39;: &#39;blue&#39;}}}
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">geots</span><span class="o">.</span><span class="n">getThumbnail</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_large_image_examples_18_0.jpg" src="../_images/notebooks_large_image_examples_18_0.jpg" />
+</div>
+</div>
+</section>
+<section id="Girder-Server-Sources">
+<h2>Girder Server Sources<a class="headerlink" href="#Girder-Server-Sources" title="Link to this heading"></a></h2>
+<p>You can use files on a Girder server by just download them and using them locally. However, you can use girder client to access files more conveniently. If the Girder server doesn’t have the large_image plugin installed on it, this can still be useful – functionally, this pulls the file and provides a local tile server, so some of this requires the same proxy setup as a local file.</p>
+<p><code class="docutils literal notranslate"><span class="pre">large_image.tilesource.jupyter.Map</span></code> is a convenience class that can use a variety of remote sources.</p>
+<p><strong>(1)</strong> We can get a source from girder via item or file id</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">girder_client</span>
+
+<span class="n">gc1</span> <span class="o">=</span> <span class="n">girder_client</span><span class="o">.</span><span class="n">GirderClient</span><span class="p">(</span><span class="n">apiUrl</span><span class="o">=</span><span class="s1">&#39;https://data.kitware.com/api/v1&#39;</span><span class="p">)</span>
+<span class="c1"># If you need to authenticate, an easy way is to ask directly</span>
+<span class="c1"># gc.authenticate(interactive=True)</span>
+<span class="c1"># but you could also use an API token or a variety of other methods.</span>
+
+<span class="c1"># We can ask for the image by item or file id</span>
+<span class="n">map1</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">tilesource</span><span class="o">.</span><span class="n">jupyter</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">gc</span><span class="o">=</span><span class="n">gc1</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="s1">&#39;57b345d28d777f126827dc28&#39;</span><span class="p">)</span>
+<span class="n">map1</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "04fae714b34f46be91a859c8dc0c9768", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<p><strong>(2)</strong> We could use a resource path instead of an id</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">map2</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">tilesource</span><span class="o">.</span><span class="n">jupyter</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">gc</span><span class="o">=</span><span class="n">gc1</span><span class="p">,</span> <span class="n">resource</span><span class="o">=</span><span class="s1">&#39;/collection/HistomicsTK/CI and tox Test Data/large_image test files/Huron.Image2_JPEG2K.tif&#39;</span><span class="p">)</span>
+<span class="n">map2</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "554b0d4fa33545e7992e86976de34e02", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># You can get an id of an item using pure girder client calls, too.  For instance, internally, the</span>
+<span class="c1"># id is fetched from the resource path and then used.</span>
+<span class="n">resourceFromMap2</span> <span class="o">=</span> <span class="s1">&#39;/collection/HistomicsTK/CI and tox Test Data/large_image test files/Huron.Image2_JPEG2K.tif&#39;</span>
+<span class="n">idOfResource</span> <span class="o">=</span> <span class="n">gc1</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;resource/lookup&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;path&#39;</span><span class="p">:</span> <span class="n">resourceFromMap2</span><span class="p">})[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span>
+<span class="n">idOfResource</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+&#39;5818e9418d777f10f26ee443&#39;
+</pre></div></div>
+</div>
+<p><strong>(3)</strong> We can use a girder server that has the large_image plugin enabled. This lets us do more than just look at the image.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gc2</span> <span class="o">=</span> <span class="n">girder_client</span><span class="o">.</span><span class="n">GirderClient</span><span class="p">(</span><span class="n">apiUrl</span><span class="o">=</span><span class="s1">&#39;https://demo.kitware.com/histomicstk/api/v1&#39;</span><span class="p">)</span>
+
+<span class="n">resourcePath</span> <span class="o">=</span> <span class="s1">&#39;/collection/Crowd Source Paper/All slides/TCGA-A1-A0SP-01Z-00-DX1.20D689C6-EFA5-4694-BE76-24475A89ACC0.svs&#39;</span>
+<span class="n">map3</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">tilesource</span><span class="o">.</span><span class="n">jupyter</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">gc</span><span class="o">=</span><span class="n">gc2</span><span class="p">,</span> <span class="n">resource</span><span class="o">=</span><span class="n">resourcePath</span><span class="p">)</span>
+<span class="n">map3</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "aec5a5161aad4ebf9273d13ccdcc4dd5", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We can check the metadata</span>
+<span class="n">map3</span><span class="o">.</span><span class="n">metadata</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[15]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;dtype&#39;: &#39;uint8&#39;,
+ &#39;levels&#39;: 10,
+ &#39;magnification&#39;: 40.0,
+ &#39;mm_x&#39;: 0.0002521,
+ &#39;mm_y&#39;: 0.0002521,
+ &#39;sizeX&#39;: 109434,
+ &#39;sizeY&#39;: 90504,
+ &#39;tileHeight&#39;: 256,
+ &#39;tileWidth&#39;: 256}
+</pre></div></div>
+</div>
+<p>We can get data as a numpy array.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
+
+<span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">gc2</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;item/</span><span class="si">{</span><span class="n">map3</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s1">/tiles/region&#39;</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;encoding&#39;</span><span class="p">:</span> <span class="s1">&#39;pickle&#39;</span><span class="p">,</span> <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="mi">100</span><span class="p">},</span>  <span class="n">jsonResp</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+<br/></pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[16]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+array([[[240, 242, 241, 255],
+        [240, 242, 241, 255],
+        [241, 242, 242, 255],
+        ...,
+        [238, 240, 239, 253],
+        [239, 241, 240, 255],
+        [239, 241, 240, 255]],
+
+       [[240, 241, 240, 255],
+        [239, 241, 240, 255],
+        [240, 241, 240, 255],
+        ...,
+        [237, 238, 238, 253],
+        [237, 239, 238, 255],
+        [237, 239, 238, 255]],
+
+       [[239, 241, 240, 255],
+        [239, 241, 240, 255],
+        [239, 241, 240, 255],
+        ...,
+        [236, 238, 237, 253],
+        [237, 239, 238, 255],
+        [237, 239, 238, 255]],
+
+       ...,
+
+       [[240, 241, 241, 255],
+        [240, 241, 241, 255],
+        [240, 241, 241, 255],
+        ...,
+        [239, 240, 239, 253],
+        [240, 241, 240, 255],
+        [239, 241, 240, 255]],
+
+       [[241, 243, 242, 255],
+        [241, 242, 242, 255],
+        [241, 242, 242, 255],
+        ...,
+        [238, 241, 240, 253],
+        [239, 242, 241, 255],
+        [239, 241, 241, 255]],
+
+       [[237, 239, 240, 253],
+        [237, 240, 240, 253],
+        [236, 239, 239, 253],
+        ...,
+        [234, 237, 238, 251],
+        [234, 237, 237, 253],
+        [235, 238, 238, 253]]], dtype=uint8)
+</pre></div></div>
+</div>
+<p><strong>(4)</strong> From a metadata dictionary and a url. Any slippy-map style tile server could be used.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># There can be additional items in the metadata, but this is minimum required.</span>
+<span class="n">remoteMetadata</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s1">&#39;levels&#39;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+  <span class="s1">&#39;sizeX&#39;</span><span class="p">:</span> <span class="mi">95758</span><span class="p">,</span>
+  <span class="s1">&#39;sizeY&#39;</span><span class="p">:</span> <span class="mi">76873</span><span class="p">,</span>
+  <span class="s1">&#39;tileHeight&#39;</span><span class="p">:</span> <span class="mi">256</span><span class="p">,</span>
+  <span class="s1">&#39;tileWidth&#39;</span><span class="p">:</span> <span class="mi">256</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="n">remoteUrl</span> <span class="o">=</span> <span class="s1">&#39;https://demo.kitware.com/histomicstk/api/v1/item/5bbdeec6e629140048d01bb9/tiles/zxy/</span><span class="si">{z}</span><span class="s1">/</span><span class="si">{x}</span><span class="s1">/</span><span class="si">{y}</span><span class="s1">?encoding=PNG&#39;</span>
+
+<span class="n">map4</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">tilesource</span><span class="o">.</span><span class="n">jupyter</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span><span class="n">metadata</span><span class="o">=</span><span class="n">remoteMetadata</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">remoteUrl</span><span class="p">)</span>
+<span class="n">map4</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "785dccbcaeb54d6d9921acf13aca24fd", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../notebooks.html" class="btn btn-neutral float-left" title="Jupyter Notebook Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="zarr_sink_example.html" class="btn btn-neutral float-right" title="Using the Zarr Tile Sink" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

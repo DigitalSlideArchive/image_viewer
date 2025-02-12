@@ -1,0 +1,342 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_ometiff package &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="large_image_source_openjpeg" href="../large_image_source_openjpeg/modules.html" />
+    <link rel="prev" title="large_image_source_ometiff" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../api_index.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../large_image/modules.html">large_image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_bioformats/modules.html">large_image_source_bioformats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_deepzoom/modules.html">large_image_source_deepzoom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_dicom/modules.html">large_image_source_dicom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_dummy/modules.html">large_image_source_dummy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_gdal/modules.html">large_image_source_gdal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_mapnik/modules.html">large_image_source_mapnik</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_multi/modules.html">large_image_source_multi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_nd2/modules.html">large_image_source_nd2</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">large_image_source_ometiff</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">large_image_source_ometiff package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-large_image_source_ometiff.girder_source">large_image_source_ometiff.girder_source module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-large_image_source_ometiff">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_openjpeg/modules.html">large_image_source_openjpeg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_openslide/modules.html">large_image_source_openslide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_pil/modules.html">large_image_source_pil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_rasterio/modules.html">large_image_source_rasterio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_test/modules.html">large_image_source_test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_tiff/modules.html">large_image_source_tiff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_tifffile/modules.html">large_image_source_tifffile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_vips/modules.html">large_image_source_vips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_zarr/modules.html">large_image_source_zarr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_converter/modules.html">large_image_converter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_tasks/modules.html">large_image_tasks</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../api_index.html">API Documentation</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">large_image_source_ometiff</a></li>
+      <li class="breadcrumb-item active">large_image_source_ometiff package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/_build/large_image_source_ometiff/large_image_source_ometiff.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="large-image-source-ometiff-package">
+<h1>large_image_source_ometiff package<a class="headerlink" href="#large-image-source-ometiff-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-large_image_source_ometiff.girder_source">
+<span id="large-image-source-ometiff-girder-source-module"></span><h2>large_image_source_ometiff.girder_source module<a class="headerlink" href="#module-large_image_source_ometiff.girder_source" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image_source_ometiff.girder_source.OMETiffGirderTileSource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image_source_ometiff.girder_source.</span></span><span class="sig-name descname"><span class="pre">OMETiffGirderTileSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_ometiff/girder_source.html#OMETiffGirderTileSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_ometiff.girder_source.OMETiffGirderTileSource" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#large_image_source_ometiff.OMETiffFileTileSource" title="large_image_source_ometiff.OMETiffFileTileSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">OMETiffFileTileSource</span></code></a>, <a class="reference internal" href="../girder_large_image/girder_large_image.html#girder_large_image.girder_tilesource.GirderTileSource" title="girder_large_image.girder_tilesource.GirderTileSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">GirderTileSource</span></code></a></p>
+<p>Provides tile access to Girder items with an OMETiff file.</p>
+<p>Initialize the tile class.  See the base class for other available
+parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> – a filesystem path for the tile source.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_ometiff.girder_source.OMETiffGirderTileSource.cacheName">
+<span class="sig-name descname"><span class="pre">cacheName</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'tilesource'</span></em><a class="headerlink" href="#large_image_source_ometiff.girder_source.OMETiffGirderTileSource.cacheName" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_ometiff.girder_source.OMETiffGirderTileSource.levels">
+<span class="sig-name descname"><span class="pre">levels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_ometiff.girder_source.OMETiffGirderTileSource.levels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_ometiff.girder_source.OMETiffGirderTileSource.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ometiff'</span></em><a class="headerlink" href="#large_image_source_ometiff.girder_source.OMETiffGirderTileSource.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_ometiff.girder_source.OMETiffGirderTileSource.sizeX">
+<span class="sig-name descname"><span class="pre">sizeX</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_ometiff.girder_source.OMETiffGirderTileSource.sizeX" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_ometiff.girder_source.OMETiffGirderTileSource.sizeY">
+<span class="sig-name descname"><span class="pre">sizeY</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_ometiff.girder_source.OMETiffGirderTileSource.sizeY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_ometiff.girder_source.OMETiffGirderTileSource.tileHeight">
+<span class="sig-name descname"><span class="pre">tileHeight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_ometiff.girder_source.OMETiffGirderTileSource.tileHeight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_ometiff.girder_source.OMETiffGirderTileSource.tileWidth">
+<span class="sig-name descname"><span class="pre">tileWidth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_ometiff.girder_source.OMETiffGirderTileSource.tileWidth" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-large_image_source_ometiff">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-large_image_source_ometiff" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image_source_ometiff.OMETiffFileTileSource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image_source_ometiff.</span></span><span class="sig-name descname"><span class="pre">OMETiffFileTileSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_ometiff.html#OMETiffFileTileSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_ometiff.OMETiffFileTileSource" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../large_image_source_tiff/large_image_source_tiff.html#large_image_source_tiff.TiffFileTileSource" title="large_image_source_tiff.TiffFileTileSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">TiffFileTileSource</span></code></a></p>
+<p>Provides tile access to TIFF files.</p>
+<p>Initialize the tile class.  See the base class for other available
+parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> – a filesystem path for the tile source.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_ometiff.OMETiffFileTileSource.cacheName">
+<span class="sig-name descname"><span class="pre">cacheName</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'tilesource'</span></em><a class="headerlink" href="#large_image_source_ometiff.OMETiffFileTileSource.cacheName" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_ometiff.OMETiffFileTileSource.extensions">
+<span class="sig-name descname"><span class="pre">extensions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../large_image/large_image.html#large_image.constants.SourcePriority" title="large_image.constants.SourcePriority"><span class="pre">SourcePriority</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'ome':</span> <span class="pre">SourcePriority.PREFERRED,</span> <span class="pre">'tif':</span> <span class="pre">SourcePriority.MEDIUM,</span> <span class="pre">'tiff':</span> <span class="pre">SourcePriority.MEDIUM,</span> <span class="pre">None:</span> <span class="pre">SourcePriority.LOW}</span></em><a class="headerlink" href="#large_image_source_ometiff.OMETiffFileTileSource.extensions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_ometiff.OMETiffFileTileSource.getInternalMetadata">
+<span class="sig-name descname"><span class="pre">getInternalMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_ometiff.html#OMETiffFileTileSource.getInternalMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_ometiff.OMETiffFileTileSource.getInternalMetadata" title="Link to this definition"></a></dt>
+<dd><p>Return additional known metadata about the tile source.  Data returned
+from this method is not guaranteed to be in any particular format or
+have specific values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a dictionary of data or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_ometiff.OMETiffFileTileSource.getMetadata">
+<span class="sig-name descname"><span class="pre">getMetadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_ometiff.html#OMETiffFileTileSource.getMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_ometiff.OMETiffFileTileSource.getMetadata" title="Link to this definition"></a></dt>
+<dd><p>Return a dictionary of metadata containing levels, sizeX, sizeY,
+tileWidth, tileHeight, magnification, mm_x, mm_y, and frames.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>metadata dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_ometiff.OMETiffFileTileSource.getNativeMagnification">
+<span class="sig-name descname"><span class="pre">getNativeMagnification</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_ometiff.html#OMETiffFileTileSource.getNativeMagnification"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_ometiff.OMETiffFileTileSource.getNativeMagnification" title="Link to this definition"></a></dt>
+<dd><p>Get the magnification for the highest-resolution level.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>magnification, width of a pixel in mm, height of a pixel in mm.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_ometiff.OMETiffFileTileSource.getPreferredLevel">
+<span class="sig-name descname"><span class="pre">getPreferredLevel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">level</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_ometiff.html#OMETiffFileTileSource.getPreferredLevel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_ometiff.OMETiffFileTileSource.getPreferredLevel" title="Link to this definition"></a></dt>
+<dd><p>Given a desired level (0 is minimum resolution, self.levels - 1 is max
+resolution), return the level that contains actual data that is no
+lower resolution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>level</strong> – desired level</p>
+</dd>
+<dt class="field-even">Returns level<span class="colon">:</span></dt>
+<dd class="field-even"><p>a level with actual data that is no lower resolution.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_ometiff.OMETiffFileTileSource.getTile">
+<span class="sig-name descname"><span class="pre">getTile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pilImageAllowed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numpyAllowed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sparseFallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_ometiff.html#OMETiffFileTileSource.getTile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_ometiff.OMETiffFileTileSource.getTile" title="Link to this definition"></a></dt>
+<dd><p>Get a tile from a tile source, returning it as an binary image, a PIL
+image, or a numpy array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – the 0-based x position of the tile on the specified z level.
+0 is left.</p></li>
+<li><p><strong>y</strong> – the 0-based y position of the tile on the specified z level.
+0 is top.</p></li>
+<li><p><strong>z</strong> – the z level of the tile.  May range from [0, self.levels],
+where 0 is the lowest resolution, single tile for the whole source.</p></li>
+<li><p><strong>pilImageAllowed</strong> – True if a PIL image may be returned.</p></li>
+<li><p><strong>numpyAllowed</strong> – True if a numpy image may be returned.  ‘always’
+to return a numpy array.</p></li>
+<li><p><strong>sparseFallback</strong> – if False and a tile doesn’t exist, raise an
+error.  If True, check if a lower resolution tile exists, and, if
+so, interpolate the needed data for this tile.</p></li>
+<li><p><strong>frame</strong> – the frame number within the tile source.  None is the
+same as 0 for multi-frame sources.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>either a numpy array, a PIL image, or a memory object with an
+image file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_ometiff.OMETiffFileTileSource.mimeTypes">
+<span class="sig-name descname"><span class="pre">mimeTypes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../large_image/large_image.html#large_image.constants.SourcePriority" title="large_image.constants.SourcePriority"><span class="pre">SourcePriority</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'image/tiff':</span> <span class="pre">SourcePriority.MEDIUM,</span> <span class="pre">'image/x-tiff':</span> <span class="pre">SourcePriority.MEDIUM}</span></em><a class="headerlink" href="#large_image_source_ometiff.OMETiffFileTileSource.mimeTypes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_ometiff.OMETiffFileTileSource.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'ometiff'</span></em><a class="headerlink" href="#large_image_source_ometiff.OMETiffFileTileSource.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_source_ometiff.canRead">
+<span class="sig-prename descclassname"><span class="pre">large_image_source_ometiff.</span></span><span class="sig-name descname"><span class="pre">canRead</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_ometiff.html#canRead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_ometiff.canRead" title="Link to this definition"></a></dt>
+<dd><p>Check if an input can be read by the module class.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_source_ometiff.open">
+<span class="sig-prename descclassname"><span class="pre">large_image_source_ometiff.</span></span><span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_ometiff.html#open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_ometiff.open" title="Link to this definition"></a></dt>
+<dd><p>Create an instance of the module class.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="large_image_source_ometiff" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../large_image_source_openjpeg/modules.html" class="btn btn-neutral float-right" title="large_image_source_openjpeg" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

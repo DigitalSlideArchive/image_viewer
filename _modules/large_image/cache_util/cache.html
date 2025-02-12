@@ -1,0 +1,420 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image.cache_util.cache &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/K.png"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">large_image.cache_util.cache</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image.cache_util.cache</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">uuid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">TypeVar</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cachetools</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ParamSpec</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">resource</span>
+    <span class="n">HAS_RESOURCE</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">HAS_RESOURCE</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.cachefactory</span><span class="w"> </span><span class="kn">import</span> <span class="n">CacheFactory</span><span class="p">,</span> <span class="n">pickAvailableCache</span>
+
+<span class="n">P</span> <span class="o">=</span> <span class="n">ParamSpec</span><span class="p">(</span><span class="s1">&#39;P&#39;</span><span class="p">)</span>
+<span class="n">T</span> <span class="o">=</span> <span class="n">TypeVar</span><span class="p">(</span><span class="s1">&#39;T&#39;</span><span class="p">)</span>
+
+<span class="n">_tileCache</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">cachetools</span><span class="o">.</span><span class="n">Cache</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">_tileLock</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">_cacheLockKeyToken</span> <span class="o">=</span> <span class="s1">&#39;_cacheLock_key&#39;</span>
+
+<span class="c1"># If we have a resource module, ask to use as many file handles as the hard</span>
+<span class="c1"># limit allows, then calculate how may tile sources we can have open based on</span>
+<span class="c1"># the actual limit.</span>
+<span class="n">MaximumTileSources</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="k">if</span> <span class="n">HAS_RESOURCE</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">SoftNoFile</span><span class="p">,</span> <span class="n">HardNoFile</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">getrlimit</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">RLIMIT_NOFILE</span><span class="p">)</span>
+        <span class="n">resource</span><span class="o">.</span><span class="n">setrlimit</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">RLIMIT_NOFILE</span><span class="p">,</span> <span class="p">(</span><span class="n">HardNoFile</span><span class="p">,</span> <span class="n">HardNoFile</span><span class="p">))</span>
+        <span class="n">SoftNoFile</span><span class="p">,</span> <span class="n">HardNoFile</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">getrlimit</span><span class="p">(</span><span class="n">resource</span><span class="o">.</span><span class="n">RLIMIT_NOFILE</span><span class="p">)</span>
+        <span class="c1"># Reserve some file handles for general use, and expect that tile</span>
+        <span class="c1"># sources could use many handles each.  This is conservative, since</span>
+        <span class="c1"># running out of file handles breaks the program in general.</span>
+        <span class="n">MaximumTileSources</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="p">(</span><span class="n">SoftNoFile</span> <span class="o">-</span> <span class="mi">10</span><span class="p">)</span> <span class="o">//</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+
+<span class="n">CacheProperties</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;tilesource&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="c1"># Cache size is based on what the class needs, which does not include</span>
+        <span class="c1"># individual tiles</span>
+        <span class="s1">&#39;itemExpectedSize&#39;</span><span class="p">:</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">**</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s1">&#39;maxItems&#39;</span><span class="p">:</span> <span class="n">MaximumTileSources</span><span class="p">,</span>
+        <span class="c1"># The cache timeout is not currently being used, but it is set here in</span>
+        <span class="c1"># case we ever choose to implement it.</span>
+        <span class="s1">&#39;cacheTimeout&#39;</span><span class="p">:</span> <span class="mi">300</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="strhash">
+<a class="viewcode-back" href="../../../_build/large_image/large_image.cache_util.html#large_image.cache_util.cache.strhash">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">strhash</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Generate a string hash value for an arbitrary set of args and kwargs.  This</span>
+<span class="sd">    relies on the repr of each element.</span>
+
+<span class="sd">    :param args: arbitrary tuple of args.</span>
+<span class="sd">    :param kwargs: arbitrary dictionary of kwargs.</span>
+<span class="sd">    :returns: hashed string of the arguments.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%r</span><span class="s1">,</span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
+    <span class="k">return</span> <span class="nb">repr</span><span class="p">(</span><span class="n">args</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="methodcache">
+<a class="viewcode-back" href="../../../_build/large_image/large_image.cache_util.html#large_image.cache_util.cache.methodcache">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">methodcache</span><span class="p">(</span><span class="n">key</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Callable</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">:</span>  <span class="c1"># noqa</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Decorator to wrap a function with a memoizing callable that saves results</span>
+<span class="sd">    in self.cache.  This is largely taken from cachetools, but uses a cache</span>
+<span class="sd">    from self.cache rather than a passed value.  If self.cache_lock is</span>
+<span class="sd">    present and not none, a lock is used.</span>
+
+<span class="sd">    :param key: if a function, use that for the key, otherwise use self.wrapKey.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">decorator</span><span class="p">(</span><span class="n">func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="n">P</span><span class="p">,</span> <span class="n">T</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">T</span><span class="p">]:</span>
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">func</span><span class="p">)</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">P</span><span class="o">.</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">T</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="n">key</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="k">if</span> <span class="n">key</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">wrapKey</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">lock</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;cache_lock&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">ck</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_classkey&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">lock</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_lock</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_classkeyLock&#39;</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_classkeyLock</span><span class="o">.</span><span class="n">acquire</span><span class="p">(</span><span class="n">blocking</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_classkeyLock</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">ck</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_unlocked_classkey&#39;</span><span class="p">,</span> <span class="n">ck</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">ck</span><span class="p">:</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">ck</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">k</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">lock</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_lock</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="k">pass</span>  <span class="c1"># key not found</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="n">pickle</span><span class="o">.</span><span class="n">UnpicklingError</span><span class="p">,</span> <span class="ne">ModuleNotFoundError</span><span class="p">):</span>
+                <span class="c1"># this can happen if a different version of python wrote the record</span>
+                <span class="k">pass</span>
+            <span class="n">v</span> <span class="o">=</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">lock</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_lock</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cache</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">pass</span>  <span class="c1"># value too large</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">RuntimeError</span><span class="p">):</span>
+                <span class="c1"># the key was refused for some reason</span>
+                <span class="n">config</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="s1">&#39;Had a cache KeyError while trying to store a value to key </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">k</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">v</span>
+        <span class="k">return</span> <span class="n">wrapper</span>
+    <span class="k">return</span> <span class="n">decorator</span></div>
+
+
+
+<div class="viewcode-block" id="LruCacheMetaclass">
+<a class="viewcode-back" href="../../../_build/large_image/large_image.cache_util.html#large_image.cache_util.cache.LruCacheMetaclass">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LruCacheMetaclass</span><span class="p">(</span><span class="nb">type</span><span class="p">):</span>
+    <span class="n">namedCaches</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">classCaches</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">type</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="n">mcs</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># Get metaclass parameters by finding and removing them from the class</span>
+        <span class="c1"># namespace (necessary for Python 2), or preferentially as metaclass</span>
+        <span class="c1"># arguments (only in Python 3).</span>
+        <span class="n">cacheName</span> <span class="o">=</span> <span class="n">namespace</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cacheName&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">cacheName</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cacheName&#39;</span><span class="p">,</span> <span class="n">cacheName</span><span class="p">)</span>
+
+        <span class="n">maxSize</span> <span class="o">=</span> <span class="n">CacheProperties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cacheName</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cacheMaxSize&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">maxSize</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">cacheName</span> <span class="ow">in</span> <span class="n">CacheProperties</span> <span class="ow">and</span>
+                <span class="s1">&#39;maxItems&#39;</span> <span class="ow">in</span> <span class="n">CacheProperties</span><span class="p">[</span><span class="n">cacheName</span><span class="p">]</span> <span class="ow">and</span>
+                <span class="n">CacheProperties</span><span class="p">[</span><span class="n">cacheName</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;itemExpectedSize&#39;</span><span class="p">)):</span>
+            <span class="n">maxSize</span> <span class="o">=</span> <span class="n">pickAvailableCache</span><span class="p">(</span>
+                <span class="n">CacheProperties</span><span class="p">[</span><span class="n">cacheName</span><span class="p">][</span><span class="s1">&#39;itemExpectedSize&#39;</span><span class="p">],</span>
+                <span class="n">maxItems</span><span class="o">=</span><span class="n">CacheProperties</span><span class="p">[</span><span class="n">cacheName</span><span class="p">][</span><span class="s1">&#39;maxItems&#39;</span><span class="p">],</span>
+                <span class="n">cacheName</span><span class="o">=</span><span class="n">cacheName</span><span class="p">)</span>
+        <span class="n">maxSize</span> <span class="o">=</span> <span class="n">namespace</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cacheMaxSize&#39;</span><span class="p">,</span> <span class="n">maxSize</span><span class="p">)</span>
+        <span class="n">maxSize</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cacheMaxSize&#39;</span><span class="p">,</span> <span class="n">maxSize</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">maxSize</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Usage of the LruCacheMetaclass requires a &#39;</span>
+                            <span class="s1">&#39;&quot;cacheMaxSize&quot; attribute on the class </span><span class="si">%s</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="n">name</span><span class="p">)</span>
+
+        <span class="n">timeout</span> <span class="o">=</span> <span class="n">CacheProperties</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cacheName</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cacheTimeout&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="n">namespace</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;cacheTimeout&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+        <span class="n">timeout</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cacheTimeout&#39;</span><span class="p">,</span> <span class="n">timeout</span><span class="p">)</span>
+
+        <span class="bp">cls</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span>
+            <span class="n">mcs</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">bases</span><span class="p">,</span> <span class="n">namespace</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cacheName</span><span class="p">:</span>
+            <span class="n">cacheName</span> <span class="o">=</span> <span class="bp">cls</span>
+
+        <span class="k">if</span> <span class="n">LruCacheMetaclass</span><span class="o">.</span><span class="n">namedCaches</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">cacheName</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cache</span><span class="p">,</span> <span class="n">cacheLock</span> <span class="o">=</span> <span class="n">CacheFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getCache</span><span class="p">(</span>
+                <span class="n">numItems</span><span class="o">=</span><span class="n">maxSize</span><span class="p">,</span>
+                <span class="n">cacheName</span><span class="o">=</span><span class="n">cacheName</span><span class="p">,</span>
+                <span class="n">inProcess</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">LruCacheMetaclass</span><span class="o">.</span><span class="n">namedCaches</span><span class="p">[</span><span class="n">cacheName</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="n">cacheLock</span><span class="p">)</span>
+            <span class="n">config</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s1">&#39;Created LRU Cache for </span><span class="si">%r</span><span class="s1"> with </span><span class="si">%d</span><span class="s1"> maximum size&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">cacheName</span><span class="p">,</span> <span class="n">cache</span><span class="o">.</span><span class="n">maxsize</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="n">cacheLock</span><span class="p">)</span> <span class="o">=</span> <span class="n">LruCacheMetaclass</span><span class="o">.</span><span class="n">namedCaches</span><span class="p">[</span><span class="n">cacheName</span><span class="p">]</span>
+
+        <span class="c1"># Don&#39;t store the cache in cls.__dict__, because we don&#39;t want it to be</span>
+        <span class="c1"># part of the attribute lookup hierarchy</span>
+        <span class="c1"># TODO: consider putting it in cls.__dict__, to inspect statistics</span>
+        <span class="c1"># cls is hashable though, so use it to lookup the cache, in case an</span>
+        <span class="c1"># identically-named class gets redefined</span>
+        <span class="n">LruCacheMetaclass</span><span class="o">.</span><span class="n">classCaches</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">cache</span><span class="p">,</span> <span class="n">cacheLock</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>  <span class="c1"># noqa - N805</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;noCache&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+                <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;noCache&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">config</span><span class="o">.</span><span class="n">getConfig</span><span class="p">(</span><span class="s1">&#39;cache_sources&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="c1"># for pickling</span>
+            <span class="n">instance</span><span class="o">.</span><span class="n">_initValues</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+            <span class="n">instance</span><span class="o">.</span><span class="n">_classkey</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span>
+            <span class="n">instance</span><span class="o">.</span><span class="n">_noCache</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;style&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_unstyledStyle&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">subkwargs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">subkwargs</span><span class="p">[</span><span class="s1">&#39;style&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_unstyledStyle&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">instance</span><span class="o">.</span><span class="n">_unstyledInstance</span> <span class="o">=</span> <span class="n">subresult</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">subkwargs</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">instance</span>
+        <span class="n">cache</span><span class="p">,</span> <span class="n">cacheLock</span> <span class="o">=</span> <span class="n">LruCacheMetaclass</span><span class="o">.</span><span class="n">classCaches</span><span class="p">[</span><span class="bp">cls</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;getLRUHash&#39;</span><span class="p">):</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">getLRUHash</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="n">strhash</span><span class="p">(</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">key</span>
+        <span class="k">with</span> <span class="n">cacheLock</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span>
+                        <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">_cacheLockKeyToken</span><span class="p">):</span>
+                    <span class="k">return</span> <span class="n">result</span>
+                <span class="n">cacheLockForKey</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="c1"># By passing and handling the cache miss outside of the</span>
+                <span class="c1"># exception, any exceptions while trying to populate the cache</span>
+                <span class="c1"># will not be reported in the cache exception context.</span>
+                <span class="n">cacheLockForKey</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+                <span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">_cacheLockKeyToken</span><span class="p">,</span> <span class="n">cacheLockForKey</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">cacheLockForKey</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">cacheLock</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span>
+                            <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">_cacheLockKeyToken</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="n">result</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># This conditionally copies a non-styled class and adds a style.</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;style&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_setStyle&#39;</span><span class="p">)</span> <span class="ow">and</span>
+                        <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;style&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_unstyledStyle&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+                    <span class="n">subkwargs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="n">subkwargs</span><span class="p">[</span><span class="s1">&#39;style&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_unstyledStyle&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                    <span class="n">subresult</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">subkwargs</span><span class="p">)</span>
+                    <span class="n">result</span> <span class="o">=</span> <span class="n">subresult</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="n">subresult</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
+                    <span class="k">with</span> <span class="n">subresult</span><span class="o">.</span><span class="n">_sourceLock</span><span class="p">:</span>
+                        <span class="n">result</span><span class="o">.</span><span class="vm">__dict__</span> <span class="o">=</span> <span class="n">subresult</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                        <span class="n">result</span><span class="o">.</span><span class="n">_sourceLock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">_classkey</span> <span class="o">=</span> <span class="n">key</span>
+                    <span class="c1"># for pickling</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">_initValues</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">_unstyledInstance</span> <span class="o">=</span> <span class="n">subresult</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">_derivedSource</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="c1"># Has to be after setting the _unstyledInstance</span>
+                    <span class="n">result</span><span class="o">.</span><span class="n">_setStyle</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;style&#39;</span><span class="p">])</span>
+                    <span class="k">with</span> <span class="n">cacheLock</span><span class="p">:</span>
+                        <span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
+                        <span class="k">return</span> <span class="n">result</span>
+                <span class="n">instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="c1"># for pickling</span>
+                <span class="n">instance</span><span class="o">.</span><span class="n">_initValues</span> <span class="o">=</span> <span class="p">(</span><span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">cacheLock</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">del</span> <span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                        <span class="k">pass</span>
+                <span class="k">raise</span> <span class="n">exc</span>
+            <span class="n">instance</span><span class="o">.</span><span class="n">_classkey</span> <span class="o">=</span> <span class="n">key</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;style&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_unstyledStyle&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">subkwargs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">subkwargs</span><span class="p">[</span><span class="s1">&#39;style&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_unstyledStyle&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="n">instance</span><span class="o">.</span><span class="n">_unstyledInstance</span> <span class="o">=</span> <span class="n">subresult</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">subkwargs</span><span class="p">)</span>
+                <span class="n">instance</span><span class="o">.</span><span class="n">_derivedSource</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">with</span> <span class="n">cacheLock</span><span class="p">:</span>
+                <span class="n">cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">instance</span>
+        <span class="k">return</span> <span class="n">instance</span></div>
+
+
+
+<div class="viewcode-block" id="getTileCache">
+<a class="viewcode-back" href="../../../_build/large_image/large_image.cache_util.html#large_image.cache_util.cache.getTileCache">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">getTileCache</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">cachetools</span><span class="o">.</span><span class="n">Cache</span><span class="p">,</span> <span class="n">Optional</span><span class="p">[</span><span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">]]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the preferred tile cache and lock.</span>
+
+<span class="sd">    :returns: tileCache and tileLock.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">_tileCache</span><span class="p">,</span> <span class="n">_tileLock</span>
+
+    <span class="k">if</span> <span class="n">_tileCache</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Decide whether to use Memcached or cachetools</span>
+        <span class="n">_tileCache</span><span class="p">,</span> <span class="n">_tileLock</span> <span class="o">=</span> <span class="n">CacheFactory</span><span class="p">()</span><span class="o">.</span><span class="n">getCache</span><span class="p">(</span><span class="n">cacheName</span><span class="o">=</span><span class="s1">&#39;tileCache&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_tileCache</span><span class="p">,</span> <span class="n">_tileLock</span></div>
+
+
+
+<div class="viewcode-block" id="isTileCacheSetup">
+<a class="viewcode-back" href="../../../_build/large_image/large_image.cache_util.html#large_image.cache_util.cache.isTileCacheSetup">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">isTileCacheSetup</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return True if the tile cache has been created.</span>
+
+<span class="sd">    :returns: True if _tileCache is not None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_tileCache</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

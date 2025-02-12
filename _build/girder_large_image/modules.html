@@ -1,0 +1,232 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>girder_large_image &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="girder_large_image package" href="girder_large_image.html" />
+    <link rel="prev" title="Upgrading from Previous Versions" href="../../upgrade.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../girder_index.html">Girder Integration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../girder_config_options.html">Girder Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../girder_annotation_config_options.html">Girder Annotation Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../girder_caching.html">Caching Large Image in Girder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dicomweb_assetstore.html">DICOMweb Assetstore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../plottable.html">Plottable Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../upgrade.html">Upgrading from Previous Versions</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">girder_large_image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html">girder_large_image package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../girder_large_image_annotation/modules.html">girder_large_image_annotation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../girder_index.html">Girder Integration</a></li>
+      <li class="breadcrumb-item active">girder_large_image</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/_build/girder_large_image/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="girder-large-image">
+<h1>girder_large_image<a class="headerlink" href="#girder-large-image" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="girder_large_image.html">girder_large_image package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.models.html">girder_large_image.models package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#module-girder_large_image.models.image_item">girder_large_image.models.image_item module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#module-girder_large_image.models">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.rest.html">girder_large_image.rest package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#module-girder_large_image.rest.item_meta">girder_large_image.rest.item_meta module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#module-girder_large_image.rest.large_image_resource">girder_large_image.rest.large_image_resource module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#module-girder_large_image.rest.tiles">girder_large_image.rest.tiles module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#module-girder_large_image.rest">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image.html#module-girder_large_image.constants">girder_large_image.constants module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.constants.PluginSettings"><code class="docutils literal notranslate"><span class="pre">PluginSettings</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.constants.PluginSettings.LARGE_IMAGE_AUTO_SET"><code class="docutils literal notranslate"><span class="pre">PluginSettings.LARGE_IMAGE_AUTO_SET</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.constants.PluginSettings.LARGE_IMAGE_AUTO_USE_ALL_FILES"><code class="docutils literal notranslate"><span class="pre">PluginSettings.LARGE_IMAGE_AUTO_USE_ALL_FILES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.constants.PluginSettings.LARGE_IMAGE_CONFIG_FOLDER"><code class="docutils literal notranslate"><span class="pre">PluginSettings.LARGE_IMAGE_CONFIG_FOLDER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.constants.PluginSettings.LARGE_IMAGE_DEFAULT_VIEWER"><code class="docutils literal notranslate"><span class="pre">PluginSettings.LARGE_IMAGE_DEFAULT_VIEWER</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.constants.PluginSettings.LARGE_IMAGE_ICC_CORRECTION"><code class="docutils literal notranslate"><span class="pre">PluginSettings.LARGE_IMAGE_ICC_CORRECTION</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.constants.PluginSettings.LARGE_IMAGE_MAX_SMALL_IMAGE_SIZE"><code class="docutils literal notranslate"><span class="pre">PluginSettings.LARGE_IMAGE_MAX_SMALL_IMAGE_SIZE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.constants.PluginSettings.LARGE_IMAGE_MAX_THUMBNAIL_FILES"><code class="docutils literal notranslate"><span class="pre">PluginSettings.LARGE_IMAGE_MAX_THUMBNAIL_FILES</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.constants.PluginSettings.LARGE_IMAGE_NOTIFICATION_STREAM_FALLBACK"><code class="docutils literal notranslate"><span class="pre">PluginSettings.LARGE_IMAGE_NOTIFICATION_STREAM_FALLBACK</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_EXTRA"><code class="docutils literal notranslate"><span class="pre">PluginSettings.LARGE_IMAGE_SHOW_EXTRA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_EXTRA_ADMIN"><code class="docutils literal notranslate"><span class="pre">PluginSettings.LARGE_IMAGE_SHOW_EXTRA_ADMIN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_EXTRA_PUBLIC"><code class="docutils literal notranslate"><span class="pre">PluginSettings.LARGE_IMAGE_SHOW_EXTRA_PUBLIC</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_ITEM_EXTRA"><code class="docutils literal notranslate"><span class="pre">PluginSettings.LARGE_IMAGE_SHOW_ITEM_EXTRA</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_ITEM_EXTRA_ADMIN"><code class="docutils literal notranslate"><span class="pre">PluginSettings.LARGE_IMAGE_SHOW_ITEM_EXTRA_ADMIN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_ITEM_EXTRA_PUBLIC"><code class="docutils literal notranslate"><span class="pre">PluginSettings.LARGE_IMAGE_SHOW_ITEM_EXTRA_PUBLIC</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_THUMBNAILS"><code class="docutils literal notranslate"><span class="pre">PluginSettings.LARGE_IMAGE_SHOW_THUMBNAILS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_VIEWER"><code class="docutils literal notranslate"><span class="pre">PluginSettings.LARGE_IMAGE_SHOW_VIEWER</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image.html#module-girder_large_image.girder_tilesource">girder_large_image.girder_tilesource module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.girder_tilesource.GirderTileSource"><code class="docutils literal notranslate"><span class="pre">GirderTileSource</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.girder_tilesource.GirderTileSource.extensionsWithAdjacentFiles"><code class="docutils literal notranslate"><span class="pre">GirderTileSource.extensionsWithAdjacentFiles</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.girder_tilesource.GirderTileSource.getLRUHash"><code class="docutils literal notranslate"><span class="pre">GirderTileSource.getLRUHash()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.girder_tilesource.GirderTileSource.getState"><code class="docutils literal notranslate"><span class="pre">GirderTileSource.getState()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.girder_tilesource.GirderTileSource.girderSource"><code class="docutils literal notranslate"><span class="pre">GirderTileSource.girderSource</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.girder_tilesource.GirderTileSource.mayHaveAdjacentFiles"><code class="docutils literal notranslate"><span class="pre">GirderTileSource.mayHaveAdjacentFiles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.girder_tilesource.GirderTileSource.mimeTypesWithAdjacentFiles"><code class="docutils literal notranslate"><span class="pre">GirderTileSource.mimeTypesWithAdjacentFiles</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.girder_tilesource.getGirderTileSource"><code class="docutils literal notranslate"><span class="pre">getGirderTileSource()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.girder_tilesource.getGirderTileSourceName"><code class="docutils literal notranslate"><span class="pre">getGirderTileSourceName()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.girder_tilesource.loadGirderTileSources"><code class="docutils literal notranslate"><span class="pre">loadGirderTileSources()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image.html#module-girder_large_image.loadmodelcache">girder_large_image.loadmodelcache module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.loadmodelcache.invalidateLoadModelCache"><code class="docutils literal notranslate"><span class="pre">invalidateLoadModelCache()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.loadmodelcache.loadModel"><code class="docutils literal notranslate"><span class="pre">loadModel()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image.html#module-girder_large_image">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.LargeImagePlugin"><code class="docutils literal notranslate"><span class="pre">LargeImagePlugin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.LargeImagePlugin.DISPLAY_NAME"><code class="docutils literal notranslate"><span class="pre">LargeImagePlugin.DISPLAY_NAME</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#girder_large_image.LargeImagePlugin.load"><code class="docutils literal notranslate"><span class="pre">LargeImagePlugin.load()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.addSettingsToConfig"><code class="docutils literal notranslate"><span class="pre">addSettingsToConfig()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.adjustConfigForUser"><code class="docutils literal notranslate"><span class="pre">adjustConfigForUser()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.checkForLargeImageFiles"><code class="docutils literal notranslate"><span class="pre">checkForLargeImageFiles()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.handleCopyItem"><code class="docutils literal notranslate"><span class="pre">handleCopyItem()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.handleFileSave"><code class="docutils literal notranslate"><span class="pre">handleFileSave()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.handleRemoveFile"><code class="docutils literal notranslate"><span class="pre">handleRemoveFile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.handleSettingSave"><code class="docutils literal notranslate"><span class="pre">handleSettingSave()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.metadataSearchHandler"><code class="docutils literal notranslate"><span class="pre">metadataSearchHandler()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.patchMount"><code class="docutils literal notranslate"><span class="pre">patchMount()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.prepareCopyItem"><code class="docutils literal notranslate"><span class="pre">prepareCopyItem()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.removeThumbnails"><code class="docutils literal notranslate"><span class="pre">removeThumbnails()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.unbindGirderEventsByHandlerName"><code class="docutils literal notranslate"><span class="pre">unbindGirderEventsByHandlerName()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.validateBoolean"><code class="docutils literal notranslate"><span class="pre">validateBoolean()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.validateBooleanOrAll"><code class="docutils literal notranslate"><span class="pre">validateBooleanOrAll()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.validateBooleanOrICCIntent"><code class="docutils literal notranslate"><span class="pre">validateBooleanOrICCIntent()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.validateDefaultViewer"><code class="docutils literal notranslate"><span class="pre">validateDefaultViewer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.validateDictOrJSON"><code class="docutils literal notranslate"><span class="pre">validateDictOrJSON()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.validateFolder"><code class="docutils literal notranslate"><span class="pre">validateFolder()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.validateNonnegativeInteger"><code class="docutils literal notranslate"><span class="pre">validateNonnegativeInteger()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.yamlConfigFile"><code class="docutils literal notranslate"><span class="pre">yamlConfigFile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.html#girder_large_image.yamlConfigFileWrite"><code class="docutils literal notranslate"><span class="pre">yamlConfigFileWrite()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../upgrade.html" class="btn btn-neutral float-left" title="Upgrading from Previous Versions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="girder_large_image.html" class="btn btn-neutral float-right" title="girder_large_image package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+large\_image\_source\_vips package
+==================================
+
+Submodules
+----------
+
+large\_image\_source\_vips.girder\_source module
+------------------------------------------------
+
+.. automodule:: large_image_source_vips.girder_source
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: large_image_source_vips
+   :members:
+   :undoc-members:
+   :show-inheritance:

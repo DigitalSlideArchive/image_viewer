@@ -1,0 +1,361 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>girder_large_image.girder_tilesource &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../girder_large_image.html">girder_large_image</a></li>
+      <li class="breadcrumb-item active">girder_large_image.girder_tilesource</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for girder_large_image.girder_tilesource</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">AccessType</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">FilePathException</span><span class="p">,</span> <span class="n">ValidationException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.file</span><span class="w"> </span><span class="kn">import</span> <span class="n">File</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.item</span><span class="w"> </span><span class="kn">import</span> <span class="n">Item</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">tilesource</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">SourcePriority</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TileSourceAssetstoreError</span><span class="p">,</span> <span class="n">TileSourceError</span>
+
+<span class="n">AvailableGirderTileSources</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">KnownMimeTypes</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+<span class="n">KnownExtensions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+<span class="n">KnownMimeTypesWithAdjacentFiles</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+<span class="n">KnownExtensionsWithAdjacentFiles</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="GirderTileSource">
+<a class="viewcode-back" href="../../_build/girder_large_image/girder_large_image.html#girder_large_image.girder_tilesource.GirderTileSource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GirderTileSource</span><span class="p">(</span><span class="n">tilesource</span><span class="o">.</span><span class="n">FileTileSource</span><span class="p">):</span>
+    <span class="n">girderSource</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># If the large image file has one of these extensions or mimetypes, it will</span>
+    <span class="c1"># always be treated as if there are possible adjacent files.</span>
+    <span class="n">extensionsWithAdjacentFiles</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">mimeTypesWithAdjacentFiles</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the tile class.  See the base class for other available</span>
+<span class="sd">        parameters.</span>
+
+<span class="sd">        :param item: a Girder item document which contains</span>
+<span class="sd">            [&#39;largeImage&#39;][&#39;fileId&#39;] identifying the Girder file to be used</span>
+<span class="sd">            for the tile source.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">item</span> <span class="o">=</span> <span class="n">item</span>
+
+<div class="viewcode-block" id="GirderTileSource.getLRUHash">
+<a class="viewcode-back" href="../../_build/girder_large_image/girder_large_image.html#girder_large_image.girder_tilesource.GirderTileSource.getLRUHash">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getLRUHash</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">,</span><span class="si">%s</span><span class="s1">,</span><span class="si">%s</span><span class="s1">,</span><span class="si">%s</span><span class="s1">,</span><span class="si">%s</span><span class="s1">,</span><span class="si">%s</span><span class="s1">,</span><span class="si">%s</span><span class="s1">,__STYLESTART__,</span><span class="si">%s</span><span class="s1">,__STYLEEND__&#39;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;fileId&#39;</span><span class="p">],</span>
+            <span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;updated&#39;</span><span class="p">],</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;encoding&#39;</span><span class="p">,</span> <span class="s1">&#39;JPEG&#39;</span><span class="p">),</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;jpegQuality&#39;</span><span class="p">,</span> <span class="mi">95</span><span class="p">),</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;jpegSubsampling&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tiffCompression&#39;</span><span class="p">,</span> <span class="s1">&#39;raw&#39;</span><span class="p">),</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;edge&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;style&#39;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="GirderTileSource.getState">
+<a class="viewcode-back" href="../../_build/girder_large_image/girder_large_image.html#girder_large_image.girder_tilesource.GirderTileSource.getState">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_classkey&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_classkey</span>
+        <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">,</span><span class="si">%s</span><span class="s1">,</span><span class="si">%s</span><span class="s1">,</span><span class="si">%s</span><span class="s1">,</span><span class="si">%s</span><span class="s1">,</span><span class="si">%s</span><span class="s1">,</span><span class="si">%s</span><span class="s1">,__STYLESTART__,</span><span class="si">%s</span><span class="s1">,__STYLEEND__&#39;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;fileId&#39;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;updated&#39;</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">jpegQuality</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">jpegSubsampling</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tiffCompression</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">edge</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_jsonstyle</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GirderTileSource.mayHaveAdjacentFiles">
+<a class="viewcode-back" href="../../_build/girder_large_image/girder_large_image.html#girder_large_image.girder_tilesource.GirderTileSource.mayHaveAdjacentFiles">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">mayHaveAdjacentFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">largeImageFile</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">largeImageFile</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;linkUrl&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_mayHaveAdjacentFiles&#39;</span><span class="p">):</span>
+            <span class="n">largeImageFileId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;fileId&#39;</span><span class="p">]</span>
+            <span class="c1"># The item has adjacent files if there are any files that are not</span>
+            <span class="c1"># the large image file or an original file it was derived from.</span>
+            <span class="c1"># This is always the case if there are 3 or more files.</span>
+            <span class="n">fileIds</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">file</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">childFiles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">3</span><span class="p">)]</span>
+            <span class="n">knownIds</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">largeImageFileId</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="s1">&#39;originalId&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]:</span>
+                <span class="n">knownIds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;originalId&#39;</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_mayHaveAdjacentFiles</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">fileIds</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="ow">or</span>
+                <span class="n">fileIds</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">knownIds</span> <span class="ow">or</span>
+                <span class="n">fileIds</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">knownIds</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">any</span><span class="p">(</span><span class="n">ext</span> <span class="ow">in</span> <span class="n">KnownExtensionsWithAdjacentFiles</span> <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="n">largeImageFile</span><span class="p">[</span><span class="s1">&#39;exts&#39;</span><span class="p">])</span> <span class="ow">or</span>
+                    <span class="n">largeImageFile</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mimeType&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">KnownMimeTypesWithAdjacentFiles</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mayHaveAdjacentFiles</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mayHaveAdjacentFiles</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getLargeImagePath</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># If self.mayHaveAdjacentFiles is True, we try to use the girder</span>
+        <span class="c1"># mount where companion files appear next to each other.</span>
+        <span class="n">largeImageFileId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;fileId&#39;</span><span class="p">]</span>
+        <span class="n">largeImageFile</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">largeImageFileId</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">largeImagePath</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mayHaveAdjacentFiles</span><span class="p">(</span><span class="n">largeImageFile</span><span class="p">)</span> <span class="ow">and</span>
+                    <span class="nb">hasattr</span><span class="p">(</span><span class="n">File</span><span class="p">(),</span> <span class="s1">&#39;getGirderMountFilePath&#39;</span><span class="p">)):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">largeImageFile</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;imported&#39;</span><span class="p">)</span> <span class="ow">and</span>
+                            <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">getLocalFilePath</span><span class="p">(</span><span class="n">largeImageFile</span><span class="p">)</span> <span class="o">==</span> <span class="n">largeImageFile</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]):</span>
+                        <span class="n">largeImagePath</span> <span class="o">=</span> <span class="n">largeImageFile</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">largeImagePath</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">largeImagePath</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">getGirderMountFilePath</span><span class="p">(</span>
+                            <span class="n">largeImageFile</span><span class="p">,</span>
+                            <span class="o">**</span><span class="p">({</span><span class="s1">&#39;preferFlat&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span> <span class="k">if</span> <span class="s1">&#39;preferFlat&#39;</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span>
+                                <span class="n">File</span><span class="o">.</span><span class="n">getGirderMountFilePath</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span> <span class="k">else</span> <span class="p">{}))</span>
+                    <span class="k">except</span> <span class="n">FilePathException</span><span class="p">:</span>
+                        <span class="k">pass</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">largeImagePath</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">largeImagePath</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">getLocalFilePath</span><span class="p">(</span><span class="n">largeImageFile</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span>
+                        <span class="s1">&#39;No local file path for this file: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">return</span> <span class="n">largeImagePath</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">TileSourceAssetstoreError</span><span class="p">,</span> <span class="n">FilePathException</span><span class="p">):</span>
+            <span class="k">raise</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="n">ValidationException</span><span class="p">,</span> <span class="n">TileSourceError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span>
+                <span class="s1">&#39;No large image file in this item: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+
+
+<div class="viewcode-block" id="loadGirderTileSources">
+<a class="viewcode-back" href="../../_build/girder_large_image/girder_large_image.html#girder_large_image.girder_tilesource.loadGirderTileSources">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">loadGirderTileSources</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load all Girder tilesources from entrypoints and add them to the</span>
+<span class="sd">    AvailableGiderTileSources dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tilesource</span><span class="o">.</span><span class="n">loadTileSources</span><span class="p">(</span><span class="s1">&#39;girder_large_image.source&#39;</span><span class="p">,</span> <span class="n">AvailableGirderTileSources</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">sourceName</span> <span class="ow">in</span> <span class="n">AvailableGirderTileSources</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">AvailableGirderTileSources</span><span class="p">[</span><span class="n">sourceName</span><span class="p">],</span> <span class="s1">&#39;girderSource&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">KnownExtensions</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                <span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">AvailableGirderTileSources</span><span class="p">[</span><span class="n">sourceName</span><span class="p">]</span><span class="o">.</span><span class="n">extensions</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">})</span>
+            <span class="n">KnownExtensionsWithAdjacentFiles</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                <span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">AvailableGirderTileSources</span><span class="p">[</span><span class="n">sourceName</span><span class="p">]</span><span class="o">.</span><span class="n">extensionsWithAdjacentFiles</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">})</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">AvailableGirderTileSources</span><span class="p">[</span><span class="n">sourceName</span><span class="p">],</span> <span class="s1">&#39;girderSource&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">KnownMimeTypes</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                <span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">AvailableGirderTileSources</span><span class="p">[</span><span class="n">sourceName</span><span class="p">]</span><span class="o">.</span><span class="n">mimeTypes</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">})</span>
+            <span class="n">KnownMimeTypesWithAdjacentFiles</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                <span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">AvailableGirderTileSources</span><span class="p">[</span><span class="n">sourceName</span><span class="p">]</span><span class="o">.</span><span class="n">mimeTypesWithAdjacentFiles</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">})</span></div>
+
+
+
+<div class="viewcode-block" id="getGirderTileSourceName">
+<a class="viewcode-back" href="../../_build/girder_large_image/girder_large_image.html#girder_large_image.girder_tilesource.getGirderTileSourceName">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">getGirderTileSourceName</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a Girder tilesource name using the known sources.  If tile sources have</span>
+<span class="sd">    not yet been loaded, load them.</span>
+
+<span class="sd">    :param item: a Girder item.</span>
+<span class="sd">    :param file: if specified, the Girder file object to use as the large image</span>
+<span class="sd">        file; used here only to check extensions.</span>
+<span class="sd">    :returns: The name of a tilesource that can read the Girder item.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">AvailableGirderTileSources</span><span class="p">):</span>
+        <span class="n">loadGirderTileSources</span><span class="p">()</span>
+    <span class="n">availableSources</span> <span class="o">=</span> <span class="n">AvailableGirderTileSources</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="p">:</span>
+        <span class="n">file</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;fileId&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">mimeType</span> <span class="o">=</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;mimeType&#39;</span><span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">localPath</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">getLocalFilePath</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">FilePathException</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+        <span class="n">localPath</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">extensions</span> <span class="o">=</span> <span class="p">[</span><span class="n">entry</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;exts&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">entry</span><span class="p">]</span>
+    <span class="n">baseName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+    <span class="n">properties</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="n">localPath</span><span class="p">:</span>
+        <span class="n">properties</span><span class="p">[</span><span class="s1">&#39;_geospatial_source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tilesource</span><span class="o">.</span><span class="n">isGeospatial</span><span class="p">(</span><span class="n">localPath</span><span class="p">)</span>
+    <span class="n">ignored_names</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getConfig</span><span class="p">(</span><span class="s1">&#39;all_sources_ignored_names&#39;</span><span class="p">)</span>
+    <span class="n">ignoreName</span> <span class="o">=</span> <span class="p">(</span><span class="n">ignored_names</span> <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+        <span class="n">ignored_names</span><span class="p">,</span> <span class="n">baseName</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">re</span><span class="o">.</span><span class="n">IGNORECASE</span><span class="p">))</span>
+    <span class="n">sourceList</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">sourceName</span> <span class="ow">in</span> <span class="n">availableSources</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">availableSources</span><span class="p">[</span><span class="n">sourceName</span><span class="p">],</span> <span class="s1">&#39;girderSource&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">sourceExtensions</span> <span class="o">=</span> <span class="n">availableSources</span><span class="p">[</span><span class="n">sourceName</span><span class="p">]</span><span class="o">.</span><span class="n">extensions</span>
+        <span class="n">priority</span> <span class="o">=</span> <span class="n">sourceExtensions</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">MANUAL</span><span class="p">)</span>
+        <span class="n">fallback</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mimeType</span> <span class="ow">and</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">availableSources</span><span class="p">[</span><span class="n">sourceName</span><span class="p">],</span> <span class="s1">&#39;mimeTypes&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span>
+                <span class="n">mimeType</span> <span class="ow">in</span> <span class="n">availableSources</span><span class="p">[</span><span class="n">sourceName</span><span class="p">]</span><span class="o">.</span><span class="n">mimeTypes</span><span class="p">):</span>
+            <span class="n">priority</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">priority</span><span class="p">,</span> <span class="n">availableSources</span><span class="p">[</span><span class="n">sourceName</span><span class="p">]</span><span class="o">.</span><span class="n">mimeTypes</span><span class="p">[</span><span class="n">mimeType</span><span class="p">])</span>
+            <span class="n">fallback</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">regex</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">availableSources</span><span class="p">[</span><span class="n">sourceName</span><span class="p">],</span> <span class="s1">&#39;nameMatches&#39;</span><span class="p">,</span> <span class="p">{}):</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">regex</span><span class="p">,</span> <span class="n">baseName</span><span class="p">):</span>
+                <span class="n">priority</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">priority</span><span class="p">,</span> <span class="n">availableSources</span><span class="p">[</span><span class="n">sourceName</span><span class="p">]</span><span class="o">.</span><span class="n">nameMatches</span><span class="p">[</span><span class="n">regex</span><span class="p">])</span>
+                <span class="n">fallback</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="n">extensions</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">ext</span> <span class="ow">in</span> <span class="n">sourceExtensions</span><span class="p">:</span>
+                <span class="n">priority</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">priority</span><span class="p">,</span> <span class="n">sourceExtensions</span><span class="p">[</span><span class="n">ext</span><span class="p">])</span>
+                <span class="n">fallback</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">priority</span> <span class="o">&gt;=</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">MANUAL</span> <span class="ow">or</span> <span class="p">(</span><span class="n">ignoreName</span> <span class="ow">and</span> <span class="n">fallback</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="n">propertiesClash</span> <span class="o">=</span> <span class="nb">any</span><span class="p">(</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="n">availableSources</span><span class="p">[</span><span class="n">sourceName</span><span class="p">],</span> <span class="n">k</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="o">!=</span> <span class="n">v</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">properties</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+        <span class="n">sourceList</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">propertiesClash</span><span class="p">,</span> <span class="n">fallback</span><span class="p">,</span> <span class="n">priority</span><span class="p">,</span> <span class="n">sourceName</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">_clash</span><span class="p">,</span> <span class="n">_fallback</span><span class="p">,</span> <span class="n">_priority</span><span class="p">,</span> <span class="n">sourceName</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">sourceList</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">availableSources</span><span class="p">[</span><span class="n">sourceName</span><span class="p">]</span><span class="o">.</span><span class="n">canRead</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">sourceName</span></div>
+
+
+
+<div class="viewcode-block" id="getGirderTileSource">
+<a class="viewcode-back" href="../../_build/girder_large_image/girder_large_image.html#girder_large_image.girder_tilesource.getGirderTileSource">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">getGirderTileSource</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a Girder tilesource using the known sources.</span>
+
+<span class="sd">    :param item: a Girder item or an item id.</span>
+<span class="sd">    :param file: if specified, the Girder file object to use as the large image</span>
+<span class="sd">        file; used here only to check extensions.</span>
+<span class="sd">    :returns: A girder tilesource for the item.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;user&#39;</span><span class="p">),</span> <span class="n">level</span><span class="o">=</span><span class="n">AccessType</span><span class="o">.</span><span class="n">READ</span><span class="p">)</span>
+    <span class="n">sourceName</span> <span class="o">=</span> <span class="n">getGirderTileSourceName</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">sourceName</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">AvailableGirderTileSources</span><span class="p">[</span><span class="n">sourceName</span><span class="p">](</span><span class="n">item</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

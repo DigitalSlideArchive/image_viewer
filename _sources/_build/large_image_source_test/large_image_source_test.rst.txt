@@ -1,0 +1,10 @@
+large\_image\_source\_test package
+==================================
+
+Module contents
+---------------
+
+.. automodule:: large_image_source_test
+   :members:
+   :undoc-members:
+   :show-inheritance:

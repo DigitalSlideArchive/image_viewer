@@ -1,0 +1,391 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>girder_large_image_annotation package &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="girder_large_image_annotation.models package" href="girder_large_image_annotation.models.html" />
+    <link rel="prev" title="girder_large_image_annotation" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../girder_index.html">Girder Integration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../girder_config_options.html">Girder Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../girder_annotation_config_options.html">Girder Annotation Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../girder_caching.html">Caching Large Image in Girder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dicomweb_assetstore.html">DICOMweb Assetstore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../plottable.html">Plottable Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../upgrade.html">Upgrading from Previous Versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../girder_large_image/modules.html">girder_large_image</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">girder_large_image_annotation</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">girder_large_image_annotation package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-girder_large_image_annotation.constants">girder_large_image_annotation.constants module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-girder_large_image_annotation.handlers">girder_large_image_annotation.handlers module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-girder_large_image_annotation">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../girder_index.html">Girder Integration</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">girder_large_image_annotation</a></li>
+      <li class="breadcrumb-item active">girder_large_image_annotation package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/_build/girder_large_image_annotation/girder_large_image_annotation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="girder-large-image-annotation-package">
+<h1>girder_large_image_annotation package<a class="headerlink" href="#girder-large-image-annotation-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="girder_large_image_annotation.models.html">girder_large_image_annotation.models package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image_annotation.models.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image_annotation.models.html#module-girder_large_image_annotation.models.annotation">girder_large_image_annotation.models.annotation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation"><code class="docutils literal notranslate"><span class="pre">Annotation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.Skill"><code class="docutils literal notranslate"><span class="pre">Annotation.Skill</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.baseFields"><code class="docutils literal notranslate"><span class="pre">Annotation.baseFields</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.createAnnotation"><code class="docutils literal notranslate"><span class="pre">Annotation.createAnnotation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.deleteMetadata"><code class="docutils literal notranslate"><span class="pre">Annotation.deleteMetadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.findAnnotatedImages"><code class="docutils literal notranslate"><span class="pre">Annotation.findAnnotatedImages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.geojson"><code class="docutils literal notranslate"><span class="pre">Annotation.geojson()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.getVersion"><code class="docutils literal notranslate"><span class="pre">Annotation.getVersion()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.idRegex"><code class="docutils literal notranslate"><span class="pre">Annotation.idRegex</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.initialize"><code class="docutils literal notranslate"><span class="pre">Annotation.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.injectAnnotationGroupSet"><code class="docutils literal notranslate"><span class="pre">Annotation.injectAnnotationGroupSet()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.load"><code class="docutils literal notranslate"><span class="pre">Annotation.load()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.numberInstance"><code class="docutils literal notranslate"><span class="pre">Annotation.numberInstance</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.remove"><code class="docutils literal notranslate"><span class="pre">Annotation.remove()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.removeOldAnnotations"><code class="docutils literal notranslate"><span class="pre">Annotation.removeOldAnnotations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.revertVersion"><code class="docutils literal notranslate"><span class="pre">Annotation.revertVersion()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.save"><code class="docutils literal notranslate"><span class="pre">Annotation.save()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.setAccessList"><code class="docutils literal notranslate"><span class="pre">Annotation.setAccessList()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.setMetadata"><code class="docutils literal notranslate"><span class="pre">Annotation.setMetadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.updateAnnotation"><code class="docutils literal notranslate"><span class="pre">Annotation.updateAnnotation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.validate"><code class="docutils literal notranslate"><span class="pre">Annotation.validate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.validatorAnnotation"><code class="docutils literal notranslate"><span class="pre">Annotation.validatorAnnotation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.validatorAnnotationElement"><code class="docutils literal notranslate"><span class="pre">Annotation.validatorAnnotationElement</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.Annotation.versionList"><code class="docutils literal notranslate"><span class="pre">Annotation.versionList()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.annotationElementSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.annotationElementSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.annotationSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.annotationSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.arrowShapeSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.arrowShapeSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.baseElementSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.baseElementSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.baseRectangleShapeSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.baseRectangleShapeSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.baseShapeSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.baseShapeSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.circleShapeSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.circleShapeSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.colorRangeSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.colorRangeSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.colorSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.colorSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.coordSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.coordSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.coordValueSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.coordValueSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.ellipseShapeSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.ellipseShapeSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.griddataSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.griddataSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.groupSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.groupSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.heatmapSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.heatmapSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.labelSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.labelSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.overlaySchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.overlaySchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.pixelmapCategorySchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.pixelmapCategorySchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.pixelmapSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.pixelmapSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.pointShapeSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.pointShapeSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.polylineShapeSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.polylineShapeSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.rangeValueSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.rangeValueSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.rectangleGridShapeSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.rectangleGridShapeSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.rectangleShapeSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.rectangleShapeSchema</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.transformArray"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.transformArray</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.AnnotationSchema.userSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationSchema.userSchema</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotation.extendSchema"><code class="docutils literal notranslate"><span class="pre">extendSchema()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image_annotation.models.html#module-girder_large_image_annotation.models.annotationelement">girder_large_image_annotation.models.annotationelement module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement"><code class="docutils literal notranslate"><span class="pre">Annotationelement</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.bboxKeys"><code class="docutils literal notranslate"><span class="pre">Annotationelement.bboxKeys</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.countElements"><code class="docutils literal notranslate"><span class="pre">Annotationelement.countElements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.getElementGroupSet"><code class="docutils literal notranslate"><span class="pre">Annotationelement.getElementGroupSet()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.getElements"><code class="docutils literal notranslate"><span class="pre">Annotationelement.getElements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.getNextVersionValue"><code class="docutils literal notranslate"><span class="pre">Annotationelement.getNextVersionValue()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.initialize"><code class="docutils literal notranslate"><span class="pre">Annotationelement.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.removeElements"><code class="docutils literal notranslate"><span class="pre">Annotationelement.removeElements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.removeOldElements"><code class="docutils literal notranslate"><span class="pre">Annotationelement.removeOldElements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.removeWithQuery"><code class="docutils literal notranslate"><span class="pre">Annotationelement.removeWithQuery()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.saveElementAsFile"><code class="docutils literal notranslate"><span class="pre">Annotationelement.saveElementAsFile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.updateElementChunk"><code class="docutils literal notranslate"><span class="pre">Annotationelement.updateElementChunk()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.updateElements"><code class="docutils literal notranslate"><span class="pre">Annotationelement.updateElements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.yieldElements"><code class="docutils literal notranslate"><span class="pre">Annotationelement.yieldElements()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image_annotation.models.html#module-girder_large_image_annotation.models">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="girder_large_image_annotation.rest.html">girder_large_image_annotation.rest package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image_annotation.rest.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image_annotation.rest.html#module-girder_large_image_annotation.rest.annotation">girder_large_image_annotation.rest.annotation module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource"><code class="docutils literal notranslate"><span class="pre">AnnotationResource</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.canCreateFolderAnnotations"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.canCreateFolderAnnotations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.copyAnnotation"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.copyAnnotation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.createAnnotation"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.createAnnotation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.createItemAnnotations"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.createItemAnnotations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.deleteAnnotation"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.deleteAnnotation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.deleteFolderAnnotations"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.deleteFolderAnnotations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.deleteItemAnnotations"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.deleteItemAnnotations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.deleteMetadata"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.deleteMetadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.deleteOldAnnotations"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.deleteOldAnnotations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.existFolderAnnotations"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.existFolderAnnotations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.find"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.find()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.findAnnotatedImages"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.findAnnotatedImages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.getAnnotation"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.getAnnotation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.getAnnotationAccess"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.getAnnotationAccess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.getAnnotationHistory"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.getAnnotationHistory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.getAnnotationHistoryList"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.getAnnotationHistoryList()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.getAnnotationSchema"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.getAnnotationSchema()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.getAnnotationWithFormat"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.getAnnotationWithFormat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.getFolderAnnotations"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.getFolderAnnotations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.getItemAnnotations"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.getItemAnnotations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.getItemListAnnotationCounts"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.getItemListAnnotationCounts()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.getItemPlottableData"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.getItemPlottableData()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.getItemPlottableElements"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.getItemPlottableElements()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.getOldAnnotations"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.getOldAnnotations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.returnFolderAnnotations"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.returnFolderAnnotations()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.revertAnnotationHistory"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.revertAnnotationHistory()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.setFolderAnnotationAccess"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.setFolderAnnotationAccess()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.setMetadata"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.setMetadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.updateAnnotation"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.updateAnnotation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.rest.html#girder_large_image_annotation.rest.annotation.AnnotationResource.updateAnnotationAccess"><code class="docutils literal notranslate"><span class="pre">AnnotationResource.updateAnnotationAccess()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image_annotation.rest.html#module-girder_large_image_annotation.rest">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="girder_large_image_annotation.utils.html">girder_large_image_annotation.utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image_annotation.utils.html#module-girder_large_image_annotation.utils">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.AnnotationGeoJSON"><code class="docutils literal notranslate"><span class="pre">AnnotationGeoJSON</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.AnnotationGeoJSON.circleType"><code class="docutils literal notranslate"><span class="pre">AnnotationGeoJSON.circleType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.AnnotationGeoJSON.elementToGeoJSON"><code class="docutils literal notranslate"><span class="pre">AnnotationGeoJSON.elementToGeoJSON()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.AnnotationGeoJSON.ellipseType"><code class="docutils literal notranslate"><span class="pre">AnnotationGeoJSON.ellipseType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.AnnotationGeoJSON.geojson"><code class="docutils literal notranslate"><span class="pre">AnnotationGeoJSON.geojson</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.AnnotationGeoJSON.pointType"><code class="docutils literal notranslate"><span class="pre">AnnotationGeoJSON.pointType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.AnnotationGeoJSON.polylineType"><code class="docutils literal notranslate"><span class="pre">AnnotationGeoJSON.polylineType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.AnnotationGeoJSON.rectangleType"><code class="docutils literal notranslate"><span class="pre">AnnotationGeoJSON.rectangleType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.AnnotationGeoJSON.rotate"><code class="docutils literal notranslate"><span class="pre">AnnotationGeoJSON.rotate()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.GeoJSONAnnotation"><code class="docutils literal notranslate"><span class="pre">GeoJSONAnnotation</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.GeoJSONAnnotation.annotation"><code class="docutils literal notranslate"><span class="pre">GeoJSONAnnotation.annotation</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.GeoJSONAnnotation.annotationToJSON"><code class="docutils literal notranslate"><span class="pre">GeoJSONAnnotation.annotationToJSON()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.GeoJSONAnnotation.circleType"><code class="docutils literal notranslate"><span class="pre">GeoJSONAnnotation.circleType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.GeoJSONAnnotation.elementCount"><code class="docutils literal notranslate"><span class="pre">GeoJSONAnnotation.elementCount</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.GeoJSONAnnotation.elements"><code class="docutils literal notranslate"><span class="pre">GeoJSONAnnotation.elements</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.GeoJSONAnnotation.ellipseType"><code class="docutils literal notranslate"><span class="pre">GeoJSONAnnotation.ellipseType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.GeoJSONAnnotation.linestringType"><code class="docutils literal notranslate"><span class="pre">GeoJSONAnnotation.linestringType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.GeoJSONAnnotation.multilinestringType"><code class="docutils literal notranslate"><span class="pre">GeoJSONAnnotation.multilinestringType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.GeoJSONAnnotation.multipointType"><code class="docutils literal notranslate"><span class="pre">GeoJSONAnnotation.multipointType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.GeoJSONAnnotation.multipolygonType"><code class="docutils literal notranslate"><span class="pre">GeoJSONAnnotation.multipolygonType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.GeoJSONAnnotation.pointType"><code class="docutils literal notranslate"><span class="pre">GeoJSONAnnotation.pointType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.GeoJSONAnnotation.polygonType"><code class="docutils literal notranslate"><span class="pre">GeoJSONAnnotation.polygonType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.GeoJSONAnnotation.polylineType"><code class="docutils literal notranslate"><span class="pre">GeoJSONAnnotation.polylineType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.GeoJSONAnnotation.rectangleType"><code class="docutils literal notranslate"><span class="pre">GeoJSONAnnotation.rectangleType()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.PlottableItemData"><code class="docutils literal notranslate"><span class="pre">PlottableItemData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.PlottableItemData.allowedTypes"><code class="docutils literal notranslate"><span class="pre">PlottableItemData.allowedTypes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.PlottableItemData.columns"><code class="docutils literal notranslate"><span class="pre">PlottableItemData.columns</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.PlottableItemData.commonColumns"><code class="docutils literal notranslate"><span class="pre">PlottableItemData.commonColumns</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.PlottableItemData.computeColumns"><code class="docutils literal notranslate"><span class="pre">PlottableItemData.computeColumns</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.PlottableItemData.data"><code class="docutils literal notranslate"><span class="pre">PlottableItemData.data()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.PlottableItemData.datafileAnnotationElementSelector"><code class="docutils literal notranslate"><span class="pre">PlottableItemData.datafileAnnotationElementSelector()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.PlottableItemData.itemNameIDSelector"><code class="docutils literal notranslate"><span class="pre">PlottableItemData.itemNameIDSelector()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.PlottableItemData.keySelector"><code class="docutils literal notranslate"><span class="pre">PlottableItemData.keySelector()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.PlottableItemData.maxAnnotationElements"><code class="docutils literal notranslate"><span class="pre">PlottableItemData.maxAnnotationElements</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.PlottableItemData.maxDistinct"><code class="docutils literal notranslate"><span class="pre">PlottableItemData.maxDistinct</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.PlottableItemData.maxItems"><code class="docutils literal notranslate"><span class="pre">PlottableItemData.maxItems</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.PlottableItemData.recordSelector"><code class="docutils literal notranslate"><span class="pre">PlottableItemData.recordSelector()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.isGeoJSON"><code class="docutils literal notranslate"><span class="pre">isGeoJSON()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-girder_large_image_annotation.constants">
+<span id="girder-large-image-annotation-constants-module"></span><h2>girder_large_image_annotation.constants module<a class="headerlink" href="#module-girder_large_image_annotation.constants" title="Link to this heading"></a></h2>
+</section>
+<section id="module-girder_large_image_annotation.handlers">
+<span id="girder-large-image-annotation-handlers-module"></span><h2>girder_large_image_annotation.handlers module<a class="headerlink" href="#module-girder_large_image_annotation.handlers" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image_annotation.handlers.process_annotations">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image_annotation.handlers.</span></span><span class="sig-name descname"><span class="pre">process_annotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/handlers.html#process_annotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.handlers.process_annotations" title="Link to this definition"></a></dt>
+<dd><p>Add annotations to an image on a <code class="docutils literal notranslate"><span class="pre">data.process</span></code> event</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image_annotation.handlers.resolveAnnotationGirderIds">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image_annotation.handlers.</span></span><span class="sig-name descname"><span class="pre">resolveAnnotationGirderIds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">results</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">possibleGirderIds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/handlers.html#resolveAnnotationGirderIds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.handlers.resolveAnnotationGirderIds" title="Link to this definition"></a></dt>
+<dd><p>If an annotation has references to girderIds, resolve them to actual ids.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>event</strong> – a data.process event.</p></li>
+<li><p><strong>results</strong> – the results from _itemFromEvent,</p></li>
+<li><p><strong>data</strong> – annotation data.</p></li>
+<li><p><strong>possibleGirderIds</strong> – a list of annotation elements with girderIds
+needing resolution.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if all ids were processed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-girder_large_image_annotation">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-girder_large_image_annotation" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="girder_large_image_annotation.LargeImageAnnotationPlugin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">girder_large_image_annotation.</span></span><span class="sig-name descname"><span class="pre">LargeImageAnnotationPlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entrypoint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation.html#LargeImageAnnotationPlugin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.LargeImageAnnotationPlugin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GirderPlugin</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image_annotation.LargeImageAnnotationPlugin.DISPLAY_NAME">
+<span class="sig-name descname"><span class="pre">DISPLAY_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Large</span> <span class="pre">Image</span> <span class="pre">Annotation'</span></em><a class="headerlink" href="#girder_large_image_annotation.LargeImageAnnotationPlugin.DISPLAY_NAME" title="Link to this definition"></a></dt>
+<dd><p>This is the named displayed to users on the plugin page.  Unlike the entrypoint name
+used internally, this name can be an arbitrary string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.LargeImageAnnotationPlugin.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation.html#LargeImageAnnotationPlugin.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.LargeImageAnnotationPlugin.load" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image_annotation.metadataSearchHandler">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image_annotation.</span></span><span class="sig-name descname"><span class="pre">metadataSearchHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation.html#metadataSearchHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.metadataSearchHandler" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image_annotation.validateBoolean">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image_annotation.</span></span><span class="sig-name descname"><span class="pre">validateBoolean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation.html#validateBoolean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.validateBoolean" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="girder_large_image_annotation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="girder_large_image_annotation.models.html" class="btn btn-neutral float-right" title="girder_large_image_annotation.models package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

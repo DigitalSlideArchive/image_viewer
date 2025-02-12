@@ -1,0 +1,401 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_converter.format_aperio &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../large_image_converter.html">large_image_converter</a></li>
+      <li class="breadcrumb-item active">large_image_converter.format_aperio</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image_converter.format_aperio</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">large_image_source_tiff</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tifftools</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+
+<span class="n">AperioHeader</span> <span class="o">=</span> <span class="s1">&#39;Aperio Image Library v10.0.0</span><span class="se">\n</span><span class="s1">&#39;</span>
+<span class="n">FullHeaderStart</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{width}</span><span class="s1">x</span><span class="si">{height}</span><span class="s1"> [0,0 </span><span class="si">{width}</span><span class="s1">x</span><span class="si">{height}</span><span class="s1">] (</span><span class="si">{tileSize}</span><span class="s1">x</span><span class="si">{tileSize}</span><span class="s1">)&#39;</span>
+<span class="n">LowHeaderChunk</span> <span class="o">=</span> <span class="s1">&#39; -&gt; </span><span class="si">{width}</span><span class="s1">x</span><span class="si">{height}</span><span class="s1">&#39;</span>
+<span class="n">AssociatedHeader</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{name}</span><span class="s1"> </span><span class="si">{width}</span><span class="s1">x</span><span class="si">{height}</span><span class="s1">&#39;</span>
+<span class="n">ThumbnailHeader</span> <span class="o">=</span> <span class="s1">&#39;-&gt; </span><span class="si">{width}</span><span class="s1">x</span><span class="si">{height}</span><span class="s1"> - |&#39;</span>
+
+
+<div class="viewcode-block" id="adjust_params">
+<a class="viewcode-back" href="../../_build/large_image_converter/large_image_converter.html#large_image_converter.format_aperio.adjust_params">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">adjust_params</span><span class="p">(</span><span class="n">geospatial</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adjust options for aperio format.</span>
+
+<span class="sd">    :param geospatial: True if the source is geospatial.</span>
+<span class="sd">    :param params: the conversion options.  Possibly modified.</span>
+<span class="sd">    :returns: suffix: the recommended suffix for the new file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">geospatial</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Aperio format cannot be used with geospatial sources.&#39;</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;subifds&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">params</span><span class="p">[</span><span class="s1">&#39;subifds&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="s1">&#39;.svs&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="modify_vips_image_before_output">
+<a class="viewcode-back" href="../../_build/large_image_converter/large_image_converter.html#large_image_converter.format_aperio.modify_vips_image_before_output">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">modify_vips_image_before_output</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">convertParams</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make sure the vips image is either 1 or 3 bands.</span>
+
+<span class="sd">    :param image: a vips image.</span>
+<span class="sd">    :param convertParams: the parameters that will be used for compression.</span>
+<span class="sd">    :returns: a vips image.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">image</span><span class="p">[:</span><span class="mi">3</span> <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">bands</span> <span class="o">&gt;=</span> <span class="mi">3</span> <span class="k">else</span> <span class="mi">1</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="modify_tiled_ifd">
+<a class="viewcode-back" href="../../_build/large_image_converter/large_image_converter.html#large_image_converter.format_aperio.modify_tiled_ifd">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">modify_tiled_ifd</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">ifd</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">ifdIndices</span><span class="p">,</span> <span class="n">lidata</span><span class="p">,</span> <span class="n">liDesc</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Modify a tiled image to add aperio metadata and ensure tags are set</span>
+<span class="sd">    appropriately.</span>
+
+<span class="sd">    :param info: the tifftools info that will be written to the tiff tile;</span>
+<span class="sd">        modified.</span>
+<span class="sd">    :param ifd: the full resolution ifd as read by tifftools.</span>
+<span class="sd">    :param idx: index of this ifd.</span>
+<span class="sd">    :param ifdIndices: the 0-based index of the full resolution ifd of each</span>
+<span class="sd">        frame followed by the ifd of the first associated image.</span>
+<span class="sd">    :param lidata: large_image data including metadata and associated images.</span>
+<span class="sd">    :param liDesc: the parsed json from the original large_image_converter</span>
+<span class="sd">        description.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">descStart</span> <span class="o">=</span> <span class="n">FullHeaderStart</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+        <span class="n">width</span><span class="o">=</span><span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageWidth</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">height</span><span class="o">=</span><span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageHeight</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="n">tileSize</span><span class="o">=</span><span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">TileWidth</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">formatChunk</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;compression&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;jpeg&#39;</span><span class="p">:</span>
+        <span class="n">formatChunk</span> <span class="o">=</span> <span class="s1">&#39;JPEG/RGB Q=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Q&#39;</span><span class="p">,</span> <span class="mi">90</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;compression&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;jp2k&#39;</span><span class="p">:</span>
+        <span class="n">formatChunk</span> <span class="o">=</span> <span class="s1">&#39;J2K/YUV16 Q=</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;psnr&#39;</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cratios&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;Converter&#39;</span><span class="p">:</span> <span class="s1">&#39;large_image_converter&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;ConverterVersion&#39;</span><span class="p">:</span> <span class="n">liDesc</span><span class="p">[</span><span class="s1">&#39;large_image_converter&#39;</span><span class="p">][</span><span class="s1">&#39;version&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;ConverterEpoch&#39;</span><span class="p">:</span> <span class="n">liDesc</span><span class="p">[</span><span class="s1">&#39;large_image_converter&#39;</span><span class="p">][</span><span class="s1">&#39;conversion_epoch&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;MPP&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">][</span><span class="s1">&#39;mm_x&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1000</span>
+                <span class="k">if</span> <span class="n">lidata</span> <span class="ow">and</span> <span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mm_x&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s1">&#39;AppMag&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">][</span><span class="s1">&#39;magnification&#39;</span><span class="p">]</span>
+                   <span class="k">if</span> <span class="n">lidata</span> <span class="ow">and</span> <span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;magnification&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">}</span>
+    <span class="n">compressionTag</span> <span class="o">=</span> <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">Compression</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">compressionTag</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">Compression</span><span class="o">.</span><span class="n">JP2000</span><span class="p">:</span>
+        <span class="n">compressionTag</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">Compression</span><span class="o">.</span><span class="n">JP2kRGB</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ifdIndices</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;OffsetZ&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;TotalDepth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ifdIndices</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;IndexRange&#39;</span><span class="p">][</span><span class="s1">&#39;IndexZ&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;TotalDepth&#39;</span><span class="p">]:</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;OffsetZ&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">][</span><span class="s1">&#39;frames&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="s1">&#39;mm_z&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1000</span>
+                <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;TotalDepth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">][</span><span class="s1">&#39;frames&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;mm_z&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span>
+                    <span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">][</span><span class="s1">&#39;frames&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">2</span><span class="p">][</span><span class="s1">&#39;mm_z&#39;</span><span class="p">])</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">AperioHeader</span><span class="si">}{</span><span class="n">descStart</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">formatChunk</span><span class="si">}</span><span class="s1">|&#39;</span> <span class="o">+</span>
+        <span class="s1">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1"> = </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">items</span><span class="p">())</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">))</span>
+    <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageDescription</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+        <span class="s1">&#39;datatype&#39;</span><span class="p">:</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">Datatype</span><span class="o">.</span><span class="n">ASCII</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">NewSubfileType</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="s1">&#39;datatype&#39;</span><span class="p">:</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">Datatype</span><span class="o">.</span><span class="n">LONG</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">ifdIndices</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">subifds</span> <span class="o">=</span> <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">SubIFD</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;ifds&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">subifds</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="n">ifdIndices</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span> <span class="n">ifdIndices</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span>
+    <span class="k">for</span> <span class="n">subifd</span> <span class="ow">in</span> <span class="n">subifds</span><span class="p">:</span>
+        <span class="n">lowerDesc</span> <span class="o">=</span> <span class="n">LowHeaderChunk</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">width</span><span class="o">=</span><span class="n">subifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageWidth</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">height</span><span class="o">=</span><span class="n">subifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageHeight</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;MPP&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;MPP&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;MPP&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;AppMag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;AppMag&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;AppMag&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">AperioHeader</span><span class="si">}{</span><span class="n">descStart</span><span class="si">}{</span><span class="n">lowerDesc</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">formatChunk</span><span class="si">}</span><span class="s1">|&#39;</span> <span class="o">+</span>
+            <span class="s1">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s1"> = </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">items</span><span class="p">())</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">))</span>
+        <span class="n">subifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageDescription</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+            <span class="s1">&#39;datatype&#39;</span><span class="p">:</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">Datatype</span><span class="o">.</span><span class="n">ASCII</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">subifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">NewSubfileType</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;datatype&#39;</span><span class="p">:</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">Datatype</span><span class="o">.</span><span class="n">LONG</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">compressionTag</span> <span class="o">=</span> <span class="n">subifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">Compression</span><span class="o">.</span><span class="n">value</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">compressionTag</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">Compression</span><span class="o">.</span><span class="n">JP2000</span><span class="p">:</span>
+            <span class="n">compressionTag</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">Compression</span><span class="o">.</span><span class="n">JP2kRGB</span></div>
+
+
+
+<div class="viewcode-block" id="create_thumbnail_and_label">
+<a class="viewcode-back" href="../../_build/large_image_converter/large_image_converter.html#large_image_converter.format_aperio.create_thumbnail_and_label">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_thumbnail_and_label</span><span class="p">(</span><span class="n">tempPath</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">ifdCount</span><span class="p">,</span> <span class="n">needsLabel</span><span class="p">,</span> <span class="n">labelPosition</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create a thumbnail and, optionally, label image for the aperio file.</span>
+
+<span class="sd">    :param tempPath: a temporary file in a temporary directory.</span>
+<span class="sd">    :param info: the tifftools info that will be written to the tiff tile;</span>
+<span class="sd">        modified.</span>
+<span class="sd">    :param ifdCount: the number of ifds in the first tiled image.  This is 1 if</span>
+<span class="sd">        there are subifds.</span>
+<span class="sd">    :param needsLabel: true if a label image needs to be added.</span>
+<span class="sd">    :param labelPosition: the position in the ifd list where a label image</span>
+<span class="sd">        should be inserted.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">thumbnailSize</span> <span class="o">=</span> <span class="mi">1024</span>
+    <span class="n">labelSize</span> <span class="o">=</span> <span class="mi">640</span>
+    <span class="n">maxLabelAspect</span> <span class="o">=</span> <span class="mf">1.5</span>
+    <span class="n">tileSize</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">TileWidth</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">levels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">thumbnailSize</span><span class="p">,</span> <span class="n">labelSize</span><span class="p">)</span> <span class="o">/</span> <span class="n">tileSize</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="n">neededList</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;thumbnail&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">needsLabel</span><span class="p">:</span>
+        <span class="n">neededList</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">]</span>
+    <span class="n">tiledPath</span> <span class="o">=</span> <span class="n">tempPath</span> <span class="o">+</span> <span class="s1">&#39;-overview.tiff&#39;</span>
+    <span class="n">firstFrameIfds</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ifdCount</span> <span class="o">-</span> <span class="n">levels</span><span class="p">):</span><span class="n">ifdCount</span><span class="p">]</span>
+    <span class="n">tifftools</span><span class="o">.</span><span class="n">write_tiff</span><span class="p">(</span><span class="n">firstFrameIfds</span><span class="p">,</span> <span class="n">tiledPath</span><span class="p">)</span>
+    <span class="n">ts</span> <span class="o">=</span> <span class="n">large_image_source_tiff</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">tiledPath</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">subImage</span> <span class="ow">in</span> <span class="n">neededList</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">subImage</span> <span class="o">==</span> <span class="s1">&#39;label&#39;</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">sizeX</span><span class="p">,</span> <span class="n">ts</span><span class="o">.</span><span class="n">sizeY</span><span class="p">)</span> <span class="o">*</span> <span class="n">maxLabelAspect</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">-</span> <span class="nb">min</span><span class="p">(</span><span class="n">ts</span><span class="o">.</span><span class="n">sizeX</span><span class="p">,</span> <span class="n">ts</span><span class="o">.</span><span class="n">sizeY</span><span class="p">)</span> <span class="o">*</span> <span class="n">maxLabelAspect</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">regionParams</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">maxWidth</span><span class="o">=</span><span class="n">labelSize</span><span class="p">,</span> <span class="n">maxHeight</span><span class="o">=</span><span class="n">labelSize</span><span class="p">),</span>
+                <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="n">ts</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">-</span> <span class="n">y</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">regionParams</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">maxWidth</span><span class="o">=</span><span class="n">thumbnailSize</span><span class="p">,</span> <span class="n">maxHeight</span><span class="o">=</span><span class="n">thumbnailSize</span><span class="p">)}</span>
+        <span class="n">image</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">getRegion</span><span class="p">(</span>
+            <span class="nb">format</span><span class="o">=</span><span class="n">large_image</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">TILE_FORMAT_PIL</span><span class="p">,</span> <span class="o">**</span><span class="n">regionParams</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;RGB&#39;</span><span class="p">,</span> <span class="s1">&#39;L&#39;</span><span class="p">}:</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">subImage</span> <span class="o">==</span> <span class="s1">&#39;label&#39;</span><span class="p">:</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mi">90</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">imagePath</span> <span class="o">=</span> <span class="n">tempPath</span> <span class="o">+</span> <span class="s1">&#39;-image_</span><span class="si">%s</span><span class="s1">.tiff&#39;</span> <span class="o">%</span> <span class="n">subImage</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+            <span class="n">imagePath</span><span class="p">,</span> <span class="s1">&#39;TIFF&#39;</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="s1">&#39;tiff_jpeg&#39;</span><span class="p">,</span>
+            <span class="n">quality</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;quality&#39;</span><span class="p">,</span> <span class="mi">90</span><span class="p">)))</span>
+        <span class="n">imageInfo</span> <span class="o">=</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">read_tiff</span><span class="p">(</span><span class="n">imagePath</span><span class="p">)</span>
+        <span class="n">ifd</span> <span class="o">=</span> <span class="n">imageInfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">subImage</span> <span class="o">==</span> <span class="s1">&#39;label&#39;</span><span class="p">:</span>
+            <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">Orientation</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">tifftools</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">Orientation</span><span class="o">.</span><span class="n">RightTop</span><span class="o">.</span><span class="n">value</span><span class="p">],</span>
+                <span class="s1">&#39;datatype&#39;</span><span class="p">:</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">Datatype</span><span class="o">.</span><span class="n">LONG</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="n">AperioHeader</span> <span class="o">+</span> <span class="n">AssociatedHeader</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="s1">&#39;label&#39;</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageWidth</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">height</span><span class="o">=</span><span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageHeight</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageDescription</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+                <span class="s1">&#39;datatype&#39;</span><span class="p">:</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">Datatype</span><span class="o">.</span><span class="n">ASCII</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">NewSubfileType</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="n">tifftools</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">NewSubfileType</span><span class="o">.</span><span class="n">ReducedImage</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                <span class="p">],</span>
+                <span class="s1">&#39;datatype&#39;</span><span class="p">:</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">Datatype</span><span class="o">.</span><span class="n">LONG</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="n">labelPosition</span><span class="p">:</span><span class="n">labelPosition</span><span class="p">]</span> <span class="o">=</span> <span class="n">imageInfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fullDesc</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageDescription</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+            <span class="n">description</span> <span class="o">=</span> <span class="n">fullDesc</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;[&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">ThumbnailHeader</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="n">width</span><span class="o">=</span><span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageWidth</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">height</span><span class="o">=</span><span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageHeight</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="p">)</span> <span class="o">+</span> <span class="n">fullDesc</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageDescription</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+                <span class="s1">&#39;datatype&#39;</span><span class="p">:</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">Datatype</span><span class="o">.</span><span class="n">ASCII</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">imageInfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="modify_tiff_before_write">
+<a class="viewcode-back" href="../../_build/large_image_converter/large_image_converter.html#large_image_converter.format_aperio.modify_tiff_before_write">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">modify_tiff_before_write</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">ifdIndices</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span> <span class="n">lidata</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Adjust the metadata and ifds for a tiff file to make it compatible with</span>
+<span class="sd">    Aperio (svs).</span>
+
+<span class="sd">    Aperio files are tiff files which are stored without subifds in the order</span>
+<span class="sd">    full res, optional thumbnail, half res, quarter res, ..., full res, half</span>
+<span class="sd">    res, quarter res, ..., label, macro.  All ifds have an ImageDescription</span>
+<span class="sd">    that start with an aperio header followed by some dimension information and</span>
+<span class="sd">    then an option key-.value list</span>
+
+<span class="sd">    :param info: the tifftools info that will be written to the tiff tile;</span>
+<span class="sd">        modified.</span>
+<span class="sd">    :param ifdIndices: the 0-based index of the full resolution ifd of each</span>
+<span class="sd">        frame followed by the ifd of the first associated image.</span>
+<span class="sd">    :param tempPath: a temporary file in a temporary directory.</span>
+<span class="sd">    :param lidata: large_image data including metadata and associated images.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">liDesc</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageDescription</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+    <span class="c1"># Adjust tiled images</span>
+    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">ifdIndex</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ifdIndices</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">ifd</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="n">ifdIndex</span><span class="p">]</span>
+        <span class="n">modify_tiled_ifd</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">ifd</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">ifdIndices</span><span class="p">,</span> <span class="n">lidata</span><span class="p">,</span> <span class="n">liDesc</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="c1"># Remove all but macro and label image, keeping track if either is present</span>
+    <span class="n">assocKeys</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">ifdIndices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">ifd</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">assocKey</span> <span class="o">=</span> <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageDescription</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">assocKey</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
+        <span class="k">if</span> <span class="n">assocKey</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;label&#39;</span><span class="p">,</span> <span class="s1">&#39;macro&#39;</span><span class="p">}:</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">:</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">description</span> <span class="o">=</span> <span class="n">AssociatedHeader</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">assocKey</span><span class="p">,</span>
+            <span class="n">width</span><span class="o">=</span><span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageWidth</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">height</span><span class="o">=</span><span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageHeight</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageDescription</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+            <span class="s1">&#39;datatype&#39;</span><span class="p">:</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">Datatype</span><span class="o">.</span><span class="n">ASCII</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">NewSubfileType</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="n">tifftools</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">NewSubfileType</span><span class="o">.</span><span class="n">ReducedImage</span><span class="o">.</span><span class="n">value</span> <span class="k">if</span> <span class="n">assocKey</span> <span class="o">==</span> <span class="s1">&#39;label&#39;</span> <span class="k">else</span>
+                <span class="p">(</span><span class="n">tifftools</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">NewSubfileType</span><span class="o">.</span><span class="n">ReducedImage</span><span class="o">.</span><span class="n">value</span> <span class="o">|</span>
+                 <span class="n">tifftools</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">NewSubfileType</span><span class="o">.</span><span class="n">Macro</span><span class="o">.</span><span class="n">value</span><span class="p">),</span>
+            <span class="p">],</span>
+            <span class="s1">&#39;datatype&#39;</span><span class="p">:</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">Datatype</span><span class="o">.</span><span class="n">LONG</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">assocKeys</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">assocKey</span><span class="p">)</span>
+    <span class="n">create_thumbnail_and_label</span><span class="p">(</span>
+        <span class="n">tempPath</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">ifdIndices</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;label&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">assocKeys</span><span class="p">,</span> <span class="n">ifdIndices</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

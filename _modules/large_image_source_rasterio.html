@@ -1,0 +1,1277 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_rasterio &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../_static/K.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">large_image_source_rasterio</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image_source_rasterio</h1><div class="highlight"><pre>
+<span></span><span class="c1">#############################################################################</span>
+<span class="c1">#  Copyright Kitware Inc.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed under the Apache License, Version 2.0 ( the &quot;License&quot; );</span>
+<span class="c1">#  you may not use this file except in compliance with the License.</span>
+<span class="c1">#  You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#    http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#  See the License for the specific language governing permissions and</span>
+<span class="c1">#  limitations under the License.</span>
+<span class="c1">#############################################################################</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">suppress</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">PackageNotFoundError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">_importlib_version</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">PIL.Image</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.cache_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">LruCacheMetaclass</span><span class="p">,</span> <span class="n">methodcache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.constants</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">TILE_FORMAT_IMAGE</span><span class="p">,</span> <span class="n">TILE_FORMAT_NUMPY</span><span class="p">,</span>
+                                   <span class="n">TILE_FORMAT_PIL</span><span class="p">,</span> <span class="n">SourcePriority</span><span class="p">,</span>
+                                   <span class="n">TileInputUnits</span><span class="p">,</span> <span class="n">TileOutputMimeTypes</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">TileSourceError</span><span class="p">,</span>
+                                    <span class="n">TileSourceFileNotFoundError</span><span class="p">,</span>
+                                    <span class="n">TileSourceInefficientError</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.tilesource.geo</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">GDALBaseFileTileSource</span><span class="p">,</span>
+                                        <span class="n">ProjUnitsAcrossLevel0</span><span class="p">,</span>
+                                        <span class="n">ProjUnitsAcrossLevel0_MaxSize</span><span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.tilesource.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONDict</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">__version__</span> <span class="o">=</span> <span class="n">_importlib_version</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">PackageNotFoundError</span><span class="p">:</span>
+    <span class="c1"># package is not installed</span>
+    <span class="k">pass</span>
+
+<span class="n">rio</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">Affine</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_lazyImport</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Import the rasterio module.  This is done when needed rather than in the</span>
+<span class="sd">    module initialization because it is slow.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">Affine</span><span class="p">,</span> <span class="n">rio</span>
+
+    <span class="k">if</span> <span class="n">rio</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">affine</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">rasterio</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rio</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">rasterio.warp</span>
+
+            <span class="n">Affine</span> <span class="o">=</span> <span class="n">affine</span><span class="o">.</span><span class="n">Affine</span>
+
+            <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
+                <span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="n">rio</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">NotGeoreferencedWarning</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s1">&#39;rasterio&#39;</span><span class="p">)</span>
+            <span class="n">rio</span><span class="o">.</span><span class="n">_env</span><span class="o">.</span><span class="n">code_map</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;rasterio module not found.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="make_crs">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.make_crs">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">make_crs</span><span class="p">(</span><span class="n">projection</span><span class="p">):</span>
+    <span class="n">_lazyImport</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">projection</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">rio</span><span class="o">.</span><span class="n">CRS</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">projection</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">projection</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">rio</span><span class="o">.</span><span class="n">CRS</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">projection</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">projection</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">rio</span><span class="o">.</span><span class="n">CRS</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;EPSG:</span><span class="si">{</span><span class="n">projection</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rio</span><span class="o">.</span><span class="n">CRS</span><span class="p">(</span><span class="n">projection</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="RasterioFileTileSource">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.RasterioFileTileSource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RasterioFileTileSource</span><span class="p">(</span><span class="n">GDALBaseFileTileSource</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">LruCacheMetaclass</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Provides tile access to geospatial files.&quot;&quot;&quot;</span>
+
+    <span class="n">cacheName</span> <span class="o">=</span> <span class="s1">&#39;tilesource&#39;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;rasterio&#39;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unitsPerPixel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the tile class.</span>
+
+<span class="sd">        See the base class for other available parameters.</span>
+
+<span class="sd">        :param path: a filesystem path for the tile source.</span>
+<span class="sd">        :param projection: None to use pixel space, otherwise a crs compatible with rasterio&#39;s CRS.</span>
+<span class="sd">        :param unitsPerPixel: The size of a pixel at the 0 tile size.</span>
+<span class="sd">            Ignored if the projection is None.  For projections, None uses the default,</span>
+<span class="sd">            which is the distance between (-180,0) and (180,0) in EPSG:4326 converted to the</span>
+<span class="sd">            projection divided by the tile size. crs projections that are not latlong</span>
+<span class="sd">            (is_geographic is False) must specify unitsPerPixel.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># init the object</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">_lazyImport</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addKnownExtensions</span><span class="p">()</span>
+
+        <span class="c1"># create a thread lock</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_getDatasetLock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">rio</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">MemoryFile</span><span class="p">):</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">rio</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">DatasetReaderBase</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">path</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># set the large_image path</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getLargeImagePath</span><span class="p">()</span>
+
+            <span class="c1"># open the file with rasterio and display potential warning/errors</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDatasetLock</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span>
+                        <span class="s1">&#39;/vsi&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="n">TileSourceFileNotFoundError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">rio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">rio</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">RasterioIOError</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;File cannot be opened via rasterio.&#39;</span>
+                    <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">driver</span> <span class="o">==</span> <span class="s1">&#39;netCDF&#39;</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;netCDF file will not be read via rasterio source.&#39;</span>
+                    <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># extract default parameters from the image</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tileSize</span> <span class="o">=</span> <span class="mi">256</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bounds</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileSize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileSize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">projection</span> <span class="o">=</span> <span class="n">make_crs</span><span class="p">(</span><span class="n">projection</span><span class="p">)</span> <span class="k">if</span> <span class="n">projection</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="c1"># get width and height parameters</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDatasetLock</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sourceSizeX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">width</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sourceSizeY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">height</span>
+
+        <span class="c1"># netCDF is blacklisted from rasterio so it won&#39;t be used.</span>
+        <span class="c1"># use the mapnik source if needed. This variable is always ignored</span>
+        <span class="c1"># is_netcdf = False</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># get the different scales and projections from the image</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPixelSizeInMeters</span><span class="p">()</span>
+
+            <span class="c1"># raise an error if we are missing some information about the projection</span>
+            <span class="c1"># i.e. we don&#39;t know where to place it on a map</span>
+            <span class="n">isProjected</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;png&#39;</span><span class="p">}</span>
+            <span class="k">if</span> <span class="n">isProjected</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">scale</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;File does not have a projected scale, so will not be &#39;</span>
+                       <span class="s1">&#39;opened via rasterio with a projection.&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+            <span class="c1"># set the levels of the tiles</span>
+            <span class="n">logX</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span><span class="p">)</span>
+            <span class="n">logY</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span><span class="p">)</span>
+            <span class="n">computedLevel</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">logX</span><span class="p">,</span> <span class="n">logY</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sourceLevels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">computedLevel</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_unitsPerPixel</span> <span class="o">=</span> <span class="n">unitsPerPixel</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">projection</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_initWithProjection</span><span class="p">(</span><span class="n">unitsPerPixel</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_getPopulatedLevels</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_getTileLock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_setDefaultStyle</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;File cannot be opened via rasterio </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s1">.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getPopulatedLevels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDatasetLock</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_populatedLevels</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">overviews</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_scanForMinMax</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">analysisSize</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">onlyMinMax</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the band range of the data type to the end of the range list.</span>
+
+<span class="sd">        This will change autocalling behavior, and for non-integer data types,</span>
+<span class="sd">        this adds the range [0, 1].</span>
+
+<span class="sd">        :param dtype: the dtype of the bands</span>
+<span class="sd">        :param frame: optional default to 0</span>
+<span class="sd">        :param analysisSize: optional default to 1024</span>
+<span class="sd">        :param onlyMinMax: optional default to True</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># default frame to 0 in case it is set to None from outside</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">frame</span> <span class="ow">or</span> <span class="mi">0</span>
+
+        <span class="c1"># read band information</span>
+        <span class="n">bandInfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBandInformation</span><span class="p">()</span>
+
+        <span class="c1"># get the minmax value from the band</span>
+        <span class="n">hasMin</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;min&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bandInfo</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">hasMax</span> <span class="o">=</span> <span class="nb">all</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;max&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bandInfo</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">frame</span> <span class="ow">and</span> <span class="n">onlyMinMax</span> <span class="ow">and</span> <span class="n">hasMax</span> <span class="ow">and</span> <span class="n">hasMin</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDatasetLock</span><span class="p">:</span>
+                <span class="n">dtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">profile</span><span class="p">[</span><span class="s1">&#39;dtype&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bandRanges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">b</span><span class="p">[</span><span class="s1">&#39;min&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bandInfo</span><span class="o">.</span><span class="n">values</span><span class="p">()],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
+                <span class="s1">&#39;max&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">b</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bandInfo</span><span class="o">.</span><span class="n">values</span><span class="p">()],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span>
+            <span class="p">}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">:</span>
+                <span class="n">bounds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">)</span>
+                <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ymax&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;right&#39;</span><span class="p">:</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;xmax&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;bottom&#39;</span><span class="p">:</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ymin&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="s1">&#39;projection&#39;</span><span class="p">,</span>
+                    <span class="p">},</span>
+                <span class="p">}</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">RasterioFileTileSource</span><span class="p">,</span> <span class="n">RasterioFileTileSource</span><span class="p">)</span><span class="o">.</span><span class="n">_scanForMinMax</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span>
+                <span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">,</span>
+                <span class="n">analysisSize</span><span class="o">=</span><span class="n">analysisSize</span><span class="p">,</span>
+                <span class="n">onlyMinMax</span><span class="o">=</span><span class="n">onlyMinMax</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Add the maximum range of the data type to the end of the band</span>
+        <span class="c1"># range list.  This changes autoscaling behavior.  For non-integer</span>
+        <span class="c1"># data types, this adds the range [0, 1].</span>
+        <span class="n">band_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bandRanges</span><span class="p">[</span><span class="n">frame</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># only valid for integer dtypes</span>
+            <span class="n">range_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span><span class="p">(</span><span class="n">band_frame</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">max</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">range_max</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">band_frame</span><span class="p">[</span><span class="s1">&#39;min&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">band_frame</span><span class="p">[</span><span class="s1">&#39;min&#39;</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">band_frame</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">band_frame</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">],</span> <span class="n">range_max</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_initWithProjection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">unitsPerPixel</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize aspects of the class when a projection is set.</span>
+
+<span class="sd">        :param unitsPerPixel: optional default to None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">srcCrs</span> <span class="o">=</span> <span class="n">make_crs</span><span class="p">(</span><span class="mi">4326</span><span class="p">)</span>
+        <span class="c1"># Since we already converted to bytes decoding is safe here</span>
+        <span class="n">dstCrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span>
+        <span class="k">if</span> <span class="n">dstCrs</span><span class="o">.</span><span class="n">is_geographic</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Projection must not be geographic (it needs to use linear &#39;</span>
+                   <span class="s1">&#39;units, not longitude/latitude).&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">unitsPerPixel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unitsAcrossLevel0</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">unitsPerPixel</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileSize</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">unitsAcrossLevel0</span> <span class="o">=</span> <span class="n">ProjUnitsAcrossLevel0</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="o">.</span><span class="n">to_string</span><span class="p">(),</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsAcrossLevel0</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># If unitsPerPixel is not specified, the horizontal distance</span>
+                <span class="c1"># between -180,0 and +180,0 is used.  Some projections (such as</span>
+                <span class="c1"># stereographic) will fail in this case; they must have a unitsPerPixel specified.</span>
+                <span class="n">east</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">rio</span><span class="o">.</span><span class="n">warp</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">srcCrs</span><span class="p">,</span> <span class="n">dstCrs</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="mi">180</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">west</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">rio</span><span class="o">.</span><span class="n">warp</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">srcCrs</span><span class="p">,</span> <span class="n">dstCrs</span><span class="p">,</span> <span class="p">[</span><span class="mi">180</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">unitsAcrossLevel0</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">east</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">west</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsAcrossLevel0</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;unitsPerPixel must be specified for this projection&#39;</span>
+                    <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ProjUnitsAcrossLevel0</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">ProjUnitsAcrossLevel0_MaxSize</span><span class="p">:</span>
+                    <span class="n">ProjUnitsAcrossLevel0</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+                <span class="n">ProjUnitsAcrossLevel0</span><span class="p">[</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
+                <span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsAcrossLevel0</span>
+
+        <span class="c1"># for consistency, it should probably always be (0, 0).  Whatever</span>
+        <span class="c1"># renders the map would need the same offset as used here.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">projectionOrigin</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Calculate values for this projection</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPixelSizeInMeters</span><span class="p">()</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span>
+        <span class="n">tile0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsAcrossLevel0</span> <span class="o">/</span> <span class="n">width</span>
+        <span class="n">base2</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">tile0</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">base2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># Report sizeX and sizeY as the whole world</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span>
+
+<div class="viewcode-block" id="RasterioFileTileSource.getLRUHash">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.RasterioFileTileSource.getLRUHash">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getLRUHash</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">projection</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;projection&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">unitsPerPixel</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;unitsPerPixel&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">4</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">source</span> <span class="o">=</span> <span class="nb">super</span><span class="p">(</span><span class="n">RasterioFileTileSource</span><span class="p">,</span> <span class="n">RasterioFileTileSource</span><span class="p">)</span>
+        <span class="n">lru</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getLRUHash</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;,</span><span class="si">{</span><span class="n">projection</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">unitsPerPixel</span><span class="si">}</span><span class="s1">&#39;</span>
+
+        <span class="k">return</span> <span class="n">lru</span> <span class="o">+</span> <span class="n">info</span></div>
+
+
+<div class="viewcode-block" id="RasterioFileTileSource.getState">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.RasterioFileTileSource.getState">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">proj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">unit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_unitsPerPixel</span>
+
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">getState</span><span class="p">()</span> <span class="o">+</span> <span class="sa">f</span><span class="s1">&#39;,</span><span class="si">{</span><span class="n">proj</span><span class="si">}</span><span class="s1">,</span><span class="si">{</span><span class="n">unit</span><span class="si">}</span><span class="s1">&#39;</span></div>
+
+
+<div class="viewcode-block" id="RasterioFileTileSource.getCrs">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.RasterioFileTileSource.getCrs">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getCrs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns crs object for the given dataset</span>
+
+<span class="sd">        :returns: The crs or None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDatasetLock</span><span class="p">:</span>
+
+            <span class="c1"># use gcp if available</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">gcps</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">gcps</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">crs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">gcps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">crs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">crs</span>
+
+            <span class="c1"># if no crs but the file is a NITF or has a valid affine transform then</span>
+            <span class="c1"># consider it as 4326</span>
+            <span class="n">hasTransform</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">transform</span> <span class="o">!=</span> <span class="n">Affine</span><span class="o">.</span><span class="n">identity</span><span class="p">()</span>
+            <span class="n">isNitf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">driver</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;NITF&#39;</span><span class="p">}</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">crs</span> <span class="ow">and</span> <span class="p">(</span><span class="n">hasTransform</span> <span class="ow">or</span> <span class="n">isNitf</span><span class="p">):</span>
+                <span class="n">crs</span> <span class="o">=</span> <span class="n">make_crs</span><span class="p">(</span><span class="mi">4326</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">crs</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getAffine</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the Affine transformation.</span>
+
+<span class="sd">        If GCPs are used, get the appropriate Affine for those. Be careful,</span>
+<span class="sd">        Rasterio have deprecated GDAL styled transform in favor</span>
+<span class="sd">        of ``Affine`` objects. See their documentation for more information:</span>
+<span class="sd">        shorturl.at/bcdGL</span>
+
+<span class="sd">        :returns: a six-component array with the transform</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDatasetLock</span><span class="p">:</span>
+            <span class="n">affine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">transform</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">gcps</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">gcps</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">affine</span> <span class="o">=</span> <span class="n">rio</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">from_gcps</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">gcps</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="n">affine</span>
+
+<div class="viewcode-block" id="RasterioFileTileSource.getBounds">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.RasterioFileTileSource.getBounds">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getBounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns bounds of the image.</span>
+
+<span class="sd">        :param crs: the projection for the bounds.  None for the default.</span>
+
+<span class="sd">        :returns: an object with the four corners and the projection that was used.</span>
+<span class="sd">            None if we don&#39;t know the original projection.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">crs</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;srs&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">crs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;srs&#39;</span><span class="p">)</span>
+
+        <span class="c1"># read the crs as a crs if needed</span>
+        <span class="n">dstCrs</span> <span class="o">=</span> <span class="n">make_crs</span><span class="p">(</span><span class="n">crs</span><span class="p">)</span> <span class="k">if</span> <span class="n">crs</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">strDstCrs</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span> <span class="k">if</span> <span class="n">dstCrs</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">dstCrs</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
+
+        <span class="c1"># exit if it&#39;s already set</span>
+        <span class="k">if</span> <span class="n">strDstCrs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bounds</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bounds</span><span class="p">[</span><span class="n">strDstCrs</span><span class="p">]</span>
+
+        <span class="c1"># extract the projection information</span>
+        <span class="n">af</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAffine</span><span class="p">()</span>
+        <span class="n">srcCrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getCrs</span><span class="p">()</span>
+
+        <span class="c1"># set bounds to none and exit if no crs is set for the dataset</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">srcCrs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bounds</span><span class="p">[</span><span class="n">strDstCrs</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="c1"># compute the corner coordinates using the affine transformation as</span>
+        <span class="c1"># longitudes and latitudes. Cannot only rely on bounds because of</span>
+        <span class="c1"># rotated coordinate systems</span>
+        <span class="n">bounds</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;ll&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">af</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sourceSizeY</span> <span class="o">*</span> <span class="n">af</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">af</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sourceSizeY</span> <span class="o">*</span> <span class="n">af</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;ul&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">af</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">af</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;lr&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">af</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sourceSizeX</span> <span class="o">*</span> <span class="n">af</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sourceSizeY</span> <span class="o">*</span> <span class="n">af</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">af</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sourceSizeX</span> <span class="o">*</span> <span class="n">af</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sourceSizeY</span> <span class="o">*</span> <span class="n">af</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;ur&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">af</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sourceSizeX</span> <span class="o">*</span> <span class="n">af</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">af</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">sourceSizeX</span> <span class="o">*</span> <span class="n">af</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+
+        <span class="c1"># ensure that the coordinates are within the projection limits</span>
+        <span class="k">if</span> <span class="n">srcCrs</span><span class="o">.</span><span class="n">is_geographic</span> <span class="ow">and</span> <span class="n">dstCrs</span><span class="p">:</span>
+
+            <span class="c1"># set the vertical bounds</span>
+            <span class="c1"># some projection system don&#39;t cover the poles so we need to adapt</span>
+            <span class="c1"># the values of ybounds accordingly</span>
+            <span class="n">has_poles</span> <span class="o">=</span> <span class="n">rio</span><span class="o">.</span><span class="n">warp</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="mi">4326</span><span class="p">,</span> <span class="n">dstCrs</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">90</span><span class="p">])[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="nb">float</span><span class="p">(</span><span class="s1">&#39;inf&#39;</span><span class="p">)</span>
+            <span class="n">yBounds</span> <span class="o">=</span> <span class="mi">90</span> <span class="k">if</span> <span class="n">has_poles</span> <span class="k">else</span> <span class="mf">89.999999</span>
+
+            <span class="c1"># for each corner fix the latitude within -yBounds yBounds</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">:</span>
+                <span class="n">bounds</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">yBounds</span><span class="p">),</span> <span class="o">-</span><span class="n">yBounds</span><span class="p">)</span>
+
+            <span class="c1"># rotate longitude so the western-most corner is within [-180, 180)</span>
+            <span class="n">dx</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">bounds</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+            <span class="k">if</span> <span class="n">dx</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">180</span> <span class="ow">or</span> <span class="n">dx</span> <span class="o">&gt;=</span> <span class="mi">180</span><span class="p">:</span>
+                <span class="n">dx</span> <span class="o">=</span> <span class="p">((</span><span class="n">dx</span> <span class="o">+</span> <span class="mi">180</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span> <span class="o">-</span> <span class="mi">180</span><span class="p">)</span> <span class="o">-</span> <span class="n">dx</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">bounds</span><span class="p">:</span>
+                    <span class="n">bounds</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">dx</span>
+
+            <span class="c1"># if one of the corner is &gt;= 180 set all the corners to world width</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">180</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">bounds</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+                <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ul&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ll&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">180</span>
+                <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ur&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;lr&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">180</span>
+
+        <span class="c1"># reproject the pts in the destination coordinate system if necessary</span>
+        <span class="n">needProjection</span> <span class="o">=</span> <span class="n">dstCrs</span> <span class="ow">and</span> <span class="n">dstCrs</span> <span class="o">!=</span> <span class="n">srcCrs</span>
+        <span class="k">if</span> <span class="n">needProjection</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">bounds</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="p">[</span><span class="n">pt</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]],</span> <span class="p">[</span><span class="n">pt</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">rio</span><span class="o">.</span><span class="n">warp</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">srcCrs</span><span class="p">,</span> <span class="n">dstCrs</span><span class="p">,</span> <span class="p">[</span><span class="n">pt</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]],</span> <span class="p">[</span><span class="n">pt</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]])</span>
+
+        <span class="c1"># extract min max coordinates from the corners</span>
+        <span class="n">ll</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ll&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ll&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="n">ul</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ul&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ul&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="n">lr</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;lr&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;lr&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="n">ur</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ur&#39;</span><span class="p">][</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ur&#39;</span><span class="p">][</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">ll</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ul</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ur</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;xmax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ll</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ul</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">ur</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ymin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">ll</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ul</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lr</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ur</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ymax&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">ll</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ul</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">lr</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ur</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="c1"># set the srs in the bounds</span>
+        <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;srs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dstCrs</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span> <span class="k">if</span> <span class="n">needProjection</span> <span class="k">else</span> <span class="n">srcCrs</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
+
+        <span class="c1"># write the bounds in memory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bounds</span><span class="p">[</span><span class="n">strDstCrs</span><span class="p">]</span> <span class="o">=</span> <span class="n">bounds</span>
+
+        <span class="k">return</span> <span class="n">bounds</span></div>
+
+
+<div class="viewcode-block" id="RasterioFileTileSource.getBandInformation">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.RasterioFileTileSource.getBandInformation">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getBandInformation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">statistics</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">dataset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get information about each band in the image.</span>
+
+<span class="sd">        :param statistics: if True, compute statistics if they don&#39;t already exist.</span>
+<span class="sd">            Ignored: always treated as True.</span>
+<span class="sd">        :param dataset: the dataset.  If None, use the main dataset.</span>
+
+<span class="sd">        :returns: a list of one dictionary per band.  Each dictionary contains</span>
+<span class="sd">            known values such as interpretation, min, max, mean, stdev, nodata,</span>
+<span class="sd">            scale, offset, units, categories, colortable, maskband.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># exit if the value is already set</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_bandInfo&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">dataset</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bandInfo</span>
+
+        <span class="c1"># check if the dataset is cached</span>
+        <span class="n">cache</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">dataset</span>
+
+        <span class="c1"># do everything inside the dataset lock to avoid multiple read</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDatasetLock</span><span class="p">:</span>
+
+            <span class="c1"># setup the dataset (use the one store in self.dataset if not cached)</span>
+            <span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span>
+
+            <span class="c1"># loop in the bands to get the indicidative stats (bands are 1 indexed)</span>
+            <span class="n">infoSet</span> <span class="o">=</span> <span class="n">JSONDict</span><span class="p">({})</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">dataset</span><span class="o">.</span><span class="n">indexes</span><span class="p">:</span>  <span class="c1"># 1 indexed</span>
+
+                <span class="c1"># get the stats</span>
+                <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="s1">&#39;stats&#39;</span><span class="p">):</span>
+                    <span class="n">stats</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">stats</span><span class="p">(</span><span class="n">indexes</span><span class="o">=</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">approx</span><span class="o">=</span><span class="kc">True</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">stats</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">statistics</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">approx</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">clear_cache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+                <span class="c1"># rasterio doesn&#39;t provide support for maskband as for RCF 15</span>
+                <span class="c1"># instead the whole mask numpy array is rendered. We don&#39;t want to save it</span>
+                <span class="c1"># in the metadata</span>
+                <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="n">stats</span><span class="o">.</span><span class="n">min</span><span class="p">,</span>
+                    <span class="s1">&#39;max&#39;</span><span class="p">:</span> <span class="n">stats</span><span class="o">.</span><span class="n">max</span><span class="p">,</span>
+                    <span class="s1">&#39;mean&#39;</span><span class="p">:</span> <span class="n">stats</span><span class="o">.</span><span class="n">mean</span><span class="p">,</span>
+                    <span class="s1">&#39;stdev&#39;</span><span class="p">:</span> <span class="n">stats</span><span class="o">.</span><span class="n">std</span><span class="p">,</span>
+                    <span class="s1">&#39;nodata&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">nodatavals</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+                    <span class="s1">&#39;scale&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">scales</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+                    <span class="s1">&#39;offset&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">offsets</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+                    <span class="s1">&#39;units&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">units</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+                    <span class="s1">&#39;categories&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">descriptions</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span>
+                    <span class="s1">&#39;interpretation&#39;</span><span class="p">:</span> <span class="n">dataset</span><span class="o">.</span><span class="n">colorinterp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;interpretation&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;palette&#39;</span><span class="p">:</span>
+                    <span class="n">info</span><span class="p">[</span><span class="s1">&#39;colortable&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">colormap</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+                <span class="c1"># if dataset.mask_flag_enums[i - 1][0] != MaskFlags.all_valid:</span>
+                <span class="c1">#     # TODO: find band number - this is incorrect</span>
+                <span class="c1">#     info[&quot;maskband&quot;] = dataset.mask_flag_enums[i - 1][1].value</span>
+
+                <span class="c1"># Only keep values that aren&#39;t None or the empty string</span>
+                <span class="n">infoSet</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">info</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">v</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="p">(</span>
+                        <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">and</span>
+                        <span class="n">math</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="p">}</span>
+
+        <span class="c1"># set the value to cache if needed</span>
+        <span class="k">if</span> <span class="n">cache</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bandInfo</span> <span class="o">=</span> <span class="n">infoSet</span>
+
+        <span class="k">return</span> <span class="n">infoSet</span></div>
+
+
+<div class="viewcode-block" id="RasterioFileTileSource.getMetadata">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.RasterioFileTileSource.getMetadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">()</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDatasetLock</span><span class="p">:</span>
+            <span class="c1"># check if the file is geospatial</span>
+            <span class="n">has_projection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">crs</span>
+            <span class="n">has_gcps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">gcps</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">gcps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">has_affine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">transform</span>
+
+            <span class="n">metadata</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                <span class="s1">&#39;geospatial&#39;</span><span class="p">:</span> <span class="nb">bool</span><span class="p">(</span><span class="n">has_projection</span> <span class="ow">or</span> <span class="n">has_gcps</span> <span class="ow">or</span> <span class="n">has_affine</span><span class="p">),</span>
+                <span class="s1">&#39;sourceLevels&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sourceLevels</span><span class="p">,</span>
+                <span class="s1">&#39;sourceSizeX&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sourceSizeX</span><span class="p">,</span>
+                <span class="s1">&#39;sourceSizeY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">sourceSizeY</span><span class="p">,</span>
+                <span class="s1">&#39;bounds&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">),</span>
+                <span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">,</span>
+                <span class="s1">&#39;sourceBounds&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBounds</span><span class="p">(),</span>
+                <span class="s1">&#39;bands&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBandInformation</span><span class="p">(),</span>
+            <span class="p">})</span>
+        <span class="k">return</span> <span class="n">metadata</span></div>
+
+
+<div class="viewcode-block" id="RasterioFileTileSource.getInternalMetadata">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.RasterioFileTileSource.getInternalMetadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getInternalMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return additional known metadata about the tile source.</span>
+
+<span class="sd">        Data returned from this method is not guaranteed to be in</span>
+<span class="sd">        any particular format or have specific values.</span>
+
+<span class="sd">        :returns: a dictionary of data or None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">JSONDict</span><span class="p">({})</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDatasetLock</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;driverShortName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">driver</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;driverLongName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">driver</span>
+            <span class="c1"># result[&#39;fileList&#39;] = self.dataset.GetFileList()</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;RasterXSize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">width</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;RasterYSize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">height</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;Affine&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAffine</span><span class="p">()</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;Projection&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">crs</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="p">)</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;GCPProjection&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">gcps</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">meta</span>
+            <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;crs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;crs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_string</span><span class="p">()</span>
+                <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;crs&#39;</span> <span class="ow">in</span> <span class="n">meta</span> <span class="ow">and</span> <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;crs&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">else</span> <span class="kc">None</span>
+            <span class="p">)</span>
+            <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">meta</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">to_gdal</span><span class="p">()</span> <span class="k">if</span> <span class="s1">&#39;transform&#39;</span> <span class="ow">in</span> <span class="n">meta</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="p">)</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;Metadata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">meta</span>
+
+            <span class="c1"># add gcp of available</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">gcps</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;GCPs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">gcp</span><span class="o">.</span><span class="n">asdict</span><span class="p">()</span> <span class="k">for</span> <span class="n">gcp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">gcps</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="RasterioFileTileSource.getTile">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.RasterioFileTileSource.getTile">[docs]</a>
+    <span class="nd">@methodcache</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getTile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">pilImageAllowed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">numpyAllowed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_xyzInRange</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+            <span class="n">factor</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">z</span><span class="p">))</span>
+            <span class="n">xmin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">factor</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span><span class="p">)</span>
+            <span class="n">ymin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="n">factor</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span><span class="p">)</span>
+            <span class="n">xmax</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">xmin</span> <span class="o">+</span> <span class="n">factor</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sourceSizeX</span><span class="p">))</span>
+            <span class="n">ymax</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">ymin</span> <span class="o">+</span> <span class="n">factor</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sourceSizeY</span><span class="p">))</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">round</span><span class="p">((</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span> <span class="o">/</span> <span class="n">factor</span><span class="p">)))</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">round</span><span class="p">((</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">)</span> <span class="o">/</span> <span class="n">factor</span><span class="p">)))</span>
+
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDatasetLock</span><span class="p">:</span>
+                <span class="n">window</span> <span class="o">=</span> <span class="n">rio</span><span class="o">.</span><span class="n">windows</span><span class="o">.</span><span class="n">Window</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">)</span>
+                <span class="n">count</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">count</span>
+                <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">read</span><span class="p">(</span>
+                    <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span>
+                    <span class="n">out_shape</span><span class="o">=</span><span class="p">(</span><span class="n">count</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">w</span><span class="p">),</span>
+                    <span class="n">resampling</span><span class="o">=</span><span class="n">rio</span><span class="o">.</span><span class="n">enums</span><span class="o">.</span><span class="n">Resampling</span><span class="o">.</span><span class="n">nearest</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTileCorners</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="n">bounds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">)</span>
+
+            <span class="c1"># return empty image when I&#39;m out of bounds</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">xmin</span> <span class="o">&gt;=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;xmax&#39;</span><span class="p">]</span> <span class="ow">or</span>
+                <span class="n">xmax</span> <span class="o">&lt;=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">]</span> <span class="ow">or</span>
+                <span class="n">ymin</span> <span class="o">&gt;=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ymax&#39;</span><span class="p">]</span> <span class="ow">or</span>
+                <span class="n">ymax</span> <span class="o">&lt;=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ymin&#39;</span><span class="p">]</span>
+            <span class="p">):</span>
+                <span class="n">pilimg</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;RGBA&#39;</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span><span class="p">))</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outputTile</span><span class="p">(</span>
+                    <span class="n">pilimg</span><span class="p">,</span> <span class="n">TILE_FORMAT_PIL</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">applyStyle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+                <span class="p">)</span>
+
+            <span class="n">xres</span> <span class="o">=</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span>
+            <span class="n">yres</span> <span class="o">=</span> <span class="p">(</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span>
+            <span class="n">dst_transform</span> <span class="o">=</span> <span class="n">Affine</span><span class="p">(</span><span class="n">xres</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">xmin</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="n">yres</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+
+            <span class="c1"># Adding an alpha band when the source has one is trouble.</span>
+            <span class="c1"># It will result in surprisingly unmasked data.</span>
+            <span class="n">src_alpha_band</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">interp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">colorinterp</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">interp</span> <span class="o">==</span> <span class="n">rio</span><span class="o">.</span><span class="n">enums</span><span class="o">.</span><span class="n">ColorInterp</span><span class="o">.</span><span class="n">alpha</span><span class="p">:</span>
+                    <span class="n">src_alpha_band</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="n">add_alpha</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">src_alpha_band</span>
+
+            <span class="c1"># read the image as a warp vrt</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDatasetLock</span><span class="p">:</span>
+                <span class="k">with</span> <span class="n">rio</span><span class="o">.</span><span class="n">vrt</span><span class="o">.</span><span class="n">WarpedVRT</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span>
+                    <span class="n">resampling</span><span class="o">=</span><span class="n">rio</span><span class="o">.</span><span class="n">enums</span><span class="o">.</span><span class="n">Resampling</span><span class="o">.</span><span class="n">nearest</span><span class="p">,</span>
+                    <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">,</span>
+                    <span class="n">transform</span><span class="o">=</span><span class="n">dst_transform</span><span class="p">,</span>
+                    <span class="n">height</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span><span class="p">,</span>
+                    <span class="n">width</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span><span class="p">,</span>
+                    <span class="n">add_alpha</span><span class="o">=</span><span class="n">add_alpha</span><span class="p">,</span>
+                <span class="p">)</span> <span class="k">as</span> <span class="n">vrt</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">tile</span> <span class="o">=</span> <span class="n">vrt</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">resampling</span><span class="o">=</span><span class="n">rio</span><span class="o">.</span><span class="n">enums</span><span class="o">.</span><span class="n">Resampling</span><span class="o">.</span><span class="n">nearest</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Failed to getTile&#39;</span><span class="p">)</span>
+                        <span class="n">tile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># necessary for multispectral images:</span>
+        <span class="c1"># set the coordinates first and the bands at the end</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">tile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">moveaxis</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outputTile</span><span class="p">(</span>
+            <span class="n">tile</span><span class="p">,</span> <span class="n">TILE_FORMAT_NUMPY</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">pilImageAllowed</span><span class="p">,</span> <span class="n">numpyAllowed</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_convertProjectionUnits</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;base_pixels&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert projection units.</span>
+
+<span class="sd">        Given bound information and a units that consists of a projection (srs or crs),</span>
+<span class="sd">        convert the bounds to either pixel or the class projection coordinates.</span>
+
+<span class="sd">        :param left: the left edge (inclusive) of the region to process.</span>
+<span class="sd">        :param top: the top edge (inclusive) of the region to process.</span>
+<span class="sd">        :param right: the right edge (exclusive) of the region to process.</span>
+<span class="sd">        :param bottom: the bottom edge (exclusive) of the region to process.</span>
+<span class="sd">        :param width: the width of the region to process.  Ignored if both left and</span>
+<span class="sd">            right are specified.</span>
+<span class="sd">        :param height: the height of the region to process.  Ignores if both top and</span>
+<span class="sd">            bottom are specified.</span>
+<span class="sd">        :param units: either &#39;projection&#39;, a string starting with &#39;proj4:&#39;,&#39;epsg:&#39;,</span>
+<span class="sd">            or &#39;+proj=&#39; or a enumerated value like &#39;wgs84&#39;, or one of the super&#39;s values.</span>
+<span class="sd">        :param kwargs: optional parameters.</span>
+
+<span class="sd">        :returns: left, top, right, bottom, units.  The new bounds in the either</span>
+<span class="sd">            pixel or class projection units.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># build the different corner from the parameters</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;unitsWH&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;unitsWH&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">units</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">left</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">right</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">width</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="n">width</span>
+            <span class="k">if</span> <span class="n">right</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">left</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">width</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="n">width</span>
+            <span class="k">if</span> <span class="n">top</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bottom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">height</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">top</span> <span class="o">=</span> <span class="n">bottom</span> <span class="o">-</span> <span class="n">height</span>
+            <span class="k">if</span> <span class="n">bottom</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">top</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">height</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">bottom</span> <span class="o">=</span> <span class="n">top</span> <span class="o">+</span> <span class="n">height</span>
+
+        <span class="c1"># raise error if we didn&#39;t build one of the coordinates</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">left</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">right</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">top</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bottom</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Cannot convert from projection unless at least one of &#39;</span>
+                   <span class="s1">&#39;left and right and at least one of top and bottom is &#39;</span>
+                   <span class="s1">&#39;specified.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># compute the pixel coordinates of the corners if no projection is set</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">:</span>
+            <span class="n">pleft</span><span class="p">,</span> <span class="n">ptop</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">toNativePixelCoordinates</span><span class="p">(</span>
+                <span class="n">right</span> <span class="k">if</span> <span class="n">left</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">left</span><span class="p">,</span> <span class="n">bottom</span> <span class="k">if</span> <span class="n">top</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">top</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">pright</span><span class="p">,</span> <span class="n">pbottom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">toNativePixelCoordinates</span><span class="p">(</span>
+                <span class="n">left</span> <span class="k">if</span> <span class="n">right</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">right</span><span class="p">,</span>
+                <span class="n">top</span> <span class="k">if</span> <span class="n">bottom</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">bottom</span><span class="p">,</span>
+                <span class="n">units</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">units</span> <span class="o">=</span> <span class="s1">&#39;base_pixels&#39;</span>
+
+        <span class="c1"># compute the coordinates if the projection exist</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">units</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;proj4:&#39;</span><span class="p">):</span>
+                <span class="c1"># HACK to avoid `proj4:` prefixes with `WGS84`, etc.</span>
+                <span class="n">units</span> <span class="o">=</span> <span class="n">units</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">srcCrs</span> <span class="o">=</span> <span class="n">make_crs</span><span class="p">(</span><span class="n">units</span><span class="p">)</span>
+            <span class="n">dstCrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span>  <span class="c1"># instance projection -- do not use the CRS native to the file</span>
+            <span class="p">[</span><span class="n">pleft</span><span class="p">],</span> <span class="p">[</span><span class="n">ptop</span><span class="p">]</span> <span class="o">=</span> <span class="n">rio</span><span class="o">.</span><span class="n">warp</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span>
+                <span class="n">srcCrs</span><span class="p">,</span> <span class="n">dstCrs</span><span class="p">,</span>
+                <span class="p">[</span><span class="n">right</span> <span class="k">if</span> <span class="n">left</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">left</span><span class="p">],</span>
+                <span class="p">[</span><span class="n">bottom</span> <span class="k">if</span> <span class="n">top</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">top</span><span class="p">])</span>
+            <span class="p">[</span><span class="n">pright</span><span class="p">],</span> <span class="p">[</span><span class="n">pbottom</span><span class="p">]</span> <span class="o">=</span> <span class="n">rio</span><span class="o">.</span><span class="n">warp</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span>
+                <span class="n">srcCrs</span><span class="p">,</span> <span class="n">dstCrs</span><span class="p">,</span>
+                <span class="p">[</span><span class="n">left</span> <span class="k">if</span> <span class="n">right</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">right</span><span class="p">],</span>
+                <span class="p">[</span><span class="n">top</span> <span class="k">if</span> <span class="n">bottom</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">bottom</span><span class="p">])</span>
+            <span class="n">units</span> <span class="o">=</span> <span class="s1">&#39;projection&#39;</span>
+
+        <span class="c1"># set the corner value in pixel coordinates if the coordinate was initially</span>
+        <span class="c1"># set else leave it to None</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="n">pleft</span> <span class="k">if</span> <span class="n">left</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">top</span> <span class="o">=</span> <span class="n">ptop</span> <span class="k">if</span> <span class="n">top</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">right</span> <span class="o">=</span> <span class="n">pright</span> <span class="k">if</span> <span class="n">right</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">bottom</span> <span class="o">=</span> <span class="n">pbottom</span> <span class="k">if</span> <span class="n">bottom</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">units</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getRegionBounds</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="p">,</span>
+        <span class="n">left</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">top</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">right</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">bottom</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">units</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get region bounds.</span>
+
+<span class="sd">        Given a set of arguments that can include left, right, top, bottom, width,</span>
+<span class="sd">        height, and units, generate actual pixel values for left, top, right, and bottom.</span>
+<span class="sd">        If units is `&#39;projection&#39;`, use the source&#39;s projection.  If units is a</span>
+<span class="sd">        proj string, use that projection.  Otherwise, just use the super function.</span>
+
+<span class="sd">        :param metadata: the metadata associated with this source.</span>
+<span class="sd">        :param left: the left edge (inclusive) of the region to process.</span>
+<span class="sd">        :param top: the top edge (inclusive) of the region to process.</span>
+<span class="sd">        :param right: the right edge (exclusive) of the region to process.</span>
+<span class="sd">        :param bottom: the bottom edge (exclusive) of the region to process.</span>
+<span class="sd">        :param width: the width of the region to process.  Ignored if both left and</span>
+<span class="sd">            right are specified.</span>
+<span class="sd">        :param height: the height of the region to process.  Ignores if both top and</span>
+<span class="sd">            bottom are specified.</span>
+<span class="sd">        :param units: either &#39;projection&#39;, a string starting with &#39;proj4:&#39;, &#39;epsg:&#39;</span>
+<span class="sd">            or a enumarted value like &#39;wgs84&#39;, or one of the super&#39;s values.</span>
+<span class="sd">        :param kwargs: optional parameters from _convertProjectionUnits.  See above.</span>
+
+<span class="sd">        :returns: left, top, right, bottom bounds in pixels.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">isUnits</span> <span class="o">=</span> <span class="n">units</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="n">units</span> <span class="o">=</span> <span class="n">TileInputUnits</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">units</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">if</span> <span class="n">isUnits</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span>
+
+        <span class="c1"># check if the units is a string or projection material</span>
+        <span class="n">isProj</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">with</span> <span class="n">suppress</span><span class="p">(</span><span class="n">rio</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">CRSError</span><span class="p">):</span>
+            <span class="n">isProj</span> <span class="o">=</span> <span class="n">make_crs</span><span class="p">(</span><span class="n">units</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="c1"># convert the coordinates if a projection exist</span>
+        <span class="k">if</span> <span class="n">isUnits</span> <span class="ow">and</span> <span class="n">isProj</span><span class="p">:</span>
+            <span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">units</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convertProjectionUnits</span><span class="p">(</span>
+                <span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">units</span> <span class="o">==</span> <span class="s1">&#39;projection&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">:</span>
+            <span class="n">bounds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">)</span>
+
+            <span class="c1"># Fill in missing values</span>
+            <span class="k">if</span> <span class="n">left</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">right</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">width</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">right</span> <span class="o">-</span> \
+                    <span class="n">width</span>  <span class="c1"># fmt: skip</span>
+            <span class="k">if</span> <span class="n">right</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;xmax&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">width</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">left</span> <span class="o">+</span> <span class="n">width</span>
+            <span class="k">if</span> <span class="n">top</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">top</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ymax&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">bottom</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">height</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">bottom</span> <span class="o">-</span> \
+                    <span class="n">height</span>  <span class="c1"># fmt: skip</span>
+            <span class="k">if</span> <span class="n">bottom</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">bottom</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ymin&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">height</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">top</span> <span class="o">+</span> <span class="n">height</span>
+
+            <span class="c1"># remove width and height if necessary</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;unitsWH&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;unitsWH&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">units</span><span class="p">:</span>
+                <span class="n">width</span> <span class="o">=</span> <span class="n">height</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="c1"># Convert to [-0.5, 0.5], [-0.5, 0.5] coordinate range</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">projectionOrigin</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsAcrossLevel0</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">projectionOrigin</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsAcrossLevel0</span>
+            <span class="n">top</span> <span class="o">=</span> <span class="p">(</span><span class="n">top</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">projectionOrigin</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsAcrossLevel0</span>
+            <span class="n">bottom</span> <span class="o">=</span> <span class="p">(</span><span class="n">bottom</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">projectionOrigin</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsAcrossLevel0</span>
+
+            <span class="c1"># Convert to worldwide &#39;base pixels&#39; and crop to the world</span>
+            <span class="n">xScale</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span>
+            <span class="n">yScale</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span>
+            <span class="n">left</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">xScale</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">left</span><span class="p">)</span> <span class="o">*</span> <span class="n">xScale</span><span class="p">))</span>
+            <span class="n">right</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">xScale</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="n">right</span><span class="p">)</span> <span class="o">*</span> <span class="n">xScale</span><span class="p">))</span>
+            <span class="n">top</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">yScale</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">-</span> <span class="n">top</span><span class="p">)</span> <span class="o">*</span> <span class="n">yScale</span><span class="p">))</span>
+            <span class="n">bottom</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">yScale</span><span class="p">,</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">-</span> <span class="n">bottom</span><span class="p">)</span> <span class="o">*</span> <span class="n">yScale</span><span class="p">))</span>
+
+            <span class="c1"># Ensure correct ordering</span>
+            <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">)</span>
+            <span class="n">top</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">bottom</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">top</span><span class="p">,</span> <span class="n">bottom</span><span class="p">)</span>
+            <span class="n">units</span> <span class="o">=</span> <span class="s1">&#39;base_pixels&#39;</span>
+
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">_getRegionBounds</span><span class="p">(</span>
+            <span class="n">metadata</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">units</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="RasterioFileTileSource.pixelToProjection">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.RasterioFileTileSource.pixelToProjection">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pixelToProjection</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert from pixels back to projection coordinates.</span>
+
+<span class="sd">        :param x, y: base pixel coordinates.</span>
+<span class="sd">        :param level: the level of the pixel.  None for maximum level.</span>
+
+<span class="sd">        :returns: px, py in projection coordinates.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">level</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="c1"># if no projection is set build the pixel values using the geotransform</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">:</span>
+            <span class="n">af</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAffine</span><span class="p">()</span>
+            <span class="n">x</span> <span class="o">*=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">level</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">*=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">level</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">af</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">af</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">af</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">y</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">af</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="n">af</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">af</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="n">y</span>
+
+        <span class="c1"># else we used the projection set in __init__</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">xScale</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="n">level</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span>
+            <span class="n">yScale</span> <span class="o">=</span> <span class="mi">2</span><span class="o">**</span><span class="n">level</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">/</span> <span class="n">xScale</span> <span class="o">-</span> <span class="mf">0.5</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">-</span> <span class="n">y</span> <span class="o">/</span> <span class="n">yScale</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsAcrossLevel0</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">projectionOrigin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsAcrossLevel0</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">projectionOrigin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span></div>
+
+
+<div class="viewcode-block" id="RasterioFileTileSource.toNativePixelCoordinates">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.RasterioFileTileSource.toNativePixelCoordinates">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">toNativePixelCoordinates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">roundResults</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert a coordinate in the native projection to pixel coordinates.</span>
+
+<span class="sd">        :param x: the x coordinate it the native projection.</span>
+<span class="sd">        :param y: the y coordinate it the native projection.</span>
+<span class="sd">        :param crs: input projection.  None to use the sources&#39;s projection.</span>
+<span class="sd">        :param roundResults: if True, round the results to the nearest pixel.</span>
+
+<span class="sd">        :return: (x, y) the pixel coordinate.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">srcCrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span> <span class="k">if</span> <span class="n">crs</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">make_crs</span><span class="p">(</span><span class="n">crs</span><span class="p">)</span>
+
+        <span class="c1"># convert to the native projection</span>
+        <span class="n">dstCrs</span> <span class="o">=</span> <span class="n">make_crs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getCrs</span><span class="p">())</span>
+        <span class="p">[</span><span class="n">px</span><span class="p">],</span> <span class="p">[</span><span class="n">py</span><span class="p">]</span> <span class="o">=</span> <span class="n">rio</span><span class="o">.</span><span class="n">warp</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">srcCrs</span><span class="p">,</span> <span class="n">dstCrs</span><span class="p">,</span> <span class="p">[</span><span class="n">x</span><span class="p">],</span> <span class="p">[</span><span class="n">y</span><span class="p">])</span>
+
+        <span class="c1"># convert to native pixel coordinates</span>
+        <span class="n">af</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAffine</span><span class="p">()</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">af</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">af</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">af</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">af</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">af</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">af</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="n">af</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">af</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">-</span> <span class="n">af</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">*</span> <span class="n">px</span> <span class="o">+</span> <span class="n">af</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">py</span><span class="p">)</span> <span class="o">/</span> <span class="n">d</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">af</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">af</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">-</span> <span class="n">af</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">af</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="n">af</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">px</span> <span class="o">-</span> <span class="n">af</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">py</span><span class="p">)</span> <span class="o">/</span> <span class="n">d</span>
+
+        <span class="c1"># convert to integer if requested</span>
+        <span class="k">if</span> <span class="n">roundResults</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">x</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span></div>
+
+
+<div class="viewcode-block" id="RasterioFileTileSource.getPixel">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.RasterioFileTileSource.getPixel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getPixel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a single pixel from the current tile source.</span>
+
+<span class="sd">        :param kwargs: optional arguments.  Some options are region, output, encoding,</span>
+<span class="sd">            jpegQuality, jpegSubsampling, tiffCompression, fill.  See tileIterator.</span>
+
+<span class="sd">        :returns: a dictionary with the value of the pixel for each channel on a</span>
+<span class="sd">            scale of [0-255], including alpha, if available.  This may contain</span>
+<span class="sd">            additional information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pixel</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">getPixel</span><span class="p">(</span><span class="n">includeTileRecord</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="n">pixel</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;tile&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">tile</span><span class="p">:</span>
+            <span class="c1"># Coordinates in the max level tile</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;gx&#39;</span><span class="p">],</span> <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;gy&#39;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">:</span>
+                <span class="c1"># convert to a scale of [-0.5, 0.5]</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">+</span> <span class="n">x</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">-</span> <span class="n">y</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span>
+                <span class="c1"># convert to projection coordinates</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projectionOrigin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsAcrossLevel0</span>
+                <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projectionOrigin</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">unitsAcrossLevel0</span>
+                <span class="c1"># convert to native pixel coordinates</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">toNativePixelCoordinates</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDatasetLock</span><span class="p">:</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">indexes</span><span class="p">:</span>
+                        <span class="n">window</span> <span class="o">=</span> <span class="n">rio</span><span class="o">.</span><span class="n">windows</span><span class="o">.</span><span class="n">Window</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">read</span><span class="p">(</span>
+                                <span class="n">i</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="n">window</span><span class="p">,</span> <span class="n">resampling</span><span class="o">=</span><span class="n">rio</span><span class="o">.</span><span class="n">enums</span><span class="o">.</span><span class="n">Resampling</span><span class="o">.</span><span class="n">nearest</span><span class="p">,</span>
+                            <span class="p">)</span>
+                            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># there should be 1 single pixel</span>
+                            <span class="n">pixel</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;bands&#39;</span><span class="p">,</span> <span class="p">{})[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+                        <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+                            <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">pixel</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_encodeTiledImageFromVips</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vimg</span><span class="p">,</span> <span class="n">iterInfo</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+<div class="viewcode-block" id="RasterioFileTileSource.getRegion">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.RasterioFileTileSource.getRegion">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getRegion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="p">(</span><span class="n">TILE_FORMAT_IMAGE</span><span class="p">,),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get region.</span>
+
+<span class="sd">        Get a rectangular region from the current tile source.  Aspect ratio is preserved.</span>
+<span class="sd">        If neither width nor height is given, the original size of the highest</span>
+<span class="sd">        resolution level is used.  If both are given, the returned image will be</span>
+<span class="sd">        no larger than either size.</span>
+
+<span class="sd">        :param format: the desired format or a tuple of allowed formats. Formats</span>
+<span class="sd">            are members of (TILE_FORMAT_PIL, TILE_FORMAT_NUMPY, TILE_FORMAT_IMAGE).</span>
+<span class="sd">            If TILE_FORMAT_IMAGE, encoding may be specified.</span>
+<span class="sd">        :param kwargs: optional arguments.  Some options are region, output, encoding,</span>
+<span class="sd">            jpegQuality, jpegSubsampling, tiffCompression, fill.  See tileIterator.</span>
+
+<span class="sd">        :returns: regionData, formatOrRegionMime: the image data and either the</span>
+<span class="sd">            mime type, if the format is TILE_FORMAT_IMAGE, or the format.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># cast format as a tuple if needed</span>
+        <span class="nb">format</span> <span class="o">=</span> <span class="nb">format</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">set</span><span class="p">,</span> <span class="nb">list</span><span class="p">))</span> <span class="k">else</span> <span class="p">(</span><span class="nb">format</span><span class="p">,)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;encoding&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;TILED&#39;</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;getRegion() with TILED output can only be used with a projection.&#39;</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">getRegion</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="c1"># The tile iterator handles determining the output region</span>
+        <span class="n">iterInfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileIterator</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="n">TILE_FORMAT_NUMPY</span><span class="p">,</span> <span class="n">resample</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span><span class="o">.</span><span class="n">info</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span>
+            <span class="n">iterInfo</span> <span class="ow">and</span>
+            <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jsonstyle</span> <span class="ow">and</span>
+            <span class="n">TILE_FORMAT_IMAGE</span> <span class="ow">in</span> <span class="nb">format</span> <span class="ow">and</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;encoding&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;TILED&#39;</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">getRegion</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">left</span><span class="p">,</span> <span class="n">top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixelToProjection</span><span class="p">(</span>
+            <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;region&#39;</span><span class="p">][</span><span class="s1">&#39;left&#39;</span><span class="p">],</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;region&#39;</span><span class="p">][</span><span class="s1">&#39;top&#39;</span><span class="p">],</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;level&#39;</span><span class="p">])</span>
+        <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pixelToProjection</span><span class="p">(</span>
+            <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;region&#39;</span><span class="p">][</span><span class="s1">&#39;right&#39;</span><span class="p">],</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;region&#39;</span><span class="p">][</span><span class="s1">&#39;bottom&#39;</span><span class="p">],</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;level&#39;</span><span class="p">])</span>
+        <span class="c1"># Be sure to use set output size</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">][</span><span class="s1">&#39;width&#39;</span><span class="p">]</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;output&#39;</span><span class="p">][</span><span class="s1">&#39;height&#39;</span><span class="p">]</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDatasetLock</span><span class="p">,</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">NamedTemporaryFile</span><span class="p">(</span>
+            <span class="n">suffix</span><span class="o">=</span><span class="s1">&#39;.tiff&#39;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;tiledGeoRegion_&#39;</span><span class="p">,</span> <span class="n">delete</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">output</span><span class="p">:</span>
+
+            <span class="n">xres</span> <span class="o">=</span> <span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span> <span class="o">/</span> <span class="n">width</span>
+            <span class="n">yres</span> <span class="o">=</span> <span class="p">(</span><span class="n">top</span> <span class="o">-</span> <span class="n">bottom</span><span class="p">)</span> <span class="o">/</span> <span class="n">height</span>
+            <span class="n">dst_transform</span> <span class="o">=</span> <span class="n">Affine</span><span class="p">(</span><span class="n">xres</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="n">yres</span><span class="p">,</span> <span class="n">top</span><span class="p">)</span>
+
+            <span class="k">with</span> <span class="n">rio</span><span class="o">.</span><span class="n">vrt</span><span class="o">.</span><span class="n">WarpedVRT</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span>
+                <span class="n">resampling</span><span class="o">=</span><span class="n">rio</span><span class="o">.</span><span class="n">enums</span><span class="o">.</span><span class="n">Resampling</span><span class="o">.</span><span class="n">nearest</span><span class="p">,</span>
+                <span class="n">crs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">,</span>
+                <span class="n">transform</span><span class="o">=</span><span class="n">dst_transform</span><span class="p">,</span>
+                <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span>
+                <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">vrt</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">vrt</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">resampling</span><span class="o">=</span><span class="n">rio</span><span class="o">.</span><span class="n">enums</span><span class="o">.</span><span class="n">Resampling</span><span class="o">.</span><span class="n">nearest</span><span class="p">)</span>
+
+            <span class="n">profile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">profile</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">large_image</span><span class="o">.</span><span class="n">tilesource</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">_rasterioParameters</span><span class="p">(</span>
+                    <span class="n">defaultCompression</span><span class="o">=</span><span class="s1">&#39;lzw&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+                <span class="p">),</span>
+            <span class="p">)</span>
+            <span class="n">profile</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                <span class="s1">&#39;crs&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">,</span>
+                <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">height</span><span class="p">,</span>
+                <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="n">width</span><span class="p">,</span>
+                <span class="s1">&#39;transform&#39;</span><span class="p">:</span> <span class="n">dst_transform</span><span class="p">,</span>
+            <span class="p">})</span>
+            <span class="k">with</span> <span class="n">rio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">profile</span><span class="p">)</span> <span class="k">as</span> <span class="n">dst</span><span class="p">:</span>
+                <span class="n">dst</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="c1"># Write colormaps if available</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">colorinterp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;palette&#39;</span><span class="p">:</span>
+                        <span class="n">dst</span><span class="o">.</span><span class="n">write_colormap</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">colormap</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">name</span><span class="p">),</span> <span class="n">TileOutputMimeTypes</span><span class="p">[</span><span class="s1">&#39;TILED&#39;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="RasterioFileTileSource.validateCOG">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.RasterioFileTileSource.validateCOG">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validateCOG</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if this image is a valid Cloud Optimized GeoTiff.</span>
+
+<span class="sd">        This will raise a :class:`large_image.exceptions.TileSourceInefficientError`</span>
+<span class="sd">        if not a valid Cloud Optimized GeoTiff. Otherwise, returns True. Requires</span>
+<span class="sd">        the ``rio-cogeo`` lib.</span>
+
+
+<span class="sd">        :param strict: Enforce warnings as exceptions. Set to False to only warn</span>
+<span class="sd">            and not raise exceptions.</span>
+<span class="sd">        :param warn: Log any warnings</span>
+
+<span class="sd">        :returns: the validity of the cogtiff</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">rio_cogeo.cogeo</span><span class="w"> </span><span class="kn">import</span> <span class="n">cog_validate</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Please install `rio-cogeo` to check COG validity.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">isValid</span><span class="p">,</span> <span class="n">errors</span><span class="p">,</span> <span class="n">warnings</span> <span class="o">=</span> <span class="n">cog_validate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">,</span> <span class="n">strict</span><span class="o">=</span><span class="n">strict</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">errors</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TileSourceInefficientError</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">strict</span> <span class="ow">and</span> <span class="n">warnings</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TileSourceInefficientError</span><span class="p">(</span><span class="n">warnings</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">warn</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">warning</span> <span class="ow">in</span> <span class="n">warnings</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">warning</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">isValid</span></div>
+
+
+<div class="viewcode-block" id="RasterioFileTileSource.isGeospatial">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.RasterioFileTileSource.isGeospatial">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">isGeospatial</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if a path is likely to be a geospatial file.</span>
+
+<span class="sd">        :param path: The path to the file</span>
+<span class="sd">        :returns: True if geospatial.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">_lazyImport</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">rio</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">DatasetReaderBase</span><span class="p">):</span>
+            <span class="n">ds</span> <span class="o">=</span> <span class="n">path</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">ds</span> <span class="o">=</span> <span class="n">rio</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">ds</span><span class="o">.</span><span class="n">crs</span> <span class="ow">or</span> <span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">transform</span> <span class="ow">and</span> <span class="n">ds</span><span class="o">.</span><span class="n">transform</span> <span class="o">!=</span> <span class="n">rio</span><span class="o">.</span><span class="n">Affine</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">gcps</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> <span class="n">ds</span><span class="o">.</span><span class="n">gcps</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="RasterioFileTileSource.addKnownExtensions">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.RasterioFileTileSource.addKnownExtensions">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">addKnownExtensions</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">rasterio.drivers</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_addedExtensions&#39;</span><span class="p">):</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_addedExtensions</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="n">rasterio</span><span class="o">.</span><span class="n">drivers</span><span class="o">.</span><span class="n">raster_driver_extensions</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">ext</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span><span class="p">:</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span><span class="p">[</span><span class="n">ext</span><span class="p">]</span> <span class="o">=</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">IMPLICIT</span>
+            <span class="c1"># This list was compiled by trying to read the test files in GDAL&#39;s</span>
+            <span class="c1"># repo.</span>
+            <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">{</span>
+                    <span class="s1">&#39;adf&#39;</span><span class="p">,</span> <span class="s1">&#39;aux&#39;</span><span class="p">,</span> <span class="s1">&#39;demtif&#39;</span><span class="p">,</span> <span class="s1">&#39;dim&#39;</span><span class="p">,</span> <span class="s1">&#39;doq&#39;</span><span class="p">,</span> <span class="s1">&#39;flt&#39;</span><span class="p">,</span> <span class="s1">&#39;fst&#39;</span><span class="p">,</span> <span class="s1">&#39;gsc&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;h3&#39;</span><span class="p">,</span> <span class="s1">&#39;lan&#39;</span><span class="p">,</span> <span class="s1">&#39;los&#39;</span><span class="p">,</span> <span class="s1">&#39;lrc&#39;</span><span class="p">,</span> <span class="s1">&#39;mint.bin&#39;</span><span class="p">,</span> <span class="s1">&#39;mtw&#39;</span><span class="p">,</span> <span class="s1">&#39;nsf&#39;</span><span class="p">,</span> <span class="s1">&#39;nws&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;on9&#39;</span><span class="p">,</span> <span class="s1">&#39;pjg&#39;</span><span class="p">,</span> <span class="s1">&#39;png.ovr&#39;</span><span class="p">,</span> <span class="s1">&#39;prj&#39;</span><span class="p">,</span> <span class="s1">&#39;ptf&#39;</span><span class="p">,</span> <span class="s1">&#39;rasterlite&#39;</span><span class="p">,</span> <span class="s1">&#39;rdb&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;tif.grd&#39;</span><span class="p">,</span> <span class="s1">&#39;til&#39;</span><span class="p">,</span> <span class="s1">&#39;vic&#39;</span><span class="p">,</span> <span class="s1">&#39;xlb&#39;</span><span class="p">}:</span>
+                <span class="k">if</span> <span class="n">ext</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span><span class="p">:</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span><span class="p">[</span><span class="n">ext</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span> <span class="o">=</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">IMPLICIT_LOW</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="open">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.open">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">open</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create an instance of the module class.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">RasterioFileTileSource</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="canRead">
+<a class="viewcode-back" href="../_build/large_image_source_rasterio/large_image_source_rasterio.html#large_image_source_rasterio.canRead">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">canRead</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if an input can be read by the module class.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">RasterioFileTileSource</span><span class="o">.</span><span class="n">canRead</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

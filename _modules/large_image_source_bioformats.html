@@ -1,0 +1,936 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_bioformats &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../_static/K.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">large_image_source_bioformats</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image_source_bioformats</h1><div class="highlight"><pre>
+<span></span><span class="c1">#############################################################################</span>
+<span class="c1">#  Copyright Kitware Inc.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed under the Apache License, Version 2.0 ( the &quot;License&quot; );</span>
+<span class="c1">#  you may not use this file except in compliance with the License.</span>
+<span class="c1">#  You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#    http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#  See the License for the specific language governing permissions and</span>
+<span class="c1">#  limitations under the License.</span>
+<span class="c1">#############################################################################</span>
+
+<span class="c1"># This tile sources uses javabridge to communicate between python and java.  It</span>
+<span class="c1"># requires some version of java&#39;s jvm to be available (see</span>
+<span class="c1"># https://jdk.java.net/archive/).  It uses the python-bioformats wheel to get</span>
+<span class="c1"># the bioformats JAR file.  A later version may be desirable (see</span>
+<span class="c1"># https://www.openmicroscopy.org/bio-formats/downloads/).  See</span>
+<span class="c1"># https://downloads.openmicroscopy.org/bio-formats/5.1.5/api/loci/formats/</span>
+<span class="c1">#   IFormatReader.html for interface details.</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">atexit</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">builtins</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">types</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">weakref</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">zipfile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">PackageNotFoundError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">_importlib_version</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">large_image.tilesource.base</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.cache_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">LruCacheMetaclass</span><span class="p">,</span> <span class="n">methodcache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">TILE_FORMAT_NUMPY</span><span class="p">,</span> <span class="n">SourcePriority</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TileSourceError</span><span class="p">,</span> <span class="n">TileSourceFileNotFoundError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.tilesource</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileTileSource</span><span class="p">,</span> <span class="n">nearPowerOfTwo</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">__version__</span> <span class="o">=</span> <span class="n">_importlib_version</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">PackageNotFoundError</span><span class="p">:</span>
+    <span class="c1"># package is not installed</span>
+    <span class="k">pass</span>
+
+<span class="n">bioformats</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="c1"># import javabridge</span>
+<span class="n">javabridge</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="n">_javabridgeStarted</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">_javabridgeStartLock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+<span class="n">_bioformatsVersion</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">_openImages</span> <span class="o">=</span> <span class="p">[]</span>
+
+
+<span class="c1"># Default to ignoring files with no extension and some specific extensions.</span>
+<span class="n">config</span><span class="o">.</span><span class="n">ConfigValues</span><span class="p">[</span><span class="s1">&#39;source_bioformats_ignored_names&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;(^[^.]*|\.(jpg|jpeg|jpe|png|tif|tiff|ndpi|nd2|ome|nc|json|geojson|fits|isyntax|mrxs|zip|zarr(\.db|\.zip)))$&#39;</span>  <span class="c1"># noqa</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_monitor_thread</span><span class="p">():</span>
+    <span class="n">main_thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">main_thread</span><span class="p">()</span>
+    <span class="n">main_thread</span><span class="o">.</span><span class="n">join</span><span class="p">()</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">_openImages</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">javabridge</span><span class="o">.</span><span class="n">attach</span><span class="p">()</span>
+            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">_openImages</span><span class="p">):</span>
+                <span class="n">source</span> <span class="o">=</span> <span class="n">_openImages</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+                <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="p">()</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">source</span><span class="o">.</span><span class="n">_bioimage</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">source</span><span class="o">.</span><span class="n">_bioimage</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">pass</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">javabridge</span><span class="o">.</span><span class="n">get_env</span><span class="p">():</span>
+                <span class="n">javabridge</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+    <span class="n">_stopJavabridge</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_reduceLogging</span><span class="p">():</span>
+    <span class="c1"># As of python-bioformats 4.0.0, org.apache.log4j isn&#39;t in the bundled</span>
+    <span class="c1"># jar file, so setting log levels just produces needless warnings.</span>
+    <span class="c1"># bioformats.log4j.basic_config()</span>
+    <span class="c1"># javabridge.JClassWrapper(&#39;loci.common.Log4jTools&#39;).setRootLevel(</span>
+    <span class="c1">#     logging.getLevelName(logger.level))</span>
+    <span class="c1">#</span>
+    <span class="c1"># This is taken from</span>
+    <span class="c1"># https://github.com/pskeshu/microscoper/blob/master/microscoper/io.py</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">rootLoggerName</span> <span class="o">=</span> <span class="n">javabridge</span><span class="o">.</span><span class="n">get_static_field</span><span class="p">(</span>
+            <span class="s1">&#39;org/slf4j/Logger&#39;</span><span class="p">,</span> <span class="s1">&#39;ROOT_LOGGER_NAME&#39;</span><span class="p">,</span> <span class="s1">&#39;Ljava/lang/String;&#39;</span><span class="p">)</span>
+        <span class="n">rootLogger</span> <span class="o">=</span> <span class="n">javabridge</span><span class="o">.</span><span class="n">static_call</span><span class="p">(</span>
+            <span class="s1">&#39;org/slf4j/LoggerFactory&#39;</span><span class="p">,</span> <span class="s1">&#39;getLogger&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;(Ljava/lang/String;)Lorg/slf4j/Logger;&#39;</span><span class="p">,</span> <span class="n">rootLoggerName</span><span class="p">)</span>
+        <span class="n">logLevel</span> <span class="o">=</span> <span class="n">javabridge</span><span class="o">.</span><span class="n">get_static_field</span><span class="p">(</span>
+            <span class="s1">&#39;ch/qos/logback/classic/Level&#39;</span><span class="p">,</span> <span class="s1">&#39;OFF&#39;</span><span class="p">,</span> <span class="s1">&#39;Lch/qos/logback/classic/Level;&#39;</span><span class="p">)</span>
+        <span class="n">javabridge</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">rootLogger</span><span class="p">,</span> <span class="s1">&#39;setLevel&#39;</span><span class="p">,</span> <span class="s1">&#39;(Lch/qos/logback/classic/Level;)V&#39;</span><span class="p">,</span> <span class="n">logLevel</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="n">bioformats</span><span class="o">.</span><span class="n">formatreader</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_startJavabridge</span><span class="p">(</span><span class="n">logger</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">_javabridgeStarted</span><span class="p">,</span> <span class="n">_bioformatsVersion</span>
+
+    <span class="k">with</span> <span class="n">_javabridgeStartLock</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_javabridgeStarted</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Only import these when first asked.  They are slow to import.</span>
+            <span class="k">global</span> <span class="n">bioformats</span>
+            <span class="k">global</span> <span class="n">javabridge</span>
+            <span class="k">if</span> <span class="n">bioformats</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="kn">import</span><span class="w"> </span><span class="nn">bioformats</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">_bioformatsVersion</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span>
+                        <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">bioformats</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span>
+                        <span class="s1">&#39;jars/bioformats_package.jar&#39;</span><span class="p">,</span>
+                    <span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;META-INF/MANIFEST.MF&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8192</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span>
+                        <span class="sa">b</span><span class="s1">&#39;Implementation-Version: &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Bioformats.jar version: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">_bioformatsVersion</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">pass</span>
+            <span class="k">if</span> <span class="n">javabridge</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="kn">import</span><span class="w"> </span><span class="nn">javabridge</span>
+
+            <span class="c1"># We need something to wake up at exit and shut things down</span>
+            <span class="n">monitor</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">_monitor_thread</span><span class="p">)</span>
+            <span class="n">monitor</span><span class="o">.</span><span class="n">daemon</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">monitor</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">javabridge</span><span class="o">.</span><span class="n">start_vm</span><span class="p">(</span><span class="n">class_path</span><span class="o">=</span><span class="n">bioformats</span><span class="o">.</span><span class="n">JARS</span><span class="p">,</span> <span class="n">run_headless</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">_reduceLogging</span><span class="p">()</span>
+                <span class="n">atexit</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">_stopJavabridge</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Started JVM for Bioformats tile source.&#39;</span><span class="p">)</span>
+                <span class="n">_javabridgeStarted</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Cannot start JVM for Bioformats tile source.&#39;</span><span class="p">)</span>
+                <span class="n">_javabridgeStarted</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="n">_javabridgeStarted</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_stopJavabridge</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">global</span> <span class="n">_javabridgeStarted</span>
+
+    <span class="k">if</span> <span class="n">javabridge</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">javabridge</span><span class="o">.</span><span class="n">kill_vm</span><span class="p">()</span>
+    <span class="n">_javabridgeStarted</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_getBioformatsVersion</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the version of the jar file.</span>
+
+<span class="sd">    :returns: the version string if it is in the expected format, None</span>
+<span class="sd">        otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_bioformatsVersion</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">large_image</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+
+        <span class="n">logger</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+        <span class="n">_startJavabridge</span><span class="p">(</span><span class="n">logger</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_bioformatsVersion</span>
+
+
+<div class="viewcode-block" id="BioformatsFileTileSource">
+<a class="viewcode-back" href="../_build/large_image_source_bioformats/large_image_source_bioformats.html#large_image_source_bioformats.BioformatsFileTileSource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">BioformatsFileTileSource</span><span class="p">(</span><span class="n">FileTileSource</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">LruCacheMetaclass</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides tile access to via Bioformats.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cacheName</span> <span class="o">=</span> <span class="s1">&#39;tilesource&#39;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;bioformats&#39;</span>
+    <span class="n">extensions</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="kc">None</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">FALLBACK</span><span class="p">,</span>
+        <span class="s1">&#39;czi&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>
+        <span class="s1">&#39;ets&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">LOW</span><span class="p">,</span>  <span class="c1"># part of vsi</span>
+        <span class="s1">&#39;lif&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">MEDIUM</span><span class="p">,</span>
+        <span class="s1">&#39;vsi&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">mimeTypes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="kc">None</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">FALLBACK</span><span class="p">,</span>
+        <span class="s1">&#39;image/czi&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>
+        <span class="s1">&#39;image/vsi&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="c1"># If frames are smaller than this they are served as single tiles, which</span>
+    <span class="c1"># can be more efficient than handling multiple tiles.</span>
+    <span class="n">_singleTileThreshold</span> <span class="o">=</span> <span class="mi">2048</span>
+    <span class="n">_tileSize</span> <span class="o">=</span> <span class="mi">512</span>
+    <span class="n">_associatedImageMaxSize</span> <span class="o">=</span> <span class="mi">8192</span>
+    <span class="n">_maxSkippedLevels</span> <span class="o">=</span> <span class="mi">3</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the tile class.  See the base class for other available</span>
+<span class="sd">        parameters.</span>
+
+<span class="sd">        :param path: the associated file path.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">largeImagePath</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_getLargeImagePath</span><span class="p">())</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">_ignoreSourceNames</span><span class="p">(</span><span class="s1">&#39;bioformats&#39;</span><span class="p">,</span> <span class="n">largeImagePath</span><span class="p">)</span>
+
+        <span class="n">header</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">largeImagePath</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">header</span> <span class="o">=</span> <span class="n">builtins</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">largeImagePath</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;File cannot be opened via Bioformats&#39;</span>
+                <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="c1"># Never allow pdfs; they crash the JVM</span>
+        <span class="k">if</span> <span class="n">header</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;%PDF-&#39;</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;File cannot be opened via Bioformats&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_startJavabridge</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;File cannot be opened by bioformats reader because javabridge failed to start&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addKnownExtensions</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tileLock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">javabridge</span><span class="o">.</span><span class="n">attach</span><span class="p">()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_bioimage</span> <span class="o">=</span> <span class="n">bioformats</span><span class="o">.</span><span class="n">ImageReader</span><span class="p">(</span><span class="n">largeImagePath</span><span class="p">,</span> <span class="n">perform_init</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># So this as a separate step so, if it fails, we can ask to</span>
+                    <span class="c1"># open something that does not exist and bioformats will</span>
+                    <span class="c1"># release some file handles.</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_bioimage</span><span class="o">.</span><span class="n">init_reader</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="c1"># Ask to open a file that should never exist</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_bioimage</span><span class="o">.</span><span class="n">rdr</span><span class="o">.</span><span class="n">setId</span><span class="p">(</span><span class="s1">&#39;__</span><span class="se">\0</span><span class="s1">__&#39;</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                        <span class="k">pass</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_bioimage</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_bioimage</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">raise</span> <span class="n">exc</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">OSError</span><span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">largeImagePath</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="n">TileSourceFileNotFoundError</span><span class="p">(</span><span class="n">largeImagePath</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;File cannot be opened via Bioformats. (</span><span class="si">%r</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="s1">&#39;File cannot be opened via Bioformats (</span><span class="si">%r</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">exc</span><span class="p">)</span>
+            <span class="n">_openImages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">weakref</span><span class="o">.</span><span class="n">ref</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+
+            <span class="n">rdr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bioimage</span><span class="o">.</span><span class="n">rdr</span>
+            <span class="c1"># Bind additional functions not done by bioformats module.</span>
+            <span class="c1"># Functions are listed at https://downloads.openmicroscopy.org</span>
+            <span class="c1"># /bio-formats/5.1.5/api/loci/formats/IFormatReader.html</span>
+            <span class="k">for</span> <span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">desc</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;getBitsPerPixel&#39;</span><span class="p">,</span> <span class="s1">&#39;()I&#39;</span><span class="p">,</span> <span class="s1">&#39;Get the number of bits per pixel&#39;</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;getDomains&#39;</span><span class="p">,</span> <span class="s1">&#39;()[Ljava/lang/String;&#39;</span><span class="p">,</span> <span class="s1">&#39;Get a list of domains&#39;</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;getEffectiveSizeC&#39;</span><span class="p">,</span> <span class="s1">&#39;()I&#39;</span><span class="p">,</span> <span class="s1">&#39;effectiveC * Z * T = imageCount&#39;</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;getOptimalTileHeight&#39;</span><span class="p">,</span> <span class="s1">&#39;()I&#39;</span><span class="p">,</span> <span class="s1">&#39;the optimal sub-image height &#39;</span>
+                 <span class="s1">&#39;for use with openBytes&#39;</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;getOptimalTileWidth&#39;</span><span class="p">,</span> <span class="s1">&#39;()I&#39;</span><span class="p">,</span> <span class="s1">&#39;the optimal sub-image width &#39;</span>
+                 <span class="s1">&#39;for use with openBytes&#39;</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;getResolution&#39;</span><span class="p">,</span> <span class="s1">&#39;()I&#39;</span><span class="p">,</span> <span class="s1">&#39;The current resolution level&#39;</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;getResolutionCount&#39;</span><span class="p">,</span> <span class="s1">&#39;()I&#39;</span><span class="p">,</span> <span class="s1">&#39;The number of resolutions for &#39;</span>
+                 <span class="s1">&#39;the current series&#39;</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;getZCTCoords&#39;</span><span class="p">,</span> <span class="s1">&#39;(I)[I&#39;</span><span class="p">,</span> <span class="s1">&#39;Gets the Z, C and T coordinates &#39;</span>
+                 <span class="s1">&#39;(real sizes) corresponding to the given rasterized index value.&#39;</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;hasFlattenedResolutions&#39;</span><span class="p">,</span> <span class="s1">&#39;()Z&#39;</span><span class="p">,</span> <span class="s1">&#39;True if resolutions have been flattened&#39;</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;isMetadataComplete&#39;</span><span class="p">,</span> <span class="s1">&#39;()Z&#39;</span><span class="p">,</span> <span class="s1">&#39;True if metadata is completely parsed&#39;</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;isNormalized&#39;</span><span class="p">,</span> <span class="s1">&#39;()Z&#39;</span><span class="p">,</span> <span class="s1">&#39;Is float data normalized&#39;</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;setFlattenedResolutions&#39;</span><span class="p">,</span> <span class="s1">&#39;(Z)V&#39;</span><span class="p">,</span> <span class="s1">&#39;Set if resolution should be flattened&#39;</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;setResolution&#39;</span><span class="p">,</span> <span class="s1">&#39;(I)V&#39;</span><span class="p">,</span> <span class="s1">&#39;Set the resolution level&#39;</span><span class="p">),</span>
+            <span class="p">]:</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="n">rdr</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span>
+                    <span class="n">javabridge</span><span class="o">.</span><span class="n">jutil</span><span class="o">.</span><span class="n">make_method</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">desc</span><span class="p">),</span> <span class="n">rdr</span><span class="p">))</span>
+            <span class="c1"># rdr.setFlattenedResolutions(False)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_metadataForCurrentSeries</span><span class="p">(</span><span class="n">rdr</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_checkSeries</span><span class="p">(</span><span class="n">rdr</span><span class="p">)</span>
+            <span class="n">bmd</span> <span class="o">=</span> <span class="n">bioformats</span><span class="o">.</span><span class="n">metadatatools</span><span class="o">.</span><span class="n">MetadataRetrieve</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_bioimage</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;channelNames&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">bmd</span><span class="o">.</span><span class="n">getChannelName</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span> <span class="ow">or</span> <span class="n">bmd</span><span class="o">.</span><span class="n">getChannelID</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeColorPlanes&#39;</span><span class="p">])]</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;channelNames&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;sizeXY&#39;</span><span class="p">,</span> <span class="s1">&#39;sizeC&#39;</span><span class="p">,</span> <span class="s1">&#39;sizeZ&#39;</span><span class="p">,</span> <span class="s1">&#39;sizeT&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeX&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeY&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;File cannot be opened with biofromats.&#39;</span>
+                <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_computeTiles</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_computeLevels</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_computeMagnification</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">javabridge</span><span class="o">.</span><span class="n">JavaException</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="n">es</span> <span class="o">=</span> <span class="n">javabridge</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="n">throwable</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;File cannot be opened via Bioformats. (</span><span class="si">%s</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">es</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="s1">&#39;File cannot be opened via Bioformats. (</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">es</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">AttributeError</span><span class="p">,</span> <span class="ne">UnicodeDecodeError</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;The bioformats reader threw an unhandled exception.&#39;</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;The bioformats reader threw an unhandled exception.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">finally</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">javabridge</span><span class="o">.</span><span class="n">get_env</span><span class="p">():</span>
+                <span class="n">javabridge</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Bioformats image must have at least one level.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Bioformats tile size is invalid.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;JPEG&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;readerClassName&#39;</span><span class="p">]</span> <span class="ow">and</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;optimalTileWidth&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">16384</span> <span class="ow">or</span>
+                 <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;optimalTileHeight&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">16384</span><span class="p">)):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Bioformats will be too inefficient to read this file.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_lastGetTileException</span> <span class="o">=</span> <span class="s1">&#39;raise&#39;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">getTile</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="nb">delattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_lastGetTileException&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="s1">&#39;Bioformats cannot read a tile: </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">exc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_populatedLevels</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span>
+            <span class="n">v</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;frameSeries&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;series&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">])</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_bioimage&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">javabridge</span><span class="o">.</span><span class="n">attach</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_bioimage</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bioimage</span>
+                <span class="n">_openImages</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">weakref</span><span class="o">.</span><span class="n">ref</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">javabridge</span><span class="o">.</span><span class="n">get_env</span><span class="p">():</span>
+                    <span class="n">javabridge</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_metadataForCurrentSeries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdr</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_metadata&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="s1">&#39;dimensionOrder&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getDimensionOrder</span><span class="p">(),</span>
+            <span class="s1">&#39;metadata&#39;</span><span class="p">:</span> <span class="n">javabridge</span><span class="o">.</span><span class="n">jdictionary_to_string_dictionary</span><span class="p">(</span>
+                <span class="n">rdr</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">()),</span>
+            <span class="s1">&#39;seriesMetadata&#39;</span><span class="p">:</span> <span class="n">javabridge</span><span class="o">.</span><span class="n">jdictionary_to_string_dictionary</span><span class="p">(</span>
+                <span class="n">rdr</span><span class="o">.</span><span class="n">getSeriesMetadata</span><span class="p">()),</span>
+            <span class="s1">&#39;seriesCount&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSeriesCount</span><span class="p">(),</span>
+            <span class="s1">&#39;imageCount&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getImageCount</span><span class="p">(),</span>
+            <span class="s1">&#39;rgbChannelCount&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getRGBChannelCount</span><span class="p">(),</span>
+            <span class="s1">&#39;sizeColorPlanes&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeC</span><span class="p">(),</span>
+            <span class="s1">&#39;sizeT&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeT</span><span class="p">(),</span>
+            <span class="s1">&#39;sizeZ&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeZ</span><span class="p">(),</span>
+            <span class="s1">&#39;sizeX&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeX</span><span class="p">(),</span>
+            <span class="s1">&#39;sizeY&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeY</span><span class="p">(),</span>
+            <span class="s1">&#39;pixelType&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getPixelType</span><span class="p">(),</span>
+            <span class="s1">&#39;isLittleEndian&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">isLittleEndian</span><span class="p">(),</span>
+            <span class="s1">&#39;isRGB&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">isRGB</span><span class="p">(),</span>
+            <span class="s1">&#39;isInterleaved&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">isInterleaved</span><span class="p">(),</span>
+            <span class="s1">&#39;isIndexed&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">isIndexed</span><span class="p">(),</span>
+            <span class="s1">&#39;bitsPerPixel&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getBitsPerPixel</span><span class="p">(),</span>
+            <span class="s1">&#39;sizeC&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getEffectiveSizeC</span><span class="p">(),</span>
+            <span class="s1">&#39;normalized&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">isNormalized</span><span class="p">(),</span>
+            <span class="s1">&#39;metadataComplete&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">isMetadataComplete</span><span class="p">(),</span>
+            <span class="c1"># &#39;domains&#39;: rdr.getDomains(),</span>
+            <span class="s1">&#39;optimalTileWidth&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getOptimalTileWidth</span><span class="p">(),</span>
+            <span class="s1">&#39;optimalTileHeight&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getOptimalTileHeight</span><span class="p">(),</span>
+            <span class="s1">&#39;resolutionCount&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getResolutionCount</span><span class="p">(),</span>
+            <span class="s1">&#39;readerClassName&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">get_class_name</span><span class="p">(),</span>
+        <span class="p">})</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getSeriesStarts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdr</span><span class="p">):</span>  <span class="c1"># noqa</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;frameSeries&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[{</span>
+            <span class="s1">&#39;series&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="s1">&#39;sizeX&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeX&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;sizeY&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeY&#39;</span><span class="p">],</span>
+        <span class="p">}]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;seriesCount&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="n">seriesMetadata</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;seriesCount&#39;</span><span class="p">]):</span>
+            <span class="n">rdr</span><span class="o">.</span><span class="n">setSeries</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+            <span class="n">seriesMetadata</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">javabridge</span><span class="o">.</span><span class="n">jdictionary_to_string_dictionary</span><span class="p">(</span><span class="n">rdr</span><span class="o">.</span><span class="n">getSeriesMetadata</span><span class="p">()))</span>
+        <span class="n">frameList</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">nextSeriesNum</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">seriesMetadata</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">frameNum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="n">seriesNum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;Series &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">seriesNum</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">seriesNum</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;seriesCount&#39;</span><span class="p">]:</span>
+                    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">frameList</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">frameNum</span><span class="p">:</span>
+                        <span class="n">frameList</span><span class="o">.</span><span class="n">append</span><span class="p">([])</span>
+                    <span class="k">if</span> <span class="n">seriesNum</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">frameList</span><span class="p">[</span><span class="n">frameNum</span><span class="p">]:</span>
+                        <span class="n">frameList</span><span class="p">[</span><span class="n">frameNum</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">seriesNum</span><span class="p">)</span>
+                        <span class="n">frameList</span><span class="p">[</span><span class="n">frameNum</span><span class="p">]</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+                    <span class="n">nextSeriesNum</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">nextSeriesNum</span><span class="p">,</span> <span class="n">seriesNum</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Failed to parse series information: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
+            <span class="n">rdr</span><span class="o">.</span><span class="n">setSeries</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">seriesMetadata</span> <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Series &#39;</span><span class="p">)):</span>
+                <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">seriesMetadata</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span>
+                <span class="n">key</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">seriesMetadata</span> <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;Series &#39;</span><span class="p">)):</span>
+            <span class="n">frameList</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="n">nextSeriesNum</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">rdr</span><span class="o">.</span><span class="n">setSeries</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">lastX</span><span class="p">,</span> <span class="n">lastY</span> <span class="o">=</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeX</span><span class="p">(),</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeY</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;seriesCount&#39;</span><span class="p">]):</span>
+                <span class="n">rdr</span><span class="o">.</span><span class="n">setSeries</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">rdr</span><span class="o">.</span><span class="n">getSizeX</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeX&#39;</span><span class="p">]</span> <span class="ow">and</span>
+                        <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeY</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeY&#39;</span><span class="p">]</span> <span class="ow">and</span>
+                        <span class="n">rdr</span><span class="o">.</span><span class="n">getImageCount</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;imageCount&#39;</span><span class="p">]):</span>
+                    <span class="n">frameList</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">idx</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">nextSeriesNum</span> <span class="o">==</span> <span class="n">idx</span><span class="p">:</span>
+                        <span class="n">nextSeriesNum</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="n">lastX</span><span class="p">,</span> <span class="n">lastY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeX&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeY&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">rdr</span><span class="o">.</span><span class="n">getSizeX</span><span class="p">()</span> <span class="o">*</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeY</span><span class="p">()</span> <span class="o">*</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getImageCount</span><span class="p">()</span> <span class="o">&gt;</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeX&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeY&#39;</span><span class="p">]</span> <span class="o">*</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;imageCount&#39;</span><span class="p">]):</span>
+                    <span class="n">frameList</span> <span class="o">=</span> <span class="p">[[</span><span class="n">idx</span><span class="p">]]</span>
+                    <span class="n">nextSeriesNum</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeX&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">=</span> <span class="n">lastX</span> <span class="o">=</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeX</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">=</span> <span class="n">lastY</span> <span class="o">=</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeY</span><span class="p">()</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;imageCount&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getImageCount</span><span class="p">()</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">lastX</span> <span class="ow">and</span> <span class="n">lastY</span> <span class="ow">and</span>
+                        <span class="n">nearPowerOfTwo</span><span class="p">(</span><span class="n">rdr</span><span class="o">.</span><span class="n">getSizeX</span><span class="p">(),</span> <span class="n">lastX</span><span class="p">)</span> <span class="ow">and</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeX</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">lastX</span> <span class="ow">and</span>
+                        <span class="n">nearPowerOfTwo</span><span class="p">(</span><span class="n">rdr</span><span class="o">.</span><span class="n">getSizeY</span><span class="p">(),</span> <span class="n">lastY</span><span class="p">)</span> <span class="ow">and</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeY</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">lastY</span><span class="p">):</span>
+                    <span class="n">steps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span>
+                        <span class="n">lastX</span> <span class="o">*</span> <span class="n">lastY</span> <span class="o">/</span> <span class="p">(</span><span class="n">rdr</span><span class="o">.</span><span class="n">getSizeX</span><span class="p">()</span> <span class="o">*</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeY</span><span class="p">()))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+                    <span class="n">frameList</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">steps</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">frameList</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">idx</span><span class="p">)</span>
+                    <span class="n">lastX</span><span class="p">,</span> <span class="n">lastY</span> <span class="o">=</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeX</span><span class="p">(),</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeY</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">nextSeriesNum</span> <span class="o">==</span> <span class="n">idx</span><span class="p">:</span>
+                        <span class="n">nextSeriesNum</span> <span class="o">=</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">frameList</span> <span class="o">=</span> <span class="p">[</span><span class="n">fl</span> <span class="k">for</span> <span class="n">fl</span> <span class="ow">in</span> <span class="n">frameList</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fl</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;frameSeries&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[{</span>
+            <span class="s1">&#39;series&#39;</span><span class="p">:</span> <span class="n">fl</span><span class="p">,</span>
+        <span class="p">}</span> <span class="k">for</span> <span class="n">fl</span> <span class="ow">in</span> <span class="n">frameList</span><span class="p">]</span>
+        <span class="n">rdr</span><span class="o">.</span><span class="n">setSeries</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">nextSeriesNum</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_checkSeries</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rdr</span><span class="p">):</span>
+        <span class="n">firstPossibleAssoc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getSeriesStarts</span><span class="p">(</span><span class="n">rdr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;seriesAssociatedImages&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">seriesNum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">firstPossibleAssoc</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;seriesCount&#39;</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="nb">any</span><span class="p">((</span><span class="n">seriesNum</span> <span class="ow">in</span> <span class="n">series</span><span class="p">[</span><span class="s1">&#39;series&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">series</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;frameSeries&#39;</span><span class="p">]):</span>
+                <span class="k">continue</span>
+            <span class="n">rdr</span><span class="o">.</span><span class="n">setSeries</span><span class="p">(</span><span class="n">seriesNum</span><span class="p">)</span>
+            <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;sizeX&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeX</span><span class="p">(),</span>
+                <span class="s1">&#39;sizeY&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeY</span><span class="p">(),</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sizeX&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_associatedImageMaxSize</span> <span class="ow">and</span>
+                    <span class="n">info</span><span class="p">[</span><span class="s1">&#39;sizeY&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_associatedImageMaxSize</span><span class="p">):</span>
+                <span class="c1"># TODO: Figure out better names for associated images.  Can</span>
+                <span class="c1"># we tell if any of them are the macro or label image?</span>
+                <span class="n">info</span><span class="p">[</span><span class="s1">&#39;seriesNum&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">seriesNum</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;seriesAssociatedImages&#39;</span><span class="p">][</span>
+                    <span class="s1">&#39;image</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">seriesNum</span><span class="p">]</span> <span class="o">=</span> <span class="n">info</span>
+        <span class="n">validate</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;frameSeries&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">frame</span><span class="p">[</span><span class="s1">&#39;series&#39;</span><span class="p">])):</span>
+                <span class="k">if</span> <span class="n">level</span> <span class="ow">and</span> <span class="n">frame</span><span class="p">[</span><span class="s1">&#39;series&#39;</span><span class="p">][</span><span class="n">level</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">rdr</span><span class="o">.</span><span class="n">setSeries</span><span class="p">(</span><span class="n">frame</span><span class="p">[</span><span class="s1">&#39;series&#39;</span><span class="p">][</span><span class="n">level</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_metadataForCurrentSeries</span><span class="p">(</span><span class="n">rdr</span><span class="p">)</span>
+                <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;sizeX&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeX</span><span class="p">(),</span>
+                    <span class="s1">&#39;sizeY&#39;</span><span class="p">:</span> <span class="n">rdr</span><span class="o">.</span><span class="n">getSizeY</span><span class="p">(),</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">level</span><span class="p">:</span>
+                    <span class="n">frame</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeX&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeX&#39;</span><span class="p">],</span> <span class="n">frame</span><span class="p">[</span><span class="s1">&#39;sizeX&#39;</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeY&#39;</span><span class="p">],</span> <span class="n">frame</span><span class="p">[</span><span class="s1">&#39;sizeY&#39;</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">validate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">nearPowerOfTwo</span><span class="p">(</span><span class="n">frame</span><span class="p">[</span><span class="s1">&#39;sizeX&#39;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;sizeX&#39;</span><span class="p">])</span> <span class="ow">or</span>
+                            <span class="ow">not</span> <span class="n">nearPowerOfTwo</span><span class="p">(</span><span class="n">frame</span><span class="p">[</span><span class="s1">&#39;sizeY&#39;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;sizeY&#39;</span><span class="p">])):</span>
+                        <span class="n">frame</span><span class="p">[</span><span class="s1">&#39;series&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">frame</span><span class="p">[</span><span class="s1">&#39;series&#39;</span><span class="p">][:</span><span class="n">level</span><span class="p">]</span>
+                        <span class="n">validate</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+            <span class="n">rdr</span><span class="o">.</span><span class="n">setSeries</span><span class="p">(</span><span class="n">frame</span><span class="p">[</span><span class="s1">&#39;series&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_metadataForCurrentSeries</span><span class="p">(</span><span class="n">rdr</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">validate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">validate</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">rdr</span><span class="o">.</span><span class="n">setSeries</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeXY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;frameSeries&#39;</span><span class="p">])</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_computeTiles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;resolutionCount&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">and</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_singleTileThreshold</span> <span class="ow">and</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_singleTileThreshold</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="mi">128</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;optimalTileWidth&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_singleTileThreshold</span> <span class="ow">and</span>
+              <span class="mi">128</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;optimalTileHeight&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_singleTileThreshold</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;optimalTileWidth&#39;</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;optimalTileHeight&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileSize</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_computeLevels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span>
+            <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span><span class="p">),</span>
+            <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span><span class="p">))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_computeMagnification</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_magnification</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;seriesMetadata&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">metadata</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">])</span>
+        <span class="n">valuekeys</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="s1">&#39;Scaling|Distance|Value #1&#39;</span><span class="p">,</span> <span class="mf">1e3</span><span class="p">)],</span>
+            <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="p">[(</span><span class="s1">&#39;Scaling|Distance|Value #2&#39;</span><span class="p">,</span> <span class="mf">1e3</span><span class="p">)],</span>
+        <span class="p">}</span>
+        <span class="n">tuplekeys</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="s1">&#39;Physical pixel size&#39;</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;0028,0030 Pixel Spacing&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="p">]</span>
+        <span class="n">magkeys</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;Information|Instrument|Objective|NominalMagnification #1&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Magnification #1&#39;</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">axis</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">}:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">units</span> <span class="ow">in</span> <span class="n">valuekeys</span><span class="p">[</span><span class="n">axis</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_magnification</span><span class="p">[</span><span class="s1">&#39;mm_&#39;</span> <span class="o">+</span> <span class="n">axis</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">*</span> <span class="n">units</span>
+        <span class="k">if</span> <span class="s1">&#39;mm_x&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_magnification</span> <span class="ow">and</span> <span class="s1">&#39;mm_y&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_magnification</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">units</span> <span class="ow">in</span> <span class="n">tuplekeys</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+                    <span class="n">found</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[^0-9.]*(\d*\.?\d+)[^0-9.]+(\d*\.?\d+)\D*$&#39;</span><span class="p">,</span> <span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">found</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_magnification</span><span class="p">[</span><span class="s1">&#39;mm_x&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">_magnification</span><span class="p">[</span><span class="s1">&#39;mm_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="nb">float</span><span class="p">(</span><span class="n">found</span><span class="o">.</span><span class="n">groups</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">units</span><span class="p">,</span> <span class="nb">float</span><span class="p">(</span><span class="n">found</span><span class="o">.</span><span class="n">groups</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="n">units</span><span class="p">)</span>
+                        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                            <span class="k">pass</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">magkeys</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_magnification</span><span class="p">[</span><span class="s1">&#39;magnification&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                <span class="k">break</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_nonemptyLevelsList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a list of one value per level where the value is None if the</span>
+<span class="sd">        level does not exist in the file and any other value if it does.</span>
+
+<span class="sd">        :param frame: the frame number.</span>
+<span class="sd">        :returns: a list of levels length.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nonempty</span> <span class="o">=</span> <span class="p">[</span><span class="kc">True</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+                    <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;frameSeries&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;series&#39;</span><span class="p">]][:</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span><span class="p">]</span>
+        <span class="n">nonempty</span> <span class="o">+=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">nonempty</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">nonempty</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<div class="viewcode-block" id="BioformatsFileTileSource.getNativeMagnification">
+<a class="viewcode-back" href="../_build/large_image_source_bioformats/large_image_source_bioformats.html#large_image_source_bioformats.BioformatsFileTileSource.getNativeMagnification">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getNativeMagnification</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the magnification at a particular level.</span>
+
+<span class="sd">        :return: magnification, width of a pixel in mm, height of a pixel in mm.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mm_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_magnification</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mm_x&#39;</span><span class="p">)</span>
+        <span class="n">mm_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_magnification</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mm_y&#39;</span><span class="p">,</span> <span class="n">mm_x</span><span class="p">)</span>
+        <span class="c1"># Estimate the magnification if we don&#39;t have a direct value</span>
+        <span class="n">mag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_magnification</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;magnification&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="mf">0.01</span> <span class="o">/</span> <span class="n">mm_x</span> <span class="k">if</span> <span class="n">mm_x</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;magnification&#39;</span><span class="p">:</span> <span class="n">mag</span><span class="p">,</span>
+            <span class="s1">&#39;mm_x&#39;</span><span class="p">:</span> <span class="n">mm_x</span><span class="p">,</span>
+            <span class="s1">&#39;mm_y&#39;</span><span class="p">:</span> <span class="n">mm_y</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="BioformatsFileTileSource.getMetadata">
+<a class="viewcode-back" href="../_build/large_image_source_bioformats/large_image_source_bioformats.html#large_image_source_bioformats.BioformatsFileTileSource.getMetadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a dictionary of metadata containing levels, sizeX, sizeY,</span>
+<span class="sd">        tileWidth, tileHeight, magnification, mm_x, mm_y, and frames.</span>
+
+<span class="sd">        :returns: metadata dictionary.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">()</span>
+        <span class="c1"># sizeC, sizeZ, sizeT, sizeXY</span>
+        <span class="n">frames</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">xy</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeXY&#39;</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeT&#39;</span><span class="p">]):</span>
+                <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeZ&#39;</span><span class="p">]):</span>
+                    <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeC&#39;</span><span class="p">]):</span>
+                        <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                            <span class="s1">&#39;IndexC&#39;</span><span class="p">:</span> <span class="n">c</span><span class="p">,</span>
+                            <span class="s1">&#39;IndexZ&#39;</span><span class="p">:</span> <span class="n">z</span><span class="p">,</span>
+                            <span class="s1">&#39;IndexT&#39;</span><span class="p">:</span> <span class="n">t</span><span class="p">,</span>
+                            <span class="s1">&#39;IndexXY&#39;</span><span class="p">:</span> <span class="n">xy</span><span class="p">,</span>
+                        <span class="p">})</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;frameSeries&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">frames</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">frame</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">frames</span><span class="p">):</span>
+                <span class="n">frame</span><span class="p">[</span><span class="s1">&#39;sizeX&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;frameSeries&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="s1">&#39;sizeX&#39;</span><span class="p">]</span>
+                <span class="n">frame</span><span class="p">[</span><span class="s1">&#39;sizeY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;frameSeries&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="s1">&#39;sizeY&#39;</span><span class="p">]</span>
+                <span class="n">frame</span><span class="p">[</span><span class="s1">&#39;levels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;frameSeries&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="s1">&#39;series&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;frames&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">frames</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_addMetadataFrameInformation</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;channelNames&#39;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="BioformatsFileTileSource.getInternalMetadata">
+<a class="viewcode-back" href="../_build/large_image_source_bioformats/large_image_source_bioformats.html#large_image_source_bioformats.BioformatsFileTileSource.getInternalMetadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getInternalMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return additional known metadata about the tile source.  Data returned</span>
+<span class="sd">        from this method is not guaranteed to be in any particular format or</span>
+<span class="sd">        have specific values.</span>
+
+<span class="sd">        :returns: a dictionary of data or None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span></div>
+
+
+<div class="viewcode-block" id="BioformatsFileTileSource.getTile">
+<a class="viewcode-back" href="../_build/large_image_source_bioformats/large_image_source_bioformats.html#large_image_source_bioformats.BioformatsFileTileSource.getTile">[docs]</a>
+    <span class="nd">@methodcache</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getTile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">pilImageAllowed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">numpyAllowed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xyzInRange</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="n">ft</span> <span class="o">=</span> <span class="n">fc</span> <span class="o">=</span> <span class="n">fz</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">fseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;frameSeries&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;frame&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getFrame</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">fc</span> <span class="o">=</span> <span class="n">frame</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeC&#39;</span><span class="p">]</span>
+            <span class="n">fz</span> <span class="o">=</span> <span class="p">(</span><span class="n">frame</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeC&#39;</span><span class="p">])</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeZ&#39;</span><span class="p">]</span>
+            <span class="n">ft</span> <span class="o">=</span> <span class="p">(</span><span class="n">frame</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeC&#39;</span><span class="p">]</span> <span class="o">//</span>
+                  <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeZ&#39;</span><span class="p">])</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeT&#39;</span><span class="p">]</span>
+            <span class="n">fxy</span> <span class="o">=</span> <span class="p">(</span><span class="n">frame</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeC&#39;</span><span class="p">]</span> <span class="o">//</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeZ&#39;</span><span class="p">]</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeT&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">frame</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">fxy</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;sizeXY&#39;</span><span class="p">]:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Frame does not exist&#39;</span>
+                <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="n">fseries</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;frameSeries&#39;</span><span class="p">][</span><span class="n">fxy</span><span class="p">]</span>
+        <span class="n">seriesLevel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">z</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">while</span> <span class="n">seriesLevel</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">fseries</span><span class="p">[</span><span class="s1">&#39;series&#39;</span><span class="p">])</span> <span class="ow">or</span> <span class="n">fseries</span><span class="p">[</span><span class="s1">&#39;series&#39;</span><span class="p">][</span><span class="n">seriesLevel</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">seriesLevel</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">scale</span> <span class="o">*=</span> <span class="mi">2</span>
+        <span class="n">offsetx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">*</span> <span class="n">scale</span>
+        <span class="n">offsety</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span> <span class="o">*</span> <span class="n">scale</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">*</span> <span class="n">scale</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">seriesLevel</span> <span class="o">-</span> <span class="n">offsetx</span><span class="p">)</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span> <span class="o">*</span> <span class="n">scale</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">seriesLevel</span> <span class="o">-</span> <span class="n">offsety</span><span class="p">)</span>
+        <span class="n">sizeXAtScale</span> <span class="o">=</span> <span class="n">fseries</span><span class="p">[</span><span class="s1">&#39;sizeX&#39;</span><span class="p">]</span> <span class="o">//</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">seriesLevel</span><span class="p">)</span>
+        <span class="n">sizeYAtScale</span> <span class="o">=</span> <span class="n">fseries</span><span class="p">[</span><span class="s1">&#39;sizeY&#39;</span><span class="p">]</span> <span class="o">//</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">seriesLevel</span><span class="p">)</span>
+        <span class="n">finalWidth</span> <span class="o">=</span> <span class="n">width</span> <span class="o">//</span> <span class="n">scale</span>
+        <span class="n">finalHeight</span> <span class="o">=</span> <span class="n">height</span> <span class="o">//</span> <span class="n">scale</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">sizeXAtScale</span> <span class="o">-</span> <span class="n">offsetx</span><span class="p">)</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">sizeYAtScale</span> <span class="o">-</span> <span class="n">offsety</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">scale</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxSkippedLevels</span><span class="p">:</span>
+            <span class="n">tile</span><span class="p">,</span> <span class="n">_format</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getTileFromEmptyLevel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">tile</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">tilesource</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">_imageToNumpy</span><span class="p">(</span><span class="n">tile</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="nb">format</span> <span class="o">=</span> <span class="n">TILE_FORMAT_NUMPY</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileLock</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">javabridge</span><span class="o">.</span><span class="n">attach</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">width</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">height</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bioimage</span><span class="o">.</span><span class="n">read</span><span class="p">(</span>
+                            <span class="n">c</span><span class="o">=</span><span class="n">fc</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">fz</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">ft</span><span class="p">,</span> <span class="n">series</span><span class="o">=</span><span class="n">fseries</span><span class="p">[</span><span class="s1">&#39;series&#39;</span><span class="p">][</span><span class="n">seriesLevel</span><span class="p">],</span>
+                            <span class="n">rescale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># return internal data types</span>
+                            <span class="n">XYWH</span><span class="o">=</span><span class="p">(</span><span class="n">offsetx</span><span class="p">,</span> <span class="n">offsety</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">))</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># We need the same dtype, so read 1x1 at 0x0</span>
+                        <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bioimage</span><span class="o">.</span><span class="n">read</span><span class="p">(</span>
+                            <span class="n">c</span><span class="o">=</span><span class="n">fc</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">fz</span><span class="p">,</span> <span class="n">t</span><span class="o">=</span><span class="n">ft</span><span class="p">,</span> <span class="n">series</span><span class="o">=</span><span class="n">fseries</span><span class="p">[</span><span class="s1">&#39;series&#39;</span><span class="p">][</span><span class="n">seriesLevel</span><span class="p">],</span>
+                            <span class="n">rescale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># return internal data types</span>
+                            <span class="n">XYWH</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                        <span class="n">tile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">tuple</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tile</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+                    <span class="nb">format</span> <span class="o">=</span> <span class="n">TILE_FORMAT_NUMPY</span>
+                <span class="k">except</span> <span class="n">javabridge</span><span class="o">.</span><span class="n">JavaException</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                    <span class="n">es</span> <span class="o">=</span> <span class="n">javabridge</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="n">throwable</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Failed to getTile (</span><span class="si">%r</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">es</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_lastGetTileException&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;raise&#39;</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="s1">&#39;Failed to get Bioformat region (</span><span class="si">%s</span><span class="s1">, </span><span class="si">%r</span><span class="s1">).&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">es</span><span class="p">,</span> <span class="p">(</span>
+                            <span class="n">fc</span><span class="p">,</span> <span class="n">fz</span><span class="p">,</span> <span class="n">ft</span><span class="p">,</span> <span class="n">fseries</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span><span class="p">,</span> <span class="n">offsetx</span><span class="p">,</span>
+                            <span class="n">offsety</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)))</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_lastGetTileException</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">es</span><span class="p">)</span>
+                    <span class="n">tile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                    <span class="nb">format</span> <span class="o">=</span> <span class="n">TILE_FORMAT_NUMPY</span>
+                <span class="k">finally</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">javabridge</span><span class="o">.</span><span class="n">get_env</span><span class="p">():</span>
+                        <span class="n">javabridge</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">scale</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">tile</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[::</span><span class="n">scale</span><span class="p">,</span> <span class="p">::</span><span class="n">scale</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="p">(</span><span class="n">finalHeight</span><span class="p">,</span> <span class="n">finalWidth</span><span class="p">):</span>
+            <span class="n">fillValue</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">:</span>
+                <span class="n">fillValue</span> <span class="o">=</span> <span class="mi">65535</span>
+            <span class="k">elif</span> <span class="n">tile</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">:</span>
+                <span class="n">fillValue</span> <span class="o">=</span> <span class="mi">32767</span>
+            <span class="k">elif</span> <span class="n">tile</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">:</span>
+                <span class="n">fillValue</span> <span class="o">=</span> <span class="mi">255</span>
+            <span class="k">elif</span> <span class="n">tile</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;f&#39;</span><span class="p">:</span>
+                <span class="n">fillValue</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">retile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
+                <span class="nb">tuple</span><span class="p">([</span><span class="n">finalHeight</span><span class="p">,</span> <span class="n">finalWidth</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:])),</span>
+                <span class="n">fillValue</span><span class="p">,</span>
+                <span class="n">dtype</span><span class="o">=</span><span class="n">tile</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="n">retile</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="nb">min</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">finalHeight</span><span class="p">),</span> <span class="mi">0</span><span class="p">:</span><span class="nb">min</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">finalWidth</span><span class="p">)]</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[</span>
+                <span class="mi">0</span><span class="p">:</span><span class="nb">min</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">finalHeight</span><span class="p">),</span> <span class="mi">0</span><span class="p">:</span><span class="nb">min</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">finalWidth</span><span class="p">)]</span>
+            <span class="n">tile</span> <span class="o">=</span> <span class="n">retile</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outputTile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="nb">format</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">pilImageAllowed</span><span class="p">,</span> <span class="n">numpyAllowed</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="BioformatsFileTileSource.getAssociatedImagesList">
+<a class="viewcode-back" href="../_build/large_image_source_bioformats/large_image_source_bioformats.html#large_image_source_bioformats.BioformatsFileTileSource.getAssociatedImagesList">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getAssociatedImagesList</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a list of associated images.</span>
+
+<span class="sd">        :return: the list of image keys.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;seriesAssociatedImages&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getAssociatedImage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imageKey</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get an associated image in PIL format.</span>
+
+<span class="sd">        :param imageKey: the key of the associated image.</span>
+<span class="sd">        :return: the image in PIL format or None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_metadata</span><span class="p">[</span><span class="s1">&#39;seriesAssociatedImages&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">imageKey</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">info</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">series</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;seriesNum&#39;</span><span class="p">]</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileLock</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">javabridge</span><span class="o">.</span><span class="n">attach</span><span class="p">()</span>
+                <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bioimage</span><span class="o">.</span><span class="n">read</span><span class="p">(</span>
+                    <span class="n">series</span><span class="o">=</span><span class="n">series</span><span class="p">,</span>
+                    <span class="n">rescale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># return internal data types</span>
+                    <span class="n">XYWH</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;sizeX&#39;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;sizeY&#39;</span><span class="p">]))</span>
+            <span class="k">except</span> <span class="n">javabridge</span><span class="o">.</span><span class="n">JavaException</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                <span class="n">es</span> <span class="o">=</span> <span class="n">javabridge</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">exc</span><span class="o">.</span><span class="n">throwable</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="s1">&#39;Failed to get Bioformat series (</span><span class="si">%s</span><span class="s1">, </span><span class="si">%r</span><span class="s1">).&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">es</span><span class="p">,</span> <span class="p">(</span>
+                    <span class="n">series</span><span class="p">,</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;sizeX&#39;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;sizeY&#39;</span><span class="p">])))</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">javabridge</span><span class="o">.</span><span class="n">get_env</span><span class="p">():</span>
+                    <span class="n">javabridge</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">large_image</span><span class="o">.</span><span class="n">tilesource</span><span class="o">.</span><span class="n">base</span><span class="o">.</span><span class="n">_imageToPIL</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BioformatsFileTileSource.addKnownExtensions">
+<a class="viewcode-back" href="../_build/large_image_source_bioformats/large_image_source_bioformats.html#large_image_source_bioformats.BioformatsFileTileSource.addKnownExtensions">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">addKnownExtensions</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="c1"># This starts javabridge/bioformats if needed</span>
+        <span class="n">_getBioformatsVersion</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_addedExtensions&#39;</span><span class="p">):</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_addedExtensions</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">dotext</span> <span class="ow">in</span> <span class="n">bioformats</span><span class="o">.</span><span class="n">READABLE_FORMATS</span><span class="p">:</span>
+                <span class="n">ext</span> <span class="o">=</span> <span class="n">dotext</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">ext</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span><span class="p">:</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span><span class="p">[</span><span class="n">ext</span><span class="p">]</span> <span class="o">=</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">IMPLICIT</span>
+            <span class="c1"># The python modules doesn&#39;t list all the extensions that can be</span>
+            <span class="c1"># read, so supplement from the jar</span>
+            <span class="n">readerlist</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span>
+                <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">bioformats</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span>
+                <span class="s1">&#39;jars/bioformats_package.jar&#39;</span><span class="p">,</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;loci/formats/readers.txt&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^loci\.formats\.in\..* # (?:.*?\b(\w{2,})\b(?:,|\s|$))&#39;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">readerlist</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">(</span><span class="n">pattern</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="n">line</span><span class="p">))</span> <span class="o">-</span> <span class="p">{</span>
+                        <span class="s1">&#39;pattern&#39;</span><span class="p">,</span> <span class="s1">&#39;urlreader&#39;</span><span class="p">,</span> <span class="s1">&#39;screen&#39;</span><span class="p">,</span> <span class="s1">&#39;zip&#39;</span><span class="p">,</span> <span class="s1">&#39;zarr&#39;</span><span class="p">,</span> <span class="s1">&#39;db&#39;</span><span class="p">,</span>
+                        <span class="s1">&#39;fake&#39;</span><span class="p">,</span> <span class="s1">&#39;no&#39;</span><span class="p">}:</span>
+                    <span class="k">if</span> <span class="n">ext</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span><span class="p">:</span>
+                        <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span><span class="p">[</span><span class="n">ext</span><span class="p">]</span> <span class="o">=</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">IMPLICIT</span>
+            <span class="c1"># These were found by reading some OMERO test files</span>
+            <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;columbusidx&#39;</span><span class="p">,</span> <span class="s1">&#39;dv_vol&#39;</span><span class="p">,</span> <span class="s1">&#39;lifext&#39;</span><span class="p">}:</span>
+                <span class="k">if</span> <span class="n">ext</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span><span class="p">:</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span><span class="p">[</span><span class="n">ext</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span> <span class="o">=</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">IMPLICIT_LOW</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="open">
+<a class="viewcode-back" href="../_build/large_image_source_bioformats/large_image_source_bioformats.html#large_image_source_bioformats.open">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">open</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create an instance of the module class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">BioformatsFileTileSource</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="canRead">
+<a class="viewcode-back" href="../_build/large_image_source_bioformats/large_image_source_bioformats.html#large_image_source_bioformats.canRead">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">canRead</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if an input can be read by the module class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">BioformatsFileTileSource</span><span class="o">.</span><span class="n">canRead</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

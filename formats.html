@@ -1,0 +1,535 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Formats &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="_static/K.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Multi Source Schema" href="multi_source_specification.html" />
+    <link rel="prev" title="Image Conversion" href="image_conversion.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Image Formats</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#preferred-extensions-and-mime-types">Preferred Extensions and Mime Types</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mime-types-45">Mime Types (45)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extensions-438">Extensions (438)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Image Formats</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/formats.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="image-formats">
+<h1>Image Formats<a class="headerlink" href="#image-formats" title="Link to this heading"></a></h1>
+<section id="preferred-extensions-and-mime-types">
+<h2>Preferred Extensions and Mime Types<a class="headerlink" href="#preferred-extensions-and-mime-types" title="Link to this heading"></a></h2>
+<p>Images can generally be read regardless of their name.  By default, when opening an image with <code class="docutils literal notranslate"><span class="pre">large_image.open()</span></code>, each tile source reader is tried in turn until one source can open the file.  Each source lists preferred file extensions and mime types with a priority level.  If the file ends with one of these extensions or has one of these mimetypes, the order that the source readers are tried is adjusted based on the specified priority.</p>
+<p>The file extensions and mime types that are listed by the core sources that can affect source processing order are listed below.  See <code class="docutils literal notranslate"><span class="pre">large_image.listSources()</span></code> for details about priority of the different sources and the <code class="docutils literal notranslate"><span class="pre">large_image.constants.SourcePriority</span></code> for the priority meaning.</p>
+<p>The following table describes the some of the formats supported by <code class="docutils literal notranslate"><span class="pre">large-image</span></code> and the common extensions for each format. This table also describes the <code class="docutils literal notranslate"><span class="pre">large-image-source-*</span></code> modules that can be used to read each format.</p>
+<p>For a list of known mime types, see <a class="reference internal" href="#mime-types-list"><span class="std std-ref">Mime Types (45)</span></a>.
+For a list of known extensions, see <a class="reference internal" href="#extensions-list"><span class="std std-ref">Extensions (438)</span></a>.</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Common Formats</span><a class="headerlink" href="#id1" title="Link to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Format</p></th>
+<th class="head"><p>Extension(s)</p></th>
+<th class="head"><p>Tile Source</p></th>
+<th class="head"><p>Multiframe</p></th>
+<th class="head"><p>Geospatial</p></th>
+<th class="head"><p>Writeable</p></th>
+<th class="head"><p>Associated Images</p></th>
+<th class="head"><p>Example File</p>
+</th>
+</tr>
+</thead>
+<tbody id="tcgaextract-ihergb-labeled-tiff-0">
+<tr class="row-even"><td><p><a href="https://www.itu.int/itudoc/itu-t/com16/tiff-fx/docs/tiff6.pdf" title="Tagged Image File Format">TIFF</a>
+<a class="reference internal" href="#tcgaextract_ihergb_labeled.tiff_0"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tiff</span></code>, <code class="docutils literal notranslate"><span class="pre">tif</span></code>, <code class="docutils literal notranslate"><span class="pre">ptif</span></code>, <code class="docutils literal notranslate"><span class="pre">ptiff</span></code>, <code class="docutils literal notranslate"><span class="pre">qptiff</span></code></p></td>
+<td><p>tiff, tifffile</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/faf5c8da95a5e624c70300afb98318e3421cc86ac27755f207075fa2f68aa23d099bec802007a86533579c6aadc97b4ce710d272eb871172d4b2c7e9ff6e9cad/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-odd" id="tcgaextract-ihergb-labeled-tiff-1"><td><p><a href="https://www.itu.int/itudoc/itu-t/com16/tiff-fx/docs/tiff6.pdf" title="Tagged Image File Format">TIFF</a>
+<a class="reference internal" href="#tcgaextract_ihergb_labeled.tiff_1"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tiff</span></code>, <code class="docutils literal notranslate"><span class="pre">tif</span></code>, <code class="docutils literal notranslate"><span class="pre">ptif</span></code>, <code class="docutils literal notranslate"><span class="pre">ptiff</span></code>, <code class="docutils literal notranslate"><span class="pre">qptiff</span></code></p></td>
+<td><p>openslide</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/faf5c8da95a5e624c70300afb98318e3421cc86ac27755f207075fa2f68aa23d099bec802007a86533579c6aadc97b4ce710d272eb871172d4b2c7e9ff6e9cad/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-even" id="tcgaextract-ihergb-labeled-tiff-2"><td><p><a href="https://www.itu.int/itudoc/itu-t/com16/tiff-fx/docs/tiff6.pdf" title="Tagged Image File Format">TIFF</a>
+<a class="reference internal" href="#tcgaextract_ihergb_labeled.tiff_2"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tiff</span></code>, <code class="docutils literal notranslate"><span class="pre">tif</span></code>, <code class="docutils literal notranslate"><span class="pre">ptif</span></code>, <code class="docutils literal notranslate"><span class="pre">ptiff</span></code>, <code class="docutils literal notranslate"><span class="pre">qptiff</span></code></p></td>
+<td><p>vips</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/faf5c8da95a5e624c70300afb98318e3421cc86ac27755f207075fa2f68aa23d099bec802007a86533579c6aadc97b4ce710d272eb871172d4b2c7e9ff6e9cad/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-odd" id="tcgaextract-ihergb-labeled-tiff-3"><td><p><a href="https://www.itu.int/itudoc/itu-t/com16/tiff-fx/docs/tiff6.pdf" title="Tagged Image File Format">TIFF</a>
+<a class="reference internal" href="#tcgaextract_ihergb_labeled.tiff_3"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tiff</span></code>, <code class="docutils literal notranslate"><span class="pre">tif</span></code>, <code class="docutils literal notranslate"><span class="pre">ptif</span></code>, <code class="docutils literal notranslate"><span class="pre">ptiff</span></code>, <code class="docutils literal notranslate"><span class="pre">qptiff</span></code></p></td>
+<td><p>pil</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/faf5c8da95a5e624c70300afb98318e3421cc86ac27755f207075fa2f68aa23d099bec802007a86533579c6aadc97b4ce710d272eb871172d4b2c7e9ff6e9cad/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-even" id="tcgaextract-ihergb-labeled-tiff-4"><td><p><a href="https://www.itu.int/itudoc/itu-t/com16/tiff-fx/docs/tiff6.pdf" title="Tagged Image File Format">TIFF</a>
+<a class="reference internal" href="#tcgaextract_ihergb_labeled.tiff_4"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tiff</span></code>, <code class="docutils literal notranslate"><span class="pre">tif</span></code>, <code class="docutils literal notranslate"><span class="pre">ptif</span></code>, <code class="docutils literal notranslate"><span class="pre">ptiff</span></code>, <code class="docutils literal notranslate"><span class="pre">qptiff</span></code></p></td>
+<td><p>gdal, rasterio, mapnik</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/faf5c8da95a5e624c70300afb98318e3421cc86ac27755f207075fa2f68aa23d099bec802007a86533579c6aadc97b4ce710d272eb871172d4b2c7e9ff6e9cad/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-odd" id="cmu-1-svs-0"><td><p><a href="https://paulbourke.net/dataformats/svs/" title="Aperio ScanScope Virtual Slide">SVS</a>
+<a class="reference internal" href="#CMU-1.svs_0"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">svs</span></code>, <code class="docutils literal notranslate"><span class="pre">svslide</span></code></p></td>
+<td><p>openslide</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/3c31fd959302b56cf62020ed01312ab964bd776fbf7139a283bdde7c351d9211cec008eaf7f3b1b54e8e14c8293c6e6f77a389406e72318cb954f4a1a65f9ae1/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-even" id="cmu-1-svs-1"><td><p><a href="https://paulbourke.net/dataformats/svs/" title="Aperio ScanScope Virtual Slide">SVS</a>
+<a class="reference internal" href="#CMU-1.svs_1"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">svs</span></code>, <code class="docutils literal notranslate"><span class="pre">svslide</span></code></p></td>
+<td><p>tiff, tifffile, bioformats</p></td>
+<td><p>Unknown</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/3c31fd959302b56cf62020ed01312ab964bd776fbf7139a283bdde7c351d9211cec008eaf7f3b1b54e8e14c8293c6e6f77a389406e72318cb954f4a1a65f9ae1/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-odd" id="cmu-1-svs-2"><td><p><a href="https://paulbourke.net/dataformats/svs/" title="Aperio ScanScope Virtual Slide">SVS</a>
+<a class="reference internal" href="#CMU-1.svs_2"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">svs</span></code>, <code class="docutils literal notranslate"><span class="pre">svslide</span></code></p></td>
+<td><p>gdal, rasterio, mapnik</p></td>
+<td><p>Unknown</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/3c31fd959302b56cf62020ed01312ab964bd776fbf7139a283bdde7c351d9211cec008eaf7f3b1b54e8e14c8293c6e6f77a389406e72318cb954f4a1a65f9ae1/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-even" id="ddx58-axl-egfr-well2-xy04-ome-tif-0"><td><p><a href="https://docs.openmicroscopy.org/ome-model/5.6.3/ome-tiff/" title="Open Microscopy Environment Tagged Image File Format">OME-TIFF</a>
+<a class="reference internal" href="#DDX58_AXL_EGFR_well2_XY04.ome.tif_0"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ome.tiff</span></code>, <code class="docutils literal notranslate"><span class="pre">ome.tif</span></code>, <code class="docutils literal notranslate"><span class="pre">ome</span></code></p></td>
+<td><p>ometiff</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/d255bac7fdb3318ca015a688d396a2fc618a1383bc1751ec56100bf50b38f16d2d71a3837104fbe41bad524807123108e6fe0984f76bbf5e22656cea7541d44e/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-odd" id="ddx58-axl-egfr-well2-xy04-ome-tif-1"><td><p><a href="https://docs.openmicroscopy.org/ome-model/5.6.3/ome-tiff/" title="Open Microscopy Environment Tagged Image File Format">OME-TIFF</a>
+<a class="reference internal" href="#DDX58_AXL_EGFR_well2_XY04.ome.tif_1"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ome.tiff</span></code>, <code class="docutils literal notranslate"><span class="pre">ome.tif</span></code>, <code class="docutils literal notranslate"><span class="pre">ome</span></code></p></td>
+<td><p>vips</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/d255bac7fdb3318ca015a688d396a2fc618a1383bc1751ec56100bf50b38f16d2d71a3837104fbe41bad524807123108e6fe0984f76bbf5e22656cea7541d44e/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-even" id="ddx58-axl-egfr-well2-xy04-ome-tif-2"><td><p><a href="https://docs.openmicroscopy.org/ome-model/5.6.3/ome-tiff/" title="Open Microscopy Environment Tagged Image File Format">OME-TIFF</a>
+<a class="reference internal" href="#DDX58_AXL_EGFR_well2_XY04.ome.tif_2"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ome.tiff</span></code>, <code class="docutils literal notranslate"><span class="pre">ome.tif</span></code>, <code class="docutils literal notranslate"><span class="pre">ome</span></code></p></td>
+<td><p>pil</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/d255bac7fdb3318ca015a688d396a2fc618a1383bc1751ec56100bf50b38f16d2d71a3837104fbe41bad524807123108e6fe0984f76bbf5e22656cea7541d44e/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-odd" id="ddx58-axl-egfr-well2-xy04-ome-tif-3"><td><p><a href="https://docs.openmicroscopy.org/ome-model/5.6.3/ome-tiff/" title="Open Microscopy Environment Tagged Image File Format">OME-TIFF</a>
+<a class="reference internal" href="#DDX58_AXL_EGFR_well2_XY04.ome.tif_3"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">ome.tiff</span></code>, <code class="docutils literal notranslate"><span class="pre">ome.tif</span></code>, <code class="docutils literal notranslate"><span class="pre">ome</span></code></p></td>
+<td><p>gdal, rasterio, mapnik</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/d255bac7fdb3318ca015a688d396a2fc618a1383bc1751ec56100bf50b38f16d2d71a3837104fbe41bad524807123108e6fe0984f76bbf5e22656cea7541d44e/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-even" id="wd1-1-17-03-wt-mp-ome-zarr-zip-0"><td><p><a href="https://wiki.earthdata.nasa.gov/display/ESO/Zarr+Format">Zarr</a>
+<a class="reference internal" href="#WD1.1_17-03_WT_MP.ome.zarr.zip_0"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">zarr</span></code>, <code class="docutils literal notranslate"><span class="pre">zarray</span></code>, <code class="docutils literal notranslate"><span class="pre">zattrs</span></code>, <code class="docutils literal notranslate"><span class="pre">zgroup</span></code>, <code class="docutils literal notranslate"><span class="pre">zip</span></code>, <code class="docutils literal notranslate"><span class="pre">db</span></code>, <code class="docutils literal notranslate"><span class="pre">sqlite</span></code></p></td>
+<td><p>zarr</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p>True</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/ebc026c279944e8d2829f3cfd12715cce73bd49f2d081688fd12bd758b26a2728a3f34f2c9c0c1b37f8bf822b5283908e84a41cb9b761000d5c8b43854572f32/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-odd" id="normmedia-8well-col2-livecellgfp-db-0"><td><p><a href="https://wiki.earthdata.nasa.gov/display/ESO/Zarr+Format">Zarr</a>
+<a class="reference internal" href="#normmedia_8well_col2_livecellgfp.db_0"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">zarr</span></code>, <code class="docutils literal notranslate"><span class="pre">zarray</span></code>, <code class="docutils literal notranslate"><span class="pre">zattrs</span></code>, <code class="docutils literal notranslate"><span class="pre">zgroup</span></code>, <code class="docutils literal notranslate"><span class="pre">zip</span></code>, <code class="docutils literal notranslate"><span class="pre">db</span></code>, <code class="docutils literal notranslate"><span class="pre">sqlite</span></code></p></td>
+<td><p>zarr</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p>True</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/aa2c27d981ce01e75c642a68bee49752822eafdd68ca4eab0dffd0e04844499f7d3db18c21c59514b0b079e80a62cfc39c483d76c2ea962c45a9697de9e6fd08/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-even" id="sample-image-nd2-0"><td><p><a href="https://docs.openmicroscopy.org/bio-formats/5.9.2/formats/nikon-nis-elements-nd2.html" title="Nikon NIS Elements">ND2</a>
+<a class="reference internal" href="#sample_image.nd2_0"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">nd2</span></code></p></td>
+<td><p>nd2</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/4e76e490c915b10f646cb516f85a4d36d52aa7eff94715b90222644180e26fef6768493887c05adf182cf0351ba0bce659204041c4698a0f6b08423586788f4d/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-odd" id="plate1-blue-a-02-scene-1-p2-e1-01-czi-0"><td><p><a href="https://www.zeiss.com/microscopy/en/products/software/zeiss-zen/czi-image-file-format.html" title="Carl Zeiss Image">CZI</a>
+<a class="reference internal" href="#Plate1-Blue-A-02-Scene-1-P2-E1-01.czi_0"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">czi</span></code></p></td>
+<td><p>bioformats</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/a707e0a65bbb743adb90ea17dd4e2d1ad1fbf7a105a29e8b67bd90b41525786136ed20ecc4876ff68abdceba8eb5f5bbedb9a364f5b260fa357d37987082a355/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-even" id="us-mono2-8-8x-execho-dcm-0"><td><p><a href="https://www.dicomstandard.org/about" title="Digital Imaging and Communications in Medicine">DICOM</a>
+<a class="reference internal" href="#US-MONO2-8-8x-execho.dcm_0"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">dcm</span></code>, <code class="docutils literal notranslate"><span class="pre">dic</span></code>, <code class="docutils literal notranslate"><span class="pre">dicom</span></code></p></td>
+<td><p>bioformats</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/5332044f887d82c7f3693c6ca180f07accf5f00c2b7b1a3a29ef9ae737d5f1975478b5e2d5846c391987b8051416068f57a7062e848323c700412236b35679db/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-odd" id="test-fret-585-423-426-lif-0"><td><p><a href="https://svi.nl/LeicaLif" title="Leica Image Format">LIF</a>
+<a class="reference internal" href="#20191025 Test FRET 585. 423, 426.lif_0"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">lif</span></code>, <code class="docutils literal notranslate"><span class="pre">liff</span></code></p></td>
+<td><p>bioformats</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/d25de002d8a81dfcaf6b062b9f429ca85bb81423bc09d3aa33d9d51e9392cc4ace2b8521475e373ceecaf958effd0fade163e7173c467aab66c957da14482ed7/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-even" id="animated-png-example-bouncing-beach-ball-png-0"><td><p><a href="http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html" title="Portable Network Graphics">PNG</a>
+<a class="reference internal" href="#Animated_PNG_example_bouncing_beach_ball.png_0"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">png</span></code></p></td>
+<td><p>pil</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/465ebdc2e81b2576dfc96b34e82db7f968e6d4f32f0fa80ef4bb0e44ed216230e6be1a2e4b11ae301a2905cc582dd24cbd2c360d9567ff7b1dac2c871f6d1e37/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-odd" id="clouds-jpeg-0"><td><p><a href="https://jpeg.org/jpeg/" title="Joint Photographic Experts Group">JPEG</a>
+<a class="reference internal" href="#clouds.jpeg_0"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jpeg</span></code>, <code class="docutils literal notranslate"><span class="pre">jpe</span></code>, <code class="docutils literal notranslate"><span class="pre">jpg</span></code></p></td>
+<td><p>pil</p></td>
+<td><p>Unknown</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/19796a50482aa834dca684129384c4bee87c43fb1636f0358211119b9274e05797db78cfa89192fc3395ad7cbb2d66e78e15ed8b8c9fed6361c0fc300d2fde93/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-even" id="clouds-jpeg-1"><td><p><a href="https://jpeg.org/jpeg/" title="Joint Photographic Experts Group">JPEG</a>
+<a class="reference internal" href="#clouds.jpeg_1"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jpeg</span></code>, <code class="docutils literal notranslate"><span class="pre">jpe</span></code>, <code class="docutils literal notranslate"><span class="pre">jpg</span></code></p></td>
+<td><p>vips</p></td>
+<td><p>Unknown</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/19796a50482aa834dca684129384c4bee87c43fb1636f0358211119b9274e05797db78cfa89192fc3395ad7cbb2d66e78e15ed8b8c9fed6361c0fc300d2fde93/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-odd" id="clouds-jpeg-2"><td><p><a href="https://jpeg.org/jpeg/" title="Joint Photographic Experts Group">JPEG</a>
+<a class="reference internal" href="#clouds.jpeg_2"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">jpeg</span></code>, <code class="docutils literal notranslate"><span class="pre">jpe</span></code>, <code class="docutils literal notranslate"><span class="pre">jpg</span></code></p></td>
+<td><p>gdal, rasterio, mapnik</p></td>
+<td><p>Unknown</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/19796a50482aa834dca684129384c4bee87c43fb1636f0358211119b9274e05797db78cfa89192fc3395ad7cbb2d66e78e15ed8b8c9fed6361c0fc300d2fde93/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-even" id="erdas-foo-jp2-0"><td><p><a href="https://jpeg.org/jpeg2000/index.html" title="Joint Photographic Experts Group 2000">JPEG 2000</a>
+<a class="reference internal" href="#erdas_foo.jp2_0"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">j2c</span></code>, <code class="docutils literal notranslate"><span class="pre">j2k</span></code>, <code class="docutils literal notranslate"><span class="pre">jp2</span></code>, <code class="docutils literal notranslate"><span class="pre">jpf</span></code>, <code class="docutils literal notranslate"><span class="pre">jpx</span></code></p></td>
+<td><p>gdal, rasterio, mapnik</p></td>
+<td><p>Unknown</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://github.com/OSGeo/gdal/raw/master/autotest/gdrivers/data/jpeg2000/erdas_foo.jp2">Download</a></p>
+</td>
+</tr>
+<tr class="row-odd" id="erdas-foo-jp2-1"><td><p><a href="https://jpeg.org/jpeg2000/index.html" title="Joint Photographic Experts Group 2000">JPEG 2000</a>
+<a class="reference internal" href="#erdas_foo.jp2_1"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">j2c</span></code>, <code class="docutils literal notranslate"><span class="pre">j2k</span></code>, <code class="docutils literal notranslate"><span class="pre">jp2</span></code>, <code class="docutils literal notranslate"><span class="pre">jpf</span></code>, <code class="docutils literal notranslate"><span class="pre">jpx</span></code></p></td>
+<td><p>openjpeg</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p><a class="reference external" href="https://github.com/OSGeo/gdal/raw/master/autotest/gdrivers/data/jpeg2000/erdas_foo.jp2">Download</a></p>
+</td>
+</tr>
+<tr class="row-even" id="erdas-foo-jp2-2"><td><p><a href="https://jpeg.org/jpeg2000/index.html" title="Joint Photographic Experts Group 2000">JPEG 2000</a>
+<a class="reference internal" href="#erdas_foo.jp2_2"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">j2c</span></code>, <code class="docutils literal notranslate"><span class="pre">j2k</span></code>, <code class="docutils literal notranslate"><span class="pre">jp2</span></code>, <code class="docutils literal notranslate"><span class="pre">jpf</span></code>, <code class="docutils literal notranslate"><span class="pre">jpx</span></code></p></td>
+<td><p>vips</p></td>
+<td><p>Unknown</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://github.com/OSGeo/gdal/raw/master/autotest/gdrivers/data/jpeg2000/erdas_foo.jp2">Download</a></p>
+</td>
+</tr>
+<tr class="row-odd" id="erdas-foo-jp2-3"><td><p><a href="https://jpeg.org/jpeg2000/index.html" title="Joint Photographic Experts Group 2000">JPEG 2000</a>
+<a class="reference internal" href="#erdas_foo.jp2_3"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">j2c</span></code>, <code class="docutils literal notranslate"><span class="pre">j2k</span></code>, <code class="docutils literal notranslate"><span class="pre">jp2</span></code>, <code class="docutils literal notranslate"><span class="pre">jpf</span></code>, <code class="docutils literal notranslate"><span class="pre">jpx</span></code></p></td>
+<td><p>pil</p></td>
+<td><p>Unknown</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://github.com/OSGeo/gdal/raw/master/autotest/gdrivers/data/jpeg2000/erdas_foo.jp2">Download</a></p>
+</td>
+</tr>
+<tr class="row-even" id="erdas-foo-jp2-4"><td><p><a href="https://jpeg.org/jpeg2000/index.html" title="Joint Photographic Experts Group 2000">JPEG 2000</a>
+<a class="reference internal" href="#erdas_foo.jp2_4"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">j2c</span></code>, <code class="docutils literal notranslate"><span class="pre">j2k</span></code>, <code class="docutils literal notranslate"><span class="pre">jp2</span></code>, <code class="docutils literal notranslate"><span class="pre">jpf</span></code>, <code class="docutils literal notranslate"><span class="pre">jpx</span></code></p></td>
+<td><p>bioformats</p></td>
+<td><p>Unknown</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p><a class="reference external" href="https://github.com/OSGeo/gdal/raw/master/autotest/gdrivers/data/jpeg2000/erdas_foo.jp2">Download</a></p>
+</td>
+</tr>
+<tr class="row-odd" id="samplegifimage-40kbmb-gif-0"><td><p><a href="https://www.adobe.com/creativecloud/file-types/image/raster/gif-file.html" title="Graphics Interchange Format">GIF</a>
+<a class="reference internal" href="#SampleGIFImage_40kbmb.gif_0"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">gif</span></code></p></td>
+<td><p>vips</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/26d9a26b25a37f405b5c165b9ae338c873d27482e83881222df2af99e620b5f860a74ba92c0ca6caab2a45582ec5d82ba4c9a9c73870306c1eaa7d5fe69eafff/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-even" id="samplegifimage-40kbmb-gif-1"><td><p><a href="https://www.adobe.com/creativecloud/file-types/image/raster/gif-file.html" title="Graphics Interchange Format">GIF</a>
+<a class="reference internal" href="#SampleGIFImage_40kbmb.gif_1"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">gif</span></code></p></td>
+<td><p>pil</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/26d9a26b25a37f405b5c165b9ae338c873d27482e83881222df2af99e620b5f860a74ba92c0ca6caab2a45582ec5d82ba4c9a9c73870306c1eaa7d5fe69eafff/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-odd" id="samplegifimage-40kbmb-gif-2"><td><p><a href="https://www.adobe.com/creativecloud/file-types/image/raster/gif-file.html" title="Graphics Interchange Format">GIF</a>
+<a class="reference internal" href="#SampleGIFImage_40kbmb.gif_2"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">gif</span></code></p></td>
+<td><p>bioformats</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/26d9a26b25a37f405b5c165b9ae338c873d27482e83881222df2af99e620b5f860a74ba92c0ca6caab2a45582ec5d82ba4c9a9c73870306c1eaa7d5fe69eafff/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-even" id="samplegifimage-40kbmb-gif-3"><td><p><a href="https://www.adobe.com/creativecloud/file-types/image/raster/gif-file.html" title="Graphics Interchange Format">GIF</a>
+<a class="reference internal" href="#SampleGIFImage_40kbmb.gif_3"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">gif</span></code></p></td>
+<td><p>gdal, rasterio, mapnik</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://data.kitware.com/api/v1/file/hashsum/sha512/26d9a26b25a37f405b5c165b9ae338c873d27482e83881222df2af99e620b5f860a74ba92c0ca6caab2a45582ec5d82ba4c9a9c73870306c1eaa7d5fe69eafff/download">Download</a></p>
+</td>
+</tr>
+<tr class="row-odd" id="bit-bmp-0"><td><p><a href="https://www.ece.ualberta.ca/~elliott/ee552/studentAppNotes/2003_w/misc/bmp_file_format/bmp_file_format.htm">Bitmap</a>
+<a class="reference internal" href="#1bit.bmp_0"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bmp</span></code></p></td>
+<td><p>pil</p></td>
+<td><p>Unknown</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://github.com/OSGeo/gdal/raw/master/autotest/gcore/data/1bit.bmp">Download</a></p>
+</td>
+</tr>
+<tr class="row-even" id="bit-bmp-1"><td><p><a href="https://www.ece.ualberta.ca/~elliott/ee552/studentAppNotes/2003_w/misc/bmp_file_format/bmp_file_format.htm">Bitmap</a>
+<a class="reference internal" href="#1bit.bmp_1"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bmp</span></code></p></td>
+<td><p>bioformats</p></td>
+<td><p>Unknown</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p>True</p></td>
+<td><p><a class="reference external" href="https://github.com/OSGeo/gdal/raw/master/autotest/gcore/data/1bit.bmp">Download</a></p>
+</td>
+</tr>
+<tr class="row-odd" id="bit-bmp-2"><td><p><a href="https://www.ece.ualberta.ca/~elliott/ee552/studentAppNotes/2003_w/misc/bmp_file_format/bmp_file_format.htm">Bitmap</a>
+<a class="reference internal" href="#1bit.bmp_2"><span class="std std-ref">🔗</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bmp</span></code></p></td>
+<td><p>gdal, rasterio, mapnik</p></td>
+<td><p>Unknown</p></td>
+<td><p>True</p></td>
+<td><p>False</p></td>
+<td><p>False</p></td>
+<td><p><a class="reference external" href="https://github.com/OSGeo/gdal/raw/master/autotest/gcore/data/1bit.bmp">Download</a></p></td>
+</tr>
+</tbody>
+</table>
+<section id="mime-types-45">
+<span id="mime-types-list"></span><h3>Mime Types (45)<a class="headerlink" href="#mime-types-45" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">application/dicom</span></code>, <code class="docutils literal notranslate"><span class="pre">application/json</span></code>, <code class="docutils literal notranslate"><span class="pre">application/pdf</span></code>, <code class="docutils literal notranslate"><span class="pre">application/postscript</span></code>, <code class="docutils literal notranslate"><span class="pre">application/vnd+zarr</span></code>, <code class="docutils literal notranslate"><span class="pre">application/x-zarr</span></code>, <code class="docutils literal notranslate"><span class="pre">application/yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">application/zip+zarr</span></code>, <code class="docutils literal notranslate"><span class="pre">image/avif</span></code>, <code class="docutils literal notranslate"><span class="pre">image/bmp</span></code>, <code class="docutils literal notranslate"><span class="pre">image/czi</span></code>, <code class="docutils literal notranslate"><span class="pre">image/geotiff</span></code>, <code class="docutils literal notranslate"><span class="pre">image/gif</span></code>, <code class="docutils literal notranslate"><span class="pre">image/heic</span></code>, <code class="docutils literal notranslate"><span class="pre">image/heif</span></code>, <code class="docutils literal notranslate"><span class="pre">image/icns</span></code>, <code class="docutils literal notranslate"><span class="pre">image/j2c</span></code>, <code class="docutils literal notranslate"><span class="pre">image/jls</span></code>, <code class="docutils literal notranslate"><span class="pre">image/jp2</span></code>, <code class="docutils literal notranslate"><span class="pre">image/jpeg</span></code>, <code class="docutils literal notranslate"><span class="pre">image/jpx</span></code>, <code class="docutils literal notranslate"><span class="pre">image/jxl</span></code>, <code class="docutils literal notranslate"><span class="pre">image/mirax</span></code>, <code class="docutils literal notranslate"><span class="pre">image/mpo</span></code>, <code class="docutils literal notranslate"><span class="pre">image/nd2</span></code>, <code class="docutils literal notranslate"><span class="pre">image/palm</span></code>, <code class="docutils literal notranslate"><span class="pre">image/png</span></code>, <code class="docutils literal notranslate"><span class="pre">image/rgb</span></code>, <code class="docutils literal notranslate"><span class="pre">image/scn</span></code>, <code class="docutils literal notranslate"><span class="pre">image/sgi</span></code>, <code class="docutils literal notranslate"><span class="pre">image/tiff</span></code>, <code class="docutils literal notranslate"><span class="pre">image/vnd.adobe.photoshop</span></code>, <code class="docutils literal notranslate"><span class="pre">image/vsi</span></code>, <code class="docutils literal notranslate"><span class="pre">image/webp</span></code>, <code class="docutils literal notranslate"><span class="pre">image/x-icon</span></code>, <code class="docutils literal notranslate"><span class="pre">image/x-pcx</span></code>, <code class="docutils literal notranslate"><span class="pre">image/x-portable-anymap</span></code>, <code class="docutils literal notranslate"><span class="pre">image/x-ptif</span></code>, <code class="docutils literal notranslate"><span class="pre">image/x-tga</span></code>, <code class="docutils literal notranslate"><span class="pre">image/x-tiff</span></code>, <code class="docutils literal notranslate"><span class="pre">image/x-xpixmap</span></code>, <code class="docutils literal notranslate"><span class="pre">image/xbm</span></code>, <code class="docutils literal notranslate"><span class="pre">image/xpm</span></code>, <code class="docutils literal notranslate"><span class="pre">text/yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">video/mpeg</span></code></p>
+</section>
+<section id="extensions-438">
+<span id="extensions-list"></span><h3>Extensions (438)<a class="headerlink" href="#extensions-438" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">000</span></code>, <code class="docutils literal notranslate"><span class="pre">1sc</span></code>, <code class="docutils literal notranslate"><span class="pre">2fl</span></code>, <code class="docutils literal notranslate"><span class="pre">ace2</span></code>, <code class="docutils literal notranslate"><span class="pre">acff</span></code>, <code class="docutils literal notranslate"><span class="pre">adf</span></code>, <code class="docutils literal notranslate"><span class="pre">afi</span></code>, <code class="docutils literal notranslate"><span class="pre">afm</span></code>, <code class="docutils literal notranslate"><span class="pre">aim</span></code>, <code class="docutils literal notranslate"><span class="pre">al3d</span></code>, <code class="docutils literal notranslate"><span class="pre">ali</span></code>, <code class="docutils literal notranslate"><span class="pre">am</span></code>, <code class="docutils literal notranslate"><span class="pre">amiramesh</span></code>, <code class="docutils literal notranslate"><span class="pre">apl</span></code>, <code class="docutils literal notranslate"><span class="pre">apng</span></code>, <code class="docutils literal notranslate"><span class="pre">arc</span></code>, <code class="docutils literal notranslate"><span class="pre">arf</span></code>, <code class="docutils literal notranslate"><span class="pre">asc</span></code>, <code class="docutils literal notranslate"><span class="pre">aux</span></code>, <code class="docutils literal notranslate"><span class="pre">avi</span></code>, <code class="docutils literal notranslate"><span class="pre">avif</span></code>, <code class="docutils literal notranslate"><span class="pre">avs</span></code>, <code class="docutils literal notranslate"><span class="pre">b</span></code>, <code class="docutils literal notranslate"><span class="pre">bag</span></code>, <code class="docutils literal notranslate"><span class="pre">bif</span></code>, <code class="docutils literal notranslate"><span class="pre">bil</span></code>, <code class="docutils literal notranslate"><span class="pre">bin</span></code>, <code class="docutils literal notranslate"><span class="pre">bip</span></code>, <code class="docutils literal notranslate"><span class="pre">blp</span></code>, <code class="docutils literal notranslate"><span class="pre">blx</span></code>, <code class="docutils literal notranslate"><span class="pre">bmp</span></code>, <code class="docutils literal notranslate"><span class="pre">bt</span></code>, <code class="docutils literal notranslate"><span class="pre">btf</span></code>, <code class="docutils literal notranslate"><span class="pre">bufr</span></code>, <code class="docutils literal notranslate"><span class="pre">bw</span></code>, <code class="docutils literal notranslate"><span class="pre">byn</span></code>, <code class="docutils literal notranslate"><span class="pre">c01</span></code>, <code class="docutils literal notranslate"><span class="pre">cal</span></code>, <code class="docutils literal notranslate"><span class="pre">cfg</span></code>, <code class="docutils literal notranslate"><span class="pre">ch5</span></code>, <code class="docutils literal notranslate"><span class="pre">cif</span></code>, <code class="docutils literal notranslate"><span class="pre">columbusidx</span></code>, <code class="docutils literal notranslate"><span class="pre">cr2</span></code>, <code class="docutils literal notranslate"><span class="pre">crw</span></code>, <code class="docutils literal notranslate"><span class="pre">csv</span></code>, <code class="docutils literal notranslate"><span class="pre">ct1</span></code>, <code class="docutils literal notranslate"><span class="pre">cub</span></code>, <code class="docutils literal notranslate"><span class="pre">cur</span></code>, <code class="docutils literal notranslate"><span class="pre">cxd</span></code>, <code class="docutils literal notranslate"><span class="pre">czi</span></code>, <code class="docutils literal notranslate"><span class="pre">dat</span></code>, <code class="docutils literal notranslate"><span class="pre">db</span></code>, <code class="docutils literal notranslate"><span class="pre">dbf</span></code>, <code class="docutils literal notranslate"><span class="pre">dcimg</span></code>, <code class="docutils literal notranslate"><span class="pre">dcm</span></code>, <code class="docutils literal notranslate"><span class="pre">dcx</span></code>, <code class="docutils literal notranslate"><span class="pre">ddf</span></code>, <code class="docutils literal notranslate"><span class="pre">dds</span></code>, <code class="docutils literal notranslate"><span class="pre">dem</span></code>, <code class="docutils literal notranslate"><span class="pre">demtif</span></code>, <code class="docutils literal notranslate"><span class="pre">df3</span></code>, <code class="docutils literal notranslate"><span class="pre">dgn</span></code>, <code class="docutils literal notranslate"><span class="pre">dib</span></code>, <code class="docutils literal notranslate"><span class="pre">dic</span></code>, <code class="docutils literal notranslate"><span class="pre">dicom</span></code>, <code class="docutils literal notranslate"><span class="pre">dim</span></code>, <code class="docutils literal notranslate"><span class="pre">dm2</span></code>, <code class="docutils literal notranslate"><span class="pre">dm3</span></code>, <code class="docutils literal notranslate"><span class="pre">dm4</span></code>, <code class="docutils literal notranslate"><span class="pre">doq</span></code>, <code class="docutils literal notranslate"><span class="pre">dt0</span></code>, <code class="docutils literal notranslate"><span class="pre">dt1</span></code>, <code class="docutils literal notranslate"><span class="pre">dt2</span></code>, <code class="docutils literal notranslate"><span class="pre">dti</span></code>, <code class="docutils literal notranslate"><span class="pre">dv</span></code>, <code class="docutils literal notranslate"><span class="pre">dv_vol</span></code>, <code class="docutils literal notranslate"><span class="pre">dwg</span></code>, <code class="docutils literal notranslate"><span class="pre">dxf</span></code>, <code class="docutils literal notranslate"><span class="pre">dz</span></code>, <code class="docutils literal notranslate"><span class="pre">dzc</span></code>, <code class="docutils literal notranslate"><span class="pre">dzi</span></code>, <code class="docutils literal notranslate"><span class="pre">e00</span></code>, <code class="docutils literal notranslate"><span class="pre">eer</span></code>, <code class="docutils literal notranslate"><span class="pre">emf</span></code>, <code class="docutils literal notranslate"><span class="pre">eps</span></code>, <code class="docutils literal notranslate"><span class="pre">epsi</span></code>, <code class="docutils literal notranslate"><span class="pre">err</span></code>, <code class="docutils literal notranslate"><span class="pre">ers</span></code>, <code class="docutils literal notranslate"><span class="pre">ets</span></code>, <code class="docutils literal notranslate"><span class="pre">exp</span></code>, <code class="docutils literal notranslate"><span class="pre">exr</span></code>, <code class="docutils literal notranslate"><span class="pre">fdf</span></code>, <code class="docutils literal notranslate"><span class="pre">fff</span></code>, <code class="docutils literal notranslate"><span class="pre">ffr</span></code>, <code class="docutils literal notranslate"><span class="pre">fgb</span></code>, <code class="docutils literal notranslate"><span class="pre">fid</span></code>, <code class="docutils literal notranslate"><span class="pre">fit</span></code>, <code class="docutils literal notranslate"><span class="pre">fits</span></code>, <code class="docutils literal notranslate"><span class="pre">flc</span></code>, <code class="docutils literal notranslate"><span class="pre">flex</span></code>, <code class="docutils literal notranslate"><span class="pre">fli</span></code>, <code class="docutils literal notranslate"><span class="pre">flt</span></code>, <code class="docutils literal notranslate"><span class="pre">frm</span></code>, <code class="docutils literal notranslate"><span class="pre">fst</span></code>, <code class="docutils literal notranslate"><span class="pre">ftc</span></code>, <code class="docutils literal notranslate"><span class="pre">ftu</span></code>, <code class="docutils literal notranslate"><span class="pre">gbr</span></code>, <code class="docutils literal notranslate"><span class="pre">gdb</span></code>, <code class="docutils literal notranslate"><span class="pre">gdbtable</span></code>, <code class="docutils literal notranslate"><span class="pre">gel</span></code>, <code class="docutils literal notranslate"><span class="pre">gen</span></code>, <code class="docutils literal notranslate"><span class="pre">geojson</span></code>, <code class="docutils literal notranslate"><span class="pre">geojsonl</span></code>, <code class="docutils literal notranslate"><span class="pre">geojsons</span></code>, <code class="docutils literal notranslate"><span class="pre">geotiff</span></code>, <code class="docutils literal notranslate"><span class="pre">gff</span></code>, <code class="docutils literal notranslate"><span class="pre">gif</span></code>, <code class="docutils literal notranslate"><span class="pre">gml</span></code>, <code class="docutils literal notranslate"><span class="pre">gmt</span></code>, <code class="docutils literal notranslate"><span class="pre">gpkg</span></code>, <code class="docutils literal notranslate"><span class="pre">gpkg.zip</span></code>, <code class="docutils literal notranslate"><span class="pre">gpx</span></code>, <code class="docutils literal notranslate"><span class="pre">grb</span></code>, <code class="docutils literal notranslate"><span class="pre">grb2</span></code>, <code class="docutils literal notranslate"><span class="pre">grc</span></code>, <code class="docutils literal notranslate"><span class="pre">grd</span></code>, <code class="docutils literal notranslate"><span class="pre">grey</span></code>, <code class="docutils literal notranslate"><span class="pre">grib</span></code>, <code class="docutils literal notranslate"><span class="pre">grib2</span></code>, <code class="docutils literal notranslate"><span class="pre">gsb</span></code>, <code class="docutils literal notranslate"><span class="pre">gsc</span></code>, <code class="docutils literal notranslate"><span class="pre">gta</span></code>, <code class="docutils literal notranslate"><span class="pre">gti</span></code>, <code class="docutils literal notranslate"><span class="pre">gti.fgb</span></code>, <code class="docutils literal notranslate"><span class="pre">gti.gpkg</span></code>, <code class="docutils literal notranslate"><span class="pre">gtx</span></code>, <code class="docutils literal notranslate"><span class="pre">gvb</span></code>, <code class="docutils literal notranslate"><span class="pre">gxf</span></code>, <code class="docutils literal notranslate"><span class="pre">gxt</span></code>, <code class="docutils literal notranslate"><span class="pre">h3</span></code>, <code class="docutils literal notranslate"><span class="pre">h5</span></code>, <code class="docutils literal notranslate"><span class="pre">hdf</span></code>, <code class="docutils literal notranslate"><span class="pre">hdf5</span></code>, <code class="docutils literal notranslate"><span class="pre">hdr</span></code>, <code class="docutils literal notranslate"><span class="pre">hdr.gz</span></code>, <code class="docutils literal notranslate"><span class="pre">hed</span></code>, <code class="docutils literal notranslate"><span class="pre">heic</span></code>, <code class="docutils literal notranslate"><span class="pre">heics</span></code>, <code class="docutils literal notranslate"><span class="pre">heif</span></code>, <code class="docutils literal notranslate"><span class="pre">heifs</span></code>, <code class="docutils literal notranslate"><span class="pre">hf2</span></code>, <code class="docutils literal notranslate"><span class="pre">hgt</span></code>, <code class="docutils literal notranslate"><span class="pre">hif</span></code>, <code class="docutils literal notranslate"><span class="pre">his</span></code>, <code class="docutils literal notranslate"><span class="pre">htd</span></code>, <code class="docutils literal notranslate"><span class="pre">html</span></code>, <code class="docutils literal notranslate"><span class="pre">hx</span></code>, <code class="docutils literal notranslate"><span class="pre">i2i</span></code>, <code class="docutils literal notranslate"><span class="pre">icb</span></code>, <code class="docutils literal notranslate"><span class="pre">icns</span></code>, <code class="docutils literal notranslate"><span class="pre">ico</span></code>, <code class="docutils literal notranslate"><span class="pre">ics</span></code>, <code class="docutils literal notranslate"><span class="pre">idf</span></code>, <code class="docutils literal notranslate"><span class="pre">ids</span></code>, <code class="docutils literal notranslate"><span class="pre">igc</span></code>, <code class="docutils literal notranslate"><span class="pre">iim</span></code>, <code class="docutils literal notranslate"><span class="pre">ili</span></code>, <code class="docutils literal notranslate"><span class="pre">im</span></code>, <code class="docutils literal notranslate"><span class="pre">im3</span></code>, <code class="docutils literal notranslate"><span class="pre">img</span></code>, <code class="docutils literal notranslate"><span class="pre">img.gz</span></code>, <code class="docutils literal notranslate"><span class="pre">ims</span></code>, <code class="docutils literal notranslate"><span class="pre">inf</span></code>, <code class="docutils literal notranslate"><span class="pre">ini</span></code>, <code class="docutils literal notranslate"><span class="pre">inr</span></code>, <code class="docutils literal notranslate"><span class="pre">ipl</span></code>, <code class="docutils literal notranslate"><span class="pre">ipm</span></code>, <code class="docutils literal notranslate"><span class="pre">ipw</span></code>, <code class="docutils literal notranslate"><span class="pre">isg</span></code>, <code class="docutils literal notranslate"><span class="pre">itf</span></code>, <code class="docutils literal notranslate"><span class="pre">j2c</span></code>, <code class="docutils literal notranslate"><span class="pre">j2k</span></code>, <code class="docutils literal notranslate"><span class="pre">jfif</span></code>, <code class="docutils literal notranslate"><span class="pre">jls</span></code>, <code class="docutils literal notranslate"><span class="pre">jml</span></code>, <code class="docutils literal notranslate"><span class="pre">jp2</span></code>, <code class="docutils literal notranslate"><span class="pre">jpc</span></code>, <code class="docutils literal notranslate"><span class="pre">jpe</span></code>, <code class="docutils literal notranslate"><span class="pre">jpeg</span></code>, <code class="docutils literal notranslate"><span class="pre">jpf</span></code>, <code class="docutils literal notranslate"><span class="pre">jpg</span></code>, <code class="docutils literal notranslate"><span class="pre">jpk</span></code>, <code class="docutils literal notranslate"><span class="pre">jpls</span></code>, <code class="docutils literal notranslate"><span class="pre">jpt</span></code>, <code class="docutils literal notranslate"><span class="pre">jpx</span></code>, <code class="docutils literal notranslate"><span class="pre">json</span></code>, <code class="docutils literal notranslate"><span class="pre">jxl</span></code>, <code class="docutils literal notranslate"><span class="pre">kap</span></code>, <code class="docutils literal notranslate"><span class="pre">kea</span></code>, <code class="docutils literal notranslate"><span class="pre">klb</span></code>, <code class="docutils literal notranslate"><span class="pre">kml</span></code>, <code class="docutils literal notranslate"><span class="pre">kmz</span></code>, <code class="docutils literal notranslate"><span class="pre">kro</span></code>, <code class="docutils literal notranslate"><span class="pre">l2d</span></code>, <code class="docutils literal notranslate"><span class="pre">labels</span></code>, <code class="docutils literal notranslate"><span class="pre">lan</span></code>, <code class="docutils literal notranslate"><span class="pre">lbl</span></code>, <code class="docutils literal notranslate"><span class="pre">lcp</span></code>, <code class="docutils literal notranslate"><span class="pre">lei</span></code>, <code class="docutils literal notranslate"><span class="pre">lif</span></code>, <code class="docutils literal notranslate"><span class="pre">lifext</span></code>, <code class="docutils literal notranslate"><span class="pre">liff</span></code>, <code class="docutils literal notranslate"><span class="pre">lim</span></code>, <code class="docutils literal notranslate"><span class="pre">lms</span></code>, <code class="docutils literal notranslate"><span class="pre">lof</span></code>, <code class="docutils literal notranslate"><span class="pre">los</span></code>, <code class="docutils literal notranslate"><span class="pre">lrc</span></code>, <code class="docutils literal notranslate"><span class="pre">lsm</span></code>, <code class="docutils literal notranslate"><span class="pre">map</span></code>, <code class="docutils literal notranslate"><span class="pre">mapml</span></code>, <code class="docutils literal notranslate"><span class="pre">mat</span></code>, <code class="docutils literal notranslate"><span class="pre">mbtiles</span></code>, <code class="docutils literal notranslate"><span class="pre">mdb</span></code>, <code class="docutils literal notranslate"><span class="pre">mea</span></code>, <code class="docutils literal notranslate"><span class="pre">mem</span></code>, <code class="docutils literal notranslate"><span class="pre">mid</span></code>, <code class="docutils literal notranslate"><span class="pre">mif</span></code>, <code class="docutils literal notranslate"><span class="pre">mint.bin</span></code>, <code class="docutils literal notranslate"><span class="pre">mnc</span></code>, <code class="docutils literal notranslate"><span class="pre">mng</span></code>, <code class="docutils literal notranslate"><span class="pre">mod</span></code>, <code class="docutils literal notranslate"><span class="pre">mov</span></code>, <code class="docutils literal notranslate"><span class="pre">mpeg</span></code>, <code class="docutils literal notranslate"><span class="pre">mpg</span></code>, <code class="docutils literal notranslate"><span class="pre">mpl</span></code>, <code class="docutils literal notranslate"><span class="pre">mpo</span></code>, <code class="docutils literal notranslate"><span class="pre">mpr</span></code>, <code class="docutils literal notranslate"><span class="pre">mps</span></code>, <code class="docutils literal notranslate"><span class="pre">mrc</span></code>, <code class="docutils literal notranslate"><span class="pre">mrcs</span></code>, <code class="docutils literal notranslate"><span class="pre">mrf</span></code>, <code class="docutils literal notranslate"><span class="pre">mrw</span></code>, <code class="docutils literal notranslate"><span class="pre">mrxs</span></code>, <code class="docutils literal notranslate"><span class="pre">msp</span></code>, <code class="docutils literal notranslate"><span class="pre">msr</span></code>, <code class="docutils literal notranslate"><span class="pre">mtb</span></code>, <code class="docutils literal notranslate"><span class="pre">mtw</span></code>, <code class="docutils literal notranslate"><span class="pre">mvd2</span></code>, <code class="docutils literal notranslate"><span class="pre">mvt</span></code>, <code class="docutils literal notranslate"><span class="pre">mvt.gz</span></code>, <code class="docutils literal notranslate"><span class="pre">n1</span></code>, <code class="docutils literal notranslate"><span class="pre">naf</span></code>, <code class="docutils literal notranslate"><span class="pre">nat</span></code>, <code class="docutils literal notranslate"><span class="pre">nc</span></code>, <code class="docutils literal notranslate"><span class="pre">nd</span></code>, <code class="docutils literal notranslate"><span class="pre">nd2</span></code>, <code class="docutils literal notranslate"><span class="pre">ndpi</span></code>, <code class="docutils literal notranslate"><span class="pre">ndpis</span></code>, <code class="docutils literal notranslate"><span class="pre">nef</span></code>, <code class="docutils literal notranslate"><span class="pre">nhdr</span></code>, <code class="docutils literal notranslate"><span class="pre">nia</span></code>, <code class="docutils literal notranslate"><span class="pre">nia.gz</span></code>, <code class="docutils literal notranslate"><span class="pre">nii</span></code>, <code class="docutils literal notranslate"><span class="pre">nii.gz</span></code>, <code class="docutils literal notranslate"><span class="pre">nitf</span></code>, <code class="docutils literal notranslate"><span class="pre">nrrd</span></code>, <code class="docutils literal notranslate"><span class="pre">nsf</span></code>, <code class="docutils literal notranslate"><span class="pre">ntf</span></code>, <code class="docutils literal notranslate"><span class="pre">nws</span></code>, <code class="docutils literal notranslate"><span class="pre">obf</span></code>, <code class="docutils literal notranslate"><span class="pre">obsep</span></code>, <code class="docutils literal notranslate"><span class="pre">ods</span></code>, <code class="docutils literal notranslate"><span class="pre">oib</span></code>, <code class="docutils literal notranslate"><span class="pre">oif</span></code>, <code class="docutils literal notranslate"><span class="pre">oir</span></code>, <code class="docutils literal notranslate"><span class="pre">ome</span></code>, <code class="docutils literal notranslate"><span class="pre">ome.btf</span></code>, <code class="docutils literal notranslate"><span class="pre">ome.tf2</span></code>, <code class="docutils literal notranslate"><span class="pre">ome.tf8</span></code>, <code class="docutils literal notranslate"><span class="pre">ome.tif</span></code>, <code class="docutils literal notranslate"><span class="pre">ome.tiff</span></code>, <code class="docutils literal notranslate"><span class="pre">ome.xml</span></code>, <code class="docutils literal notranslate"><span class="pre">omp2info</span></code>, <code class="docutils literal notranslate"><span class="pre">on2</span></code>, <code class="docutils literal notranslate"><span class="pre">on9</span></code>, <code class="docutils literal notranslate"><span class="pre">osm</span></code>, <code class="docutils literal notranslate"><span class="pre">osm.pbf</span></code>, <code class="docutils literal notranslate"><span class="pre">palm</span></code>, <code class="docutils literal notranslate"><span class="pre">par</span></code>, <code class="docutils literal notranslate"><span class="pre">pbf</span></code>, <code class="docutils literal notranslate"><span class="pre">pbm</span></code>, <code class="docutils literal notranslate"><span class="pre">pcd</span></code>, <code class="docutils literal notranslate"><span class="pre">pcoraw</span></code>, <code class="docutils literal notranslate"><span class="pre">pcx</span></code>, <code class="docutils literal notranslate"><span class="pre">pdf</span></code>, <code class="docutils literal notranslate"><span class="pre">pds</span></code>, <code class="docutils literal notranslate"><span class="pre">pfm</span></code>, <code class="docutils literal notranslate"><span class="pre">pgm</span></code>, <code class="docutils literal notranslate"><span class="pre">pic</span></code>, <code class="docutils literal notranslate"><span class="pre">pict</span></code>, <code class="docutils literal notranslate"><span class="pre">pix</span></code>, <code class="docutils literal notranslate"><span class="pre">pjg</span></code>, <code class="docutils literal notranslate"><span class="pre">pmtiles</span></code>, <code class="docutils literal notranslate"><span class="pre">png</span></code>, <code class="docutils literal notranslate"><span class="pre">png.ovr</span></code>, <code class="docutils literal notranslate"><span class="pre">pnl</span></code>, <code class="docutils literal notranslate"><span class="pre">pnm</span></code>, <code class="docutils literal notranslate"><span class="pre">pnt</span></code>, <code class="docutils literal notranslate"><span class="pre">pol</span></code>, <code class="docutils literal notranslate"><span class="pre">ppg</span></code>, <code class="docutils literal notranslate"><span class="pre">ppi</span></code>, <code class="docutils literal notranslate"><span class="pre">ppm</span></code>, <code class="docutils literal notranslate"><span class="pre">pr3</span></code>, <code class="docutils literal notranslate"><span class="pre">prf</span></code>, <code class="docutils literal notranslate"><span class="pre">prj</span></code>, <code class="docutils literal notranslate"><span class="pre">ps</span></code>, <code class="docutils literal notranslate"><span class="pre">psd</span></code>, <code class="docutils literal notranslate"><span class="pre">psv</span></code>, <code class="docutils literal notranslate"><span class="pre">ptf</span></code>, <code class="docutils literal notranslate"><span class="pre">ptif</span></code>, <code class="docutils literal notranslate"><span class="pre">ptiff</span></code>, <code class="docutils literal notranslate"><span class="pre">pxr</span></code>, <code class="docutils literal notranslate"><span class="pre">qoi</span></code>, <code class="docutils literal notranslate"><span class="pre">qpi</span></code>, <code class="docutils literal notranslate"><span class="pre">qptiff</span></code>, <code class="docutils literal notranslate"><span class="pre">r3d</span></code>, <code class="docutils literal notranslate"><span class="pre">ras</span></code>, <code class="docutils literal notranslate"><span class="pre">rasterlite</span></code>, <code class="docutils literal notranslate"><span class="pre">raw</span></code>, <code class="docutils literal notranslate"><span class="pre">rcpnl</span></code>, <code class="docutils literal notranslate"><span class="pre">rda</span></code>, <code class="docutils literal notranslate"><span class="pre">rdb</span></code>, <code class="docutils literal notranslate"><span class="pre">rec</span></code>, <code class="docutils literal notranslate"><span class="pre">res</span></code>, <code class="docutils literal notranslate"><span class="pre">rgb</span></code>, <code class="docutils literal notranslate"><span class="pre">rgba</span></code>, <code class="docutils literal notranslate"><span class="pre">rik</span></code>, <code class="docutils literal notranslate"><span class="pre">rl2</span></code>, <code class="docutils literal notranslate"><span class="pre">rst</span></code>, <code class="docutils literal notranslate"><span class="pre">rsw</span></code>, <code class="docutils literal notranslate"><span class="pre">scn</span></code>, <code class="docutils literal notranslate"><span class="pre">sdat</span></code>, <code class="docutils literal notranslate"><span class="pre">sdt</span></code>, <code class="docutils literal notranslate"><span class="pre">seq</span></code>, <code class="docutils literal notranslate"><span class="pre">sg-grd-z</span></code>, <code class="docutils literal notranslate"><span class="pre">sgi</span></code>, <code class="docutils literal notranslate"><span class="pre">shp</span></code>, <code class="docutils literal notranslate"><span class="pre">shp.zip</span></code>, <code class="docutils literal notranslate"><span class="pre">shx</span></code>, <code class="docutils literal notranslate"><span class="pre">shz</span></code>, <code class="docutils literal notranslate"><span class="pre">sid</span></code>, <code class="docutils literal notranslate"><span class="pre">sif</span></code>, <code class="docutils literal notranslate"><span class="pre">sigdem</span></code>, <code class="docutils literal notranslate"><span class="pre">sld</span></code>, <code class="docutils literal notranslate"><span class="pre">sldy</span></code>, <code class="docutils literal notranslate"><span class="pre">sm2</span></code>, <code class="docutils literal notranslate"><span class="pre">sm3</span></code>, <code class="docutils literal notranslate"><span class="pre">sos</span></code>, <code class="docutils literal notranslate"><span class="pre">spc</span></code>, <code class="docutils literal notranslate"><span class="pre">spe</span></code>, <code class="docutils literal notranslate"><span class="pre">spi</span></code>, <code class="docutils literal notranslate"><span class="pre">sql</span></code>, <code class="docutils literal notranslate"><span class="pre">sqlite</span></code>, <code class="docutils literal notranslate"><span class="pre">st</span></code>, <code class="docutils literal notranslate"><span class="pre">stk</span></code>, <code class="docutils literal notranslate"><span class="pre">stp</span></code>, <code class="docutils literal notranslate"><span class="pre">svg</span></code>, <code class="docutils literal notranslate"><span class="pre">svs</span></code>, <code class="docutils literal notranslate"><span class="pre">svslide</span></code>, <code class="docutils literal notranslate"><span class="pre">sxf</span></code>, <code class="docutils literal notranslate"><span class="pre">sxm</span></code>, <code class="docutils literal notranslate"><span class="pre">szi</span></code>, <code class="docutils literal notranslate"><span class="pre">tab</span></code>, <code class="docutils literal notranslate"><span class="pre">tc</span></code>, <code class="docutils literal notranslate"><span class="pre">tcx</span></code>, <code class="docutils literal notranslate"><span class="pre">ter</span></code>, <code class="docutils literal notranslate"><span class="pre">tf2</span></code>, <code class="docutils literal notranslate"><span class="pre">tf8</span></code>, <code class="docutils literal notranslate"><span class="pre">tfr</span></code>, <code class="docutils literal notranslate"><span class="pre">tga</span></code>, <code class="docutils literal notranslate"><span class="pre">thf</span></code>, <code class="docutils literal notranslate"><span class="pre">tif</span></code>, <code class="docutils literal notranslate"><span class="pre">tif.grd</span></code>, <code class="docutils literal notranslate"><span class="pre">tiff</span></code>, <code class="docutils literal notranslate"><span class="pre">til</span></code>, <code class="docutils literal notranslate"><span class="pre">tnb</span></code>, <code class="docutils literal notranslate"><span class="pre">toc</span></code>, <code class="docutils literal notranslate"><span class="pre">top</span></code>, <code class="docutils literal notranslate"><span class="pre">topojson</span></code>, <code class="docutils literal notranslate"><span class="pre">tpkx</span></code>, <code class="docutils literal notranslate"><span class="pre">tsv</span></code>, <code class="docutils literal notranslate"><span class="pre">txt</span></code>, <code class="docutils literal notranslate"><span class="pre">v</span></code>, <code class="docutils literal notranslate"><span class="pre">vct</span></code>, <code class="docutils literal notranslate"><span class="pre">vda</span></code>, <code class="docutils literal notranslate"><span class="pre">vff</span></code>, <code class="docutils literal notranslate"><span class="pre">vfk</span></code>, <code class="docutils literal notranslate"><span class="pre">vic</span></code>, <code class="docutils literal notranslate"><span class="pre">vips</span></code>, <code class="docutils literal notranslate"><span class="pre">vms</span></code>, <code class="docutils literal notranslate"><span class="pre">vmu</span></code>, <code class="docutils literal notranslate"><span class="pre">vrt</span></code>, <code class="docutils literal notranslate"><span class="pre">vsi</span></code>, <code class="docutils literal notranslate"><span class="pre">vst</span></code>, <code class="docutils literal notranslate"><span class="pre">vws</span></code>, <code class="docutils literal notranslate"><span class="pre">wat</span></code>, <code class="docutils literal notranslate"><span class="pre">webp</span></code>, <code class="docutils literal notranslate"><span class="pre">wlz</span></code>, <code class="docutils literal notranslate"><span class="pre">wmf</span></code>, <code class="docutils literal notranslate"><span class="pre">wpi</span></code>, <code class="docutils literal notranslate"><span class="pre">x10</span></code>, <code class="docutils literal notranslate"><span class="pre">xbm</span></code>, <code class="docutils literal notranslate"><span class="pre">xdce</span></code>, <code class="docutils literal notranslate"><span class="pre">xlb</span></code>, <code class="docutils literal notranslate"><span class="pre">xlef</span></code>, <code class="docutils literal notranslate"><span class="pre">xls</span></code>, <code class="docutils literal notranslate"><span class="pre">xlsm</span></code>, <code class="docutils literal notranslate"><span class="pre">xlsx</span></code>, <code class="docutils literal notranslate"><span class="pre">xml</span></code>, <code class="docutils literal notranslate"><span class="pre">xodr</span></code>, <code class="docutils literal notranslate"><span class="pre">xpm</span></code>, <code class="docutils literal notranslate"><span class="pre">xqd</span></code>, <code class="docutils literal notranslate"><span class="pre">xqf</span></code>, <code class="docutils literal notranslate"><span class="pre">xtf</span></code>, <code class="docutils literal notranslate"><span class="pre">xv</span></code>, <code class="docutils literal notranslate"><span class="pre">xys</span></code>, <code class="docutils literal notranslate"><span class="pre">xyz</span></code>, <code class="docutils literal notranslate"><span class="pre">yaml</span></code>, <code class="docutils literal notranslate"><span class="pre">yml</span></code>, <code class="docutils literal notranslate"><span class="pre">zarr</span></code>, <code class="docutils literal notranslate"><span class="pre">zarray</span></code>, <code class="docutils literal notranslate"><span class="pre">zattrs</span></code>, <code class="docutils literal notranslate"><span class="pre">zfp</span></code>, <code class="docutils literal notranslate"><span class="pre">zfr</span></code>, <code class="docutils literal notranslate"><span class="pre">zgroup</span></code>, <code class="docutils literal notranslate"><span class="pre">zif</span></code>, <code class="docutils literal notranslate"><span class="pre">zip</span></code>, <code class="docutils literal notranslate"><span class="pre">zvi</span></code></p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="image_conversion.html" class="btn btn-neutral float-left" title="Image Conversion" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="multi_source_specification.html" class="btn btn-neutral float-right" title="Multi Source Schema" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

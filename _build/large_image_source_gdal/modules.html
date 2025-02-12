@@ -1,0 +1,216 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_gdal &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="large_image_source_gdal package" href="large_image_source_gdal.html" />
+    <link rel="prev" title="large_image_source_dummy package" href="../large_image_source_dummy/large_image_source_dummy.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../api_index.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../large_image/modules.html">large_image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_bioformats/modules.html">large_image_source_bioformats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_deepzoom/modules.html">large_image_source_deepzoom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_dicom/modules.html">large_image_source_dicom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_dummy/modules.html">large_image_source_dummy</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">large_image_source_gdal</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image_source_gdal.html">large_image_source_gdal package</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_mapnik/modules.html">large_image_source_mapnik</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_multi/modules.html">large_image_source_multi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_nd2/modules.html">large_image_source_nd2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_ometiff/modules.html">large_image_source_ometiff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_openjpeg/modules.html">large_image_source_openjpeg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_openslide/modules.html">large_image_source_openslide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_pil/modules.html">large_image_source_pil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_rasterio/modules.html">large_image_source_rasterio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_test/modules.html">large_image_source_test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_tiff/modules.html">large_image_source_tiff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_tifffile/modules.html">large_image_source_tifffile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_vips/modules.html">large_image_source_vips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_zarr/modules.html">large_image_source_zarr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_converter/modules.html">large_image_converter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_tasks/modules.html">large_image_tasks</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../api_index.html">API Documentation</a></li>
+      <li class="breadcrumb-item active">large_image_source_gdal</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/_build/large_image_source_gdal/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="large-image-source-gdal">
+<h1>large_image_source_gdal<a class="headerlink" href="#large-image-source-gdal" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="large_image_source_gdal.html">large_image_source_gdal package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="large_image_source_gdal.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="large_image_source_gdal.html#module-large_image_source_gdal.girder_source">large_image_source_gdal.girder_source module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.girder_source.GDALGirderTileSource"><code class="docutils literal notranslate"><span class="pre">GDALGirderTileSource</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.girder_source.GDALGirderTileSource.cacheName"><code class="docutils literal notranslate"><span class="pre">GDALGirderTileSource.cacheName</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.girder_source.GDALGirderTileSource.getLRUHash"><code class="docutils literal notranslate"><span class="pre">GDALGirderTileSource.getLRUHash()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.girder_source.GDALGirderTileSource.levels"><code class="docutils literal notranslate"><span class="pre">GDALGirderTileSource.levels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.girder_source.GDALGirderTileSource.name"><code class="docutils literal notranslate"><span class="pre">GDALGirderTileSource.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.girder_source.GDALGirderTileSource.projection"><code class="docutils literal notranslate"><span class="pre">GDALGirderTileSource.projection</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.girder_source.GDALGirderTileSource.projectionOrigin"><code class="docutils literal notranslate"><span class="pre">GDALGirderTileSource.projectionOrigin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.girder_source.GDALGirderTileSource.sizeX"><code class="docutils literal notranslate"><span class="pre">GDALGirderTileSource.sizeX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.girder_source.GDALGirderTileSource.sizeY"><code class="docutils literal notranslate"><span class="pre">GDALGirderTileSource.sizeY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.girder_source.GDALGirderTileSource.sourceLevels"><code class="docutils literal notranslate"><span class="pre">GDALGirderTileSource.sourceLevels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.girder_source.GDALGirderTileSource.sourceSizeX"><code class="docutils literal notranslate"><span class="pre">GDALGirderTileSource.sourceSizeX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.girder_source.GDALGirderTileSource.sourceSizeY"><code class="docutils literal notranslate"><span class="pre">GDALGirderTileSource.sourceSizeY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.girder_source.GDALGirderTileSource.tileHeight"><code class="docutils literal notranslate"><span class="pre">GDALGirderTileSource.tileHeight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.girder_source.GDALGirderTileSource.tileWidth"><code class="docutils literal notranslate"><span class="pre">GDALGirderTileSource.tileWidth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.girder_source.GDALGirderTileSource.unitsAcrossLevel0"><code class="docutils literal notranslate"><span class="pre">GDALGirderTileSource.unitsAcrossLevel0</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="large_image_source_gdal.html#module-large_image_source_gdal">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.PROJECTED_VECTOR_IMAGE_SIZE"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.PROJECTED_VECTOR_IMAGE_SIZE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.VECTOR_IMAGE_SIZE"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.VECTOR_IMAGE_SIZE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.addKnownExtensions"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.addKnownExtensions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.cacheName"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.cacheName</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.geospatial"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.geospatial</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.getBandInformation"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.getBandInformation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.getBounds"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.getBounds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.getInternalMetadata"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.getInternalMetadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.getLRUHash"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.getLRUHash()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.getMetadata"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.getMetadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.getPixel"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.getPixel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.getProj4String"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.getProj4String()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.getRegion"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.getRegion()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.getState"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.getState()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.getTile"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.getTile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.isGeospatial"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.isGeospatial()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.levels"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.levels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.name"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.pixelToProjection"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.pixelToProjection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.projection"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.projection</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.projectionOrigin"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.projectionOrigin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.sizeX"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.sizeX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.sizeY"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.sizeY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.sourceLevels"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.sourceLevels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.sourceSizeX"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.sourceSizeX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.sourceSizeY"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.sourceSizeY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.tileHeight"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.tileHeight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.tileWidth"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.tileWidth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.toNativePixelCoordinates"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.toNativePixelCoordinates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.unitsAcrossLevel0"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.unitsAcrossLevel0</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource.validateCOG"><code class="docutils literal notranslate"><span class="pre">GDALFileTileSource.validateCOG()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.canRead"><code class="docutils literal notranslate"><span class="pre">canRead()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image_source_gdal.html#large_image_source_gdal.open"><code class="docutils literal notranslate"><span class="pre">open()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../large_image_source_dummy/large_image_source_dummy.html" class="btn btn-neutral float-left" title="large_image_source_dummy package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="large_image_source_gdal.html" class="btn btn-neutral float-right" title="large_image_source_gdal package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

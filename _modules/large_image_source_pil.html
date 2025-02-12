@@ -1,0 +1,508 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_pil &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../_static/K.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">large_image_source_pil</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image_source_pil</h1><div class="highlight"><pre>
+<span></span><span class="c1">#############################################################################</span>
+<span class="c1">#  Copyright Kitware Inc.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed under the Apache License, Version 2.0 ( the &quot;License&quot; );</span>
+<span class="c1">#  you may not use this file except in compliance with the License.</span>
+<span class="c1">#  You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#    http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#  See the License for the specific language governing permissions and</span>
+<span class="c1">#  limitations under the License.</span>
+<span class="c1">#############################################################################</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">contextlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">PIL.Image</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.cache_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">LruCacheMetaclass</span><span class="p">,</span> <span class="n">methodcache</span><span class="p">,</span> <span class="n">strhash</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">TILE_FORMAT_PIL</span><span class="p">,</span> <span class="n">SourcePriority</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TileSourceError</span><span class="p">,</span> <span class="n">TileSourceFileNotFoundError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.tilesource</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileTileSource</span>
+
+<span class="c1"># Optionally extend PIL with some additional formats</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pillow_heif</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_heif_opener</span>
+    <span class="n">register_heif_opener</span><span class="p">()</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pillow_heif</span><span class="w"> </span><span class="kn">import</span> <span class="n">register_avif_opener</span>
+    <span class="n">register_avif_opener</span><span class="p">()</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="k">pass</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pillow_jxl</span>  <span class="c1"># noqa</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="k">pass</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pillow_jpls</span>  <span class="c1"># noqa</span>
+<span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+    <span class="k">pass</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">PackageNotFoundError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">_importlib_version</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">__version__</span> <span class="o">=</span> <span class="n">_importlib_version</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">PackageNotFoundError</span><span class="p">:</span>
+    <span class="c1"># package is not installed</span>
+    <span class="k">pass</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s1">&#39;.*PIL.*&#39;</span><span class="p">)</span>
+
+<span class="c1"># Default to ignoring files with some specific extensions.</span>
+<span class="n">config</span><span class="o">.</span><span class="n">ConfigValues</span><span class="p">[</span><span class="s1">&#39;source_pil_ignored_names&#39;</span><span class="p">]</span> <span class="o">=</span> \
+    <span class="sa">r</span><span class="s1">&#39;(\.mrxs|\.vsi)$&#39;</span>
+
+
+<div class="viewcode-block" id="getMaxSize">
+<a class="viewcode-back" href="../_build/large_image_source_pil/large_image_source_pil.html#large_image_source_pil.getMaxSize">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">getMaxSize</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">maxDefault</span><span class="o">=</span><span class="mi">4096</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the maximum width and height that we allow for an image.</span>
+
+<span class="sd">    :param size: the requested maximum size.  This is either a number to use</span>
+<span class="sd">        for both width and height, or an object with {&#39;width&#39;: (width),</span>
+<span class="sd">        &#39;height&#39;: height} in pixels.  If None, the default max size is used.</span>
+<span class="sd">    :param maxDefault: a default value to use for width and height.</span>
+<span class="sd">    :returns: maxWidth, maxHeight in pixels.  0 means no images are allowed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">maxWidth</span> <span class="o">=</span> <span class="n">maxHeight</span> <span class="o">=</span> <span class="n">maxDefault</span>
+    <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">maxWidth</span> <span class="o">=</span> <span class="n">size</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">,</span> <span class="n">maxWidth</span><span class="p">)</span>
+            <span class="n">maxHeight</span> <span class="o">=</span> <span class="n">size</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="n">maxHeight</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">maxWidth</span> <span class="o">=</span> <span class="n">maxHeight</span> <span class="o">=</span> <span class="n">size</span>
+    <span class="c1"># We may want to put an upper limit on what is requested so it can&#39;t be</span>
+    <span class="c1"># completely overridden.</span>
+    <span class="k">return</span> <span class="n">maxWidth</span><span class="p">,</span> <span class="n">maxHeight</span></div>
+
+
+
+<div class="viewcode-block" id="PILFileTileSource">
+<a class="viewcode-back" href="../_build/large_image_source_pil/large_image_source_pil.html#large_image_source_pil.PILFileTileSource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PILFileTileSource</span><span class="p">(</span><span class="n">FileTileSource</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">LruCacheMetaclass</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides tile access to single image PIL files.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cacheName</span> <span class="o">=</span> <span class="s1">&#39;tilesource&#39;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;pil&#39;</span>
+
+    <span class="c1"># Although PIL is mostly a fallback source, prefer it to other fallback</span>
+    <span class="c1"># sources</span>
+    <span class="n">extensions</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="kc">None</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">FALLBACK_HIGH</span><span class="p">,</span>
+        <span class="s1">&#39;jpg&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">LOW</span><span class="p">,</span>
+        <span class="s1">&#39;jpeg&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">LOW</span><span class="p">,</span>
+        <span class="s1">&#39;jpe&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">LOW</span><span class="p">,</span>
+        <span class="s1">&#39;nef&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">LOW</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">mimeTypes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="kc">None</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">FALLBACK_HIGH</span><span class="p">,</span>
+        <span class="s1">&#39;image/jpeg&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">LOW</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">maxSize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the tile class.  See the base class for other available</span>
+<span class="sd">        parameters.</span>
+
+<span class="sd">        :param path: the associated file path.</span>
+<span class="sd">        :param maxSize: either a number or an object with {&#39;width&#39;: (width),</span>
+<span class="sd">            &#39;height&#39;: height} in pixels.  If None, the default max size is</span>
+<span class="sd">            used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addKnownExtensions</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_maxSize</span> <span class="o">=</span> <span class="n">maxSize</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">maxSize</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">maxSize</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">maxSize</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;maxSize must be None, an integer, a dictionary, or a &#39;</span>
+                       <span class="s1">&#39;JSON string that converts to one of those.&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxSize</span> <span class="o">=</span> <span class="n">maxSize</span>
+
+        <span class="n">largeImagePath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getLargeImagePath</span><span class="p">()</span>
+        <span class="c1"># Some formats shouldn&#39;t be read this way, even if they could.  For</span>
+        <span class="c1"># instances, mirax (mrxs) files look like JPEGs, but opening them as</span>
+        <span class="c1"># such misses most of the data.</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">_ignoreSourceNames</span><span class="p">(</span><span class="s1">&#39;pil&#39;</span><span class="p">,</span> <span class="n">largeImagePath</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_fromRawpy</span><span class="p">(</span><span class="n">largeImagePath</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">largeImagePath</span><span class="p">)</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">OSError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="ne">NotImplementedError</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">largeImagePath</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="n">TileSourceFileNotFoundError</span><span class="p">(</span><span class="n">largeImagePath</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;File cannot be opened via PIL.&#39;</span>
+                <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">minwh</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+        <span class="n">maxwh</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+        <span class="c1"># Throw an exception if too small or big before processing further</span>
+        <span class="k">if</span> <span class="n">minwh</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;PIL tile size is invalid.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">maxWidth</span><span class="p">,</span> <span class="n">maxHeight</span> <span class="o">=</span> <span class="n">getMaxSize</span><span class="p">(</span><span class="n">maxSize</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">defaultMaxSize</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">maxwh</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">(</span><span class="n">maxWidth</span><span class="p">,</span> <span class="n">maxHeight</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;PIL tile size is too large.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_checkForFrames</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;icc_profile&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_iccprofiles</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;icc_profile&#39;</span><span class="p">)]</span>
+        <span class="c1"># If the rotation flag exists, loading the image may change the width</span>
+        <span class="c1"># and height</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="p">,</span> <span class="s1">&#39;_tile_orientation&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="kc">None</span><span class="p">,</span> <span class="mi">1</span><span class="p">}:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="c1"># If this is encoded as a 32-bit integer or a 32-bit float, convert it</span>
+        <span class="c1"># to an 8-bit integer.  This expects the source value to either have a</span>
+        <span class="c1"># maximum of 1, 2^8-1, 2^16-1, 2^24-1, or 2^32-1, and scales it to</span>
+        <span class="c1"># [0, 255]</span>
+        <span class="n">pilImageMode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="o">.</span><span class="n">mode</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_factor</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">pilImageMode</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;I&#39;</span><span class="p">,</span> <span class="s1">&#39;F&#39;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">imgdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">imgdata</span><span class="p">)):</span>
+                    <span class="n">imgdata</span> <span class="o">=</span> <span class="n">imgdata</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                    <span class="n">imgdata</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">imgdata</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;PIL cannot find loader for this file.&#39;</span>
+                <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">maxval</span> <span class="o">=</span> <span class="mi">256</span> <span class="o">**</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">imgdata</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">256</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;PIL cannot load this file.&#39;</span>
+                <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_factor</span> <span class="o">=</span> <span class="mf">255.0</span> <span class="o">/</span> <span class="nb">max</span><span class="p">(</span><span class="n">maxval</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span>
+                <span class="n">imgdata</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_factor</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="o">.</span><span class="n">width</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="o">.</span><span class="n">height</span>
+        <span class="c1"># We have just one tile which is the entire image.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c1"># Throw an exception if too big after processing</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">&gt;</span> <span class="n">maxWidth</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span> <span class="o">&gt;</span> <span class="n">maxHeight</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;PIL tile size is too large.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_checkForFrames</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_frameCount</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="p">,</span> <span class="s1">&#39;seek&#39;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">baseSize</span><span class="p">,</span> <span class="n">baseMode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="o">.</span><span class="n">mode</span>
+                <span class="n">baseMode</span> <span class="o">=</span> <span class="p">{</span><span class="n">baseMode</span><span class="p">}</span>
+                <span class="k">if</span> <span class="s1">&#39;P&#39;</span> <span class="ow">in</span> <span class="n">baseMode</span><span class="p">:</span>
+                    <span class="n">baseMode</span> <span class="o">|=</span> <span class="p">{</span><span class="s1">&#39;RGB&#39;</span><span class="p">,</span> <span class="s1">&#39;RGBA&#39;</span><span class="p">}</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span> <span class="o">=</span> <span class="p">[</span>
+                    <span class="n">idx</span> <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">frame</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">PIL</span><span class="o">.</span><span class="n">ImageSequence</span><span class="o">.</span><span class="n">Iterator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">frame</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">baseSize</span> <span class="ow">and</span> <span class="n">frame</span><span class="o">.</span><span class="n">mode</span> <span class="ow">in</span> <span class="n">baseMode</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_frameImage</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_frameCount</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tileLock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_frames</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_frameCount</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_getLargeImagePath</span><span class="p">())</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_fromRawpy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">largeImagePath</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Try to use rawpy to read an image.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># if rawpy is present, try reading via that library first, but only</span>
+        <span class="c1"># if PIL reports a single frame</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">largeImagePath</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">PIL</span><span class="o">.</span><span class="n">ImageSequence</span><span class="o">.</span><span class="n">Iterator</span><span class="p">(</span><span class="n">img</span><span class="p">)))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">builtins</span>
+
+            <span class="kn">import</span><span class="w"> </span><span class="nn">rawpy</span>
+
+            <span class="k">with</span> <span class="n">contextlib</span><span class="o">.</span><span class="n">redirect_stderr</span><span class="p">(</span><span class="n">builtins</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">devnull</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)):</span>
+                <span class="n">rgb</span> <span class="o">=</span> <span class="n">rawpy</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">largeImagePath</span><span class="p">)</span><span class="o">.</span><span class="n">postprocess</span><span class="p">()</span>
+                <span class="n">rgb</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">tilesource</span><span class="o">.</span><span class="n">utilities</span><span class="o">.</span><span class="n">_imageToNumpy</span><span class="p">(</span><span class="n">rgb</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">rgb</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">rgb</span> <span class="o">=</span> <span class="n">rgb</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="n">rgb</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="n">rgb</span> <span class="o">=</span> <span class="n">rgb</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span>
+                    <span class="n">rgb</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span> <span class="k">if</span> <span class="n">rgb</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span> <span class="k">else</span> <span class="n">rgb</span><span class="p">,</span>
+                    <span class="p">(</span><span class="s1">&#39;RGB&#39;</span> <span class="k">if</span> <span class="n">rgb</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span> <span class="k">else</span> <span class="s1">&#39;RGB;16&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">rgb</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span> <span class="k">else</span>
+                    <span class="p">(</span><span class="s1">&#39;L&#39;</span> <span class="k">if</span> <span class="n">rgb</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span> <span class="k">else</span> <span class="s1">&#39;L;16&#39;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+<div class="viewcode-block" id="PILFileTileSource.defaultMaxSize">
+<a class="viewcode-back" href="../_build/large_image_source_pil/large_image_source_pil.html#large_image_source_pil.PILFileTileSource.defaultMaxSize">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">defaultMaxSize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the default max size from the config settings.</span>
+
+<span class="sd">        :returns: the default max size.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">getConfig</span><span class="p">(</span><span class="s1">&#39;max_small_image_size&#39;</span><span class="p">,</span> <span class="mi">4096</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="PILFileTileSource.getLRUHash">
+<a class="viewcode-back" href="../_build/large_image_source_pil/large_image_source_pil.html#large_image_source_pil.PILFileTileSource.getLRUHash">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getLRUHash</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">strhash</span><span class="p">(</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">PILFileTileSource</span><span class="p">,</span> <span class="n">PILFileTileSource</span><span class="p">)</span><span class="o">.</span><span class="n">getLRUHash</span><span class="p">(</span>
+                <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;maxSize&#39;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="PILFileTileSource.getState">
+<a class="viewcode-back" href="../_build/large_image_source_pil/large_image_source_pil.html#large_image_source_pil.PILFileTileSource.getState">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">getState</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_maxSize</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PILFileTileSource.getMetadata">
+<a class="viewcode-back" href="../_build/large_image_source_pil/large_image_source_pil.html#large_image_source_pil.PILFileTileSource.getMetadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a dictionary of metadata containing levels, sizeX, sizeY,</span>
+<span class="sd">        tileWidth, tileHeight, magnification, mm_x, mm_y, and frames.</span>
+
+<span class="sd">        :returns: metadata dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">()</span>
+        <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_frames&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;frames&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[{}</span> <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="p">))]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_addMetadataFrameInformation</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="PILFileTileSource.getInternalMetadata">
+<a class="viewcode-back" href="../_build/large_image_source_pil/large_image_source_pil.html#large_image_source_pil.PILFileTileSource.getInternalMetadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getInternalMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return additional known metadata about the tile source.  Data returned</span>
+<span class="sd">        from this method is not guaranteed to be in any particular format or</span>
+<span class="sd">        have specific values.</span>
+
+<span class="sd">        :returns: a dictionary of data or None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;pil&#39;</span><span class="p">:</span> <span class="p">{}}</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span> <span class="s1">&#39;mode&#39;</span><span class="p">,</span> <span class="s1">&#39;size&#39;</span><span class="p">,</span> <span class="s1">&#39;width&#39;</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="s1">&#39;palette&#39;</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">results</span><span class="p">[</span><span class="s1">&#39;pil&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">results</span></div>
+
+
+<div class="viewcode-block" id="PILFileTileSource.getTile">
+<a class="viewcode-back" href="../_build/large_image_source_pil/large_image_source_pil.html#large_image_source_pil.PILFileTileSource.getTile">[docs]</a>
+    <span class="nd">@methodcache</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getTile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">pilImageAllowed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">numpyAllowed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">mayRedirect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getFrame</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xyzInRange</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frameCount</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">frame</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileLock</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_frameImage</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_frames</span><span class="p">[</span><span class="n">frame</span><span class="p">])</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_frameImage</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_frameImage</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">img</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_factor</span><span class="p">:</span>
+                <span class="n">img</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">img</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_factor</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outputTile</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">TILE_FORMAT_PIL</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span>
+                                <span class="n">pilImageAllowed</span><span class="p">,</span> <span class="n">numpyAllowed</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PILFileTileSource.addKnownExtensions">
+<a class="viewcode-back" href="../_build/large_image_source_pil/large_image_source_pil.html#large_image_source_pil.PILFileTileSource.addKnownExtensions">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">addKnownExtensions</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_addedExtensions&#39;</span><span class="p">):</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_addedExtensions</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">mimeTypes</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">mimeTypes</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">dotext</span> <span class="ow">in</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">registered_extensions</span><span class="p">():</span>
+                <span class="n">ext</span> <span class="o">=</span> <span class="n">dotext</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">ext</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span><span class="p">:</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span><span class="p">[</span><span class="n">ext</span><span class="p">]</span> <span class="o">=</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">IMPLICIT_HIGH</span>
+            <span class="k">for</span> <span class="n">mimeType</span> <span class="ow">in</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">MIME</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">mimeType</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">mimeTypes</span><span class="p">:</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">mimeTypes</span><span class="p">[</span><span class="n">mimeType</span><span class="p">]</span> <span class="o">=</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">IMPLICIT_HIGH</span>
+            <span class="c1"># These were found by reading various test files.</span>
+            <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;ppg&#39;</span><span class="p">}:</span>
+                <span class="k">if</span> <span class="n">ext</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span><span class="p">:</span>
+                    <span class="bp">cls</span><span class="o">.</span><span class="n">extensions</span><span class="p">[</span><span class="n">ext</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span> <span class="o">=</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">IMPLICIT_LOW</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="open">
+<a class="viewcode-back" href="../_build/large_image_source_pil/large_image_source_pil.html#large_image_source_pil.open">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">open</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create an instance of the module class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">PILFileTileSource</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="canRead">
+<a class="viewcode-back" href="../_build/large_image_source_pil/large_image_source_pil.html#large_image_source_pil.canRead">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">canRead</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if an input can be read by the module class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">PILFileTileSource</span><span class="o">.</span><span class="n">canRead</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

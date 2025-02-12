@@ -1,0 +1,416 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image.tilesource.tiledict &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/K.png"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../tilesource.html">large_image.tilesource</a></li>
+      <li class="breadcrumb-item active">large_image.tilesource.tiledict</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image.tilesource.tiledict</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">PIL</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">PIL.Image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">PIL.ImageColor</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">PIL.ImageDraw</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">exceptions</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">TILE_FORMAT_IMAGE</span><span class="p">,</span> <span class="n">TILE_FORMAT_NUMPY</span><span class="p">,</span> <span class="n">TILE_FORMAT_PIL</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">ImageBytes</span><span class="p">,</span> <span class="n">_encodeImage</span><span class="p">,</span> <span class="n">_imageToNumpy</span><span class="p">,</span> <span class="n">_imageToPIL</span>
+
+
+<div class="viewcode-block" id="LazyTileDict">
+<a class="viewcode-back" href="../../../_build/large_image/large_image.tilesource.html#large_image.tilesource.tiledict.LazyTileDict">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LazyTileDict</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Tiles returned from the tile iterator and dictionaries of information with</span>
+<span class="sd">    actual image data in the &#39;tile&#39; key and the format in the &#39;format&#39; key.</span>
+<span class="sd">    Since some applications need information about the tile but don&#39;t need the</span>
+<span class="sd">    image data, these two values are lazily computed.  The LazyTileDict can be</span>
+<span class="sd">    treated like a regular dictionary, except that when either of those two</span>
+<span class="sd">    keys are first accessed, they will cause the image to be loaded and</span>
+<span class="sd">    possibly converted to a PIL image and cropped.</span>
+
+<span class="sd">    Unless setFormat is called on the tile, tile images may always be returned</span>
+<span class="sd">    as PIL images.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tileInfo</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a LazyTileDict dictionary where there is enough information to</span>
+<span class="sd">        load the tile image.  ang and kwargs are as for the dict() class.</span>
+
+<span class="sd">        :param tileInfo: a dictionary of x, y, level, format, encoding, crop,</span>
+<span class="sd">            and source, used for fetching the tile image.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">tileInfo</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">tileInfo</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">tileInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;frame&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">level</span> <span class="o">=</span> <span class="n">tileInfo</span><span class="p">[</span><span class="s1">&#39;level&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="n">tileInfo</span><span class="p">[</span><span class="s1">&#39;format&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="n">tileInfo</span><span class="p">[</span><span class="s1">&#39;encoding&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">crop</span> <span class="o">=</span> <span class="n">tileInfo</span><span class="p">[</span><span class="s1">&#39;crop&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">tileInfo</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resample</span> <span class="o">=</span> <span class="n">tileInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;resample&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requestedScale</span> <span class="o">=</span> <span class="n">tileInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;requestedScale&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">tileInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;metadata&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">retile</span> <span class="o">=</span> <span class="n">tileInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;retile&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">deferredKeys</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;tile&#39;</span><span class="p">,</span> <span class="s1">&#39;format&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alwaysAllowPIL</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">imageKwargs</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loaded</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># We set this initially so that they are listed in known keys using the</span>
+        <span class="c1"># native dictionary methods</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;tile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;format&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span>
+
+<div class="viewcode-block" id="LazyTileDict.setFormat">
+<a class="viewcode-back" href="../../../_build/large_image/large_image.tilesource.html#large_image.tilesource.tiledict.LazyTileDict.setFormat">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setFormat</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="nb">format</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="n">resample</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="n">imageKwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set a more restrictive output format for a tile, possibly also resizing</span>
+<span class="sd">        it via resampling.  If this is not called, the tile may either be</span>
+<span class="sd">        returned as one of the specified formats or as a PIL image.</span>
+
+<span class="sd">        :param format: a tuple or list of allowed formats.  Formats are members</span>
+<span class="sd">            of TILE_FORMAT_*.  This will avoid converting images if they are</span>
+<span class="sd">            in the desired output encoding (regardless of subparameters).</span>
+<span class="sd">        :param resample: if not False or None, allow resampling.  Once turned</span>
+<span class="sd">            on, this cannot be turned off on the tile.</span>
+<span class="sd">        :param imageKwargs: additional parameters that should be passed to</span>
+<span class="sd">            _encodeImage.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># If any parameters are changed, mark the tile as not loaded, so that</span>
+        <span class="c1"># referring to a deferredKey will reload the image.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alwaysAllowPIL</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="nb">format</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">format</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="nb">format</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loaded</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">resample</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">resample</span> <span class="ow">and</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">requestedScale</span> <span class="ow">and</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">requestedScale</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">!=</span> <span class="mf">1.0</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">resample</span> <span class="o">=</span> <span class="n">resample</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;scaled&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">requestedScale</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;tile_x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tile_x&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;tile_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tile_y&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;tile_width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tile_width&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;tile_height&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tile_height&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;magnification&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;tile_magnification&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tile_magnification&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;magnification&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;tile_mm_x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mm_x&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;tile_mm_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mm_y&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;tile_x&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;tile_y&#39;</span><span class="p">])</span>
+            <span class="c1"># Add provisional width and height</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resample</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">requestedScale</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;tile_width&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">requestedScale</span><span class="p">))</span>
+                <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;tile_height&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">requestedScale</span><span class="p">))</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tile_magnification&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;magnification&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;tile_magnification&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">requestedScale</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tile_mm_x&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;mm_x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;tile_mm_x&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">requestedScale</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tile_mm_y&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;mm_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;tile_mm_y&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">requestedScale</span>
+            <span class="c1"># If we can resample the tile, many parameters may change once the</span>
+            <span class="c1"># image is loaded.  Don&#39;t include width and height in this list;</span>
+            <span class="c1"># the provisional values are sufficient.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">deferredKeys</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;tile&#39;</span><span class="p">,</span> <span class="s1">&#39;format&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loaded</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">imageKwargs</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">imageKwargs</span> <span class="o">=</span> <span class="n">imageKwargs</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loaded</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_retileTile</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given the tile information, create a numpy array and merge multiple</span>
+<span class="sd">        tiles together to form a tile of a different size.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tileWidth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;tileWidth&#39;</span><span class="p">]</span>
+        <span class="n">tileHeight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;tileHeight&#39;</span><span class="p">]</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">width</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">height</span>
+        <span class="n">tx</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+        <span class="n">ty</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+
+        <span class="n">retile</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">xmin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tx</span> <span class="o">//</span> <span class="n">tileWidth</span><span class="p">))</span>
+        <span class="n">xmax</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">tx</span> <span class="o">+</span> <span class="n">width</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="n">tileWidth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">ymin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ty</span> <span class="o">//</span> <span class="n">tileHeight</span><span class="p">))</span>
+        <span class="n">ymax</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">ty</span> <span class="o">+</span> <span class="n">height</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="n">tileHeight</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">):</span>
+                <span class="n">tileData</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">getTile</span><span class="p">(</span>
+                    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span>
+                    <span class="n">numpyAllowed</span><span class="o">=</span><span class="s1">&#39;always&#39;</span><span class="p">,</span> <span class="n">sparseFallback</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tileData</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">tileData</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="n">tileData</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_imageToNumpy</span><span class="p">(</span><span class="n">tileData</span><span class="p">)</span>
+                <span class="n">x0</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">tileWidth</span> <span class="o">-</span> <span class="n">tx</span><span class="p">)</span>
+                <span class="n">y0</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="n">tileHeight</span> <span class="o">-</span> <span class="n">ty</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">x0</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">tileData</span> <span class="o">=</span> <span class="n">tileData</span><span class="p">[:,</span> <span class="o">-</span><span class="n">x0</span><span class="p">:]</span>
+                    <span class="n">x0</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="n">y0</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">tileData</span> <span class="o">=</span> <span class="n">tileData</span><span class="p">[</span><span class="o">-</span><span class="n">y0</span><span class="p">:,</span> <span class="p">:]</span>
+                    <span class="n">y0</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">tw</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">tileData</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">width</span> <span class="o">-</span> <span class="n">x0</span><span class="p">)</span>
+                <span class="n">th</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">tileData</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">height</span> <span class="o">-</span> <span class="n">y0</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">retile</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">retile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">tileData</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tileData</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">tileData</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">retile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]:</span>
+                    <span class="n">retile</span> <span class="o">=</span> <span class="n">retile</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="n">tileData</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+                <span class="n">retile</span><span class="p">[</span><span class="n">y0</span><span class="p">:</span><span class="n">y0</span> <span class="o">+</span> <span class="n">th</span><span class="p">,</span> <span class="n">x0</span><span class="p">:</span><span class="n">x0</span> <span class="o">+</span> <span class="n">tw</span><span class="p">]</span> <span class="o">=</span> <span class="n">tileData</span><span class="p">[</span>
+                    <span class="p">:</span><span class="n">th</span><span class="p">,</span> <span class="p">:</span><span class="n">tw</span><span class="p">,</span> <span class="p">:</span><span class="n">retile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">retile</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tileData</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ImageBytes</span><span class="p">,</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span>
+        <span class="n">Union</span><span class="p">[</span><span class="n">ImageBytes</span><span class="p">,</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">],</span> <span class="n">Optional</span><span class="p">[</span><span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">],</span>
+    <span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If we need to resample a tile, use PIL if it is uint8 or we are using</span>
+<span class="sd">        a specific resampling mode that is PIL-specific.  Otherwise, use</span>
+<span class="sd">        skimage if available.</span>
+
+<span class="sd">        :param tileData: the image to scale.</span>
+<span class="sd">        :returns: tileData, pilData.  pilData will be None if the results are a</span>
+<span class="sd">            numpy array.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pilData</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resample</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">requestedScale</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">tileData</span><span class="p">,</span> <span class="n">pilData</span>
+        <span class="n">pilResize</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">tileData</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">tileData</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span> <span class="ow">and</span>
+                <span class="n">TILE_FORMAT_NUMPY</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">resample</span> <span class="ow">in</span> <span class="p">{</span><span class="kc">True</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">}):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="kn">import</span><span class="w"> </span><span class="nn">skimage.transform</span>
+                <span class="n">pilResize</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">if</span> <span class="n">pilResize</span><span class="p">:</span>
+            <span class="n">pilData</span> <span class="o">=</span> <span class="n">_imageToPIL</span><span class="p">(</span><span class="n">tileData</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span>
+                <span class="n">pilData</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">requestedScale</span><span class="p">))</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span>
+                <span class="n">pilData</span><span class="o">.</span><span class="n">size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">requestedScale</span><span class="p">))</span>
+            <span class="n">pilData</span> <span class="o">=</span> <span class="n">tileData</span> <span class="o">=</span> <span class="n">pilData</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span>
+                <span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]),</span>
+                <span class="n">resample</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="s1">&#39;Resampling&#39;</span><span class="p">,</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="p">)</span><span class="o">.</span><span class="n">LANCZOS</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resample</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">resample</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tileData</span> <span class="o">=</span> <span class="n">skimage</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span>
+                <span class="n">cast</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">tileData</span><span class="p">),</span>
+                <span class="p">(</span><span class="bp">self</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">],</span>
+                 <span class="n">cast</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">tileData</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+                <span class="n">order</span><span class="o">=</span><span class="mi">3</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resample</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">resample</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tileData</span><span class="p">,</span> <span class="n">pilData</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If this is the first time either the tile or format key is requested,</span>
+<span class="sd">        load the tile image data.  Otherwise, just return the internal</span>
+<span class="sd">        dictionary result.</span>
+
+<span class="sd">        See the base dict class for function details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">loaded</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">deferredKeys</span><span class="p">:</span>
+            <span class="c1"># Flag this immediately to avoid recursion if we refer to the</span>
+            <span class="c1"># tile&#39;s own values.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loaded</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">retile</span><span class="p">:</span>
+                <span class="n">tileData</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="o">.</span><span class="n">getTile</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">level</span><span class="p">,</span>
+                    <span class="n">pilImageAllowed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">numpyAllowed</span><span class="o">=</span><span class="s1">&#39;always&#39;</span> <span class="k">if</span> <span class="n">TILE_FORMAT_NUMPY</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="k">else</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="n">sparseFallback</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">crop</span><span class="p">:</span>
+                    <span class="n">tileData</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_imageToNumpy</span><span class="p">(</span><span class="n">tileData</span><span class="p">)</span>
+                    <span class="n">tileData</span> <span class="o">=</span> <span class="n">tileData</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">crop</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span><span class="bp">self</span><span class="o">.</span><span class="n">crop</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">crop</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="bp">self</span><span class="o">.</span><span class="n">crop</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tileData</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_retileTile</span><span class="p">()</span>
+
+            <span class="n">pilData</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="c1"># resample if needed</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resample</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">requestedScale</span><span class="p">:</span>
+                <span class="n">tileData</span><span class="p">,</span> <span class="n">pilData</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_resample</span><span class="p">(</span><span class="n">tileData</span><span class="p">)</span>
+
+            <span class="n">tileFormat</span> <span class="o">=</span> <span class="p">(</span><span class="n">TILE_FORMAT_PIL</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tileData</span><span class="p">,</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">)</span>
+                          <span class="k">else</span> <span class="p">(</span><span class="n">TILE_FORMAT_NUMPY</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tileData</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+                                <span class="k">else</span> <span class="n">TILE_FORMAT_IMAGE</span><span class="p">))</span>
+            <span class="n">tileEncoding</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">tileFormat</span> <span class="o">!=</span> <span class="n">TILE_FORMAT_IMAGE</span> <span class="k">else</span> <span class="p">(</span>
+                <span class="s1">&#39;JPEG&#39;</span> <span class="k">if</span> <span class="n">tileData</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xff\xd8\xff</span><span class="s1">&#39;</span> <span class="k">else</span>
+                <span class="s1">&#39;PNG&#39;</span> <span class="k">if</span> <span class="n">tileData</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x89</span><span class="s1">PNG&#39;</span> <span class="k">else</span>
+                <span class="s1">&#39;TIFF&#39;</span> <span class="k">if</span> <span class="n">tileData</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;II</span><span class="se">\x2a\x00</span><span class="s1">&#39;</span> <span class="k">else</span>
+                <span class="kc">None</span><span class="p">)</span>
+            <span class="c1"># Reformat the image if required</span>
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">alwaysAllowPIL</span> <span class="ow">or</span>
+                    <span class="p">(</span><span class="n">TILE_FORMAT_NUMPY</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tileData</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">))):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">tileFormat</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="ow">and</span> <span class="p">(</span><span class="n">tileFormat</span> <span class="o">!=</span> <span class="n">TILE_FORMAT_IMAGE</span> <span class="ow">or</span> <span class="p">(</span>
+                        <span class="n">tileEncoding</span> <span class="ow">and</span>
+                        <span class="n">tileEncoding</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">imageKwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;encoding&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span><span class="p">)))):</span>
+                    <span class="c1"># already in an acceptable format</span>
+                    <span class="k">pass</span>
+                <span class="k">elif</span> <span class="n">TILE_FORMAT_NUMPY</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">:</span>
+                    <span class="n">tileData</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_imageToNumpy</span><span class="p">(</span><span class="n">tileData</span><span class="p">)</span>
+                    <span class="n">tileFormat</span> <span class="o">=</span> <span class="n">TILE_FORMAT_NUMPY</span>
+                <span class="k">elif</span> <span class="n">TILE_FORMAT_PIL</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">:</span>
+                    <span class="n">tileData</span> <span class="o">=</span> <span class="n">pilData</span> <span class="k">if</span> <span class="n">pilData</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_imageToPIL</span><span class="p">(</span><span class="n">tileData</span><span class="p">)</span>
+                    <span class="n">tileFormat</span> <span class="o">=</span> <span class="n">TILE_FORMAT_PIL</span>
+                <span class="k">elif</span> <span class="n">TILE_FORMAT_IMAGE</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">:</span>
+                    <span class="n">tileData</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_encodeImage</span><span class="p">(</span><span class="n">tileData</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">imageKwargs</span><span class="p">)</span>
+                    <span class="n">tileFormat</span> <span class="o">=</span> <span class="n">TILE_FORMAT_IMAGE</span>
+                <span class="k">if</span> <span class="n">tileFormat</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">exceptions</span><span class="o">.</span><span class="n">TileSourceError</span><span class="p">(</span>
+                        <span class="s1">&#39;Cannot yield tiles in desired format </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="p">))</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">TILE_FORMAT_PIL</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="ow">and</span> <span class="n">TILE_FORMAT_NUMPY</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="ow">and</span>
+                    <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tileData</span><span class="p">,</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">)):</span>
+                <span class="n">tileData</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_imageToNumpy</span><span class="p">(</span><span class="n">tileData</span><span class="p">)</span>
+                <span class="n">tileFormat</span> <span class="o">=</span> <span class="n">TILE_FORMAT_NUMPY</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tileData</span> <span class="o">=</span> <span class="n">pilData</span> <span class="k">if</span> <span class="n">pilData</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">_imageToPIL</span><span class="p">(</span><span class="n">tileData</span><span class="p">)</span>
+                <span class="n">tileFormat</span> <span class="o">=</span> <span class="n">TILE_FORMAT_PIL</span>
+
+            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;tile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tileData</span>
+            <span class="bp">self</span><span class="p">[</span><span class="s1">&#39;format&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tileFormat</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LazyTileDict.release">
+<a class="viewcode-back" href="../../../_build/large_image/large_image.tilesource.html#large_image.tilesource.tiledict.LazyTileDict.release">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">release</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If the tile has been loaded, unload it.  It can be loaded again.  This</span>
+<span class="sd">        is useful if you want to keep tiles available in memory but not their</span>
+<span class="sd">        actual tile data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">loaded</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">loaded</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">deferredKeys</span><span class="p">:</span>
+                <span class="bp">self</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

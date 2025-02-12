@@ -1,0 +1,1233 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_converter &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../_static/K.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">large_image_converter</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image_converter</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">concurrent.futures</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">fractions</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">struct</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">PackageNotFoundError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">_importlib_version</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tempfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemporaryDirectory</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tifftools</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.tilesource.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">_gdalParameters</span><span class="p">,</span>
+                                              <span class="n">_newFromFileLock</span><span class="p">,</span> <span class="n">_vipsCast</span><span class="p">,</span>
+                                              <span class="n">_vipsParameters</span><span class="p">)</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">format_aperio</span>
+
+<span class="n">pyvips</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">__version__</span> <span class="o">=</span> <span class="n">_importlib_version</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">PackageNotFoundError</span><span class="p">:</span>
+    <span class="c1"># package is not installed</span>
+    <span class="k">pass</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;large-image-converter&#39;</span><span class="p">)</span>
+
+
+<span class="n">FormatModules</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;aperio&#39;</span><span class="p">:</span> <span class="n">format_aperio</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># Estimated maximum memory use per frame conversion.  Used to limit concurrent</span>
+<span class="c1"># frame conversions.</span>
+<span class="n">FrameMemoryEstimate</span> <span class="o">=</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">**</span> <span class="mi">3</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_use_associated_image</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if an associated image key should be used.  If a list of images to</span>
+<span class="sd">    keep was specified, it must match at least one of the regex in that list.</span>
+<span class="sd">    If a list of images to exclude was specified, it must not any regex in that</span>
+<span class="sd">    list.  The exclude list takes priority.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_exclude_associated&#39;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">exp</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;_exclude_associated&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_keep_associated&#39;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">exp</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;_keep_associated&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">exp</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_data_from_large_image</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if the input file can be read by installed large_image tile sources.</span>
+<span class="sd">    If so, return the metadata, internal metadata, and extract each associated</span>
+<span class="sd">    image.</span>
+
+<span class="sd">    :param path: path of the file.</span>
+<span class="sd">    :param outputPath: the name of a temporary output file.</span>
+<span class="sd">    :returns: a dictionary of metadata, internal_metadata, and images.  images</span>
+<span class="sd">        is a dictionary of keys and paths.  Returns None if the path is not</span>
+<span class="sd">        readable by large_image.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_import_pyvips</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;large_image://test&#39;</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">ts</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">noCache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">urllib.parse</span>
+
+        <span class="n">tsparams</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">if</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">urllib</span><span class="o">.</span><span class="n">parse</span><span class="o">.</span><span class="n">parse_qs</span><span class="p">(</span>
+                <span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;?&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;?&#39;</span> <span class="ow">in</span> <span class="n">path</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
+        <span class="n">ts</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;large_image://test&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">tsparams</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;metadata&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">(),</span>
+        <span class="s1">&#39;internal_metadata&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="o">.</span><span class="n">getInternalMetadata</span><span class="p">(),</span>
+        <span class="s1">&#39;images&#39;</span><span class="p">:</span> <span class="p">{},</span>
+        <span class="s1">&#39;tilesource&#39;</span><span class="p">:</span> <span class="n">ts</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="n">_get_thread_pool</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">getAssociatedImagesList</span><span class="p">():</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">_use_associated_image</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="k">continue</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">img</span><span class="p">,</span> <span class="n">mime</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">getAssociatedImage</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">savePath</span> <span class="o">=</span> <span class="n">outputPath</span> <span class="o">+</span> <span class="s1">&#39;-</span><span class="si">%s</span><span class="s1">-</span><span class="si">%s</span><span class="s1">.tiff&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">-%H%M%S&#39;</span><span class="p">))</span>
+        <span class="c1"># TODO: allow specifying quality separately from main image quality</span>
+        <span class="n">_pool_add</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+            <span class="n">_convert_via_vips</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">savePath</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">,</span> <span class="n">mime</span><span class="o">=</span><span class="n">mime</span><span class="p">,</span> <span class="n">forTiled</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="p">))</span>
+        <span class="n">results</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">savePath</span>
+    <span class="n">_drain_pool</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">tasks</span><span class="p">,</span> <span class="s1">&#39;associated images&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_generate_geotiff</span><span class="p">(</span><span class="n">inputPath</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Take a source input file, readable by gdal, and output a cloud-optimized</span>
+<span class="sd">    geotiff file.  See https://gdal.org/drivers/raster/cog.html.</span>
+
+<span class="sd">    :param inputPath: the path to the input file or base file of a set.</span>
+<span class="sd">    :param outputPath: the path of the output file.</span>
+<span class="sd">    Optional parameters that can be specified in kwargs:</span>
+<span class="sd">    :param tileSize: the horizontal and vertical tile size.</span>
+<span class="sd">    :param compression: one of &#39;jpeg&#39;, &#39;deflate&#39; (zip), &#39;lzw&#39;, or &#39;zstd&#39;.</span>
+<span class="sd">    :param quality: a jpeg quality passed to vips.  0 is small, 100 is high</span>
+<span class="sd">        quality.  90 or above is recommended.</span>
+<span class="sd">    :param level: compression level for zstd, 1-22 (default is 10).</span>
+<span class="sd">    :param predictor: one of &#39;none&#39;, &#39;horizontal&#39;, &#39;float&#39;, or &#39;yes&#39; used for</span>
+<span class="sd">        lzw and deflate.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">osgeo</span><span class="w"> </span><span class="kn">import</span> <span class="n">gdal</span><span class="p">,</span> <span class="n">gdalconst</span>
+
+    <span class="n">cmdopt</span> <span class="o">=</span> <span class="n">_gdalParameters</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">cmd</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;gdal_translate&#39;</span><span class="p">,</span> <span class="n">inputPath</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">]</span> <span class="o">+</span> <span class="n">cmdopt</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Convert to geotiff: </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># subprocess.check_call(cmd)</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">inputPath</span><span class="p">,</span> <span class="n">gdalconst</span><span class="o">.</span><span class="n">GA_ReadOnly</span><span class="p">)</span>
+        <span class="n">gdal</span><span class="o">.</span><span class="n">Translate</span><span class="p">(</span><span class="n">outputPath</span><span class="p">,</span> <span class="n">ds</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">cmdopt</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">outputPath</span><span class="p">)</span>
+        <span class="k">raise</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_generate_multiframe_tiff</span><span class="p">(</span><span class="n">inputPath</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span> <span class="n">lidata</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Take a source input file with multiple frames and output a multi-pyramidal</span>
+<span class="sd">    tiff file.</span>
+
+<span class="sd">    :param inputPath: the path to the input file or base file of a set.</span>
+<span class="sd">    :param outputPath: the path of the output file.</span>
+<span class="sd">    :param tempPath: a temporary file in a temporary directory.</span>
+<span class="sd">    :param lidata: data from a large_image tilesource including associated</span>
+<span class="sd">        images.</span>
+<span class="sd">    Optional parameters that can be specified in kwargs:</span>
+<span class="sd">    :param tileSize: the horizontal and vertical tile size.</span>
+<span class="sd">    :param compression: one of &#39;jpeg&#39;, &#39;deflate&#39; (zip), &#39;lzw&#39;, &#39;packbits&#39;,</span>
+<span class="sd">        &#39;zstd&#39;, or &#39;jp2k&#39;.</span>
+<span class="sd">    :param quality: a jpeg quality passed to vips.  0 is small, 100 is high</span>
+<span class="sd">        quality.  90 or above is recommended.</span>
+<span class="sd">    :param level: compression level for zstd, 1-22 (default is 10).</span>
+<span class="sd">    :param predictor: one of &#39;none&#39;, &#39;horizontal&#39;, or &#39;float&#39; used for lzw and</span>
+<span class="sd">        deflate.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_import_pyvips</span><span class="p">()</span>
+
+    <span class="k">with</span> <span class="n">_newFromFileLock</span><span class="p">:</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_file</span><span class="p">(</span><span class="n">inputPath</span><span class="p">)</span>
+    <span class="n">width</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">width</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">height</span>
+    <span class="n">pages</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="s1">&#39;n-pages&#39;</span> <span class="ow">in</span> <span class="n">image</span><span class="o">.</span><span class="n">get_fields</span><span class="p">():</span>
+        <span class="n">pages</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="s1">&#39;n-pages&#39;</span><span class="p">)</span>
+    <span class="c1"># Now check if there are other images we need to convert or preserve</span>
+    <span class="n">outputList</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">imageSizes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="n">_get_thread_pool</span><span class="p">(</span><span class="n">memoryLimit</span><span class="o">=</span><span class="n">FrameMemoryEstimate</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">onlyFrame</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;onlyFrame&#39;</span><span class="p">))</span> <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;onlyFrame&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">frame</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># Process each image separately to pyramidize it</span>
+    <span class="k">for</span> <span class="n">page</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">pages</span><span class="p">):</span>
+        <span class="n">subInputPath</span> <span class="o">=</span> <span class="n">inputPath</span> <span class="o">+</span> <span class="s1">&#39;[page=</span><span class="si">%d</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="n">page</span>
+        <span class="k">with</span> <span class="n">_newFromFileLock</span><span class="p">:</span>
+            <span class="n">subImage</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_file</span><span class="p">(</span><span class="n">subInputPath</span><span class="p">)</span>
+        <span class="n">imageSizes</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">subImage</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">subImage</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="n">subInputPath</span><span class="p">,</span> <span class="n">page</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">subImage</span><span class="o">.</span><span class="n">width</span> <span class="o">!=</span> <span class="n">width</span> <span class="ow">or</span> <span class="n">subImage</span><span class="o">.</span><span class="n">height</span> <span class="o">!=</span> <span class="n">height</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">subImage</span><span class="o">.</span><span class="n">width</span> <span class="o">*</span> <span class="n">subImage</span><span class="o">.</span><span class="n">height</span> <span class="o">&lt;=</span> <span class="n">width</span> <span class="o">*</span> <span class="n">height</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Bigger image found (was </span><span class="si">%d</span><span class="s1">x</span><span class="si">%d</span><span class="s1">, now </span><span class="si">%d</span><span class="s1">x</span><span class="si">%d</span><span class="s1">)&#39;</span><span class="p">,</span>
+                        <span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">subImage</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">subImage</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">outputList</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="n">subImage</span><span class="o">.</span><span class="n">width</span>
+            <span class="n">height</span> <span class="o">=</span> <span class="n">subImage</span><span class="o">.</span><span class="n">height</span>
+        <span class="n">frame</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">onlyFrame</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">onlyFrame</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">!=</span> <span class="n">frame</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">subOutputPath</span> <span class="o">=</span> <span class="n">tempPath</span> <span class="o">+</span> <span class="s1">&#39;-</span><span class="si">%d</span><span class="s1">-</span><span class="si">%s</span><span class="s1">.tiff&#39;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">page</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">-%H%M%S&#39;</span><span class="p">))</span>
+        <span class="n">_pool_add</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+            <span class="n">_convert_via_vips</span><span class="p">,</span> <span class="n">subInputPath</span><span class="p">,</span> <span class="n">subOutputPath</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span>
+            <span class="n">status</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">page</span><span class="p">,</span> <span class="n">pages</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="p">))</span>
+        <span class="n">outputList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">subOutputPath</span><span class="p">)</span>
+    <span class="n">extraImages</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">lidata</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">]):</span>
+        <span class="c1"># If we couldn&#39;t extract images from li, try to detect non-primary</span>
+        <span class="c1"># images from the original file.  These are any images who size is</span>
+        <span class="c1"># not a power of two division of the primary image size</span>
+        <span class="n">possibleSizes</span> <span class="o">=</span> <span class="n">_list_possible_sizes</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">subInputPath</span><span class="p">,</span> <span class="n">page</span> <span class="ow">in</span> <span class="n">imageSizes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">possibleSizes</span><span class="p">:</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;image_</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">page</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">_use_associated_image</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="n">savePath</span> <span class="o">=</span> <span class="n">tempPath</span> <span class="o">+</span> <span class="s1">&#39;-</span><span class="si">%s</span><span class="s1">-</span><span class="si">%s</span><span class="s1">.tiff&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">-%H%M%S&#39;</span><span class="p">))</span>
+                <span class="n">_pool_add</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+                    <span class="n">_convert_via_vips</span><span class="p">,</span> <span class="n">subInputPath</span><span class="p">,</span> <span class="n">savePath</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span> <span class="p">))</span>
+                <span class="n">extraImages</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">savePath</span>
+    <span class="n">_drain_pool</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">tasks</span><span class="p">,</span> <span class="s1">&#39;subpage&#39;</span><span class="p">)</span>
+    <span class="n">_output_tiff</span><span class="p">(</span><span class="n">outputList</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span> <span class="n">lidata</span><span class="p">,</span> <span class="n">extraImages</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_generate_tiff</span><span class="p">(</span><span class="n">inputPath</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span> <span class="n">lidata</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Take a source input file, readable by vips, and output a pyramidal tiff</span>
+<span class="sd">    file.</span>
+
+<span class="sd">    :param inputPath: the path to the input file or base file of a set.</span>
+<span class="sd">    :param outputPath: the path of the output file.</span>
+<span class="sd">    :param tempPath: a temporary file in a temporary directory.</span>
+<span class="sd">    :param lidata: data from a large_image tilesource including associated</span>
+<span class="sd">        images.</span>
+<span class="sd">    Optional parameters that can be specified in kwargs:</span>
+<span class="sd">    :param tileSize: the horizontal and vertical tile size.</span>
+<span class="sd">    :param compression: one of &#39;jpeg&#39;, &#39;deflate&#39; (zip), &#39;lzw&#39;, &#39;packbits&#39;,</span>
+<span class="sd">        &#39;zstd&#39;, or &#39;jp2k&#39;.</span>
+<span class="sd">    :param quality: a jpeg quality passed to vips.  0 is small, 100 is high</span>
+<span class="sd">        quality.  90 or above is recommended.</span>
+<span class="sd">    :param level: compression level for zstd, 1-22 (default is 10).</span>
+<span class="sd">    :param predictor: one of &#39;none&#39;, &#39;horizontal&#39;, or &#39;float&#39; used for lzw and</span>
+<span class="sd">        deflate.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_import_pyvips</span><span class="p">()</span>
+    <span class="n">subOutputPath</span> <span class="o">=</span> <span class="n">tempPath</span> <span class="o">+</span> <span class="s1">&#39;-</span><span class="si">%s</span><span class="s1">.tiff&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">-%H%M%S&#39;</span><span class="p">))</span>
+    <span class="n">_convert_via_vips</span><span class="p">(</span><span class="n">inputPath</span><span class="p">,</span> <span class="n">subOutputPath</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">_output_tiff</span><span class="p">([</span><span class="n">subOutputPath</span><span class="p">],</span> <span class="n">outputPath</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span> <span class="n">lidata</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_convert_via_vips</span><span class="p">(</span><span class="n">inputPathOrBuffer</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span> <span class="n">forTiled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                      <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">preferredVipsCast</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a file, buffer, or vips image to a tiff file.  This is equivalent</span>
+<span class="sd">    to a vips command line of</span>
+<span class="sd">      vips tiffsave &lt;input path&gt; &lt;output path&gt;</span>
+<span class="sd">    followed by the convert params in the form of --&lt;key&gt;[=&lt;value&gt;] where no</span>
+<span class="sd">    value needs to be specified if they are True.</span>
+
+<span class="sd">    :param inputPathOrBuffer: a file path, bytes object, or vips image.</span>
+<span class="sd">    :param outputPath: the name of the file to save.</span>
+<span class="sd">    :param tempPath: a directory where temporary files may be stored.  vips</span>
+<span class="sd">        also stores files in TMPDIR</span>
+<span class="sd">    :param forTiled: True if the output should be tiled, false if not.</span>
+<span class="sd">    :param status: an optional additional string to add to log messages.</span>
+<span class="sd">    :param preferredVipsCast: vips scaling parameters to use in a cast.</span>
+<span class="sd">    :param kwargs: addition arguments that get passed to _vipsParameters</span>
+<span class="sd">        and _convert_to_jp2k.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_import_pyvips</span><span class="p">()</span>
+    <span class="n">convertParams</span> <span class="o">=</span> <span class="n">_vipsParameters</span><span class="p">(</span><span class="n">forTiled</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="n">status</span><span class="p">)</span> <span class="k">if</span> <span class="n">status</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inputPathOrBuffer</span><span class="p">,</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">vimage</span><span class="o">.</span><span class="n">Image</span><span class="p">):</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;vips image&#39;</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">inputPathOrBuffer</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">inputPathOrBuffer</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="s1">&#39;buffer&#39;</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_buffer</span><span class="p">(</span><span class="n">inputPathOrBuffer</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="n">inputPathOrBuffer</span>
+        <span class="k">with</span> <span class="n">_newFromFileLock</span><span class="p">:</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_file</span><span class="p">(</span><span class="n">inputPathOrBuffer</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Input: </span><span class="si">%s</span><span class="s1">, Output: </span><span class="si">%s</span><span class="s1">, Options: </span><span class="si">%r%s</span><span class="s1">&#39;</span><span class="p">,</span>
+                <span class="n">source</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">,</span> <span class="n">convertParams</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">autorot</span><span class="p">()</span>
+    <span class="n">adjusted</span> <span class="o">=</span> <span class="n">format_hook</span><span class="p">(</span><span class="s1">&#39;modify_vips_image_before_output&#39;</span><span class="p">,</span> <span class="n">image</span><span class="p">,</span> <span class="n">convertParams</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">adjusted</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="n">adjusted</span><span class="p">:</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">adjusted</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">convertParams</span><span class="p">[</span><span class="s1">&#39;compression&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;jpeg&#39;</span><span class="p">}</span> <span class="ow">or</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">interpretation</span> <span class="o">!=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Interpretation</span><span class="o">.</span><span class="n">SCRGB</span><span class="p">):</span>
+        <span class="c1"># jp2k compression supports more than 8-bits per sample, but the</span>
+        <span class="c1"># decompressor claims this is unsupported.</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">_vipsCast</span><span class="p">(</span>
+            <span class="n">image</span><span class="p">,</span>
+            <span class="n">convertParams</span><span class="p">[</span><span class="s1">&#39;compression&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;webp&#39;</span><span class="p">,</span> <span class="s1">&#39;jpeg&#39;</span><span class="p">}</span> <span class="ow">or</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;compression&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;jp2k&#39;</span><span class="p">},</span>
+            <span class="n">preferredVipsCast</span><span class="p">)</span>
+    <span class="c1"># TODO: revisit the TMPDIR override; this is not thread safe</span>
+    <span class="c1"># oldtmpdir = os.environ.get(&#39;TMPDIR&#39;)</span>
+    <span class="c1"># os.environ[&#39;TMPDIR&#39;] = os.path.dirname(tempPath)</span>
+    <span class="c1"># try:</span>
+    <span class="c1">#     image.write_to_file(outputPath, **convertParams)</span>
+    <span class="c1"># finally:</span>
+    <span class="c1">#     if oldtmpdir is not None:</span>
+    <span class="c1">#         os.environ[&#39;TMPDIR&#39;] = oldtmpdir</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         del os.environ[&#39;TMPDIR&#39;]</span>
+    <span class="n">image</span><span class="o">.</span><span class="n">write_to_file</span><span class="p">(</span><span class="n">outputPath</span><span class="p">,</span> <span class="o">**</span><span class="n">convertParams</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;compression&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;jp2k&#39;</span><span class="p">:</span>
+        <span class="n">_convert_to_jp2k</span><span class="p">(</span><span class="n">outputPath</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_convert_to_jp2k_tile</span><span class="p">(</span><span class="n">lock</span><span class="p">,</span> <span class="n">fptr</span><span class="p">,</span> <span class="n">dest</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">jp2kargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Read an uncompressed tile from a file and save it as a JP2000 file.</span>
+
+<span class="sd">    :param lock: a lock to ensure exclusive access to the file.</span>
+<span class="sd">    :param fptr: a pointer to the open file.</span>
+<span class="sd">    :param dest: the output path for the jp2k file.</span>
+<span class="sd">    :param offset: the location in the input file with the data.</span>
+<span class="sd">    :param length: the number of bytes to read.</span>
+<span class="sd">    :param shape: a tuple with the shape of the tile to read.  This is usually</span>
+<span class="sd">        (height, width, channels).</span>
+<span class="sd">    :param dtype: the numpy dtype of the data in the tile.</span>
+<span class="sd">    :param jp2kargs: arguments to pass to the compression, such as psnr or</span>
+<span class="sd">        cratios.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">glymur</span>
+
+    <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+        <span class="n">fptr</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">offset</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">fptr</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">shape</span><span class="p">)</span>
+    <span class="n">glymur</span><span class="o">.</span><span class="n">Jp2k</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">jp2kargs</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_concurrency_to_value</span><span class="p">(</span><span class="n">_concurrency</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert the _concurrency value to a number of cpus.</span>
+
+<span class="sd">    :param _concurrency: a positive value for a set number of cpus.  &lt;= 0 for</span>
+<span class="sd">        the number of logical cpus less that amount.  None is the same as 0.</span>
+<span class="sd">    :returns: the number of cpus.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_concurrency</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">_concurrency</span><span class="p">)</span> <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">_concurrency</span><span class="p">)</span><span class="o">.</span><span class="n">isdigit</span><span class="p">()</span> <span class="k">else</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">_concurrency</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_concurrency</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">large_image</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(</span><span class="n">logical</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">+</span> <span class="n">_concurrency</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_thread_pool</span><span class="p">(</span><span class="n">memoryLimit</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">parentConcurrency</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">numItems</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Allocate a thread pool based on the specific concurrency.</span>
+
+<span class="sd">    :param memoryLimit: if not None, limit the concurrency to no more than one</span>
+<span class="sd">        process per memoryLimit bytes of total memory.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">concurrency</span> <span class="o">=</span> <span class="n">_concurrency_to_value</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">parentConcurrency</span> <span class="ow">and</span> <span class="n">parentConcurrency</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">concurrency</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">concurrency</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">concurrency</span> <span class="o">/</span> <span class="n">parentConcurrency</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">memoryLimit</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">parentConcurrency</span><span class="p">:</span>
+            <span class="n">memoryLimit</span> <span class="o">*=</span> <span class="n">parentConcurrency</span>
+        <span class="n">concurrency</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">concurrency</span><span class="p">,</span> <span class="n">large_image</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">total_memory</span><span class="p">()</span> <span class="o">//</span> <span class="n">memoryLimit</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">numItems</span> <span class="ow">and</span> <span class="n">numItems</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">concurrency</span> <span class="o">&gt;</span> <span class="n">numItems</span><span class="p">:</span>
+        <span class="n">concurrency</span> <span class="o">=</span> <span class="n">numItems</span>
+    <span class="n">concurrency</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">concurrency</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">concurrency</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_pool_log</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Log processing within a pool.</span>
+
+<span class="sd">    :param left: units left to process.</span>
+<span class="sd">    :param total: total units left to process.</span>
+<span class="sd">    :param label: label to log describing what is being processed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="s1">&#39;_pool_log_starttime&#39;</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">_pool_log_starttime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">logger</span><span class="p">,</span> <span class="s1">&#39;_pool_log_lastlog&#39;</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">_pool_log_lastlog</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">logger</span><span class="o">.</span><span class="n">_pool_log_lastlog</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">logger</span><span class="o">.</span><span class="n">_pool_log_starttime</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> left </span><span class="si">%4.2f</span><span class="s1">s&#39;</span><span class="p">,</span> <span class="n">left</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">elapsed</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">_pool_log_lastlog</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_pool_add</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">newtask</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add a new task to a pool, then drain any finished tasks at the start of the</span>
+<span class="sd">    pool.</span>
+
+<span class="sd">    :param tasks: a list containing either lists or tuples, the last element</span>
+<span class="sd">        of which is a task submitted to the pool.  Altered.</span>
+<span class="sd">    :param newtask: a list or tuple to add to the pool.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tasks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">newtask</span><span class="p">)</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">tasks</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">tasks</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">result</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="n">tasks</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_drain_pool</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">tasks</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wait for all tasks in a pool to complete, then shutdown the pool.</span>
+
+<span class="sd">    :param pool: a concurrent futures pool.</span>
+<span class="sd">    :param tasks: a list containing either lists or tuples, the last element</span>
+<span class="sd">        of which is a task submitted to the pool.  Altered.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">numtasks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span>
+    <span class="n">_pool_log</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tasks</span><span class="p">),</span> <span class="n">numtasks</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">tasks</span><span class="p">):</span>
+        <span class="c1"># This allows better stopping on a SIGTERM</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">tasks</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">result</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">tasks</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">_pool_log</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tasks</span><span class="p">),</span> <span class="n">numtasks</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+    <span class="n">pool</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_convert_to_jp2k</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a tiled tiff file without compression, convert it to jp2k compression</span>
+<span class="sd">    using the gylmur library.  This expects a tiff as written by vips without</span>
+<span class="sd">    any subifds.</span>
+
+<span class="sd">    :param path: the path of the tiff file.  The file is altered.</span>
+<span class="sd">    :param psnr: if set, the target psnr.  0 for lossless.</span>
+<span class="sd">    :param cr: is set, the target compression ratio.  1 for lossless.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">read_tiff</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">jp2kargs</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">if</span> <span class="s1">&#39;psnr&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">jp2kargs</span><span class="p">[</span><span class="s1">&#39;psnr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;psnr&#39;</span><span class="p">])]</span>
+    <span class="k">elif</span> <span class="s1">&#39;cr&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">jp2kargs</span><span class="p">[</span><span class="s1">&#39;cratios&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;cr&#39;</span><span class="p">])]</span>
+    <span class="n">tilecount</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">TileOffsets</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+                    <span class="k">for</span> <span class="n">ifd</span> <span class="ow">in</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">])</span>
+    <span class="n">processed</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">lastlog</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="n">_get_thread_pool</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;r+b&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fptr</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">ifd</span> <span class="ow">in</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">]:</span>
+            <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">Compression</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">tifftools</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">Compression</span><span class="o">.</span><span class="n">JP2000</span><span class="p">)</span>
+            <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">TileWidth</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">TileLength</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">BitsPerSample</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]))</span>
+            <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span> <span class="k">if</span> <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span>
+                <span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">BitsPerSample</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">16</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span>
+            <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">offset</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">TileOffsets</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]):</span>
+                <span class="n">tmppath</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">%d</span><span class="s1">.jp2k&#39;</span> <span class="o">%</span> <span class="n">processed</span>
+                <span class="n">tasks</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">ifd</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">processed</span><span class="p">,</span> <span class="n">tmppath</span><span class="p">,</span> <span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+                    <span class="n">_convert_to_jp2k_tile</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">fptr</span><span class="p">,</span> <span class="n">tmppath</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span>
+                    <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">TileByteCounts</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">],</span>
+                    <span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">jp2kargs</span><span class="p">)))</span>
+                <span class="n">processed</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">tasks</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">tasks</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">result</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">ifd</span><span class="p">,</span> <span class="n">idx</span><span class="p">,</span> <span class="n">processed</span><span class="p">,</span> <span class="n">tmppath</span><span class="p">,</span> <span class="n">task</span> <span class="o">=</span> <span class="n">tasks</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">tmppath</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">tmppath</span><span class="p">)</span>
+            <span class="c1"># Remove first comment marker.  It adds needless bytes</span>
+            <span class="n">compos</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xff\x64</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">compos</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">compos</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+                <span class="n">comlen</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s1">&#39;&gt;H&#39;</span><span class="p">,</span> <span class="n">data</span><span class="p">[</span><span class="n">compos</span> <span class="o">+</span> <span class="mi">2</span><span class="p">:</span><span class="n">compos</span> <span class="o">+</span> <span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">compos</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">comlen</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="ow">and</span> <span class="n">data</span><span class="p">[</span><span class="n">compos</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">comlen</span><span class="p">]</span> <span class="o">==</span> <span class="mh">0xff</span><span class="p">:</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:</span><span class="n">compos</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="n">compos</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">comlen</span><span class="p">:]</span>
+            <span class="k">with</span> <span class="n">lock</span><span class="p">:</span>
+                <span class="n">fptr</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">SEEK_END</span><span class="p">)</span>
+                <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">TileOffsets</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">fptr</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
+                <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">TileByteCounts</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="n">fptr</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">lastlog</span> <span class="o">&gt;=</span> <span class="mi">10</span> <span class="ow">and</span> <span class="n">tilecount</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Converted </span><span class="si">%d</span><span class="s1"> of </span><span class="si">%d</span><span class="s1"> tiles to jp2k&#39;</span><span class="p">,</span> <span class="n">processed</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tilecount</span><span class="p">)</span>
+                <span class="n">lastlog</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">fptr</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">SEEK_END</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">ifd</span> <span class="ow">in</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">]:</span>
+            <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fptr</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
+        <span class="n">info</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fptr</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
+    <span class="n">tmppath</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;.jp2k.tiff&#39;</span>
+    <span class="n">tifftools</span><span class="o">.</span><span class="n">write_tiff</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">tmppath</span><span class="p">,</span> <span class="n">bigtiff</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">allowExisting</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">unlink</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">tmppath</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_convert_large_image_tile</span><span class="p">(</span><span class="n">tilelock</span><span class="p">,</span> <span class="n">strips</span><span class="p">,</span> <span class="n">tile</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add a single tile to a list of strips for a vips image so that they can be</span>
+<span class="sd">    composited together.</span>
+
+<span class="sd">    :param tilelock: a lock for thread safety.</span>
+<span class="sd">    :param strips: an array of strips to adds to the final vips image.</span>
+<span class="sd">    :param tile: a tileIterator tile.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;tile&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">char</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">large_image</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">dtypeToGValue</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">)</span>
+    <span class="n">vimg</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_memory</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">data</span><span class="p">)</span><span class="o">.</span><span class="n">data</span><span class="p">,</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+        <span class="n">large_image</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">dtypeToGValue</span><span class="p">[</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">char</span><span class="p">])</span>
+    <span class="n">vimgTemp</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_temp_file</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.v&#39;</span><span class="p">)</span>
+    <span class="n">vimg</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">vimgTemp</span><span class="p">)</span>
+    <span class="n">vimg</span> <span class="o">=</span> <span class="n">vimgTemp</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+    <span class="n">ty</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;tile_position&#39;</span><span class="p">][</span><span class="s1">&#39;level_y&#39;</span><span class="p">]</span>
+    <span class="k">with</span> <span class="n">tilelock</span><span class="p">:</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">strips</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">ty</span><span class="p">:</span>
+            <span class="n">strips</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">strips</span><span class="p">[</span><span class="n">ty</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">strips</span><span class="p">[</span><span class="n">ty</span><span class="p">]</span> <span class="o">=</span> <span class="n">vimg</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="p">:</span>
+                <span class="k">return</span>
+        <span class="k">if</span> <span class="n">vimg</span><span class="o">.</span><span class="n">bands</span> <span class="o">&gt;</span> <span class="n">strips</span><span class="p">[</span><span class="n">ty</span><span class="p">]</span><span class="o">.</span><span class="n">bands</span><span class="p">:</span>
+            <span class="n">vimg</span> <span class="o">=</span> <span class="n">vimg</span><span class="p">[:</span><span class="n">strips</span><span class="p">[</span><span class="n">ty</span><span class="p">]</span><span class="o">.</span><span class="n">bands</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">strips</span><span class="p">[</span><span class="n">ty</span><span class="p">]</span><span class="o">.</span><span class="n">bands</span> <span class="o">&gt;</span> <span class="n">vimg</span><span class="o">.</span><span class="n">bands</span><span class="p">:</span>
+            <span class="n">strips</span><span class="p">[</span><span class="n">ty</span><span class="p">]</span> <span class="o">=</span> <span class="n">strips</span><span class="p">[</span><span class="n">ty</span><span class="p">][:</span><span class="n">vimg</span><span class="o">.</span><span class="n">bands</span><span class="p">]</span>
+        <span class="n">strips</span><span class="p">[</span><span class="n">ty</span><span class="p">]</span> <span class="o">=</span> <span class="n">strips</span><span class="p">[</span><span class="n">ty</span><span class="p">]</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">vimg</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_convert_large_image_frame</span><span class="p">(</span>
+        <span class="n">frame</span><span class="p">,</span> <span class="n">numFrames</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">frameOutputPath</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span> <span class="n">preferredVipsCast</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">parentConcurrency</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert a single frame from a large_image source.  This parallelizes tile</span>
+<span class="sd">    reads.  Once all tiles are converted to a composited vips image, a tiff</span>
+<span class="sd">    file is generated.</span>
+
+<span class="sd">    :param frame: the 0-based frame number.</span>
+<span class="sd">    :param numFrames: the total number of frames; used for logging.</span>
+<span class="sd">    :param ts: the open tile source.</span>
+<span class="sd">    :param frameOutputPath: the destination name for the tiff file.</span>
+<span class="sd">    :param tempPath: a temporary file in a temporary directory.</span>
+<span class="sd">    :param preferredVipsCast: vips scaling parameters to use in a cast.</span>
+<span class="sd">    :param parentConcurrency: amount of concurrency used by parent task.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># The iterator tile size is a balance between memory use and fewer calls</span>
+    <span class="c1"># and file handles.</span>
+    <span class="n">_iterTileSize</span> <span class="o">=</span> <span class="mi">4096</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Processing frame </span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">frame</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">numFrames</span><span class="p">)</span>
+    <span class="n">strips</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="n">_get_thread_pool</span><span class="p">(</span>
+        <span class="n">memoryLimit</span><span class="o">=</span><span class="n">FrameMemoryEstimate</span><span class="p">,</span>
+        <span class="c1"># allow multiple tiles even if we are using all the cores, as it</span>
+        <span class="c1"># balances I/O and computation</span>
+        <span class="n">parentConcurrency</span><span class="o">=</span><span class="p">(</span><span class="n">parentConcurrency</span> <span class="o">//</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">tilelock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">ts</span><span class="o">.</span><span class="n">tileIterator</span><span class="p">(</span><span class="n">tile_size</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="n">_iterTileSize</span><span class="p">),</span> <span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">):</span>
+        <span class="n">_pool_add</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">_convert_large_image_tile</span><span class="p">,</span> <span class="n">tilelock</span><span class="p">,</span> <span class="n">strips</span><span class="p">,</span> <span class="n">tile</span><span class="p">),</span> <span class="p">))</span>
+    <span class="n">_drain_pool</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">tasks</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;tiles from frame </span><span class="si">{</span><span class="n">frame</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">numFrames</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="n">minbands</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">strip</span><span class="o">.</span><span class="n">bands</span> <span class="k">for</span> <span class="n">strip</span> <span class="ow">in</span> <span class="n">strips</span><span class="p">)</span>
+    <span class="n">maxbands</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">strip</span><span class="o">.</span><span class="n">bands</span> <span class="k">for</span> <span class="n">strip</span> <span class="ow">in</span> <span class="n">strips</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">minbands</span> <span class="o">!=</span> <span class="n">maxbands</span><span class="p">:</span>
+        <span class="n">strips</span> <span class="o">=</span> <span class="p">[</span><span class="n">strip</span><span class="p">[:</span><span class="n">minbands</span><span class="p">]</span> <span class="k">for</span> <span class="n">strip</span> <span class="ow">in</span> <span class="n">strips</span><span class="p">]</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">strips</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">stripidx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">strips</span><span class="p">)):</span>
+        <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">strips</span><span class="p">[</span><span class="n">stripidx</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="n">stripidx</span> <span class="o">*</span> <span class="n">_iterTileSize</span><span class="p">,</span> <span class="n">expand</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">_convert_via_vips</span><span class="p">(</span>
+        <span class="n">img</span><span class="p">,</span> <span class="n">frameOutputPath</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">frame</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">numFrames</span><span class="p">),</span>
+        <span class="n">preferredVipsCast</span><span class="o">=</span><span class="n">preferredVipsCast</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_output_type</span><span class="p">(</span><span class="n">lidata</span><span class="p">):</span>  <span class="c1"># noqa</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determine how to cast and scale vips data based on actual image contents.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">intype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;tilesource&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">intype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span> <span class="ow">or</span> <span class="n">intype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Checking data range&#39;</span><span class="p">)</span>
+    <span class="n">minval</span> <span class="o">=</span> <span class="n">maxval</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;frames&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]))):</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;tilesource&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span>
+            <span class="n">onlyMinMax</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">maxWidth</span><span class="o">=</span><span class="mi">2048</span><span class="p">,</span> <span class="n">maxHeight</span><span class="o">=</span><span class="mi">2048</span><span class="p">),</span>
+            <span class="n">resample</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;max&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">h</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="n">maxval</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">maxval</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+            <span class="n">minval</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="s1">&#39;min&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">maxval</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">maxval</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
+            <span class="n">minval</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">minval</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">h</span><span class="p">[</span><span class="s1">&#39;min&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()))</span>
+    <span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;range&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">minval</span><span class="p">,</span> <span class="n">maxval</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Data range is [</span><span class="si">%r</span><span class="s1">, </span><span class="si">%r</span><span class="s1">]&#39;</span><span class="p">,</span> <span class="n">minval</span><span class="p">,</span> <span class="n">maxval</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">minval</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">intype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">BandFormat</span><span class="o">.</span><span class="n">UCHAR</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">minval</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">intype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">BandFormat</span><span class="o">.</span><span class="n">USHORT</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">minval</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">maxval</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">BandFormat</span><span class="o">.</span><span class="n">UCHAR</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">minval</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">maxval</span> <span class="o">&lt;=</span> <span class="mi">2</span> <span class="o">**</span> <span class="o">-</span><span class="mi">8</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">BandFormat</span><span class="o">.</span><span class="n">USHORT</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="mi">2</span> <span class="o">**</span> <span class="o">-</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">maxval</span><span class="p">))</span> <span class="o">-</span> <span class="mi">16</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">**</span> <span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">maxval</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">minval</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">maxval</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">BandFormat</span><span class="o">.</span><span class="n">USHORT</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">65535</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">minval</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">maxval</span> <span class="o">&lt;</span> <span class="mi">256</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">BandFormat</span><span class="o">.</span><span class="n">UCHAR</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">minval</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">maxval</span> <span class="o">&lt;</span> <span class="mi">65536</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">BandFormat</span><span class="o">.</span><span class="n">USHORT</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">minval</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">BandFormat</span><span class="o">.</span><span class="n">USHORT</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+                <span class="mi">2</span> <span class="o">**</span> <span class="o">-</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">maxval</span><span class="p">))</span> <span class="o">-</span> <span class="mi">16</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">**</span> <span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">maxval</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">minval</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">**</span> <span class="o">-</span><span class="mi">8</span> <span class="ow">and</span> <span class="n">maxval</span> <span class="o">&lt;=</span> <span class="mi">2</span> <span class="o">**</span> <span class="o">-</span><span class="mi">8</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">BandFormat</span><span class="o">.</span><span class="n">USHORT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="mi">2</span> <span class="o">**</span> <span class="o">-</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">maxval</span><span class="p">))</span> <span class="o">-</span> <span class="mi">15</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">**</span> <span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">maxval</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="n">minval</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">1</span> <span class="ow">and</span> <span class="n">maxval</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">BandFormat</span><span class="o">.</span><span class="n">USHORT</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">32767</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">minval</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">32768</span> <span class="ow">and</span> <span class="n">maxval</span> <span class="o">&lt;</span> <span class="mi">32768</span><span class="p">:</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">BandFormat</span><span class="o">.</span><span class="n">USHORT</span><span class="p">,</span> <span class="mi">32768</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">pyvips</span><span class="o">.</span><span class="n">BandFormat</span><span class="o">.</span><span class="n">USHORT</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="mi">2</span> <span class="o">**</span> <span class="o">-</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="n">minval</span><span class="p">,</span> <span class="n">maxval</span><span class="p">)))</span> <span class="o">-</span> <span class="mi">16</span><span class="p">)</span> <span class="o">-</span>
+            <span class="mi">2</span> <span class="o">**</span> <span class="o">-</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="o">-</span><span class="n">minval</span><span class="p">,</span> <span class="n">maxval</span><span class="p">))))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_convert_large_image</span><span class="p">(</span><span class="n">inputPath</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span> <span class="n">lidata</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Take a large_image source and convert it by resaving each tiles image with</span>
+<span class="sd">    vips.</span>
+
+<span class="sd">    :param inputPath: the path to the input file or base file of a set.</span>
+<span class="sd">    :param outputPath: the path of the output file.</span>
+<span class="sd">    :param tempPath: a temporary file in a temporary directory.</span>
+<span class="sd">    :param lidata: data from a large_image tilesource including associated</span>
+<span class="sd">        images.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ts</span> <span class="o">=</span> <span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;tilesource&#39;</span><span class="p">]</span>
+    <span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;_vips_cast&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_output_type</span><span class="p">(</span><span class="n">lidata</span><span class="p">)</span>
+    <span class="n">numFrames</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;frames&#39;</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">outputList</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">startFrame</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">endFrame</span> <span class="o">=</span> <span class="n">numFrames</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;onlyFrame&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;onlyFrame&#39;</span><span class="p">)):</span>
+        <span class="n">startFrame</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;onlyFrame&#39;</span><span class="p">))</span>
+        <span class="n">endFrame</span> <span class="o">=</span> <span class="n">startFrame</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="n">_get_thread_pool</span><span class="p">(</span><span class="n">memoryLimit</span><span class="o">=</span><span class="n">FrameMemoryEstimate</span><span class="p">,</span>
+                            <span class="n">numItems</span><span class="o">=</span><span class="n">endFrame</span> <span class="o">-</span> <span class="n">startFrame</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">startFrame</span><span class="p">,</span> <span class="n">endFrame</span><span class="p">):</span>
+        <span class="n">frameOutputPath</span> <span class="o">=</span> <span class="n">tempPath</span> <span class="o">+</span> <span class="s1">&#39;-</span><span class="si">%d</span><span class="s1">-</span><span class="si">%s</span><span class="s1">.tiff&#39;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">frame</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">-%H%M%S&#39;</span><span class="p">))</span>
+        <span class="n">_pool_add</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span>
+            <span class="n">_convert_large_image_frame</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="n">numFrames</span><span class="p">,</span> <span class="n">ts</span><span class="p">,</span> <span class="n">frameOutputPath</span><span class="p">,</span>
+            <span class="n">tempPath</span><span class="p">,</span> <span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;_vips_cast&#39;</span><span class="p">],</span> <span class="n">pool</span><span class="o">.</span><span class="n">_max_workers</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">),</span> <span class="p">))</span>
+        <span class="n">outputList</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">frameOutputPath</span><span class="p">)</span>
+    <span class="n">_drain_pool</span><span class="p">(</span><span class="n">pool</span><span class="p">,</span> <span class="n">tasks</span><span class="p">,</span> <span class="s1">&#39;frames&#39;</span><span class="p">)</span>
+    <span class="n">_output_tiff</span><span class="p">(</span><span class="n">outputList</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span> <span class="n">lidata</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_output_tiff</span><span class="p">(</span><span class="n">inputs</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span> <span class="n">lidata</span><span class="p">,</span> <span class="n">extraImages</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a list of input tiffs and data as parsed by _data_from_large_image,</span>
+<span class="sd">    generate an output tiff file with the associated images, correct scale, and</span>
+<span class="sd">    other metadata.</span>
+
+<span class="sd">    :param inputs: a list of pyramidal input files.</span>
+<span class="sd">    :param outputPath: the final destination.</span>
+<span class="sd">    :param tempPath: a temporary file in a temporary directory.</span>
+<span class="sd">    :param lidata: large_image data including metadata and associated images.</span>
+<span class="sd">    :param extraImages: an optional dictionary of keys and paths to add as</span>
+<span class="sd">        extra associated images.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Reading </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">info</span> <span class="o">=</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">read_tiff</span><span class="p">(</span><span class="n">inputs</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">ifdIndices</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">imgDesc</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageDescription</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">description</span> <span class="o">=</span> <span class="n">_make_li_description</span><span class="p">(</span>
+        <span class="nb">len</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">inputs</span><span class="p">),</span> <span class="n">lidata</span><span class="p">,</span>
+        <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">extraImages</span><span class="p">)</span> <span class="k">if</span> <span class="n">extraImages</span> <span class="k">else</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">lidata</span> <span class="k">else</span> <span class="mi">0</span><span class="p">),</span>
+        <span class="n">imgDesc</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">imgDesc</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageDescription</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+        <span class="s1">&#39;datatype&#39;</span><span class="p">:</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">Datatype</span><span class="o">.</span><span class="n">ASCII</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">lidata</span><span class="p">:</span>
+        <span class="n">_set_resolution</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">],</span> <span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">inputs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;subifds&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">SubIFD</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;ifds&#39;</span><span class="p">:</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span>
+            <span class="p">}</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">inputPath</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">inputs</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">idx</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Reading </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">inputPath</span><span class="p">)</span>
+            <span class="n">nextInfo</span> <span class="o">=</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">read_tiff</span><span class="p">(</span><span class="n">inputPath</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">lidata</span><span class="p">:</span>
+                <span class="n">_set_resolution</span><span class="p">(</span><span class="n">nextInfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">],</span> <span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">])</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;frames&#39;</span><span class="p">,</span> <span class="p">[]))</span> <span class="o">&gt;</span> <span class="n">idx</span><span class="p">:</span>
+                    <span class="n">nextInfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageDescription</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+                            <span class="p">{</span><span class="s1">&#39;frame&#39;</span><span class="p">:</span> <span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">][</span><span class="s1">&#39;frames&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]},</span>
+                            <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">),</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">json_serial</span><span class="p">),</span>
+                        <span class="s1">&#39;datatype&#39;</span><span class="p">:</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">Datatype</span><span class="o">.</span><span class="n">ASCII</span><span class="p">,</span>
+                    <span class="p">}</span>
+            <span class="n">ifdIndices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;subifds&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="n">nextInfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">SubIFD</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;ifds&#39;</span><span class="p">:</span> <span class="n">nextInfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">:],</span>
+                <span class="p">}</span>
+                <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nextInfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">nextInfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">])</span>
+    <span class="n">ifdIndices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">]))</span>
+    <span class="n">assocList</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="n">lidata</span><span class="p">:</span>
+        <span class="n">assocList</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">extraImages</span><span class="p">:</span>
+        <span class="n">assocList</span> <span class="o">+=</span> <span class="nb">list</span><span class="p">(</span><span class="n">extraImages</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">assocPath</span> <span class="ow">in</span> <span class="n">assocList</span><span class="p">:</span>
+        <span class="n">assocInfo</span> <span class="o">=</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">read_tiff</span><span class="p">(</span><span class="n">assocPath</span><span class="p">)</span>
+        <span class="n">assocInfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ImageDescription</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">key</span><span class="p">,</span>
+            <span class="s1">&#39;datatype&#39;</span><span class="p">:</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">Datatype</span><span class="o">.</span><span class="n">ASCII</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">info</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">assocInfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">format_hook</span><span class="p">(</span><span class="s1">&#39;modify_tiff_before_write&#39;</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">ifdIndices</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span>
+                   <span class="n">lidata</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Writing </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">)</span>
+    <span class="n">tifftools</span><span class="o">.</span><span class="n">write_tiff</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">,</span> <span class="n">bigEndian</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">bigtiff</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">allowExisting</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_set_resolution</span><span class="p">(</span><span class="n">ifds</span><span class="p">,</span> <span class="n">metadata</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given metadata with a scale in mm_x and/or mm_y, set the resolution for</span>
+<span class="sd">    each ifd, assuming that each one is half the scale of the previous one.</span>
+
+<span class="sd">    :param ifds: a list of ifds from a single pyramid.  The resolution may be</span>
+<span class="sd">        set on each one.</span>
+<span class="sd">    :param metadata: metadata with a scale specified by mm_x and/or mm_y.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mm_x&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mm_y&#39;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">ifd</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ifds</span><span class="p">):</span>
+            <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ResolutionUnit</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">tifftools</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">ResolutionUnit</span><span class="o">.</span><span class="n">Centimeter</span><span class="p">],</span>
+                <span class="s1">&#39;datatype&#39;</span><span class="p">:</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">Datatype</span><span class="o">.</span><span class="n">SHORT</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">mkey</span><span class="p">,</span> <span class="n">tkey</span> <span class="ow">in</span> <span class="p">((</span><span class="s1">&#39;mm_x&#39;</span><span class="p">,</span> <span class="s1">&#39;XResolution&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;mm_y&#39;</span><span class="p">,</span> <span class="s1">&#39;YResolution&#39;</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">metadata</span><span class="p">[</span><span class="n">mkey</span><span class="p">]:</span>
+                    <span class="n">val</span> <span class="o">=</span> <span class="n">fractions</span><span class="o">.</span><span class="n">Fraction</span><span class="p">(</span>
+                        <span class="mf">10.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">metadata</span><span class="p">[</span><span class="n">mkey</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">idx</span><span class="p">))</span><span class="o">.</span><span class="n">limit_denominator</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">val</span><span class="o">.</span><span class="n">numerator</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span> <span class="ow">or</span> <span class="n">val</span><span class="o">.</span><span class="n">denominator</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span><span class="p">:</span>
+                        <span class="n">origval</span> <span class="o">=</span> <span class="n">val</span>
+                        <span class="n">denom</span> <span class="o">=</span> <span class="mi">1000000</span>
+                        <span class="k">while</span> <span class="n">val</span><span class="o">.</span><span class="n">numerator</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span> <span class="ow">or</span> <span class="n">val</span><span class="o">.</span><span class="n">denominator</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span> <span class="ow">and</span> <span class="n">denom</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="n">denom</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">denom</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+                            <span class="n">val</span> <span class="o">=</span> <span class="n">origval</span><span class="o">.</span><span class="n">limit_denominator</span><span class="p">(</span><span class="n">denom</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">val</span><span class="o">.</span><span class="n">numerator</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span> <span class="ow">or</span> <span class="n">val</span><span class="o">.</span><span class="n">denominator</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="o">**</span><span class="mi">32</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="p">[</span><span class="n">tkey</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">val</span><span class="o">.</span><span class="n">numerator</span><span class="p">,</span> <span class="n">val</span><span class="o">.</span><span class="n">denominator</span><span class="p">],</span>
+                        <span class="s1">&#39;datatype&#39;</span><span class="p">:</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">Datatype</span><span class="o">.</span><span class="n">RATIONAL</span><span class="p">,</span>
+                    <span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_import_pyvips</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Import pyvips on demand.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">pyvips</span>
+
+    <span class="k">if</span> <span class="n">pyvips</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">pyvips</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_eightbit</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">tiffinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if a path has an unsigned 8-bit per sample data size.  If any known</span>
+<span class="sd">    channel is otherwise or this is unknown, this returns False.</span>
+
+<span class="sd">    :param path: The path to the file</span>
+<span class="sd">    :param tiffinfo: data extracted from tifftools.read_tiff(path).</span>
+<span class="sd">    :returns: True if known to be 8 bits per sample.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">tiffinfo</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">SampleFormat</span><span class="o">.</span><span class="n">value</span> <span class="ow">in</span> <span class="n">tiffinfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="ow">and</span>
+                <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">val</span> <span class="o">==</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">SampleFormat</span><span class="o">.</span><span class="n">uint</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span>
+                        <span class="n">tiffinfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">SampleFormat</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">BitsPerSample</span><span class="o">.</span><span class="n">value</span> <span class="ow">in</span> <span class="n">tiffinfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span>
+                <span class="n">val</span> <span class="o">==</span> <span class="mi">8</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span>
+                <span class="n">tiffinfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">BitsPerSample</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_lossy</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">tiffinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if a path uses lossy compression.  This imperfectly just checks if</span>
+<span class="sd">    the file is a TIFF and stored in one of the JPEG formats.</span>
+
+<span class="sd">    :param path: The path to the file</span>
+<span class="sd">    :param tiffinfo: data extracted from tifftools.read_tiff(path).</span>
+<span class="sd">    :returns: True if known to be lossy.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">tiffinfo</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">tifftools</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">Compression</span><span class="p">[</span>
+            <span class="n">tiffinfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span>
+                <span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">Compression</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">lossy</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_multiframe</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if a path is a multiframe file.</span>
+
+<span class="sd">    :param path: The path to the file</span>
+<span class="sd">    :returns: True if multiframe.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_import_pyvips</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">_newFromFileLock</span><span class="p">:</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_file</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">raise</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Is the file reachable and readable? (</span><span class="si">%r</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+    <span class="n">pages</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="s1">&#39;n-pages&#39;</span> <span class="ow">in</span> <span class="n">image</span><span class="o">.</span><span class="n">get_fields</span><span class="p">():</span>
+        <span class="n">pages</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get_value</span><span class="p">(</span><span class="s1">&#39;n-pages&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pages</span> <span class="o">&gt;</span> <span class="mi">1</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_list_possible_sizes</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a width and height, return a list of possible sizes that could be</span>
+<span class="sd">    reasonable powers-of-two smaller versions of that size.  This includes</span>
+<span class="sd">    the values rounded up and down.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)]</span>
+    <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">):</span>
+        <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">results</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">w</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">h</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">w2f</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">h2f</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">h</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">w2c</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">h2c</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">h</span> <span class="o">/</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">w2</span><span class="p">,</span> <span class="n">h2</span> <span class="ow">in</span> <span class="p">[(</span><span class="n">w2f</span><span class="p">,</span> <span class="n">h2f</span><span class="p">),</span> <span class="p">(</span><span class="n">w2f</span><span class="p">,</span> <span class="n">h2c</span><span class="p">),</span> <span class="p">(</span><span class="n">w2c</span><span class="p">,</span> <span class="n">h2f</span><span class="p">),</span> <span class="p">(</span><span class="n">w2c</span><span class="p">,</span> <span class="n">h2c</span><span class="p">)]:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">w2</span><span class="p">,</span> <span class="n">h2</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+                    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">w2</span><span class="p">,</span> <span class="n">h2</span><span class="p">))</span>
+        <span class="n">pos</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">results</span>
+
+
+<div class="viewcode-block" id="json_serial">
+<a class="viewcode-back" href="../_build/large_image_converter/large_image_converter.html#large_image_converter.json_serial">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">json_serial</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Fallback serializier for json.  This serializes datetime objects to iso</span>
+<span class="sd">    format.</span>
+
+<span class="sd">    :param obj: an object to serialize.</span>
+<span class="sd">    :returns: a serialized string.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">,</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="n">obj</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_make_li_description</span><span class="p">(</span>
+        <span class="n">framePyramidSize</span><span class="p">,</span> <span class="n">numFrames</span><span class="p">,</span> <span class="n">lidata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">numAssociatedImages</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">imageDescription</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given the number of frames, the number of levels per frame, the associated</span>
+<span class="sd">    image list, and any metadata from large_image, construct a json string with</span>
+<span class="sd">    information about the whole image.</span>
+
+<span class="sd">    :param framePyramidSize: the number of layers per frame.</span>
+<span class="sd">    :param numFrames: the number of frames.</span>
+<span class="sd">    :param lidata: the data returned from _data_from_large_image.</span>
+<span class="sd">    :param numAssociatedImages: the number of associated images.</span>
+<span class="sd">    :param imageDescription: if present, the original description.</span>
+<span class="sd">    :returns: a json string</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;large_image_converter&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;conversion_epoch&#39;</span><span class="p">:</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">(),</span>
+            <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="n">__version__</span><span class="p">,</span>
+            <span class="s1">&#39;levels&#39;</span><span class="p">:</span> <span class="n">framePyramidSize</span><span class="p">,</span>
+            <span class="s1">&#39;frames&#39;</span><span class="p">:</span> <span class="n">numFrames</span><span class="p">,</span>
+            <span class="s1">&#39;associated&#39;</span><span class="p">:</span> <span class="n">numAssociatedImages</span><span class="p">,</span>
+            <span class="s1">&#39;arguments&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s1">&#39;_&#39;</span> <span class="o">+</span> <span class="n">k</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">and</span>
+                <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;overwrite&#39;</span><span class="p">}},</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="n">lidata</span><span class="p">:</span>
+        <span class="n">results</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;frames&#39;</span><span class="p">,</span> <span class="p">[]))</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">results</span><span class="p">[</span><span class="s1">&#39;frame&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">][</span><span class="s1">&#39;frames&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;channels&#39;</span><span class="p">,</span> <span class="p">[]))</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">results</span><span class="p">[</span><span class="s1">&#39;channels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">][</span><span class="s1">&#39;channels&#39;</span><span class="p">]</span>
+        <span class="n">results</span><span class="p">[</span><span class="s1">&#39;internal&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;internal_metadata&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">imageDescription</span><span class="p">:</span>
+        <span class="n">results</span><span class="p">[</span><span class="s1">&#39;image_description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">imageDescription</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">results</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">),</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="n">json_serial</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="format_hook">
+<a class="viewcode-back" href="../_build/large_image_converter/large_image_converter.html#large_image_converter.format_hook">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">format_hook</span><span class="p">(</span><span class="n">funcname</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Call a function specific to a file format.</span>
+
+<span class="sd">    :param funcname: name of the function.</span>
+<span class="sd">    :param args: parameters to pass to the function.</span>
+<span class="sd">    :param kwargs: parameters to pass to the function.</span>
+<span class="sd">    :returns: dependent on the function.  False to indicate no further</span>
+<span class="sd">        processing should be done.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">format</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">FormatModules</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="p">{}),</span> <span class="n">funcname</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="convert">
+<a class="viewcode-back" href="../_build/large_image_converter/large_image_converter.html#large_image_converter.convert">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert</span><span class="p">(</span><span class="n">inputPath</span><span class="p">,</span> <span class="n">outputPath</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa: C901</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Take a source input file and output a pyramidal tiff file.</span>
+
+<span class="sd">    :param inputPath: the path to the input file or base file of a set.</span>
+<span class="sd">    :param outputPath: the path of the output file.</span>
+
+<span class="sd">    Optional parameters that can be specified in kwargs:</span>
+
+<span class="sd">    :param tileSize: the horizontal and vertical tile size.</span>
+<span class="sd">    :param format: one of &#39;tiff&#39; or &#39;aperio&#39;.  Default is &#39;tiff&#39;.</span>
+<span class="sd">    :param onlyFrame: None for all frames or the 0-based frame number to just</span>
+<span class="sd">        convert a single frame of the source.</span>
+<span class="sd">    :param compression: one of &#39;jpeg&#39;, &#39;deflate&#39; (zip), &#39;lzw&#39;, &#39;packbits&#39;,</span>
+<span class="sd">        &#39;zstd&#39;, or &#39;none&#39;.</span>
+<span class="sd">    :param quality: a jpeg or webp quality passed to vips.  0 is small, 100 is</span>
+<span class="sd">        high quality.  90 or above is recommended.  For webp, 0 is lossless.</span>
+<span class="sd">    :param level: compression level for zstd, 1-22 (default is 10) and deflate,</span>
+<span class="sd">        1-9.</span>
+<span class="sd">    :param predictor: one of &#39;none&#39;, &#39;horizontal&#39;, &#39;float&#39;, or &#39;yes&#39; used for</span>
+<span class="sd">        lzw and deflate.  Default is horizontal for non-geospatial data and yes</span>
+<span class="sd">        for geospatial.</span>
+<span class="sd">    :param psnr: psnr value for jp2k, higher results in large files.  0 is</span>
+<span class="sd">        lossless.</span>
+<span class="sd">    :param cr: jp2k compression ratio.  1 is lossless, 100 will try to make</span>
+<span class="sd">        a file 1% the size of the original, etc.</span>
+<span class="sd">    :param subifds: if True (the default), when creating a multi-frame file,</span>
+<span class="sd">        store lower resolution tiles in sub-ifds.  If False, store all data in</span>
+<span class="sd">        primary ifds.</span>
+<span class="sd">    :param overwrite: if not True, throw an exception if the output path</span>
+<span class="sd">        already exists.</span>
+
+<span class="sd">    Additional optional parameters:</span>
+
+<span class="sd">    :param geospatial: if not None, a boolean indicating if this file is</span>
+<span class="sd">        geospatial.  If not specified or None, this will be checked.</span>
+<span class="sd">    :param _concurrency: the number of cpus to use during conversion.  None to</span>
+<span class="sd">        use the logical cpu count.</span>
+
+<span class="sd">    :returns: outputPath if successful</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">_pool_log_starttime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_concurrency&#39;</span><span class="p">):</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;VIPS_CONCURRENCY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">_concurrency_to_value</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">))</span>
+    <span class="n">geospatial</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;geospatial&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">geospatial</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">geospatial</span> <span class="o">=</span> <span class="n">is_geospatial</span><span class="p">(</span><span class="n">inputPath</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Is file geospatial: </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">geospatial</span><span class="p">)</span>
+    <span class="n">suffix</span> <span class="o">=</span> <span class="n">format_hook</span><span class="p">(</span><span class="s1">&#39;adjust_params&#39;</span><span class="p">,</span> <span class="n">geospatial</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">suffix</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">suffix</span> <span class="o">=</span> <span class="n">suffix</span> <span class="ow">or</span> <span class="p">(</span><span class="s1">&#39;.tiff&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">geospatial</span> <span class="k">else</span> <span class="s1">&#39;.geo.tiff&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">outputPath</span><span class="p">:</span>
+        <span class="n">outputPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">inputPath</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">suffix</span>
+        <span class="k">if</span> <span class="n">outputPath</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.geo&#39;</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">):</span>
+            <span class="n">outputPath</span> <span class="o">=</span> <span class="n">outputPath</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">outputPath</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">suffix</span><span class="p">)</span> <span class="o">-</span> <span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="n">suffix</span>
+        <span class="k">if</span> <span class="n">outputPath</span> <span class="o">==</span> <span class="n">inputPath</span><span class="p">:</span>
+            <span class="n">outputPath</span> <span class="o">=</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">inputPath</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span>
+                          <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">-%H%M%S&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">outputPath</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;overwrite&#39;</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Output file already exists.&#39;</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">tiffinfo</span> <span class="o">=</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">read_tiff</span><span class="p">(</span><span class="n">inputPath</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">tiffinfo</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">eightbit</span> <span class="o">=</span> <span class="n">_is_eightbit</span><span class="p">(</span><span class="n">inputPath</span><span class="p">,</span> <span class="n">tiffinfo</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;compression&#39;</span><span class="p">):</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">lossy</span> <span class="o">=</span> <span class="n">_is_lossy</span><span class="p">(</span><span class="n">inputPath</span><span class="p">,</span> <span class="n">tiffinfo</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Is file lossy: </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">lossy</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Is file 8 bits per samples: </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">eightbit</span><span class="p">)</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;_compression&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;compression&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;jpeg&#39;</span> <span class="k">if</span> <span class="n">lossy</span> <span class="ow">and</span> <span class="n">eightbit</span> <span class="k">else</span> <span class="s1">&#39;lzw&#39;</span>
+    <span class="k">if</span> <span class="n">geospatial</span><span class="p">:</span>
+        <span class="n">_generate_geotiff</span><span class="p">(</span><span class="n">inputPath</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">,</span> <span class="n">eightbit</span><span class="o">=</span><span class="n">eightbit</span> <span class="ow">or</span> <span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tempDir</span><span class="p">:</span>
+            <span class="n">tempPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">tempDir</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">outputPath</span><span class="p">))</span>
+            <span class="n">lidata</span> <span class="o">=</span> <span class="n">_data_from_large_image</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">inputPath</span><span class="p">),</span> <span class="n">tempPath</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;large_image information for </span><span class="si">%s</span><span class="s1">: </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span>
+                       <span class="n">inputPath</span><span class="p">,</span> <span class="n">lidata</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">lidata</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">is_vips</span><span class="p">(</span>
+                    <span class="n">inputPath</span><span class="p">,</span> <span class="p">(</span><span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">][</span><span class="s1">&#39;sizeX&#39;</span><span class="p">],</span> <span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">][</span><span class="s1">&#39;sizeY&#39;</span><span class="p">]))</span> <span class="ow">or</span> <span class="p">(</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;frames&#39;</span><span class="p">,</span> <span class="p">[]))</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span>
+                    <span class="ow">not</span> <span class="n">_is_multiframe</span><span class="p">(</span><span class="n">inputPath</span><span class="p">))</span> <span class="ow">or</span>
+                    <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;tilesource&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span> <span class="ow">and</span>
+                     <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">lidata</span><span class="p">[</span><span class="s1">&#39;tilesource&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">)):</span>
+                <span class="n">_convert_large_image</span><span class="p">(</span><span class="n">inputPath</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span> <span class="n">lidata</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">_is_multiframe</span><span class="p">(</span><span class="n">inputPath</span><span class="p">):</span>
+                <span class="n">_generate_multiframe_tiff</span><span class="p">(</span><span class="n">inputPath</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span> <span class="n">lidata</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">_generate_tiff</span><span class="p">(</span><span class="n">inputPath</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span> <span class="n">lidata</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">lidata</span><span class="p">:</span>
+                        <span class="n">_convert_large_image</span><span class="p">(</span><span class="n">inputPath</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">,</span> <span class="n">tempPath</span><span class="p">,</span> <span class="n">lidata</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">outputPath</span></div>
+
+
+
+<div class="viewcode-block" id="is_geospatial">
+<a class="viewcode-back" href="../_build/large_image_converter/large_image_converter.html#large_image_converter.is_geospatial">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_geospatial</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if a path is likely to be a geospatial file.</span>
+
+<span class="sd">    :param path: The path to the file</span>
+<span class="sd">    :returns: True if geospatial.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">osgeo</span><span class="w"> </span><span class="kn">import</span> <span class="n">gdal</span><span class="p">,</span> <span class="n">gdalconst</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Cannot import GDAL.&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">gdal</span><span class="o">.</span><span class="n">UseExceptions</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ds</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">gdalconst</span><span class="o">.</span><span class="n">GA_ReadOnly</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">ds</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">GetGCPs</span><span class="p">()</span> <span class="ow">and</span> <span class="n">ds</span><span class="o">.</span><span class="n">GetGCPProjection</span><span class="p">())</span> <span class="ow">or</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">GetProjection</span><span class="p">()</span> <span class="ow">or</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">GetDriver</span><span class="p">()</span><span class="o">.</span><span class="n">ShortName</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;NITF&#39;</span><span class="p">,</span> <span class="s1">&#39;netCDF&#39;</span><span class="p">}):</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="is_vips">
+<a class="viewcode-back" href="../_build/large_image_converter/large_image_converter.html#large_image_converter.is_vips">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_vips</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">matchSize</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if a path is readable by vips.</span>
+
+<span class="sd">    :param path: The path to the file</span>
+<span class="sd">    :param matchSize: if not None, the image read by vips must be the specified</span>
+<span class="sd">        (width, height) tuple in pixels.</span>
+<span class="sd">    :returns: True if readable by vips.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_import_pyvips</span><span class="p">()</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">_newFromFileLock</span><span class="p">:</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">pyvips</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new_from_file</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="c1"># image(0, 0) will throw if vips can&#39;t decode the image</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">image</span><span class="o">.</span><span class="n">width</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">image</span><span class="o">.</span><span class="n">height</span> <span class="ow">or</span> <span class="n">image</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">matchSize</span> <span class="ow">and</span> <span class="p">(</span><span class="n">matchSize</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">image</span><span class="o">.</span><span class="n">width</span> <span class="ow">or</span> <span class="n">matchSize</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">image</span><span class="o">.</span><span class="n">height</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">return</span> <span class="kc">True</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,204 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_dicom.assetstore.rest &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/K.png"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../large_image_source_dicom.html">large_image_source_dicom</a></li>
+          <li class="breadcrumb-item"><a href="../assetstore.html">large_image_source_dicom.assetstore</a></li>
+      <li class="breadcrumb-item active">large_image_source_dicom.assetstore.rest</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image_source_dicom.assetstore.rest</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">girder.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">access</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.api.describe</span><span class="w"> </span><span class="kn">import</span> <span class="n">Description</span><span class="p">,</span> <span class="n">autoDescribeRoute</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.api.rest</span><span class="w"> </span><span class="kn">import</span> <span class="n">Resource</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">TokenScope</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">RestException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.assetstore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Assetstore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.utility.model_importer</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelImporter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.utility.progress</span><span class="w"> </span><span class="kn">import</span> <span class="n">ProgressContext</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.dicomweb_assetstore_adapter</span><span class="w"> </span><span class="kn">import</span> <span class="n">DICOMwebAssetstoreAdapter</span>
+
+
+<div class="viewcode-block" id="DICOMwebAssetstoreResource">
+<a class="viewcode-back" href="../../../_build/large_image_source_dicom/large_image_source_dicom.assetstore.html#large_image_source_dicom.assetstore.rest.DICOMwebAssetstoreResource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DICOMwebAssetstoreResource</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resourceName</span> <span class="o">=</span> <span class="s1">&#39;dicomweb_assetstore&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;:id&#39;</span><span class="p">,</span> <span class="s1">&#39;import&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">importData</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_importData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">assetstore</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">progress</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        :param assetstore: the destination assetstore.</span>
+<span class="sd">        :param params: a dictionary of parameters including destinationId,</span>
+<span class="sd">            destinationType, progress, and filters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getCurrentUser</span><span class="p">()</span>
+
+        <span class="n">destinationType</span> <span class="o">=</span> <span class="n">params</span><span class="p">[</span><span class="s1">&#39;destinationType&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">destinationType</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;folder&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;collection&#39;</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Invalid destinationType: </span><span class="si">{</span><span class="n">destinationType</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="k">raise</span> <span class="n">RestException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">ModelImporter</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">destinationType</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;destinationId&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                                                           <span class="n">exc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">DICOMwebAssetstoreAdapter</span><span class="p">(</span><span class="n">assetstore</span><span class="p">)</span><span class="o">.</span><span class="n">importData</span><span class="p">(</span>
+            <span class="n">parent</span><span class="p">,</span>
+            <span class="n">destinationType</span><span class="p">,</span>
+            <span class="n">params</span><span class="p">,</span>
+            <span class="n">progress</span><span class="p">,</span>
+            <span class="n">user</span><span class="p">,</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="DICOMwebAssetstoreResource.importData">
+<a class="viewcode-back" href="../../../_build/large_image_source_dicom/large_image_source_dicom.assetstore.html#large_image_source_dicom.assetstore.rest.DICOMwebAssetstoreResource.importData">[docs]</a>
+    <span class="nd">@access</span><span class="o">.</span><span class="n">admin</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">DATA_WRITE</span><span class="p">)</span>
+    <span class="nd">@autoDescribeRoute</span><span class="p">(</span>
+        <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;Import references to DICOM objects from a DICOMweb server&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">modelParam</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;The ID of the assetstore representing the DICOMweb server.&#39;</span><span class="p">,</span>
+                    <span class="n">model</span><span class="o">=</span><span class="n">Assetstore</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;destinationId&#39;</span><span class="p">,</span> <span class="s1">&#39;The ID of the parent folder, collection, or user &#39;</span>
+               <span class="s1">&#39;in the Girder data hierarchy under which to import the files.&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;destinationType&#39;</span><span class="p">,</span> <span class="s1">&#39;The type of the parent object to import into.&#39;</span><span class="p">,</span>
+               <span class="n">enum</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;folder&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;collection&#39;</span><span class="p">),</span>
+               <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;folder&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;limit&#39;</span><span class="p">,</span> <span class="s1">&#39;The maximum number of studies to import.&#39;</span><span class="p">,</span>
+               <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;filters&#39;</span><span class="p">,</span> <span class="s1">&#39;Any search parameters to filter the studies query.&#39;</span><span class="p">,</span>
+               <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;progress&#39;</span><span class="p">,</span> <span class="s1">&#39;Whether to record progress on this operation.&#39;</span><span class="p">,</span>
+               <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dataType</span><span class="o">=</span><span class="s1">&#39;boolean&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">errorResponse</span><span class="p">()</span>
+        <span class="o">.</span><span class="n">errorResponse</span><span class="p">(</span><span class="s1">&#39;You are not an administrator.&#39;</span><span class="p">,</span> <span class="mi">403</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">importData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">assetstore</span><span class="p">,</span> <span class="n">destinationId</span><span class="p">,</span> <span class="n">destinationType</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span> <span class="n">progress</span><span class="p">):</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getCurrentUser</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="n">ProgressContext</span><span class="p">(</span>
+            <span class="n">progress</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Importing DICOM references&#39;</span><span class="p">,</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">ctx</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_importData</span><span class="p">(</span><span class="n">assetstore</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;destinationId&#39;</span><span class="p">:</span> <span class="n">destinationId</span><span class="p">,</span>
+                <span class="s1">&#39;destinationType&#39;</span><span class="p">:</span> <span class="n">destinationType</span><span class="p">,</span>
+                <span class="s1">&#39;limit&#39;</span><span class="p">:</span> <span class="n">limit</span><span class="p">,</span>
+                <span class="s1">&#39;filters&#39;</span><span class="p">:</span> <span class="n">filters</span><span class="p">,</span>
+            <span class="p">},</span> <span class="n">progress</span><span class="o">=</span><span class="n">ctx</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

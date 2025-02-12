@@ -1,0 +1,676 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image.tilesource.tileiterator &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/K.png"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../tilesource.html">large_image.tilesource</a></li>
+      <li class="breadcrumb-item active">large_image.tilesource.tileiterator</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image.tilesource.tileiterator</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">TILE_FORMAT_IMAGE</span><span class="p">,</span> <span class="n">TILE_FORMAT_NUMPY</span><span class="p">,</span> <span class="n">TILE_FORMAT_PIL</span><span class="p">,</span> <span class="n">TileOutputMimeTypes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">utilities</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.tiledict</span><span class="w"> </span><span class="kn">import</span> <span class="n">LazyTileDict</span>
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">tilesource</span>
+
+
+<div class="viewcode-block" id="TileIterator">
+<a class="viewcode-back" href="../../../_build/large_image/large_image.tilesource.html#large_image.tilesource.tileiterator.TileIterator">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TileIterator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A tile iterator on a TileSource.  Details about the iterator can be read</span>
+<span class="sd">    via the `info` attribute on the iterator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">source</span><span class="p">:</span> <span class="s1">&#39;tilesource.TileSource&#39;</span><span class="p">,</span>
+            <span class="nb">format</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">(</span><span class="n">TILE_FORMAT_NUMPY</span><span class="p">,</span> <span class="p">),</span>
+            <span class="n">resample</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="nb">format</span> <span class="o">=</span> <span class="p">(</span><span class="nb">format</span><span class="p">,</span> <span class="p">)</span>
+        <span class="k">if</span> <span class="n">TILE_FORMAT_IMAGE</span> <span class="ow">in</span> <span class="nb">format</span><span class="p">:</span>
+            <span class="n">encoding</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;encoding&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">encoding</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">TileOutputMimeTypes</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Invalid encoding &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">encoding</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">format</span> <span class="o">=</span> <span class="nb">format</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resample</span> <span class="o">=</span> <span class="n">resample</span>
+        <span class="n">iterFormat</span> <span class="o">=</span> <span class="nb">format</span> <span class="k">if</span> <span class="n">resample</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="k">else</span> <span class="p">(</span><span class="n">TILE_FORMAT_PIL</span><span class="p">,</span> <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileIteratorInfo</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="n">iterFormat</span><span class="p">,</span> <span class="n">resample</span><span class="o">=</span><span class="n">resample</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_iter</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">resample</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;requestedScale&#39;</span><span class="p">],</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">resample</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_iter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileIterator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">LazyTileDict</span><span class="p">]:</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LazyTileDict</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_iter</span><span class="p">)</span>
+        <span class="n">tile</span><span class="o">.</span><span class="n">setFormat</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">,</span> <span class="nb">bool</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resample</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tile</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="nb">repr</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;TileIterator&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">source</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">:</span>
+            <span class="nb">repr</span> <span class="o">+=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s1">&#39;: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">][</span><span class="s2">&quot;width&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1"> x </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;output&quot;</span><span class="p">][</span><span class="s2">&quot;height&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="sa">f</span><span class="s1">&#39;; tiles: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;tile_count&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="sa">f</span><span class="s1">&#39;; region: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;region&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;frame&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">repr</span> <span class="o">+=</span> <span class="sa">f</span><span class="s1">&#39;; frame: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;frame&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1">&gt;&#39;</span>
+        <span class="nb">repr</span> <span class="o">+=</span> <span class="s1">&#39;&gt;&#39;</span>
+        <span class="k">return</span> <span class="nb">repr</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_repr_json_</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span>
+        <span class="k">return</span> <span class="p">{}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">iterlen</span> <span class="o">=</span> <span class="p">((</span><span class="n">cast</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;xmax&#39;</span><span class="p">])</span> <span class="o">-</span> <span class="n">cast</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">]))</span> <span class="o">*</span>
+                   <span class="p">(</span><span class="n">cast</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;ymax&#39;</span><span class="p">])</span> <span class="o">-</span> <span class="n">cast</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;ymin&#39;</span><span class="p">])))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tile_position&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">cast</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;tile_position&#39;</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">iterlen</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="n">iterlen</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_tileIteratorInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>  <span class="c1"># noqa</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get information necessary to construct a tile iterator.</span>
+<span class="sd">          If one of width or height is specified, the other is determined by</span>
+<span class="sd">        preserving aspect ratio.  If both are specified, the result may not be</span>
+<span class="sd">        that size, as aspect ratio is always preserved.  If neither are</span>
+<span class="sd">        specified, magnification, mm_x, and/or mm_y are used to determine the</span>
+<span class="sd">        size.  If none of those are specified, the original maximum resolution</span>
+<span class="sd">        is returned.</span>
+
+<span class="sd">        :param format: a tuple of allowed formats.  Formats are members of</span>
+<span class="sd">            TILE_FORMAT_*.  This will avoid converting images if they are</span>
+<span class="sd">            in the desired output encoding (regardless of subparameters).</span>
+<span class="sd">            Otherwise, TILE_FORMAT_NUMPY is returned.</span>
+<span class="sd">        :param region: a dictionary of optional values which specify the part</span>
+<span class="sd">            of the image to process.</span>
+
+<span class="sd">            :left: the left edge (inclusive) of the region to process.</span>
+<span class="sd">            :top: the top edge (inclusive) of the region to process.</span>
+<span class="sd">            :right: the right edge (exclusive) of the region to process.</span>
+<span class="sd">            :bottom: the bottom edge (exclusive) of the region to process.</span>
+<span class="sd">            :width: the width of the region to process.</span>
+<span class="sd">            :height: the height of the region to process.</span>
+<span class="sd">            :units: either &#39;base_pixels&#39; (default), &#39;pixels&#39;, &#39;mm&#39;, or</span>
+<span class="sd">                &#39;fraction&#39;.  base_pixels are in maximum resolution pixels.</span>
+<span class="sd">                pixels is in the specified magnification pixels.  mm is in the</span>
+<span class="sd">                specified magnification scale.  fraction is a scale of 0 to 1.</span>
+<span class="sd">                pixels and mm are only available if the magnification and mm</span>
+<span class="sd">                per pixel are defined for the image.</span>
+<span class="sd">            :unitsWH: if not specified, this is the same as `units`.</span>
+<span class="sd">                Otherwise, these units will be used for the width and height if</span>
+<span class="sd">                specified.</span>
+
+<span class="sd">        :param output: a dictionary of optional values which specify the size</span>
+<span class="sd">                of the output.</span>
+
+<span class="sd">            :maxWidth: maximum width in pixels.</span>
+<span class="sd">            :maxHeight: maximum height in pixels.</span>
+
+<span class="sd">        :param scale: a dictionary of optional values which specify the scale</span>
+<span class="sd">            of the region and / or output.  This applies to region if</span>
+<span class="sd">            pixels or mm are used for units.  It applies to output if</span>
+<span class="sd">            neither output maxWidth nor maxHeight is specified.</span>
+
+<span class="sd">            :magnification: the magnification ratio.</span>
+<span class="sd">            :mm_x: the horizontal size of a pixel in millimeters.</span>
+<span class="sd">            :mm_y: the vertical size of a pixel in millimeters.</span>
+<span class="sd">            :exact: if True, only a level that matches exactly will be</span>
+<span class="sd">                returned.  This is only applied if magnification, mm_x, or mm_y</span>
+<span class="sd">                is used.</span>
+
+<span class="sd">        :param tile_position: if present, either a number to only yield the</span>
+<span class="sd">            (tile_position)th tile [0 to (xmax - min) * (ymax - ymin)) that the</span>
+<span class="sd">            iterator would yield, or a dictionary of {region_x, region_y} to</span>
+<span class="sd">            yield that tile, where 0, 0 is the first tile yielded, and</span>
+<span class="sd">            xmax - xmin - 1, ymax - ymin - 1 is the last tile yielded, or a</span>
+<span class="sd">            dictionary of {level_x, level_y} to yield that specific tile if it</span>
+<span class="sd">            is in the region.</span>
+<span class="sd">        :param tile_size: if present, retile the output to the specified tile</span>
+<span class="sd">            size.  If only width or only height is specified, the resultant</span>
+<span class="sd">            tiles will be square.  This is a dictionary containing at least</span>
+<span class="sd">            one of:</span>
+
+<span class="sd">            :width: the desired tile width.</span>
+<span class="sd">            :height: the desired tile height.</span>
+
+<span class="sd">        :param tile_overlap: if present, retile the output adding a symmetric</span>
+<span class="sd">            overlap to the tiles.  If either x or y is not specified, it</span>
+<span class="sd">            defaults to zero.  The overlap does not change the tile size,</span>
+<span class="sd">            only the stride of the tiles.  This is a dictionary containing:</span>
+
+<span class="sd">            :x: the horizontal overlap in pixels.</span>
+<span class="sd">            :y: the vertical overlap in pixels.</span>
+<span class="sd">            :edges: if True, then the edge tiles will exclude the overlap</span>
+<span class="sd">                distance.  If unset or False, the edge tiles are full size.</span>
+
+<span class="sd">        :param tile_offset: if present, adjust tile positions so that the</span>
+<span class="sd">            corner of one tile is at the specified location.</span>
+
+<span class="sd">            :left: the left offset in pixels.</span>
+<span class="sd">            :top: the top offset in pixels.</span>
+<span class="sd">            :auto: a boolean, if True, automatically set the offset to align</span>
+<span class="sd">                with the region&#39;s left and top.</span>
+
+<span class="sd">        :param kwargs: optional arguments.  Some options are encoding,</span>
+<span class="sd">            jpegQuality, jpegSubsampling, tiffCompression, frame.</span>
+<span class="sd">        :returns: a dictionary of information needed for the tile iterator.</span>
+<span class="sd">            This is None if no tiles will be returned.  Otherwise, this</span>
+<span class="sd">            contains:</span>
+
+<span class="sd">            :region: a dictionary of the source region information:</span>
+
+<span class="sd">                :width, height: the total output of the iterator in pixels.</span>
+<span class="sd">                    This may be larger than the requested resolution (given by</span>
+<span class="sd">                    output width and output height) if there isn&#39;t an exact</span>
+<span class="sd">                    match between the requested resolution and available native</span>
+<span class="sd">                    tiles.</span>
+<span class="sd">                :left, top, right, bottom: the coordinates within the image of</span>
+<span class="sd">                    the region returned in the level pixel space.</span>
+
+<span class="sd">            :xmin, ymin, xmax, ymax: the tiles that will be included during the</span>
+<span class="sd">                iteration: [xmin, xmax) and [ymin, ymax).</span>
+<span class="sd">            :mode: either &#39;RGB&#39; or &#39;RGBA&#39;.  This determines the color space</span>
+<span class="sd">                used for tiles.</span>
+<span class="sd">            :level: the tile level used for iteration.</span>
+<span class="sd">            :metadata: tile source metadata (from getMetadata)</span>
+<span class="sd">            :output: a dictionary of the output resolution information.</span>
+
+<span class="sd">                :width, height: the requested output resolution in pixels.  If</span>
+<span class="sd">                    this is different that region width and region height, then</span>
+<span class="sd">                    the original request was asking for a different scale than</span>
+<span class="sd">                    is being delivered.</span>
+
+<span class="sd">            :frame: the frame value for the base image.</span>
+<span class="sd">            :format: a tuple of allowed output formats.</span>
+<span class="sd">            :encoding: if the output format is TILE_FORMAT_IMAGE, the desired</span>
+<span class="sd">                encoding.</span>
+<span class="sd">            :requestedScale: the scale needed to convert from the region width</span>
+<span class="sd">                and height to the output width and height.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span>
+        <span class="n">maxWidth</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;output&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;maxWidth&#39;</span><span class="p">)</span>
+        <span class="n">maxHeight</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;output&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;maxHeight&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">maxWidth</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span>
+                <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">maxWidth</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">maxWidth</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">))</span> <span class="ow">or</span>
+                <span class="p">(</span><span class="n">maxHeight</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span>
+                 <span class="p">(</span><span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">maxHeight</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="n">maxHeight</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">))):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Invalid output width or height.  Minimum value is 0.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">magLevel</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">mag</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">maxWidth</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">maxHeight</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># If neither width nor height as specified, see if magnification,</span>
+            <span class="c1"># mm_x, or mm_y are requested.</span>
+            <span class="n">magArgs</span> <span class="o">=</span> <span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">magArgs</span><span class="p">[</span><span class="s1">&#39;rounding&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">magLevel</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getLevelForMagnification</span><span class="p">(</span><span class="o">**</span><span class="n">magArgs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">magLevel</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;exact&#39;</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="n">mag</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getMagnificationForLevel</span><span class="p">(</span><span class="n">magLevel</span><span class="p">)</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">metadata</span>
+        <span class="n">left</span><span class="p">,</span> <span class="n">top</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">_getRegionBounds</span><span class="p">(</span>
+            <span class="n">metadata</span><span class="p">,</span> <span class="n">desiredMagnification</span><span class="o">=</span><span class="n">mag</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;region&#39;</span><span class="p">,</span> <span class="p">{}))</span>
+        <span class="n">regionWidth</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span>
+        <span class="n">regionHeight</span> <span class="o">=</span> <span class="n">bottom</span> <span class="o">-</span> <span class="n">top</span>
+        <span class="n">magRequestedScale</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">maxWidth</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">maxHeight</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">mag</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">mag</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">maxWidth</span><span class="p">,</span> <span class="n">maxHeight</span> <span class="o">=</span> <span class="n">regionWidth</span><span class="p">,</span> <span class="n">regionHeight</span>
+                <span class="n">magRequestedScale</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">maxWidth</span> <span class="o">=</span> <span class="n">regionWidth</span> <span class="o">/</span> <span class="n">cast</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">mag</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">])</span>
+                <span class="n">maxHeight</span> <span class="o">=</span> <span class="n">regionHeight</span> <span class="o">/</span> <span class="n">cast</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">mag</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">])</span>
+                <span class="n">magRequestedScale</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="nb">float</span><span class="p">,</span> <span class="n">mag</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">])</span>
+        <span class="n">outWidth</span><span class="p">,</span> <span class="n">outHeight</span><span class="p">,</span> <span class="n">calcScale</span> <span class="o">=</span> <span class="n">utilities</span><span class="o">.</span><span class="n">_calculateWidthHeight</span><span class="p">(</span>
+            <span class="n">maxWidth</span><span class="p">,</span> <span class="n">maxHeight</span><span class="p">,</span> <span class="n">regionWidth</span><span class="p">,</span> <span class="n">regionHeight</span><span class="p">)</span>
+        <span class="n">requestedScale</span> <span class="o">=</span> <span class="n">calcScale</span> <span class="k">if</span> <span class="n">magRequestedScale</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">magRequestedScale</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">regionWidth</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">regionHeight</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">outWidth</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span>
+                <span class="n">outHeight</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">preferredLevel</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;levels&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="c1"># If we are scaling the result, pick the tile level that is at least</span>
+        <span class="c1"># the resolution we need and is preferred by the tile source.</span>
+        <span class="k">if</span> <span class="n">outWidth</span> <span class="o">!=</span> <span class="n">regionWidth</span> <span class="ow">or</span> <span class="n">outHeight</span> <span class="o">!=</span> <span class="n">regionHeight</span><span class="p">:</span>
+            <span class="n">newLevel</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getPreferredLevel</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">preferredLevel</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span>
+                <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">outWidth</span><span class="p">)</span> <span class="o">/</span> <span class="n">regionWidth</span><span class="p">,</span>
+                                             <span class="nb">float</span><span class="p">(</span><span class="n">outHeight</span><span class="p">)</span> <span class="o">/</span> <span class="n">regionHeight</span><span class="p">))</span> <span class="o">/</span>
+                                <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="mi">4</span><span class="p">)))))</span>
+            <span class="k">if</span> <span class="n">newLevel</span> <span class="o">&lt;</span> <span class="n">preferredLevel</span><span class="p">:</span>
+                <span class="c1"># scale the bounds to the level we will use</span>
+                <span class="n">factor</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">preferredLevel</span> <span class="o">-</span> <span class="n">newLevel</span><span class="p">)</span>
+                <span class="n">left</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">left</span> <span class="o">/</span> <span class="n">factor</span><span class="p">)</span>
+                <span class="n">right</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">right</span> <span class="o">/</span> <span class="n">factor</span><span class="p">),</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">regionWidth</span> <span class="o">=</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span>
+                <span class="n">top</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">top</span> <span class="o">/</span> <span class="n">factor</span><span class="p">)</span>
+                <span class="n">bottom</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">bottom</span> <span class="o">/</span> <span class="n">factor</span><span class="p">),</span> <span class="n">top</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">regionHeight</span> <span class="o">=</span> <span class="n">bottom</span> <span class="o">-</span> <span class="n">top</span>
+                <span class="n">preferredLevel</span> <span class="o">=</span> <span class="n">newLevel</span>
+                <span class="n">requestedScale</span> <span class="o">/=</span> <span class="n">factor</span>
+        <span class="c1"># If an exact magnification was requested and this tile source doesn&#39;t</span>
+        <span class="c1"># have tiles at the appropriate level, indicate that we won&#39;t return</span>
+        <span class="c1"># anything.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">magLevel</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">magLevel</span> <span class="o">!=</span> <span class="n">preferredLevel</span> <span class="ow">and</span>
+                <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;exact&#39;</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">tile_size</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;tileWidth&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;tileHeight&#39;</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="n">tile_overlap</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tile_overlap&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tile_overlap&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">),</span>
+            <span class="s1">&#39;edges&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tile_overlap&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;edges&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+            <span class="s1">&#39;offset_x&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;offset_y&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;range_x&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">&#39;range_y&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;edges&#39;</span><span class="p">]:</span>
+            <span class="c1"># offset by half the overlap</span>
+            <span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;offset_x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span>
+            <span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;offset_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span>
+            <span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;range_x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+            <span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;range_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s1">&#39;tile_size&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">tile_size</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;tile_size&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s1">&#39;width&#39;</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;tile_size&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">])))</span>
+            <span class="n">tile_size</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;tile_size&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s1">&#39;height&#39;</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;tile_size&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">,</span> <span class="n">tile_size</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">])))</span>
+        <span class="c1"># Tile size includes the overlap</span>
+        <span class="n">tile_size</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">-=</span> <span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+        <span class="n">tile_size</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">-=</span> <span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">tile_size</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">tile_size</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Invalid tile_size or tile_overlap.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">resample</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="kc">False</span> <span class="k">if</span> <span class="nb">round</span><span class="p">(</span><span class="n">requestedScale</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">==</span> <span class="mf">1.0</span> <span class="ow">or</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;resample&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="k">else</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;resample&#39;</span><span class="p">))</span>
+        <span class="c1"># If we need to resample to make tiles at a non-native resolution,</span>
+        <span class="c1"># adjust the tile size and tile overlap parameters appropriately.</span>
+        <span class="k">if</span> <span class="n">resample</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+            <span class="n">tile_size</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">tile_size</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">requestedScale</span><span class="p">)))</span>
+            <span class="n">tile_size</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">tile_size</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">requestedScale</span><span class="p">)))</span>
+            <span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">requestedScale</span><span class="p">))</span>
+            <span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">requestedScale</span><span class="p">))</span>
+
+        <span class="n">offset_x</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tile_offset&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">offset_y</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tile_offset&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tile_offset&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;auto&#39;</span><span class="p">):</span>
+            <span class="n">offset_x</span> <span class="o">=</span> <span class="n">left</span>
+            <span class="n">offset_y</span> <span class="o">=</span> <span class="n">top</span>
+        <span class="n">offset_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">left</span> <span class="o">-</span> <span class="n">left</span> <span class="o">%</span> <span class="n">tile_size</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">offset_x</span> <span class="o">&gt;</span> <span class="n">left</span> <span class="k">else</span> <span class="n">offset_x</span>
+        <span class="n">offset_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">top</span> <span class="o">-</span> <span class="n">top</span> <span class="o">%</span> <span class="n">tile_size</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">offset_y</span> <span class="o">&gt;</span> <span class="n">top</span> <span class="k">else</span> <span class="n">offset_y</span>
+        <span class="c1"># If the overlapped tiles don&#39;t run over the edge, then the functional</span>
+        <span class="c1"># size of the region is reduced by the overlap.  This factor is stored</span>
+        <span class="c1"># in the overlap offset_*.</span>
+        <span class="n">xmin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">left</span> <span class="o">-</span> <span class="n">offset_x</span><span class="p">)</span> <span class="o">/</span> <span class="n">tile_size</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">])</span>
+        <span class="n">xmax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="nb">float</span><span class="p">(</span><span class="n">right</span> <span class="o">-</span> <span class="n">offset_x</span><span class="p">)</span> <span class="o">-</span> <span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;range_x&#39;</span><span class="p">])</span> <span class="o">/</span>
+                                 <span class="n">tile_size</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">])),</span> <span class="n">xmin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">ymin</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">top</span> <span class="o">-</span> <span class="n">offset_y</span><span class="p">)</span> <span class="o">/</span> <span class="n">tile_size</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">])</span>
+        <span class="n">ymax</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="nb">float</span><span class="p">(</span><span class="n">bottom</span> <span class="o">-</span> <span class="n">offset_y</span><span class="p">)</span> <span class="o">-</span> <span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;range_y&#39;</span><span class="p">])</span> <span class="o">/</span>
+                                 <span class="n">tile_size</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">])),</span> <span class="n">ymin</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">tile_overlap</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;xmin&#39;</span><span class="p">:</span> <span class="n">xmin</span><span class="p">,</span> <span class="s1">&#39;xmax&#39;</span><span class="p">:</span> <span class="n">xmax</span><span class="p">,</span>
+                             <span class="s1">&#39;ymin&#39;</span><span class="p">:</span> <span class="n">ymin</span><span class="p">,</span> <span class="s1">&#39;ymax&#39;</span><span class="p">:</span> <span class="n">ymax</span><span class="p">})</span>
+        <span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;offset_x&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">offset_x</span>
+        <span class="n">tile_overlap</span><span class="p">[</span><span class="s1">&#39;offset_y&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">offset_y</span>
+
+        <span class="c1"># Use RGB for JPEG, RGBA for PNG</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="s1">&#39;RGBA&#39;</span> <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;encoding&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;PNG&#39;</span><span class="p">,</span> <span class="s1">&#39;TIFF&#39;</span><span class="p">,</span> <span class="s1">&#39;TILED&#39;</span><span class="p">}</span> <span class="k">else</span> <span class="s1">&#39;RGB&#39;</span>
+
+        <span class="n">info</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;region&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="n">top</span><span class="p">,</span>
+                <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="n">left</span><span class="p">,</span>
+                <span class="s1">&#39;bottom&#39;</span><span class="p">:</span> <span class="n">bottom</span><span class="p">,</span>
+                <span class="s1">&#39;right&#39;</span><span class="p">:</span> <span class="n">right</span><span class="p">,</span>
+                <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="n">regionWidth</span><span class="p">,</span>
+                <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">regionHeight</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;xmin&#39;</span><span class="p">:</span> <span class="n">xmin</span><span class="p">,</span>
+            <span class="s1">&#39;ymin&#39;</span><span class="p">:</span> <span class="n">ymin</span><span class="p">,</span>
+            <span class="s1">&#39;xmax&#39;</span><span class="p">:</span> <span class="n">xmax</span><span class="p">,</span>
+            <span class="s1">&#39;ymax&#39;</span><span class="p">:</span> <span class="n">ymax</span><span class="p">,</span>
+            <span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="n">mode</span><span class="p">,</span>
+            <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="n">preferredLevel</span><span class="p">,</span>
+            <span class="s1">&#39;metadata&#39;</span><span class="p">:</span> <span class="n">metadata</span><span class="p">,</span>
+            <span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="n">outWidth</span><span class="p">,</span>
+                <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">outHeight</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="s1">&#39;frame&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;frame&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;format&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;format&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">TILE_FORMAT_NUMPY</span><span class="p">,</span> <span class="p">)),</span>
+            <span class="s1">&#39;encoding&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;encoding&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;requestedScale&#39;</span><span class="p">:</span> <span class="n">requestedScale</span><span class="p">,</span>
+            <span class="s1">&#39;resample&#39;</span><span class="p">:</span> <span class="n">resample</span><span class="p">,</span>
+            <span class="s1">&#39;tile_count&#39;</span><span class="p">:</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">),</span>
+            <span class="s1">&#39;tile_overlap&#39;</span><span class="p">:</span> <span class="n">tile_overlap</span><span class="p">,</span>
+            <span class="s1">&#39;tile_position&#39;</span><span class="p">:</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tile_position&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;tile_size&#39;</span><span class="p">:</span> <span class="n">tile_size</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">info</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_tileIterator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iterInfo</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">LazyTileDict</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given tile iterator information, iterate through the tiles.</span>
+<span class="sd">        Each tile is returned as part of a dictionary that includes</span>
+
+<span class="sd">            :x, y: (left, top) coordinate in current magnification pixels</span>
+<span class="sd">            :width, height: size of current tile in current magnification</span>
+<span class="sd">                pixels</span>
+<span class="sd">            :tile: cropped tile image</span>
+<span class="sd">            :format: format of the tile.  One of TILE_FORMAT_NUMPY,</span>
+<span class="sd">                TILE_FORMAT_PIL, or TILE_FORMAT_IMAGE.  TILE_FORMAT_IMAGE is</span>
+<span class="sd">                only returned if it was explicitly allowed and the tile is</span>
+<span class="sd">                already in the correct image encoding.</span>
+<span class="sd">            :level: level of the current tile</span>
+<span class="sd">            :level_x, level_y: the tile reference number within the level.</span>
+<span class="sd">                Tiles are numbered (0, 0), (1, 0), (2, 0), etc.  The 0th tile</span>
+<span class="sd">                yielded may not be (0, 0) if a region is specified.</span>
+<span class="sd">            :tile_position: a dictionary of the tile position within the</span>
+<span class="sd">                iterator, containing:</span>
+
+<span class="sd">                :level_x, level_y: the tile reference number within the level.</span>
+<span class="sd">                :region_x, region_y: 0, 0 is the first tile in the full</span>
+<span class="sd">                    iteration (when not restricting the iteration to a single</span>
+<span class="sd">                    tile).</span>
+<span class="sd">                :position: a 0-based value for the tile within the full</span>
+<span class="sd">                    iteration.</span>
+
+<span class="sd">            :iterator_range: a dictionary of the output range of the iterator:</span>
+
+<span class="sd">                :level_x_min, level_x_max: the tiles that are be included</span>
+<span class="sd">                    during the full iteration: [layer_x_min, layer_x_max).</span>
+<span class="sd">                :level_y_min, level_y_max: the tiles that are be included</span>
+<span class="sd">                    during the full iteration: [layer_y_min, layer_y_max).</span>
+<span class="sd">                :region_x_max, region_y_max: the number of tiles included during</span>
+<span class="sd">                    the full iteration.   This is layer_x_max - layer_x_min,</span>
+<span class="sd">                    layer_y_max - layer_y_min.</span>
+<span class="sd">                :position: the total number of tiles included in the full</span>
+<span class="sd">                    iteration.  This is region_x_max * region_y_max.</span>
+
+<span class="sd">            :magnification: magnification of the current tile</span>
+<span class="sd">            :mm_x, mm_y: size of the current tile pixel in millimeters.</span>
+<span class="sd">            :gx, gy: (left, top) coordinates in maximum-resolution pixels</span>
+<span class="sd">            :gwidth, gheight: size of of the current tile in maximum-resolution</span>
+<span class="sd">                pixels.</span>
+<span class="sd">            :tile_overlap: the amount of overlap with neighboring tiles (left,</span>
+<span class="sd">                top, right, and bottom).  Overlap never extends outside of the</span>
+<span class="sd">                requested region.</span>
+
+<span class="sd">        If a region that includes partial tiles is requested, those tiles are</span>
+<span class="sd">        cropped appropriately.  Most images will have tiles that get cropped</span>
+<span class="sd">        along the right and bottom edges in any case.</span>
+
+<span class="sd">        :param iterInfo: tile iterator information.  See _tileIteratorInfo.</span>
+<span class="sd">        :yields: an iterator that returns a dictionary as listed above.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">source</span>
+        <span class="n">regionWidth</span> <span class="o">=</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;region&#39;</span><span class="p">][</span><span class="s1">&#39;width&#39;</span><span class="p">]</span>
+        <span class="n">regionHeight</span> <span class="o">=</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;region&#39;</span><span class="p">][</span><span class="s1">&#39;height&#39;</span><span class="p">]</span>
+        <span class="n">left</span> <span class="o">=</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;region&#39;</span><span class="p">][</span><span class="s1">&#39;left&#39;</span><span class="p">]</span>
+        <span class="n">top</span> <span class="o">=</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;region&#39;</span><span class="p">][</span><span class="s1">&#39;top&#39;</span><span class="p">]</span>
+        <span class="n">xmin</span> <span class="o">=</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">]</span>
+        <span class="n">ymin</span> <span class="o">=</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;ymin&#39;</span><span class="p">]</span>
+        <span class="n">xmax</span> <span class="o">=</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;xmax&#39;</span><span class="p">]</span>
+        <span class="n">ymax</span> <span class="o">=</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;ymax&#39;</span><span class="p">]</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;level&#39;</span><span class="p">]</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">]</span>
+        <span class="n">tileSize</span> <span class="o">=</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;tile_size&#39;</span><span class="p">]</span>
+        <span class="n">tileOverlap</span> <span class="o">=</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;tile_overlap&#39;</span><span class="p">]</span>
+        <span class="nb">format</span> <span class="o">=</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;format&#39;</span><span class="p">]</span>
+        <span class="n">encoding</span> <span class="o">=</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;encoding&#39;</span><span class="p">]</span>
+
+        <span class="n">source</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s1">&#39;Fetching region of an image with a source size of </span><span class="si">%d</span><span class="s1"> x </span><span class="si">%d</span><span class="s1">; &#39;</span>
+            <span class="s1">&#39;getting </span><span class="si">%d</span><span class="s1"> tile</span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="n">regionWidth</span><span class="p">,</span> <span class="n">regionHeight</span><span class="p">,</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">),</span>
+            <span class="s1">&#39;&#39;</span> <span class="k">if</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;s&#39;</span><span class="p">)</span>
+
+        <span class="c1"># If tile is specified, return at most one tile</span>
+        <span class="k">if</span> <span class="n">iterInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tile_position&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">tilePos</span> <span class="o">=</span> <span class="n">iterInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tile_position&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tilePos</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">tilePos</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;position&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">tilePos</span> <span class="o">=</span> <span class="n">tilePos</span><span class="p">[</span><span class="s1">&#39;position&#39;</span><span class="p">]</span>
+                <span class="k">elif</span> <span class="s1">&#39;region_x&#39;</span> <span class="ow">in</span> <span class="n">tilePos</span> <span class="ow">and</span> <span class="s1">&#39;region_y&#39;</span> <span class="ow">in</span> <span class="n">tilePos</span><span class="p">:</span>
+                    <span class="n">tilePos</span> <span class="o">=</span> <span class="p">(</span><span class="n">tilePos</span><span class="p">[</span><span class="s1">&#39;region_x&#39;</span><span class="p">]</span> <span class="o">+</span>
+                               <span class="n">tilePos</span><span class="p">[</span><span class="s1">&#39;region_y&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="s1">&#39;level_x&#39;</span> <span class="ow">in</span> <span class="n">tilePos</span> <span class="ow">and</span> <span class="s1">&#39;level_y&#39;</span> <span class="ow">in</span> <span class="n">tilePos</span><span class="p">:</span>
+                    <span class="n">tilePos</span> <span class="o">=</span> <span class="p">((</span><span class="n">tilePos</span><span class="p">[</span><span class="s1">&#39;level_x&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span> <span class="o">+</span>
+                               <span class="p">(</span><span class="n">tilePos</span><span class="p">[</span><span class="s1">&#39;level_y&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">tilePos</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">tilePos</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">):</span>
+                <span class="n">xmax</span> <span class="o">=</span> <span class="n">xmin</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">ymin</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tilePos</span> <span class="o">/</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">))</span>
+                <span class="n">ymax</span> <span class="o">=</span> <span class="n">ymin</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">xmin</span> <span class="o">+=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tilePos</span> <span class="o">%</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">))</span>
+                <span class="n">xmax</span> <span class="o">=</span> <span class="n">xmin</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">mag</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getMagnificationForLevel</span><span class="p">(</span><span class="n">level</span><span class="p">)</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="n">mag</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scale&#39;</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+        <span class="n">retile</span> <span class="o">=</span> <span class="p">(</span><span class="n">tileSize</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;tileWidth&#39;</span><span class="p">]</span> <span class="ow">or</span>
+                  <span class="n">tileSize</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;tileHeight&#39;</span><span class="p">]</span> <span class="ow">or</span>
+                  <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">):</span>
+                <span class="n">crop</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">posX</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">tileSize</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span>
+                           <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;offset_x&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">left</span><span class="p">)</span>
+                <span class="n">posY</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="n">tileSize</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">//</span> <span class="mi">2</span> <span class="o">+</span>
+                           <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;offset_y&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">top</span><span class="p">)</span>
+                <span class="n">tileWidth</span> <span class="o">=</span> <span class="n">tileSize</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span>
+                <span class="n">tileHeight</span> <span class="o">=</span> <span class="n">tileSize</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+                <span class="c1"># crop as needed</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">posX</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">posY</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">posX</span> <span class="o">+</span> <span class="n">tileWidth</span> <span class="o">&gt;</span> <span class="n">regionWidth</span> <span class="ow">or</span>
+                        <span class="n">posY</span> <span class="o">+</span> <span class="n">tileHeight</span> <span class="o">&gt;</span> <span class="n">regionHeight</span><span class="p">):</span>
+                    <span class="n">crop</span> <span class="o">=</span> <span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">posX</span><span class="p">),</span>
+                            <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="n">posY</span><span class="p">),</span>
+                            <span class="nb">int</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">tileWidth</span><span class="p">,</span> <span class="n">regionWidth</span> <span class="o">-</span> <span class="n">posX</span><span class="p">)),</span>
+                            <span class="nb">int</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">tileHeight</span><span class="p">,</span> <span class="n">regionHeight</span> <span class="o">-</span> <span class="n">posY</span><span class="p">)))</span>
+                    <span class="n">posX</span> <span class="o">+=</span> <span class="n">crop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">posY</span> <span class="o">+=</span> <span class="n">crop</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="n">tileWidth</span> <span class="o">=</span> <span class="n">crop</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">crop</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">tileHeight</span> <span class="o">=</span> <span class="n">crop</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">crop</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">overlap</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span> <span class="o">*</span> <span class="n">tileSize</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;offset_x&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">left</span> <span class="o">-</span> <span class="n">posX</span><span class="p">),</span>
+                    <span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span> <span class="o">*</span> <span class="n">tileSize</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;offset_y&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">top</span> <span class="o">-</span> <span class="n">posY</span><span class="p">),</span>
+                <span class="p">}</span>
+                <span class="n">overlap</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tileWidth</span> <span class="o">-</span> <span class="n">tileSize</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">overlap</span><span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="n">xmin</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;range_x&#39;</span><span class="p">]</span> <span class="k">else</span>
+                    <span class="nb">min</span><span class="p">(</span><span class="n">tileWidth</span><span class="p">,</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;range_x&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;offset_x&#39;</span><span class="p">]))</span>
+                <span class="n">overlap</span><span class="p">[</span><span class="s1">&#39;bottom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tileHeight</span> <span class="o">-</span> <span class="n">tileSize</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">overlap</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">])</span>
+                    <span class="k">if</span> <span class="n">y</span> <span class="o">!=</span> <span class="n">ymin</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;range_y&#39;</span><span class="p">]</span> <span class="k">else</span>
+                    <span class="nb">min</span><span class="p">(</span><span class="n">tileHeight</span><span class="p">,</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;range_y&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;offset_y&#39;</span><span class="p">]))</span>
+                <span class="k">if</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;range_x&#39;</span><span class="p">]:</span>
+                    <span class="n">overlap</span><span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="n">overlap</span><span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">]</span>
+                    <span class="n">overlap</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;xmax&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="n">overlap</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;range_y&#39;</span><span class="p">]:</span>
+                    <span class="n">overlap</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">y</span> <span class="o">==</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;ymin&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="n">overlap</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">]</span>
+                    <span class="n">overlap</span><span class="p">[</span><span class="s1">&#39;bottom&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">==</span> <span class="n">tileOverlap</span><span class="p">[</span><span class="s1">&#39;ymax&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="n">overlap</span><span class="p">[</span><span class="s1">&#39;bottom&#39;</span><span class="p">]</span>
+                <span class="n">tile</span> <span class="o">=</span> <span class="n">LazyTileDict</span><span class="p">({</span>
+                    <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
+                    <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">y</span><span class="p">,</span>
+                    <span class="s1">&#39;frame&#39;</span><span class="p">:</span> <span class="n">iterInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;frame&#39;</span><span class="p">),</span>
+                    <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="n">level</span><span class="p">,</span>
+                    <span class="s1">&#39;format&#39;</span><span class="p">:</span> <span class="nb">format</span><span class="p">,</span>
+                    <span class="s1">&#39;encoding&#39;</span><span class="p">:</span> <span class="n">encoding</span><span class="p">,</span>
+                    <span class="s1">&#39;crop&#39;</span><span class="p">:</span> <span class="n">crop</span><span class="p">,</span>
+                    <span class="s1">&#39;requestedScale&#39;</span><span class="p">:</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;requestedScale&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;retile&#39;</span><span class="p">:</span> <span class="n">retile</span><span class="p">,</span>
+                    <span class="s1">&#39;metadata&#39;</span><span class="p">:</span> <span class="n">metadata</span><span class="p">,</span>
+                    <span class="s1">&#39;source&#39;</span><span class="p">:</span> <span class="n">source</span><span class="p">,</span>
+                <span class="p">},</span> <span class="p">{</span>
+                    <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">posX</span> <span class="o">+</span> <span class="n">left</span><span class="p">,</span>
+                    <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="n">posY</span> <span class="o">+</span> <span class="n">top</span><span class="p">,</span>
+                    <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="n">tileWidth</span><span class="p">,</span>
+                    <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">tileHeight</span><span class="p">,</span>
+                    <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="n">level</span><span class="p">,</span>
+                    <span class="s1">&#39;level_x&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
+                    <span class="s1">&#39;level_y&#39;</span><span class="p">:</span> <span class="n">y</span><span class="p">,</span>
+                    <span class="s1">&#39;magnification&#39;</span><span class="p">:</span> <span class="n">mag</span><span class="p">[</span><span class="s1">&#39;magnification&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;mm_x&#39;</span><span class="p">:</span> <span class="n">mag</span><span class="p">[</span><span class="s1">&#39;mm_x&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;mm_y&#39;</span><span class="p">:</span> <span class="n">mag</span><span class="p">[</span><span class="s1">&#39;mm_y&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;tile_position&#39;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s1">&#39;level_x&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
+                        <span class="s1">&#39;level_y&#39;</span><span class="p">:</span> <span class="n">y</span><span class="p">,</span>
+                        <span class="s1">&#39;region_x&#39;</span><span class="p">:</span> <span class="n">x</span> <span class="o">-</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;region_y&#39;</span><span class="p">:</span> <span class="n">y</span> <span class="o">-</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;ymin&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">])</span> <span class="o">+</span>
+                                     <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;ymin&#39;</span><span class="p">])</span> <span class="o">*</span>
+                                     <span class="p">(</span><span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;xmax&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">])),</span>
+                    <span class="p">},</span>
+                    <span class="s1">&#39;iterator_range&#39;</span><span class="p">:</span> <span class="p">{</span>
+                        <span class="s1">&#39;level_x_min&#39;</span><span class="p">:</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;level_y_min&#39;</span><span class="p">:</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;ymin&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;level_x_max&#39;</span><span class="p">:</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;xmax&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;level_y_max&#39;</span><span class="p">:</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;ymax&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;region_x_max&#39;</span><span class="p">:</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;xmax&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;region_y_max&#39;</span><span class="p">:</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;ymax&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;ymin&#39;</span><span class="p">],</span>
+                        <span class="s1">&#39;position&#39;</span><span class="p">:</span> <span class="p">((</span><span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;xmax&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">])</span> <span class="o">*</span>
+                                     <span class="p">(</span><span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;ymax&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">iterInfo</span><span class="p">[</span><span class="s1">&#39;ymin&#39;</span><span class="p">])),</span>
+                    <span class="p">},</span>
+                    <span class="s1">&#39;tile_overlap&#39;</span><span class="p">:</span> <span class="n">overlap</span><span class="p">,</span>
+                <span class="p">})</span>
+                <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;gx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale</span>
+                <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;gy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale</span>
+                <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;gwidth&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale</span>
+                <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;gheight&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale</span>
+                <span class="k">yield</span> <span class="n">tile</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,211 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developer Guide &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="_static/K.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Girder Integration" href="girder_index.html" />
+    <link rel="prev" title="Using the Zarr Tile Sink" href="notebooks/zarr_sink_example.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Developer Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#developer-installation">Developer Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#tile-source-requirements">Tile Source Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#test-requirements">Test Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nodejs-and-npm-for-girder-tests-or-development">nodejs and npm for Girder Tests or Development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mongo-for-girder-tests-or-development">Mongo for Girder Tests or Development</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#development-environment">Development Environment</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Developer Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/development.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="developer-guide">
+<h1>Developer Guide<a class="headerlink" href="#developer-guide" title="Link to this heading"></a></h1>
+<section id="developer-installation">
+<h2>Developer Installation<a class="headerlink" href="#developer-installation" title="Link to this heading"></a></h2>
+<p>To install all packages from source, clone the repository:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">girder</span><span class="o">/</span><span class="n">large_image</span><span class="o">.</span><span class="n">git</span>
+<span class="n">cd</span> <span class="n">large_image</span>
+</pre></div>
+</div>
+<p>Install all packages and dependencies:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>If you aren’t developing with Girder 3, you can skip installing those components.  Use <code class="docutils literal notranslate"><span class="pre">requirements-dev-core.txt</span></code> instead of <code class="docutils literal notranslate"><span class="pre">requirements-dev.txt</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">-</span><span class="n">dev</span><span class="o">-</span><span class="n">core</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<section id="tile-source-requirements">
+<h3>Tile Source Requirements<a class="headerlink" href="#tile-source-requirements" title="Link to this heading"></a></h3>
+<p>Many tile sources have complex prerequisites.  These can be installed directly using your system’s package manager or from some prebuilt Python wheels for Linux.  The prebuilt wheels are not official packages, but they can be used by instructing pip to use them by preference:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">-</span><span class="n">dev</span><span class="o">.</span><span class="n">txt</span> <span class="o">--</span><span class="n">find</span><span class="o">-</span><span class="n">links</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">girder</span><span class="o">.</span><span class="n">github</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">large_image_wheels</span>
+</pre></div>
+</div>
+</section>
+<section id="test-requirements">
+<h3>Test Requirements<a class="headerlink" href="#test-requirements" title="Link to this heading"></a></h3>
+<p>Besides an appropriate version of Python, Large Image tests are run via <a class="reference external" href="https://tox.readthedocs.io/en/latest/">tox</a>.  This is also a convenient way to setup a development environment.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">tox</span></code> Python package must be installed:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>tox
+</pre></div>
+</div>
+<p>See the tox documentation for how to recreate test environments or perform other maintenance tasks.</p>
+<p>By default, instead of storing test environments in a <code class="docutils literal notranslate"><span class="pre">.tox</span></code> directory, they are stored in the <code class="docutils literal notranslate"><span class="pre">build/tox</span></code> directory.  This is done for convenience in handling build artifacts from Girder-specific tests.</p>
+</section>
+<section id="nodejs-and-npm-for-girder-tests-or-development">
+<h3>nodejs and npm for Girder Tests or Development<a class="headerlink" href="#nodejs-and-npm-for-girder-tests-or-development" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">nodejs</span></code> version 14.x and a corresponding version of <code class="docutils literal notranslate"><span class="pre">npm</span></code> are required to build and test Girder client code.  See <a class="reference external" href="https://nodejs.org/en/download/">nodejs</a> for how to download and install it.  Remember to get version 12 or 14.</p>
+</section>
+<section id="mongo-for-girder-tests-or-development">
+<h3>Mongo for Girder Tests or Development<a class="headerlink" href="#mongo-for-girder-tests-or-development" title="Link to this heading"></a></h3>
+<p>To run the full test suite, including Girder, ensure that a MongoDB instance is ready on <code class="docutils literal notranslate"><span class="pre">localhost:27017</span></code>.  This can be done with docker via <code class="docutils literal notranslate"><span class="pre">docker</span> <span class="pre">run</span> <span class="pre">-p</span> <span class="pre">27017:27017</span> <span class="pre">-d</span> <span class="pre">mongo:latest</span></code>.</p>
+</section>
+</section>
+<section id="running-tests">
+<h2>Running Tests<a class="headerlink" href="#running-tests" title="Link to this heading"></a></h2>
+<p>Tests are run via tox environments:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tox<span class="w"> </span>-e<span class="w"> </span>test-py39,lint,lintclient
+</pre></div>
+</div>
+<p>Or, without Girder:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tox<span class="w"> </span>-e<span class="w"> </span>core-py39,lint
+</pre></div>
+</div>
+<p>You can build the docs.  They are created in the <code class="docutils literal notranslate"><span class="pre">docs/build</span></code> directory:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tox<span class="w"> </span>-e<span class="w"> </span>docs
+</pre></div>
+</div>
+<p>You can run specific tests using pytest’s options, e.g., to try one specific test:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tox<span class="w"> </span>-e<span class="w"> </span>core-py39<span class="w"> </span>--<span class="w"> </span>-k<span class="w"> </span>testFromTiffRGBJPEG
+</pre></div>
+</div>
+</section>
+<section id="development-environment">
+<h2>Development Environment<a class="headerlink" href="#development-environment" title="Link to this heading"></a></h2>
+<p>To set up a development environment, you can use tox.  This is not required to run tests.  The <code class="docutils literal notranslate"><span class="pre">dev</span></code> environment allows for complete use.  The <code class="docutils literal notranslate"><span class="pre">test</span></code> environment will also install pytest and other tools needed for testing.  Use the <code class="docutils literal notranslate"><span class="pre">core</span></code> environment instead of the <code class="docutils literal notranslate"><span class="pre">dev</span></code> environment if you aren’t using Girder.</p>
+<p>For OSX users, specify the <code class="docutils literal notranslate"><span class="pre">dev-osx</span></code> environment instead; it will install only the cross-platform common sources.</p>
+<p>You can add a suffix to the environment to get a specific version of python (e.g., <code class="docutils literal notranslate"><span class="pre">dev-py311</span></code> or <code class="docutils literal notranslate"><span class="pre">dev-osx-py310</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>tox<span class="w"> </span>--devenv<span class="w"> </span>/my/env/path<span class="w"> </span>-e<span class="w"> </span>dev
+</pre></div>
+</div>
+<p>and then switch to that environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>.<span class="w"> </span>/my/env/path/bin/activate
+</pre></div>
+</div>
+<p>If you are using Girder, build and start it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>girder<span class="w"> </span>build<span class="w"> </span>--dev
+girder<span class="w"> </span>serve
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="notebooks/zarr_sink_example.html" class="btn btn-neutral float-left" title="Using the Zarr Tile Sink" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="girder_index.html" class="btn btn-neutral float-right" title="Girder Integration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

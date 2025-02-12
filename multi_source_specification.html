@@ -1,0 +1,574 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multi Source Schema &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="_static/K.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Annotation Schema" href="annotations.html" />
+    <link rel="prev" title="Image Formats" href="formats.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formats.html">Image Formats</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Multi Source Schema</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#multi-z-position">Multi Z-position</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#composite-to-a-single-frame">Composite To A Single Frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#composite-with-scaling">Composite With Scaling</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#full-schema">Full Schema</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Multi Source Schema</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/multi_source_specification.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="multi-source-schema">
+<h1>Multi Source Schema<a class="headerlink" href="#multi-source-schema" title="Link to this heading"></a></h1>
+<p>A multi-source tile source is used to composite multiple other sources into a
+single conceptual tile source.  It is specified by a yaml or json file that
+conforms to the appropriate schema.</p>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<p>All of the examples presented here are in yaml; json works just as well.</p>
+<section id="multi-z-position">
+<h3>Multi Z-position<a class="headerlink" href="#multi-z-position" title="Link to this heading"></a></h3>
+<p>For example, if you have a set of individual files that you wish to treat as
+multiple z slices in a single file, you can do something like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="n">sources</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">path</span><span class="p">:</span> <span class="o">./</span><span class="n">test_orient1</span><span class="o">.</span><span class="n">tif</span>
+    <span class="n">z</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="o">-</span> <span class="n">path</span><span class="p">:</span> <span class="o">./</span><span class="n">test_orient2</span><span class="o">.</span><span class="n">tif</span>
+    <span class="n">z</span><span class="p">:</span> <span class="mi">1</span>
+  <span class="o">-</span> <span class="n">path</span><span class="p">:</span> <span class="o">./</span><span class="n">test_orient3</span><span class="o">.</span><span class="n">tif</span>
+    <span class="n">z</span><span class="p">:</span> <span class="mi">2</span>
+  <span class="o">-</span> <span class="n">path</span><span class="p">:</span> <span class="o">./</span><span class="n">test_orient4</span><span class="o">.</span><span class="n">tif</span>
+    <span class="n">z</span><span class="p">:</span> <span class="mi">3</span>
+  <span class="o">-</span> <span class="n">path</span><span class="p">:</span> <span class="o">./</span><span class="n">test_orient5</span><span class="o">.</span><span class="n">tif</span>
+    <span class="n">z</span><span class="p">:</span> <span class="mi">4</span>
+  <span class="o">-</span> <span class="n">path</span><span class="p">:</span> <span class="o">./</span><span class="n">test_orient6</span><span class="o">.</span><span class="n">tif</span>
+    <span class="n">z</span><span class="p">:</span> <span class="mi">5</span>
+  <span class="o">-</span> <span class="n">path</span><span class="p">:</span> <span class="o">./</span><span class="n">test_orient7</span><span class="o">.</span><span class="n">tif</span>
+    <span class="n">z</span><span class="p">:</span> <span class="mi">6</span>
+  <span class="o">-</span> <span class="n">path</span><span class="p">:</span> <span class="o">./</span><span class="n">test_orient8</span><span class="o">.</span><span class="n">tif</span>
+    <span class="n">z</span><span class="p">:</span> <span class="mi">7</span>
+</pre></div>
+</div>
+<p>Here, each of the files is explicitly listed with a specific <code class="docutils literal notranslate"><span class="pre">z</span></code> value.
+Since these files are ordered, this could equivalently be done in a simpler
+manner using a <code class="docutils literal notranslate"><span class="pre">pathPattern</span></code>, which is a regular expression that can match
+multiple files.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="n">sources</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">path</span><span class="p">:</span> <span class="o">.</span>
+    <span class="n">pathPattern</span><span class="p">:</span> <span class="s1">&#39;test_orient[1-8]\.tif&#39;</span>
+    <span class="n">zStep</span><span class="p">:</span> <span class="mi">1</span>
+</pre></div>
+</div>
+<p>Since the <code class="docutils literal notranslate"><span class="pre">z</span></code> value will default to 0, this works.  The files are sorted in
+C-sort order (lexically using the ASCII or UTF code points).  This sorting will
+break down if you have files with variable length numbers (e.g., <code class="docutils literal notranslate"><span class="pre">file10.tif</span></code>
+will appear before <code class="docutils literal notranslate"><span class="pre">file9.tiff</span></code>.  You can instead assign values from the
+file name using named expressions:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="n">sources</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">path</span><span class="p">:</span> <span class="o">.</span>
+    <span class="n">pathPattern</span><span class="p">:</span> <span class="s1">&#39;test_orient(?P&lt;z1&gt;[1-8])\.tif&#39;</span>
+</pre></div>
+</div>
+<p>Note that the name in the expression (<code class="docutils literal notranslate"><span class="pre">z1</span></code> in this example) is the name of
+the value in the schema.  If a <code class="docutils literal notranslate"><span class="pre">1</span></code> is added, then it is assumed to be 1-based
+indexed.  Without the <code class="docutils literal notranslate"><span class="pre">1</span></code>, it is assumed to be zero-indexed.</p>
+</section>
+<section id="composite-to-a-single-frame">
+<h3>Composite To A Single Frame<a class="headerlink" href="#composite-to-a-single-frame" title="Link to this heading"></a></h3>
+<p>Multiple sources can be made to appear as a single frame.  For instance:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="n">width</span><span class="p">:</span> <span class="mi">360</span>
+<span class="n">height</span><span class="p">:</span> <span class="mi">360</span>
+<span class="n">sources</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">path</span><span class="p">:</span> <span class="o">./</span><span class="n">test_orient1</span><span class="o">.</span><span class="n">tif</span>
+    <span class="n">z</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">position</span><span class="p">:</span>
+      <span class="n">x</span><span class="p">:</span> <span class="mi">0</span>
+      <span class="n">y</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="o">-</span> <span class="n">path</span><span class="p">:</span> <span class="o">./</span><span class="n">test_orient2</span><span class="o">.</span><span class="n">tif</span>
+    <span class="n">z</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">position</span><span class="p">:</span>
+      <span class="n">x</span><span class="p">:</span> <span class="mi">180</span>
+      <span class="n">y</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="o">-</span> <span class="n">path</span><span class="p">:</span> <span class="o">./</span><span class="n">test_orient3</span><span class="o">.</span><span class="n">tif</span>
+    <span class="n">z</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">position</span><span class="p">:</span>
+      <span class="n">x</span><span class="p">:</span> <span class="mi">0</span>
+      <span class="n">y</span><span class="p">:</span> <span class="mi">180</span>
+  <span class="o">-</span> <span class="n">path</span><span class="p">:</span> <span class="o">./</span><span class="n">test_orient4</span><span class="o">.</span><span class="n">tif</span>
+    <span class="n">z</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">position</span><span class="p">:</span>
+      <span class="n">x</span><span class="p">:</span> <span class="mi">180</span>
+      <span class="n">y</span><span class="p">:</span> <span class="mi">180</span>
+</pre></div>
+</div>
+<p>Here, the total width and height of the final image is specified, along with
+the upper-left position of each image in the frame.</p>
+</section>
+<section id="composite-with-scaling">
+<h3>Composite With Scaling<a class="headerlink" href="#composite-with-scaling" title="Link to this heading"></a></h3>
+<p>Transforms can be applied to scale the individual sources:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="n">width</span><span class="p">:</span> <span class="mi">720</span>
+<span class="n">height</span><span class="p">:</span> <span class="mi">720</span>
+<span class="n">sources</span><span class="p">:</span>
+  <span class="o">-</span> <span class="n">path</span><span class="p">:</span> <span class="o">./</span><span class="n">test_orient1</span><span class="o">.</span><span class="n">tif</span>
+    <span class="n">position</span><span class="p">:</span>
+      <span class="n">scale</span><span class="p">:</span> <span class="mi">2</span>
+  <span class="o">-</span> <span class="n">path</span><span class="p">:</span> <span class="o">./</span><span class="n">test_orient2</span><span class="o">.</span><span class="n">tif</span>
+    <span class="n">position</span><span class="p">:</span>
+      <span class="n">scale</span><span class="p">:</span> <span class="mi">2</span>
+      <span class="n">x</span><span class="p">:</span> <span class="mi">360</span>
+  <span class="o">-</span> <span class="n">path</span><span class="p">:</span> <span class="o">./</span><span class="n">test_orient3</span><span class="o">.</span><span class="n">tif</span>
+    <span class="n">position</span><span class="p">:</span>
+      <span class="n">scale</span><span class="p">:</span> <span class="mi">2</span>
+      <span class="n">y</span><span class="p">:</span> <span class="mi">360</span>
+  <span class="o">-</span> <span class="n">path</span><span class="p">:</span> <span class="o">./</span><span class="n">test_orient4</span><span class="o">.</span><span class="n">tif</span>
+    <span class="n">position</span><span class="p">:</span>
+      <span class="n">scale</span><span class="p">:</span> <span class="mi">2</span>
+      <span class="n">x</span><span class="p">:</span> <span class="mi">180</span>
+      <span class="n">y</span><span class="p">:</span> <span class="mi">180</span>
+</pre></div>
+</div>
+<p>Note that the zero values from the previous example have been omitted as they
+are unnecessary.</p>
+</section>
+</section>
+<section id="full-schema">
+<h2>Full Schema<a class="headerlink" href="#full-schema" title="Link to this heading"></a></h2>
+<p>The full schema (jsonschema Draft6 standard) can be obtained by referencing the
+Python at <code class="docutils literal notranslate"><span class="pre">large_image_source_multi.MultiSourceSchema</span></code>.</p>
+<p>This returns the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+  <span class="s2">&quot;$schema&quot;</span><span class="p">:</span> <span class="s2">&quot;http://json-schema.org/schema#&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+  <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;width&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;exclusiveMinimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;exclusiveMinimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;tileWidth&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;exclusiveMinimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;tileHeight&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;exclusiveMinimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;channels&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A list of channel names&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+      <span class="p">},</span>
+      <span class="s2">&quot;minItems&quot;</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+      <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;mm_x&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;exclusiveMinimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;mm_y&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;exclusiveMinimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;magnification&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+          <span class="s2">&quot;exclusiveMinimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;backgroundColor&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A list of background color values (fill color) in the same scale and band order as the first tile source (e.g., white might be [255, 255, 255] for a three channel image).&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;basePath&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;decription&quot;</span><span class="p">:</span> <span class="s2">&quot;A relative path that is used as a base for all paths in sources.  Defaults to the directory of the main file.&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;uniformSources&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If true and the first two sources are similar in frame layout and size, assume all sources are so similar&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If present, a numpy dtype name to use for the data.&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;singleBand&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If true, output only the first band of compositied results&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;boolean&quot;</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;axes&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A list of additional axes that will be parsed.  The default axes are z, t, xy, and c.  It is recommended that additional axes use terse names and avoid x, y, and s.&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;sources&quot;</span><span class="p">:</span> <span class="p">{</span>
+      <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+      <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">true</span><span class="p">,</span>
+        <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+          <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;decription&quot;</span><span class="p">:</span> <span class="s2">&quot;The relative path, including file name if pathPattern is not specified.  The relative path excluding file name if pathPattern is specified.  Or, girder://id for Girder sources.  If a specific tile source is specified that does not need an actual path, the special value of `__none__` can be used to bypass checking for an actual file.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;pathPattern&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;If specified, file names in the path are matched to this regular expression, sorted in C-sort order.  This can populate other properties via named expressions, e.g., base_(?&lt;xy&gt;</span><span class="se">\\</span><span class="s2">d+).png.  Add 1 to the name for 1-based numerical values.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;sourceName&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Require a specific source by name.  This is one of the large_image source names (e.g., this one is </span><span class="se">\&quot;</span><span class="s2">multi</span><span class="se">\&quot;</span><span class="s2">.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;frame&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Base value for all frames; only use this if the data does not conceptually have z, t, xy, or c arrangement.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;minimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;z&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Base value for all frames&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;minimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;t&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Base value for all frames&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;minimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;xy&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Base value for all frames&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;minimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;c&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Base value for all frames&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;minimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;zSet&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Override value for frame&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;minimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;tSet&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Override value for frame&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;minimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;xySet&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Override value for frame&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;minimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;cSet&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Override value for frame&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;minimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;zValues&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The numerical z position of the different z indices of the source.  If only one value is specified, other indices are shifted based on the source.  If fewer values are given than z indices, the last two value given imply a stride for the remainder.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;minItems&quot;</span><span class="p">:</span> <span class="mi">1</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;tValues&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The numerical t position of the different t indices of the source.  If only one value is specified, other indices are shifted based on the source.  If fewer values are given than t indices, the last two value given imply a stride for the remainder.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;minItems&quot;</span><span class="p">:</span> <span class="mi">1</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;xyValues&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The numerical xy position of the different xy indices of the source.  If only one value is specified, other indices are shifted based on the source.  If fewer values are given than xy indices, the last two value given imply a stride for the remainder.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;minItems&quot;</span><span class="p">:</span> <span class="mi">1</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;cValues&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The numerical c position of the different c indices of the source.  If only one value is specified, other indices are shifted based on the source.  If fewer values are given than c indices, the last two value given imply a stride for the remainder.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;minItems&quot;</span><span class="p">:</span> <span class="mi">1</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;frameValues&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The numerical frame position of the different frame indices of the source.  If only one value is specified, other indices are shifted based on the source.  If fewer values are given than frame indices, the last two value given imply a stride for the remainder.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;minItems&quot;</span><span class="p">:</span> <span class="mi">1</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;channel&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A channel name to correspond with the main image.  Ignored if c, cValues, or channels is specified.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;channels&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A list of channel names used to correspond channels in this source with the main image.  Ignored if c or cValues is specified.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;minItems&quot;</span><span class="p">:</span> <span class="mi">1</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;zStep&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Step value for multiple files included via pathPattern.  Applies to z or zValues&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;exclusiveMinimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;tStep&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Step value for multiple files included via pathPattern.  Applies to t or tValues&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;exclusiveMinimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;xyStep&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Step value for multiple files included via pathPattern.  Applies to x or xyValues&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;exclusiveMinimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;xStep&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Step value for multiple files included via pathPattern.  Applies to c or cValues&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;exclusiveMinimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;framesAsAxes&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;An object with keys as axes and values as strides to interpret the source frames.  This overrides the internal metadata for frames.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;patternProperties&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;^(c|t|z|xy)$&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;exclusiveMinimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+              <span class="p">}</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;position&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;The image can be translated with x, y offset, apply an affine transform, and scaled.  If only part of the source is desired, a crop can be applied before the transformation.&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;crop&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Crop the source before applying a position transform&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;additionalProperties&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span>
+                <span class="s2">&quot;properties&quot;</span><span class="p">:</span> <span class="p">{</span>
+                  <span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+                  <span class="p">},</span>
+                  <span class="s2">&quot;top&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+                  <span class="p">},</span>
+                  <span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+                  <span class="p">},</span>
+                  <span class="s2">&quot;bottom&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+                  <span class="p">}</span>
+                <span class="p">}</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;scale&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Values less than 1 will downsample the source.  Values greater than 1 will upsample it.&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;exclusiveMinimum&quot;</span><span class="p">:</span> <span class="mi">0</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;s11&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;s12&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;s21&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+              <span class="p">},</span>
+              <span class="s2">&quot;s22&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+              <span class="p">}</span>
+            <span class="p">}</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;frames&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;List of frames to use from source&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;array&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;items&quot;</span><span class="p">:</span> <span class="p">{</span>
+              <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;integer&quot;</span>
+            <span class="p">}</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;sampleScale&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Each pixel sample values is divided by this scale after any sampleOffset has been applied&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;sampleOffset&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;This is added to each pixel sample value before any sampleScale is applied&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;number&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;style&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;A style specification to pass to the base tile source&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+          <span class="p">},</span>
+          <span class="s2">&quot;params&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Additional parameters to pass to the base tile source&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;object&quot;</span>
+          <span class="p">}</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+          <span class="s2">&quot;path&quot;</span>
+        <span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="s2">&quot;sources&quot;</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="formats.html" class="btn btn-neutral float-left" title="Image Formats" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="annotations.html" class="btn btn-neutral float-right" title="Annotation Schema" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

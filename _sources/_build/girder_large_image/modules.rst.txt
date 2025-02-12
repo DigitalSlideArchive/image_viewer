@@ -1,0 +1,7 @@
+girder_large_image
+==================
+
+.. toctree::
+   :maxdepth: 4
+
+   girder_large_image

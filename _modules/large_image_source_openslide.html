@@ -1,0 +1,604 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_openslide &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../_static/K.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">large_image_source_openslide</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image_source_openslide</h1><div class="highlight"><pre>
+<span></span><span class="c1">##############################################################################</span>
+<span class="c1">#  Copyright Kitware Inc.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed under the Apache License, Version 2.0 ( the &quot;License&quot; );</span>
+<span class="c1">#  you may not use this file except in compliance with the License.</span>
+<span class="c1">#  You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#    http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#  See the License for the specific language governing permissions and</span>
+<span class="c1">#  limitations under the License.</span>
+<span class="c1">##############################################################################</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">PackageNotFoundError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">_importlib_version</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">openslide</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">PIL</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">tifftools</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.cache_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">LruCacheMetaclass</span><span class="p">,</span> <span class="n">methodcache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">TILE_FORMAT_PIL</span><span class="p">,</span> <span class="n">SourcePriority</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TileSourceError</span><span class="p">,</span> <span class="n">TileSourceFileNotFoundError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.tilesource</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileTileSource</span><span class="p">,</span> <span class="n">nearPowerOfTwo</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">__version__</span> <span class="o">=</span> <span class="n">_importlib_version</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">PackageNotFoundError</span><span class="p">:</span>
+    <span class="c1"># package is not installed</span>
+    <span class="k">pass</span>
+
+
+<div class="viewcode-block" id="OpenslideFileTileSource">
+<a class="viewcode-back" href="../_build/large_image_source_openslide/large_image_source_openslide.html#large_image_source_openslide.OpenslideFileTileSource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OpenslideFileTileSource</span><span class="p">(</span><span class="n">FileTileSource</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">LruCacheMetaclass</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides tile access to SVS files and other files the openslide library can</span>
+<span class="sd">    read.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cacheName</span> <span class="o">=</span> <span class="s1">&#39;tilesource&#39;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;openslide&#39;</span>
+    <span class="n">extensions</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="kc">None</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">MEDIUM</span><span class="p">,</span>
+        <span class="s1">&#39;bif&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">LOW</span><span class="p">,</span>  <span class="c1"># Ventana</span>
+        <span class="s1">&#39;dcm&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">LOW</span><span class="p">,</span>  <span class="c1"># DICOM</span>
+        <span class="s1">&#39;ini&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">LOW</span><span class="p">,</span>  <span class="c1"># Part of mrxs</span>
+        <span class="s1">&#39;mrxs&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>  <span class="c1"># MIRAX</span>
+        <span class="s1">&#39;ndpi&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>  <span class="c1"># Hamamatsu</span>
+        <span class="s1">&#39;scn&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">LOW</span><span class="p">,</span>  <span class="c1"># Leica</span>
+        <span class="s1">&#39;svs&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>
+        <span class="s1">&#39;svslide&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>
+        <span class="s1">&#39;tif&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">MEDIUM</span><span class="p">,</span>
+        <span class="s1">&#39;tiff&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">MEDIUM</span><span class="p">,</span>
+        <span class="s1">&#39;vms&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">HIGH</span><span class="p">,</span>  <span class="c1"># Hamamatsu</span>
+        <span class="s1">&#39;vmu&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">HIGH</span><span class="p">,</span>  <span class="c1"># Hamamatsu</span>
+    <span class="p">}</span>
+    <span class="n">mimeTypes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="kc">None</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">FALLBACK</span><span class="p">,</span>
+        <span class="s1">&#39;image/mirax&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>  <span class="c1"># MIRAX</span>
+        <span class="s1">&#39;image/tiff&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">MEDIUM</span><span class="p">,</span>
+        <span class="s1">&#39;image/x-tiff&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">MEDIUM</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the tile class.  See the base class for other available</span>
+<span class="sd">        parameters.</span>
+
+<span class="sd">        :param path: a filesystem path for the tile source.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_getLargeImagePath</span><span class="p">())</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span> <span class="o">=</span> <span class="n">openslide</span><span class="o">.</span><span class="n">OpenSlide</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">openslide</span><span class="o">.</span><span class="n">lowlevel</span><span class="o">.</span><span class="n">OpenSlideUnsupportedFormatError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">TileSourceFileNotFoundError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;File cannot be opened via OpenSlide.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">openslide</span><span class="o">.</span><span class="n">lowlevel</span><span class="o">.</span><span class="n">OpenSlideError</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;File will not be opened via OpenSlide.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tiffinfo</span> <span class="o">=</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">read_tiff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ICCProfile</span><span class="o">.</span><span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffinfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_iccprofiles</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_tiffinfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span>
+                    <span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">ICCProfile</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]]</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_tiffinfo&#39;</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">ifd</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffinfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">NDPI_FOCAL_PLANE</span><span class="o">.</span><span class="n">value</span> <span class="ow">in</span> <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="ow">and</span>
+                        <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">NDPI_FOCAL_PLANE</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;File will not be opened via OpenSlide; &#39;</span>
+                           <span class="s1">&#39;non-zero focal planes would be missed.&#39;</span><span class="p">)</span>
+                    <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">svsAvailableLevels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAvailableLevels</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">svsAvailableLevels</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;OpenSlide image size is invalid.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">=</span> <span class="n">svsAvailableLevels</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;width&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">=</span> <span class="n">svsAvailableLevels</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;height&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;OpenSlide reports a dimension of </span><span class="si">%d</span><span class="s1"> x </span><span class="si">%d</span><span class="s1">, but base layer &#39;</span>
+                   <span class="s1">&#39;has a dimension of </span><span class="si">%d</span><span class="s1"> x </span><span class="si">%d</span><span class="s1"> -- using base layer &#39;</span>
+                   <span class="s1">&#39;dimensions.&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                       <span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                       <span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_getTileSize</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span>
+            <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span><span class="p">),</span>
+            <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span><span class="p">))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;OpenSlide image must have at least one level.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_svslevels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Precompute which SVS level should be used for our tile levels.  SVS</span>
+        <span class="c1"># level 0 is the maximum resolution.  The SVS levels are in descending</span>
+        <span class="c1"># resolution and, we assume, are powers of two in scale.  For each of</span>
+        <span class="c1"># our levels (where 0 is the minimum resolution), find the lowest</span>
+        <span class="c1"># resolution SVS level that contains at least as many pixels.  If this</span>
+        <span class="c1"># is not the same scale as we expect, note the scale factor so we can</span>
+        <span class="c1"># load an appropriate area and scale it to the tile size later.</span>
+        <span class="n">maxSize</span> <span class="o">=</span> <span class="mi">16384</span>   <span class="c1"># This should probably be based on available memory</span>
+        <span class="k">for</span> <span class="n">level</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span><span class="p">):</span>
+            <span class="n">levelW</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">level</span><span class="p">))</span>
+            <span class="n">levelH</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">level</span><span class="p">))</span>
+            <span class="c1"># bestlevel and scale will be the picked svs level and the scale</span>
+            <span class="c1"># between that level and what we really wanted.  We expect scale to</span>
+            <span class="c1"># always be a positive integer power of two.</span>
+            <span class="n">bestlevel</span> <span class="o">=</span> <span class="n">svsAvailableLevels</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;level&#39;</span><span class="p">]</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="k">for</span> <span class="n">svslevel</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">svsAvailableLevels</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">svsAvailableLevels</span><span class="p">[</span><span class="n">svslevel</span><span class="p">][</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">levelW</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span>
+                        <span class="n">svsAvailableLevels</span><span class="p">[</span><span class="n">svslevel</span><span class="p">][</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">levelH</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="k">break</span>
+                <span class="n">bestlevel</span> <span class="o">=</span> <span class="n">svsAvailableLevels</span><span class="p">[</span><span class="n">svslevel</span><span class="p">][</span><span class="s1">&#39;level&#39;</span><span class="p">]</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">svsAvailableLevels</span><span class="p">[</span><span class="n">svslevel</span><span class="p">][</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">levelW</span><span class="p">))</span>
+            <span class="c1"># If there are no tiles at a particular level, we have to read a</span>
+            <span class="c1"># larger area of a higher resolution level.  If such an area would</span>
+            <span class="c1"># be excessively large, we could have memory issues, so raise an</span>
+            <span class="c1"># error.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">*</span> <span class="n">scale</span> <span class="o">&gt;</span> <span class="n">maxSize</span> <span class="ow">or</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span> <span class="o">*</span> <span class="n">scale</span> <span class="o">&gt;</span> <span class="n">maxSize</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;OpenSlide has no small-scale tiles (level </span><span class="si">%d</span><span class="s1"> is at </span><span class="si">%d</span><span class="s1"> &#39;</span>
+                       <span class="s1">&#39;scale)&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">scale</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_svslevels</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                <span class="s1">&#39;svslevel&#39;</span><span class="p">:</span> <span class="n">bestlevel</span><span class="p">,</span>
+                <span class="s1">&#39;scale&#39;</span><span class="p">:</span> <span class="n">scale</span><span class="p">,</span>
+            <span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bounds</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">bounds</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">openslide</span><span class="o">.</span><span class="n">PROPERTY_NAME_BOUNDS_X</span><span class="p">]),</span>
+                <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">openslide</span><span class="o">.</span><span class="n">PROPERTY_NAME_BOUNDS_Y</span><span class="p">]),</span>
+                <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">openslide</span><span class="o">.</span><span class="n">PROPERTY_NAME_BOUNDS_WIDTH</span><span class="p">]),</span>
+                <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">openslide</span><span class="o">.</span><span class="n">PROPERTY_NAME_BOUNDS_HEIGHT</span><span class="p">]),</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span>
+                <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="ow">and</span>
+                <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span>
+                <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span> <span class="ow">and</span>
+                <span class="p">(</span><span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="ow">or</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span><span class="p">)</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_bounds</span> <span class="o">=</span> <span class="n">bounds</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">],</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span>
+                <span class="n">prevlevels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span>
+                    <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span><span class="p">),</span>
+                    <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span><span class="p">))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_svslevels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_svslevels</span><span class="p">[</span><span class="n">prevlevels</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span><span class="p">:]</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_populatedLevels</span> <span class="o">=</span> <span class="nb">len</span><span class="p">({</span><span class="n">l</span><span class="p">[</span><span class="s1">&#39;svslevel&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_svslevels</span><span class="p">})</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getTileSize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the tile size.  The tile size isn&#39;t in the official openslide</span>
+<span class="sd">        interface documentation, but every example has the tile size in the</span>
+<span class="sd">        properties.  If the tile size has an excessive aspect ratio or isn&#39;t</span>
+<span class="sd">        set, fall back to a default of 256 x 256.  The read_region function</span>
+<span class="sd">        abstracts reading the tiles, so this may be less efficient, but will</span>
+<span class="sd">        still work.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Try to read it, but fall back to 256 if it isn&#39;t set.</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">height</span> <span class="o">=</span> <span class="mi">256</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span>
+                <span class="s1">&#39;openslide.level[0].tile-width&#39;</span><span class="p">])</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span>
+                <span class="s1">&#39;openslide.level[0].tile-height&#39;</span><span class="p">])</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="c1"># If the tile size is too small (&lt;4) or wrong (&lt;=0), use a default value</span>
+        <span class="k">if</span> <span class="n">width</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="mi">256</span>
+        <span class="k">if</span> <span class="n">height</span> <span class="o">&lt;</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">height</span> <span class="o">=</span> <span class="mi">256</span>
+        <span class="c1"># If the tile has an excessive aspect ratio, use default values</span>
+        <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span> <span class="o">/</span> <span class="nb">min</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">4</span><span class="p">:</span>
+            <span class="n">width</span> <span class="o">=</span> <span class="n">height</span> <span class="o">=</span> <span class="mi">256</span>
+        <span class="c1"># Don&#39;t let tiles be bigger than the whole image.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getAvailableLevels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Some SVS files (notably some NDPI variants) have levels that cannot be</span>
+<span class="sd">        read.  Get a list of levels, check that each is at least potentially</span>
+<span class="sd">        readable, and return a list of these sorted highest-resolution first.</span>
+
+<span class="sd">        :param path: the path of the SVS file.  After a failure, the file is</span>
+<span class="sd">            reopened to reset the error state.</span>
+<span class="sd">        :returns: levels.  A list of valid levels, each of which is a</span>
+<span class="sd">            dictionary of level (the internal 0-based level number), width, and</span>
+<span class="sd">            height.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">levels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">svsLevelDimensions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">level_dimensions</span>
+        <span class="k">for</span> <span class="n">svslevel</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">svsLevelDimensions</span><span class="p">)):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">read_region</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">svslevel</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">level</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;level&#39;</span><span class="p">:</span> <span class="n">svslevel</span><span class="p">,</span>
+                    <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="n">svsLevelDimensions</span><span class="p">[</span><span class="n">svslevel</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">svsLevelDimensions</span><span class="p">[</span><span class="n">svslevel</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>
+                <span class="p">}</span>
+                <span class="k">if</span> <span class="n">level</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">level</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="c1"># add to the list so that we can sort by resolution and</span>
+                    <span class="c1"># then by earlier entries</span>
+                    <span class="n">levels</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">level</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">level</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">],</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">levels</span><span class="p">),</span> <span class="n">level</span><span class="p">))</span>
+            <span class="k">except</span> <span class="n">openslide</span><span class="o">.</span><span class="n">lowlevel</span><span class="o">.</span><span class="n">OpenSlideError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span> <span class="o">=</span> <span class="n">openslide</span><span class="o">.</span><span class="n">OpenSlide</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="c1"># sort highest resolution first.</span>
+        <span class="n">levels</span> <span class="o">=</span> <span class="p">[</span><span class="n">entry</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">levels</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])]</span>
+        <span class="c1"># Discard levels that are not a power-of-two compared to the highest</span>
+        <span class="c1"># resolution level.</span>
+        <span class="n">levels</span> <span class="o">=</span> <span class="p">[</span><span class="n">entry</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">levels</span> <span class="k">if</span>
+                  <span class="n">nearPowerOfTwo</span><span class="p">(</span><span class="n">levels</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;width&#39;</span><span class="p">],</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">])</span> <span class="ow">and</span>
+                  <span class="n">nearPowerOfTwo</span><span class="p">(</span><span class="n">levels</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;height&#39;</span><span class="p">],</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">])]</span>
+        <span class="k">return</span> <span class="n">levels</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_nonemptyLevelsList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a list of one value per level where the value is None if the</span>
+<span class="sd">        level does not exist in the file and any other value if it does.</span>
+
+<span class="sd">        :param frame: the frame number.</span>
+<span class="sd">        :returns: a list of levels length.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="kc">True</span> <span class="k">if</span> <span class="n">l</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_svslevels</span><span class="p">]</span>
+
+<div class="viewcode-block" id="OpenslideFileTileSource.getNativeMagnification">
+<a class="viewcode-back" href="../_build/large_image_source_openslide/large_image_source_openslide.html#large_image_source_openslide.OpenslideFileTileSource.getNativeMagnification">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getNativeMagnification</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the magnification at a particular level.</span>
+
+<span class="sd">        :return: magnification, width of a pixel in mm, height of a pixel in mm.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">mag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span>
+                <span class="n">openslide</span><span class="o">.</span><span class="n">PROPERTY_NAME_OBJECTIVE_POWER</span><span class="p">]</span>
+            <span class="n">mag</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">mag</span><span class="p">)</span> <span class="k">if</span> <span class="n">mag</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="n">openslide</span><span class="o">.</span><span class="n">lowlevel</span><span class="o">.</span><span class="n">OpenSlideError</span><span class="p">):</span>
+            <span class="n">mag</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">mm_x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span>
+                <span class="n">openslide</span><span class="o">.</span><span class="n">PROPERTY_NAME_MPP_X</span><span class="p">])</span> <span class="o">*</span> <span class="mf">0.001</span>
+            <span class="n">mm_y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span>
+                <span class="n">openslide</span><span class="o">.</span><span class="n">PROPERTY_NAME_MPP_Y</span><span class="p">])</span> <span class="o">*</span> <span class="mf">0.001</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">mm_x</span> <span class="o">=</span> <span class="n">mm_y</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># Estimate the magnification if we don&#39;t have a direct value</span>
+        <span class="k">if</span> <span class="n">mag</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">mm_x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mag</span> <span class="o">=</span> <span class="mf">0.01</span> <span class="o">/</span> <span class="n">mm_x</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;magnification&#39;</span><span class="p">:</span> <span class="n">mag</span><span class="p">,</span>
+            <span class="s1">&#39;mm_x&#39;</span><span class="p">:</span> <span class="n">mm_x</span><span class="p">,</span>
+            <span class="s1">&#39;mm_y&#39;</span><span class="p">:</span> <span class="n">mm_y</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="OpenslideFileTileSource.getInternalMetadata">
+<a class="viewcode-back" href="../_build/large_image_source_openslide/large_image_source_openslide.html#large_image_source_openslide.OpenslideFileTileSource.getInternalMetadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getInternalMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return additional known metadata about the tile source.  Data returned</span>
+<span class="sd">        from this method is not guaranteed to be in any particular format or</span>
+<span class="sd">        have specific values.</span>
+
+<span class="sd">        :returns: a dictionary of data or None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;openslide&#39;</span><span class="p">:</span> <span class="p">{}}</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">properties</span><span class="p">:</span>
+            <span class="n">results</span><span class="p">[</span><span class="s1">&#39;openslide&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;openslide.comment&#39;</span><span class="p">:</span>
+                <span class="n">leader</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">if</span> <span class="s1">&#39;aperio&#39;</span> <span class="ow">in</span> <span class="n">leader</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+                    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;aperio_version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">leader</span>
+        <span class="k">return</span> <span class="n">results</span></div>
+
+
+<div class="viewcode-block" id="OpenslideFileTileSource.getTile">
+<a class="viewcode-back" href="../_build/large_image_source_openslide/large_image_source_openslide.html#large_image_source_openslide.OpenslideFileTileSource.getTile">[docs]</a>
+    <span class="nd">@methodcache</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getTile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">pilImageAllowed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">numpyAllowed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xyzInRange</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="n">svslevel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_svslevels</span><span class="p">[</span><span class="n">z</span><span class="p">]</span>
+        <span class="c1"># When we read a region from the SVS, we have to ask for it in the</span>
+        <span class="c1"># SVS level 0 coordinate system.  Our x and y is in tile space at the</span>
+        <span class="c1"># specified z level, so the offset in SVS level 0 coordinates has to be</span>
+        <span class="c1"># scaled by the tile size and by the z level.</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">z</span><span class="p">)</span>
+        <span class="n">offsetx</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">*</span> <span class="n">scale</span>
+        <span class="n">offsety</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span> <span class="o">*</span> <span class="n">scale</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bounds</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">offsetx</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bounds</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">]</span> <span class="o">//</span> <span class="n">svslevel</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">]</span>
+            <span class="n">offsety</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bounds</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span> <span class="o">//</span> <span class="n">svslevel</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">]</span>
+        <span class="c1"># We ask to read an area that will cover the tile at the z level.  The</span>
+        <span class="c1"># scale we computed in the __init__ process for this svs level tells</span>
+        <span class="c1"># how much larger a region we need to read.</span>
+        <span class="k">if</span> <span class="n">svslevel</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="o">**</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxSkippedLevels</span><span class="p">:</span>
+            <span class="n">tile</span><span class="p">,</span> <span class="nb">format</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getTileFromEmptyLevel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">retries</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="k">while</span> <span class="n">retries</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">read_region</span><span class="p">(</span>
+                        <span class="p">(</span><span class="n">offsetx</span><span class="p">,</span> <span class="n">offsety</span><span class="p">),</span> <span class="n">svslevel</span><span class="p">[</span><span class="s1">&#39;svslevel&#39;</span><span class="p">],</span>
+                        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">*</span> <span class="n">svslevel</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">],</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span> <span class="o">*</span> <span class="n">svslevel</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">]))</span>
+                    <span class="nb">format</span> <span class="o">=</span> <span class="n">TILE_FORMAT_PIL</span>
+                    <span class="k">break</span>
+                <span class="k">except</span> <span class="n">openslide</span><span class="o">.</span><span class="n">lowlevel</span><span class="o">.</span><span class="n">OpenSlideError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_getLargeImagePath</span><span class="p">())</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="s1">&#39;Failed to get OpenSlide region &#39;</span>
+                        <span class="sa">f</span><span class="s1">&#39;(</span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s1"> on </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="si">}</span><span class="s1">: </span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s1">).&#39;</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                    <span class="c1"># Reopen handle after a lowlevel error</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span> <span class="o">=</span> <span class="n">openslide</span><span class="o">.</span><span class="n">OpenSlide</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                    <span class="n">retries</span> <span class="o">-=</span> <span class="mi">1</span>
+                    <span class="k">if</span> <span class="n">retries</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="c1"># Always scale to the svs level 0 tile size.</span>
+            <span class="k">if</span> <span class="n">svslevel</span><span class="p">[</span><span class="s1">&#39;scale&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">tile</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span><span class="p">),</span>
+                                   <span class="nb">getattr</span><span class="p">(</span><span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="p">,</span> <span class="s1">&#39;Resampling&#39;</span><span class="p">,</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="p">)</span><span class="o">.</span><span class="n">LANCZOS</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outputTile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="nb">format</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">pilImageAllowed</span><span class="p">,</span>
+                                <span class="n">numpyAllowed</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="OpenslideFileTileSource.getPreferredLevel">
+<a class="viewcode-back" href="../_build/large_image_source_openslide/large_image_source_openslide.html#large_image_source_openslide.OpenslideFileTileSource.getPreferredLevel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getPreferredLevel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given a desired level (0 is minimum resolution, self.levels - 1 is max</span>
+<span class="sd">        resolution), return the level that contains actual data that is no</span>
+<span class="sd">        lower resolution.</span>
+
+<span class="sd">        :param level: desired level</span>
+<span class="sd">        :returns level: a level with actual data that is no lower resolution.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_svslevels</span><span class="p">[</span><span class="n">level</span><span class="p">][</span><span class="s1">&#39;scale&#39;</span><span class="p">]</span>
+        <span class="k">while</span> <span class="n">scale</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">level</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">scale</span> <span class="o">/=</span> <span class="mi">2</span>
+        <span class="k">return</span> <span class="n">level</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getAssociatedImagesDict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">associated_images</span><span class="p">:</span>
+                <span class="n">images</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;openslide&#39;</span>
+        <span class="k">except</span> <span class="n">openslide</span><span class="o">.</span><span class="n">lowlevel</span><span class="o">.</span><span class="n">OpenSlideError</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_tiffinfo&#39;</span><span class="p">):</span>
+            <span class="n">vendor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">properties</span><span class="p">[</span><span class="s1">&#39;openslide.vendor&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">ifdidx</span><span class="p">,</span> <span class="n">ifd</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tiffinfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">]):</span>
+                <span class="n">key</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">if</span> <span class="n">vendor</span> <span class="o">==</span> <span class="s1">&#39;hamamatsu&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">NDPI_SOURCELENS</span><span class="o">.</span><span class="n">value</span> <span class="ow">in</span> <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]:</span>
+                        <span class="n">lens</span> <span class="o">=</span> <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">NDPI_SOURCELENS</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                        <span class="n">key</span> <span class="o">=</span> <span class="p">{</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;macro&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;nonempty&#39;</span><span class="p">}</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">lens</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">vendor</span> <span class="o">==</span> <span class="s1">&#39;aperio&#39;</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">NewSubfileType</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="ow">and</span>
+                            <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">NewSubfileType</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">&amp;</span>
+                            <span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">NewSubfileType</span><span class="o">.</span><span class="n">bitfield</span><span class="o">.</span><span class="n">ReducedImage</span><span class="o">.</span><span class="n">value</span><span class="p">):</span>
+                        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;label&#39;</span> <span class="k">if</span> <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span>
+                               <span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">NewSubfileType</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span>
+                               <span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">NewSubfileType</span><span class="o">.</span><span class="n">bitfield</span><span class="o">.</span><span class="n">ReducedImage</span><span class="o">.</span><span class="n">value</span>
+                               <span class="k">else</span> <span class="s1">&#39;macro&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
+                    <span class="n">images</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">ifdidx</span>
+        <span class="k">return</span> <span class="n">images</span>
+
+<div class="viewcode-block" id="OpenslideFileTileSource.getAssociatedImagesList">
+<a class="viewcode-back" href="../_build/large_image_source_openslide/large_image_source_openslide.html#large_image_source_openslide.OpenslideFileTileSource.getAssociatedImagesList">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getAssociatedImagesList</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a list of all associated images.</span>
+
+<span class="sd">        :return: the list of image keys.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_getAssociatedImagesDict</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getAssociatedImage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imageKey</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get an associated image in PIL format.</span>
+
+<span class="sd">        :param imageKey: the key of the associated image.</span>
+<span class="sd">        :return: the image in PIL format or None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAssociatedImagesDict</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">imageKey</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">images</span><span class="p">[</span><span class="n">imageKey</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;openslide&#39;</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span><span class="o">.</span><span class="n">associated_images</span><span class="p">[</span><span class="n">imageKey</span><span class="p">]</span>
+            <span class="k">except</span> <span class="n">openslide</span><span class="o">.</span><span class="n">lowlevel</span><span class="o">.</span><span class="n">OpenSlideError</span><span class="p">:</span>
+                <span class="c1"># Reopen handle after a lowlevel error</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_openslide</span> <span class="o">=</span> <span class="n">openslide</span><span class="o">.</span><span class="n">OpenSlide</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">)</span>
+                <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">tiff_buffer</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span>
+        <span class="n">ifd</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffinfo</span><span class="p">[</span><span class="s1">&#39;ifds&#39;</span><span class="p">][</span><span class="n">images</span><span class="p">[</span><span class="n">imageKey</span><span class="p">]]</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">Photometric</span><span class="o">.</span><span class="n">value</span> <span class="ow">in</span> <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="ow">and</span>
+                <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">Photometric</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span>
+                <span class="n">tifftools</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">Photometric</span><span class="o">.</span><span class="n">RGB</span> <span class="ow">and</span>
+                <span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">SamplesPerPixel</span><span class="o">.</span><span class="n">value</span> <span class="ow">in</span> <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="ow">and</span>
+                <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">SamplesPerPixel</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">ifd</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">][</span><span class="n">tifftools</span><span class="o">.</span><span class="n">Tag</span><span class="o">.</span><span class="n">Photometric</span><span class="o">.</span><span class="n">value</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span>
+                <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">tifftools</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">Photometric</span><span class="o">.</span><span class="n">MinIsBlack</span>
+        <span class="n">tifftools</span><span class="o">.</span><span class="n">write_tiff</span><span class="p">(</span><span class="n">ifd</span><span class="p">,</span> <span class="n">tiff_buffer</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">tiff_buffer</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="open">
+<a class="viewcode-back" href="../_build/large_image_source_openslide/large_image_source_openslide.html#large_image_source_openslide.open">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">open</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create an instance of the module class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">OpenslideFileTileSource</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="canRead">
+<a class="viewcode-back" href="../_build/large_image_source_openslide/large_image_source_openslide.html#large_image_source_openslide.canRead">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">canRead</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if an input can be read by the module class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">OpenslideFileTileSource</span><span class="o">.</span><span class="n">canRead</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

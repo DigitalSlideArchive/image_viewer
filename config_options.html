@@ -1,0 +1,323 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Configuration Options &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="_static/K.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Image Conversion" href="image_conversion.html" />
+    <link rel="prev" title="Tile Source Options" href="tilesource_options.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Configuration Options</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-from-python">Configuration from Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-from-environment">Configuration from Environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration-within-the-girder-plugin">Configuration within the Girder Plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#logging-from-python">Logging from Python</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Configuration Options</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/config_options.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="configuration-options">
+<h1>Configuration Options<a class="headerlink" href="#configuration-options" title="Link to this heading"></a></h1>
+<p>Some functionality of large_image is controlled through configuration parameters.  These can be read or set via python using functions in the <code class="docutils literal notranslate"><span class="pre">large_image.config</span></code> module, <a class="reference external" href="./_build/large_image/large_image.html#large_image.config.getConfig">getConfig</a> and <a class="reference external" href="./_build/large_image/large_image.html#large_image.config.setConfig">setConfig</a>.</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Configuration Parameters</span><a class="headerlink" href="#id1" title="Link to this table"></a></caption>
+<colgroup>
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Key(s)</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Default</p>
+</th>
+</tr>
+</thead>
+<tbody id="config-logger">
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">logger</span></code> <a class="reference internal" href="#config-logger"><span class="std std-ref">🔗</span></a></p></td>
+<td><p>Most log messages are sent here.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">logging.Logger</span></code></p></td>
+<td><p>This defaults to the standard python logger using the name large_image. When using Girder, this default to Girder’s logger, which allows colored console output.</p>
+</td>
+</tr>
+<tr class="row-odd" id="config-logprint"><td><p><code class="docutils literal notranslate"><span class="pre">logprint</span></code> <a class="reference internal" href="#config-logprint"><span class="std std-ref">🔗</span></a></p></td>
+<td><p>Messages about available tilesources are sent here.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">logging.Logger</span></code></p></td>
+<td><p>This defaults to the standard python logger using the name large_image. When using Girder, this default to Girder’s logger, which allows colored console output.</p>
+</td>
+</tr>
+<tr class="row-even" id="config-cache-backend"><td><p><code class="docutils literal notranslate"><span class="pre">cache_backend</span></code> <a class="reference internal" href="#config-cache-backend"><span class="std std-ref">🔗</span></a></p></td>
+<td><p>String specifying how tiles are cached.  If memcached is not available for any reason, the python cache is used instead.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span> <span class="pre">|</span> <span class="pre">str:</span> <span class="pre">&quot;python&quot;</span> <span class="pre">|</span> <span class="pre">str:</span> <span class="pre">&quot;memcached&quot;</span> <span class="pre">|</span> <span class="pre">str:</span> <span class="pre">&quot;redis&quot;</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code> (When None, the first cache available in the order memcached, redis, python is used. Otherwise, the specified cache is used if available, falling back to python if not.)</p>
+</td>
+</tr>
+<tr class="row-odd" id="config-cache-python-memory-portion"><td><p><code class="docutils literal notranslate"><span class="pre">cache_python_memory_portion</span></code> <a class="reference internal" href="#config-cache-python-memory-portion"><span class="std std-ref">🔗</span></a></p></td>
+<td><p>If tiles are cached with python, the cache is sized so that it is expected to use less than 1 / (<code class="docutils literal notranslate"><span class="pre">cache_python_memory_portion</span></code>) of the available memory.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">16</span></code></p>
+</td>
+</tr>
+<tr class="row-even" id="config-cache-memcached-url"><td><p><code class="docutils literal notranslate"><span class="pre">cache_memcached_url</span></code> <a class="reference internal" href="#config-cache-memcached-url"><span class="std std-ref">🔗</span></a></p></td>
+<td><p>If tiles are cached in memcached, the url or list of urls where the memcached server is located.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">|</span> <span class="pre">List[str]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;127.0.0.1&quot;</span></code></p>
+</td>
+</tr>
+<tr class="row-odd" id="config-cache-memcached-username"><td><p><code class="docutils literal notranslate"><span class="pre">cache_memcached_username</span></code> <a class="reference internal" href="#config-cache-memcached-username"><span class="std std-ref">🔗</span></a></p></td>
+<td><p>A username for the memcached server.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+<tr class="row-even" id="config-cache-memcached-password"><td><p><code class="docutils literal notranslate"><span class="pre">cache_memcached_password</span></code> <a class="reference internal" href="#config-cache-memcached-password"><span class="std std-ref">🔗</span></a></p></td>
+<td><p>A password for the memcached server.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+<tr class="row-odd" id="config-cache-redis-url"><td><p><code class="docutils literal notranslate"><span class="pre">cache_redis_url</span></code> <a class="reference internal" href="#config-cache-redis-url"><span class="std std-ref">🔗</span></a></p></td>
+<td><p>If tiles are cached in redis, the url or list of urls where the redis server is located.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">|</span> <span class="pre">List[str]</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">&quot;127.0.0.1:6379&quot;</span></code></p>
+</td>
+</tr>
+<tr class="row-even" id="config-cache-redis-username"><td><p><code class="docutils literal notranslate"><span class="pre">cache_redis_username</span></code> <a class="reference internal" href="#config-cache-redis-username"><span class="std std-ref">🔗</span></a></p></td>
+<td><p>A username for the redis server.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+<tr class="row-odd" id="config-cache-redis-password"><td><p><code class="docutils literal notranslate"><span class="pre">cache_redis_password</span></code> <a class="reference internal" href="#config-cache-redis-password"><span class="std std-ref">🔗</span></a></p></td>
+<td><p>A password for the redis server.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+<tr class="row-even" id="config-cache-tilesource-memory-portion"><td><p><code class="docutils literal notranslate"><span class="pre">cache_tilesource_memory_portion</span></code> <a class="reference internal" href="#config-cache-tilesource-memory-portion"><span class="std std-ref">🔗</span></a></p></td>
+<td><p>Tilesources are cached on open so that subsequent accesses can be faster.  These use file handles and memory.  This limits the maximum based on a memory estimation and using no more than 1 / (<code class="docutils literal notranslate"><span class="pre">cache_tilesource_memory_portion</span></code>) of the available memory.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">32</span></code> Memory usage by tile source is necessarily a rough estimate, since it can vary due to a wide variety of image-specific and deployment-specific details; this is intended to be conservative.</p>
+</td>
+</tr>
+<tr class="row-odd" id="config-cache-tilesource-maximum"><td><p><code class="docutils literal notranslate"><span class="pre">cache_tilesource_maximum</span></code> <a class="reference internal" href="#config-cache-tilesource-maximum"><span class="std std-ref">🔗</span></a></p></td>
+<td><p>If this is zero, this signifies that <code class="docutils literal notranslate"><span class="pre">cache_tilesource_memory_portion</span></code> determines the number of sources that will be cached. If this greater than 0, the cache will be the smaller of the value computed for the memory portion and this value (but always at least 3).</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0</span></code></p>
+</td>
+</tr>
+<tr class="row-even" id="config-cache-sources"><td><p><code class="docutils literal notranslate"><span class="pre">cache_sources</span></code> <a class="reference internal" href="#config-cache-sources"><span class="std std-ref">🔗</span></a></p></td>
+<td><p>If set to False, the default will be to not cache tile sources.  This has substantial performance penalties if sources are used multiple times, so should only be set in singular dynamic environments such as experimental notebooks.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</td>
+</tr>
+<tr class="row-odd" id="config-max-small-image-size"><td><p><code class="docutils literal notranslate"><span class="pre">max_small_image_size</span></code> <a class="reference internal" href="#config-max-small-image-size"><span class="std std-ref">🔗</span></a></p></td>
+<td><p>The PIL tilesource is used for small images if they are no more than this many pixels along their maximum dimension.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">4096</span></code>  Specifying values greater than this could reduce compatibility with tile use on some browsers. In general, <code class="docutils literal notranslate"><span class="pre">8192</span></code> is safe for all modern systems, and values greater than <code class="docutils literal notranslate"><span class="pre">16384</span></code> should not be specified if the image will be viewed in any browser.</p>
+</td>
+</tr>
+<tr class="row-even" id="config-source-ignored-names"><td><p><code class="docutils literal notranslate"><span class="pre">source_bioformats_ignored_names</span></code>,
+<code class="docutils literal notranslate"><span class="pre">source_pil_ignored_names</span></code>,
+<code class="docutils literal notranslate"><span class="pre">source_vips_ignored_names</span></code> <a class="reference internal" href="#config-source-ignored-names"><span class="std std-ref">🔗</span></a></p></td>
+<td><p>Some tile sources can read some files that are better read by other tilesources.  Since reading these files is suboptimal, these tile sources have a setting that, by default, ignores files without extensions or with particular extensions.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code> (regular expression)</p></td>
+<td><p>Sources have different default values; see each source for its default. For example, the vips source default is <code class="docutils literal notranslate"><span class="pre">r'(^[^.]*|\.(yml|yaml|json|png|svs|mrxs))$'</span></code></p>
+</td>
+</tr>
+<tr class="row-odd" id="config-all-sources-ignored-names"><td><p><code class="docutils literal notranslate"><span class="pre">all_sources_ignored_names</span></code> <a class="reference internal" href="#config-all-sources-ignored-names"><span class="std std-ref">🔗</span></a></p></td>
+<td><p>If a file matches the regular expression in this setting, it will only be opened by sources that explicitly match the extension or mimetype.  Some formats are composed of multiple files that can be read as either a small image or as a large image depending on the source; this prohibits all sources that don’t explicitly support the format.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">str</span></code> (regular expression)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">'(\.mrxs|\.vsi)$'</span></code></p>
+</td>
+</tr>
+<tr class="row-even" id="config-icc-correction"><td><p><code class="docutils literal notranslate"><span class="pre">icc_correction</span></code> <a class="reference internal" href="#config-icc-correction"><span class="std std-ref">🔗</span></a></p></td>
+<td><p>If this is True or undefined, ICC color correction will be applied for tile sources that have ICC profile information.  If False, correction will not be applied.  If the style used to open a tilesource specifies ICC correction explicitly (on or off), then this setting is not used.  This may also be a string with one of the intents defined by the PIL.ImageCms.Intents enum.  <code class="docutils literal notranslate"><span class="pre">True</span></code> is the same as <code class="docutils literal notranslate"><span class="pre">perceptual</span></code>.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">bool</span> <span class="pre">|</span> <span class="pre">str:</span> <span class="pre">one</span> <span class="pre">of</span> <span class="pre">PIL.ImageCms.Intents</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p>
+</td>
+</tr>
+<tr class="row-odd" id="config-max-annotation-input-file-length"><td><p><code class="docutils literal notranslate"><span class="pre">max_annotation_input_file_length</span></code> <a class="reference internal" href="#config-max-annotation-input-file-length"><span class="std std-ref">🔗</span></a></p></td>
+<td><p>When an annotation file is uploaded through Girder, it is loaded into memory, validated, and then added to the database.  This is the maximum number of bytes that will be read directly.  Files larger than this are ignored.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p>The larger of 1 GiByte and 1/16th of the system virtual memory</p></td>
+</tr>
+</tbody>
+</table>
+<section id="configuration-from-python">
+<h2>Configuration from Python<a class="headerlink" href="#configuration-from-python" title="Link to this heading"></a></h2>
+<p>As an example, configuration parameters can be set via python code like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+
+<span class="n">large_image</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">setConfig</span><span class="p">(</span><span class="s1">&#39;max_small_image_size&#39;</span><span class="p">,</span> <span class="mi">8192</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If reading many different images but never revisiting them, it can be useful to reduce caching to a minimum.  There is a utility function to make this easier:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">large_image</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">minimizeCaching</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration-from-environment">
+<h2>Configuration from Environment<a class="headerlink" href="#configuration-from-environment" title="Link to this heading"></a></h2>
+<p>All configuration parameters can be specified as environment parameters by prefixing their uppercase names with <code class="docutils literal notranslate"><span class="pre">LARGE_IMAGE_</span></code>.  For instance, <code class="docutils literal notranslate"><span class="pre">LARGE_IMAGE_CACHE_BACKEND=python</span></code> specifies the cache backend.  If the values can be decoded as json, they will be parsed as such.  That is, numerical values will be parsed as numbers; to parse them as strings, surround them with double quotes.</p>
+<p>As another example, to use the least memory possible, set <code class="docutils literal notranslate"><span class="pre">LARGE_IMAGE_CACHE_BACKEND=python</span> <span class="pre">LARGE_IMAGE_CACHE_PYTHON_MEMORY_PORTION=1000</span> <span class="pre">LARGE_IMAGE_CACHE_TILESOURCE_MAXIMUM=2</span></code>.  The first setting specifies caching tiles in the main process and not in memcached or an external cache.  The second setting asks to use 1/1000th of the memory for a tile cache.  The third settings caches no more than 2 tile sources (2 is the minimum).</p>
+</section>
+<section id="configuration-within-the-girder-plugin">
+<h2>Configuration within the Girder Plugin<a class="headerlink" href="#configuration-within-the-girder-plugin" title="Link to this heading"></a></h2>
+<p>For the Girder plugin, these can also be set in the <code class="docutils literal notranslate"><span class="pre">girder.cfg</span></code> file in a <code class="docutils literal notranslate"><span class="pre">large_image</span></code> section.  For example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="n">large_image</span><span class="p">]</span>
+<span class="c1"># cache_backend, used for caching tiles, is either &quot;memcached&quot; or &quot;python&quot;</span>
+<span class="n">cache_backend</span> <span class="o">=</span> <span class="s2">&quot;python&quot;</span>
+<span class="c1"># &#39;python&#39; cache can use 1/(val) of the available memory</span>
+<span class="n">cache_python_memory_portion</span> <span class="o">=</span> <span class="mi">32</span>
+<span class="c1"># &#39;memcached&#39; cache backend can specify the memcached server.</span>
+<span class="c1"># cache_memcached_url may be a list</span>
+<span class="n">cache_memcached_url</span> <span class="o">=</span> <span class="s2">&quot;127.0.0.1&quot;</span>
+<span class="n">cache_memcached_username</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">cache_memcached_password</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="c1"># The tilesource cache uses the lesser of a value based on available file</span>
+<span class="c1"># handles, the memory portion, and the maximum (if not 0)</span>
+<span class="n">cache_tilesource_memory_portion</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">cache_tilesource_maximum</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="c1"># The PIL tilesource won&#39;t read images larger than the max small images size</span>
+<span class="n">max_small_image_size</span> <span class="o">=</span> <span class="mi">4096</span>
+<span class="c1"># The bioformats tilesource won&#39;t read files that end in a comma-separated</span>
+<span class="c1"># list of extensions</span>
+<span class="n">source_bioformats_ignored_names</span> <span class="o">=</span> <span class="sa">r</span><span class="s1">&#39;(^[!.]*|\.(jpg|jpeg|jpe|png|tif|tiff|ndpi))$&#39;</span>
+<span class="c1"># The maximum size of an annotation file that will be ingested into girder</span>
+<span class="c1"># via direct load</span>
+<span class="n">max_annotation_input_file_length</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">**</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</section>
+<section id="logging-from-python">
+<h2>Logging from Python<a class="headerlink" href="#logging-from-python" title="Link to this heading"></a></h2>
+<p>The log levels can be adjusted in the standard Python manner:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;large_image&#39;</span><span class="p">)</span>
+<span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">CRITICAL</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Alternately, a different logger can be specified via <code class="docutils literal notranslate"><span class="pre">setConfig</span></code> in the <code class="docutils literal notranslate"><span class="pre">logger</span></code> and <code class="docutils literal notranslate"><span class="pre">logprint</span></code> settings:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">large_image</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">setConfig</span><span class="p">(</span><span class="s1">&#39;logger&#39;</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span>
+<span class="n">large_image</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">setConfig</span><span class="p">(</span><span class="s1">&#39;logprint&#39;</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tilesource_options.html" class="btn btn-neutral float-left" title="Tile Source Options" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="image_conversion.html" class="btn btn-neutral float-right" title="Image Conversion" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

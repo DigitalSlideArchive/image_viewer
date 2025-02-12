@@ -1,0 +1,774 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image package &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="large_image.cache_util package" href="large_image.cache_util.html" />
+    <link rel="prev" title="large_image" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../api_index.html">API Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">large_image</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">large_image package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-large_image.config">large_image.config module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-large_image.constants">large_image.constants module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-large_image.exceptions">large_image.exceptions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-large_image">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_bioformats/modules.html">large_image_source_bioformats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_deepzoom/modules.html">large_image_source_deepzoom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_dicom/modules.html">large_image_source_dicom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_dummy/modules.html">large_image_source_dummy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_gdal/modules.html">large_image_source_gdal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_mapnik/modules.html">large_image_source_mapnik</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_multi/modules.html">large_image_source_multi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_nd2/modules.html">large_image_source_nd2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_ometiff/modules.html">large_image_source_ometiff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_openjpeg/modules.html">large_image_source_openjpeg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_openslide/modules.html">large_image_source_openslide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_pil/modules.html">large_image_source_pil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_rasterio/modules.html">large_image_source_rasterio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_test/modules.html">large_image_source_test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_tiff/modules.html">large_image_source_tiff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_tifffile/modules.html">large_image_source_tifffile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_vips/modules.html">large_image_source_vips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_zarr/modules.html">large_image_source_zarr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_converter/modules.html">large_image_converter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_tasks/modules.html">large_image_tasks</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../api_index.html">API Documentation</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">large_image</a></li>
+      <li class="breadcrumb-item active">large_image package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/_build/large_image/large_image.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="large-image-package">
+<h1>large_image package<a class="headerlink" href="#large-image-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="large_image.cache_util.html">large_image.cache_util package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="large_image.cache_util.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="large_image.cache_util.html#module-large_image.cache_util.base">large_image.cache_util.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.base.BaseCache"><code class="docutils literal notranslate"><span class="pre">BaseCache</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.base.BaseCache.clear"><code class="docutils literal notranslate"><span class="pre">BaseCache.clear()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.base.BaseCache.curritems"><code class="docutils literal notranslate"><span class="pre">BaseCache.curritems</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.base.BaseCache.currsize"><code class="docutils literal notranslate"><span class="pre">BaseCache.currsize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.base.BaseCache.getCache"><code class="docutils literal notranslate"><span class="pre">BaseCache.getCache()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.base.BaseCache.logError"><code class="docutils literal notranslate"><span class="pre">BaseCache.logError()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.base.BaseCache.maxsize"><code class="docutils literal notranslate"><span class="pre">BaseCache.maxsize</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="large_image.cache_util.html#module-large_image.cache_util.cache">large_image.cache_util.cache module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.cache.LruCacheMetaclass"><code class="docutils literal notranslate"><span class="pre">LruCacheMetaclass</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.cache.LruCacheMetaclass.classCaches"><code class="docutils literal notranslate"><span class="pre">LruCacheMetaclass.classCaches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.cache.LruCacheMetaclass.namedCaches"><code class="docutils literal notranslate"><span class="pre">LruCacheMetaclass.namedCaches</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.cache.getTileCache"><code class="docutils literal notranslate"><span class="pre">getTileCache()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.cache.isTileCacheSetup"><code class="docutils literal notranslate"><span class="pre">isTileCacheSetup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.cache.methodcache"><code class="docutils literal notranslate"><span class="pre">methodcache()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.cache.strhash"><code class="docutils literal notranslate"><span class="pre">strhash()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="large_image.cache_util.html#module-large_image.cache_util.cachefactory">large_image.cache_util.cachefactory module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.cachefactory.CacheFactory"><code class="docutils literal notranslate"><span class="pre">CacheFactory</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.cachefactory.CacheFactory.getCache"><code class="docutils literal notranslate"><span class="pre">CacheFactory.getCache()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.cachefactory.CacheFactory.getCacheSize"><code class="docutils literal notranslate"><span class="pre">CacheFactory.getCacheSize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.cachefactory.CacheFactory.logged"><code class="docutils literal notranslate"><span class="pre">CacheFactory.logged</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.cachefactory.getFirstAvailableCache"><code class="docutils literal notranslate"><span class="pre">getFirstAvailableCache()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.cachefactory.loadCaches"><code class="docutils literal notranslate"><span class="pre">loadCaches()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.cachefactory.pickAvailableCache"><code class="docutils literal notranslate"><span class="pre">pickAvailableCache()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="large_image.cache_util.html#module-large_image.cache_util.memcache">large_image.cache_util.memcache module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.memcache.MemCache"><code class="docutils literal notranslate"><span class="pre">MemCache</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.memcache.MemCache.clear"><code class="docutils literal notranslate"><span class="pre">MemCache.clear()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.memcache.MemCache.curritems"><code class="docutils literal notranslate"><span class="pre">MemCache.curritems</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.memcache.MemCache.currsize"><code class="docutils literal notranslate"><span class="pre">MemCache.currsize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.memcache.MemCache.getCache"><code class="docutils literal notranslate"><span class="pre">MemCache.getCache()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.memcache.MemCache.maxsize"><code class="docutils literal notranslate"><span class="pre">MemCache.maxsize</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="large_image.cache_util.html#module-large_image.cache_util.rediscache">large_image.cache_util.rediscache module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.rediscache.RedisCache"><code class="docutils literal notranslate"><span class="pre">RedisCache</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.rediscache.RedisCache.clear"><code class="docutils literal notranslate"><span class="pre">RedisCache.clear()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.rediscache.RedisCache.curritems"><code class="docutils literal notranslate"><span class="pre">RedisCache.curritems</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.rediscache.RedisCache.currsize"><code class="docutils literal notranslate"><span class="pre">RedisCache.currsize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.rediscache.RedisCache.getCache"><code class="docutils literal notranslate"><span class="pre">RedisCache.getCache()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.rediscache.RedisCache.maxsize"><code class="docutils literal notranslate"><span class="pre">RedisCache.maxsize</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="large_image.cache_util.html#module-large_image.cache_util">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.CacheFactory"><code class="docutils literal notranslate"><span class="pre">CacheFactory</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.CacheFactory.getCache"><code class="docutils literal notranslate"><span class="pre">CacheFactory.getCache()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.CacheFactory.getCacheSize"><code class="docutils literal notranslate"><span class="pre">CacheFactory.getCacheSize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.CacheFactory.logged"><code class="docutils literal notranslate"><span class="pre">CacheFactory.logged</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.LruCacheMetaclass"><code class="docutils literal notranslate"><span class="pre">LruCacheMetaclass</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.LruCacheMetaclass.classCaches"><code class="docutils literal notranslate"><span class="pre">LruCacheMetaclass.classCaches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.LruCacheMetaclass.namedCaches"><code class="docutils literal notranslate"><span class="pre">LruCacheMetaclass.namedCaches</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.MemCache"><code class="docutils literal notranslate"><span class="pre">MemCache</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.MemCache.clear"><code class="docutils literal notranslate"><span class="pre">MemCache.clear()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.MemCache.curritems"><code class="docutils literal notranslate"><span class="pre">MemCache.curritems</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.MemCache.currsize"><code class="docutils literal notranslate"><span class="pre">MemCache.currsize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.MemCache.getCache"><code class="docutils literal notranslate"><span class="pre">MemCache.getCache()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.MemCache.maxsize"><code class="docutils literal notranslate"><span class="pre">MemCache.maxsize</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.RedisCache"><code class="docutils literal notranslate"><span class="pre">RedisCache</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.RedisCache.clear"><code class="docutils literal notranslate"><span class="pre">RedisCache.clear()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.RedisCache.curritems"><code class="docutils literal notranslate"><span class="pre">RedisCache.curritems</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.RedisCache.currsize"><code class="docutils literal notranslate"><span class="pre">RedisCache.currsize</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.RedisCache.getCache"><code class="docutils literal notranslate"><span class="pre">RedisCache.getCache()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.RedisCache.maxsize"><code class="docutils literal notranslate"><span class="pre">RedisCache.maxsize</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.getTileCache"><code class="docutils literal notranslate"><span class="pre">getTileCache()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.isTileCacheSetup"><code class="docutils literal notranslate"><span class="pre">isTileCacheSetup()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.methodcache"><code class="docutils literal notranslate"><span class="pre">methodcache()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.pickAvailableCache"><code class="docutils literal notranslate"><span class="pre">pickAvailableCache()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.cache_util.html#large_image.cache_util.strhash"><code class="docutils literal notranslate"><span class="pre">strhash()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="large_image.tilesource.html">large_image.tilesource package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="large_image.tilesource.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="large_image.tilesource.html#module-large_image.tilesource.base">large_image.tilesource.base module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.FileTileSource"><code class="docutils literal notranslate"><span class="pre">FileTileSource</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.FileTileSource.canRead"><code class="docutils literal notranslate"><span class="pre">FileTileSource.canRead()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.FileTileSource.getLRUHash"><code class="docutils literal notranslate"><span class="pre">FileTileSource.getLRUHash()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.FileTileSource.getState"><code class="docutils literal notranslate"><span class="pre">FileTileSource.getState()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource"><code class="docutils literal notranslate"><span class="pre">TileSource</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.axesToFrame"><code class="docutils literal notranslate"><span class="pre">TileSource.axesToFrame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.bandCount"><code class="docutils literal notranslate"><span class="pre">TileSource.bandCount</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.canRead"><code class="docutils literal notranslate"><span class="pre">TileSource.canRead()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.channelNames"><code class="docutils literal notranslate"><span class="pre">TileSource.channelNames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.convertRegionScale"><code class="docutils literal notranslate"><span class="pre">TileSource.convertRegionScale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.dtype"><code class="docutils literal notranslate"><span class="pre">TileSource.dtype</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.extensions"><code class="docutils literal notranslate"><span class="pre">TileSource.extensions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.frameToAxes"><code class="docutils literal notranslate"><span class="pre">TileSource.frameToAxes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.frames"><code class="docutils literal notranslate"><span class="pre">TileSource.frames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.geospatial"><code class="docutils literal notranslate"><span class="pre">TileSource.geospatial</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getAssociatedImage"><code class="docutils literal notranslate"><span class="pre">TileSource.getAssociatedImage()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getAssociatedImagesList"><code class="docutils literal notranslate"><span class="pre">TileSource.getAssociatedImagesList()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getBandInformation"><code class="docutils literal notranslate"><span class="pre">TileSource.getBandInformation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getBounds"><code class="docutils literal notranslate"><span class="pre">TileSource.getBounds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getCenter"><code class="docutils literal notranslate"><span class="pre">TileSource.getCenter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getICCProfiles"><code class="docutils literal notranslate"><span class="pre">TileSource.getICCProfiles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getInternalMetadata"><code class="docutils literal notranslate"><span class="pre">TileSource.getInternalMetadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getLRUHash"><code class="docutils literal notranslate"><span class="pre">TileSource.getLRUHash()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getLevelForMagnification"><code class="docutils literal notranslate"><span class="pre">TileSource.getLevelForMagnification()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getMagnificationForLevel"><code class="docutils literal notranslate"><span class="pre">TileSource.getMagnificationForLevel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getMetadata"><code class="docutils literal notranslate"><span class="pre">TileSource.getMetadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getNativeMagnification"><code class="docutils literal notranslate"><span class="pre">TileSource.getNativeMagnification()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getOneBandInformation"><code class="docutils literal notranslate"><span class="pre">TileSource.getOneBandInformation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getPixel"><code class="docutils literal notranslate"><span class="pre">TileSource.getPixel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getPointAtAnotherScale"><code class="docutils literal notranslate"><span class="pre">TileSource.getPointAtAnotherScale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getPreferredLevel"><code class="docutils literal notranslate"><span class="pre">TileSource.getPreferredLevel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getRegion"><code class="docutils literal notranslate"><span class="pre">TileSource.getRegion()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getRegionAtAnotherScale"><code class="docutils literal notranslate"><span class="pre">TileSource.getRegionAtAnotherScale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getSingleTile"><code class="docutils literal notranslate"><span class="pre">TileSource.getSingleTile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getSingleTileAtAnotherScale"><code class="docutils literal notranslate"><span class="pre">TileSource.getSingleTileAtAnotherScale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getState"><code class="docutils literal notranslate"><span class="pre">TileSource.getState()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getThumbnail"><code class="docutils literal notranslate"><span class="pre">TileSource.getThumbnail()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getTile"><code class="docutils literal notranslate"><span class="pre">TileSource.getTile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getTileCount"><code class="docutils literal notranslate"><span class="pre">TileSource.getTileCount()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.getTileMimeType"><code class="docutils literal notranslate"><span class="pre">TileSource.getTileMimeType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.histogram"><code class="docutils literal notranslate"><span class="pre">TileSource.histogram()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.metadata"><code class="docutils literal notranslate"><span class="pre">TileSource.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.mimeTypes"><code class="docutils literal notranslate"><span class="pre">TileSource.mimeTypes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.name"><code class="docutils literal notranslate"><span class="pre">TileSource.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.nameMatches"><code class="docutils literal notranslate"><span class="pre">TileSource.nameMatches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.newPriority"><code class="docutils literal notranslate"><span class="pre">TileSource.newPriority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.style"><code class="docutils literal notranslate"><span class="pre">TileSource.style</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.tileFrames"><code class="docutils literal notranslate"><span class="pre">TileSource.tileFrames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.tileIterator"><code class="docutils literal notranslate"><span class="pre">TileSource.tileIterator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.tileIteratorAtAnotherScale"><code class="docutils literal notranslate"><span class="pre">TileSource.tileIteratorAtAnotherScale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.base.TileSource.wrapKey"><code class="docutils literal notranslate"><span class="pre">TileSource.wrapKey()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="large_image.tilesource.html#module-large_image.tilesource.geo">large_image.tilesource.geo module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource.extensions"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource.extensions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource.geospatial"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource.geospatial</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource.getBounds"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource.getBounds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource.getHexColors"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource.getHexColors()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource.getNativeMagnification"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource.getNativeMagnification()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource.getPixelSizeInMeters"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource.getPixelSizeInMeters()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource.getThumbnail"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource.getThumbnail()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource.getTileCorners"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource.getTileCorners()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource.isGeospatial"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource.isGeospatial()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource.mimeTypes"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource.mimeTypes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource.pixelToProjection"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource.pixelToProjection()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource.projection"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource.projection</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource.projectionOrigin"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource.projectionOrigin</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource.sourceLevels"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource.sourceLevels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource.sourceSizeX"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource.sourceSizeX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource.sourceSizeY"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource.sourceSizeY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource.toNativePixelCoordinates"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource.toNativePixelCoordinates()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource.unitsAcrossLevel0"><code class="docutils literal notranslate"><span class="pre">GDALBaseFileTileSource.unitsAcrossLevel0</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.GeoBaseFileTileSource"><code class="docutils literal notranslate"><span class="pre">GeoBaseFileTileSource</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.geo.make_vsi"><code class="docutils literal notranslate"><span class="pre">make_vsi()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="large_image.tilesource.html#module-large_image.tilesource.jupyter">large_image.tilesource.jupyter module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.IPyLeafletMixin"><code class="docutils literal notranslate"><span class="pre">IPyLeafletMixin</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.IPyLeafletMixin.JUPYTER_HOST"><code class="docutils literal notranslate"><span class="pre">IPyLeafletMixin.JUPYTER_HOST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.IPyLeafletMixin.JUPYTER_PROXY"><code class="docutils literal notranslate"><span class="pre">IPyLeafletMixin.JUPYTER_PROXY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.IPyLeafletMixin.as_leaflet_layer"><code class="docutils literal notranslate"><span class="pre">IPyLeafletMixin.as_leaflet_layer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.IPyLeafletMixin.iplmap"><code class="docutils literal notranslate"><span class="pre">IPyLeafletMixin.iplmap</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.Map"><code class="docutils literal notranslate"><span class="pre">Map</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.Map.from_map"><code class="docutils literal notranslate"><span class="pre">Map.from_map()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.Map.get_frame_histogram"><code class="docutils literal notranslate"><span class="pre">Map.get_frame_histogram()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.Map.id"><code class="docutils literal notranslate"><span class="pre">Map.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.Map.layer"><code class="docutils literal notranslate"><span class="pre">Map.layer</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.Map.make_layer"><code class="docutils literal notranslate"><span class="pre">Map.make_layer()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.Map.make_map"><code class="docutils literal notranslate"><span class="pre">Map.make_map()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.Map.map"><code class="docutils literal notranslate"><span class="pre">Map.map</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.Map.metadata"><code class="docutils literal notranslate"><span class="pre">Map.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.Map.to_map"><code class="docutils literal notranslate"><span class="pre">Map.to_map()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.Map.update_frame"><code class="docutils literal notranslate"><span class="pre">Map.update_frame()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.NumpyEncoder"><code class="docutils literal notranslate"><span class="pre">NumpyEncoder</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.NumpyEncoder.default"><code class="docutils literal notranslate"><span class="pre">NumpyEncoder.default()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.jupyter.launch_tile_server"><code class="docutils literal notranslate"><span class="pre">launch_tile_server()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="large_image.tilesource.html#module-large_image.tilesource.resample">large_image.tilesource.resample module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.ResampleMethod"><code class="docutils literal notranslate"><span class="pre">ResampleMethod</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.ResampleMethod.NP_MAX"><code class="docutils literal notranslate"><span class="pre">ResampleMethod.NP_MAX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.ResampleMethod.NP_MAX_COLOR"><code class="docutils literal notranslate"><span class="pre">ResampleMethod.NP_MAX_COLOR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.ResampleMethod.NP_MEAN"><code class="docutils literal notranslate"><span class="pre">ResampleMethod.NP_MEAN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.ResampleMethod.NP_MEDIAN"><code class="docutils literal notranslate"><span class="pre">ResampleMethod.NP_MEDIAN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.ResampleMethod.NP_MIN"><code class="docutils literal notranslate"><span class="pre">ResampleMethod.NP_MIN</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.ResampleMethod.NP_MIN_COLOR"><code class="docutils literal notranslate"><span class="pre">ResampleMethod.NP_MIN_COLOR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.ResampleMethod.NP_MODE"><code class="docutils literal notranslate"><span class="pre">ResampleMethod.NP_MODE</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.ResampleMethod.NP_NEAREST"><code class="docutils literal notranslate"><span class="pre">ResampleMethod.NP_NEAREST</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.ResampleMethod.PIL_BICUBIC"><code class="docutils literal notranslate"><span class="pre">ResampleMethod.PIL_BICUBIC</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.ResampleMethod.PIL_BILINEAR"><code class="docutils literal notranslate"><span class="pre">ResampleMethod.PIL_BILINEAR</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.ResampleMethod.PIL_BOX"><code class="docutils literal notranslate"><span class="pre">ResampleMethod.PIL_BOX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.ResampleMethod.PIL_HAMMING"><code class="docutils literal notranslate"><span class="pre">ResampleMethod.PIL_HAMMING</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.ResampleMethod.PIL_LANCZOS"><code class="docutils literal notranslate"><span class="pre">ResampleMethod.PIL_LANCZOS</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.ResampleMethod.PIL_MAX_ENUM"><code class="docutils literal notranslate"><span class="pre">ResampleMethod.PIL_MAX_ENUM</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.ResampleMethod.PIL_NEAREST"><code class="docutils literal notranslate"><span class="pre">ResampleMethod.PIL_NEAREST</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.downsampleTileHalfRes"><code class="docutils literal notranslate"><span class="pre">downsampleTileHalfRes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.numpyResize"><code class="docutils literal notranslate"><span class="pre">numpyResize()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.resample.pilResize"><code class="docutils literal notranslate"><span class="pre">pilResize()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="large_image.tilesource.html#module-large_image.tilesource.stylefuncs">large_image.tilesource.stylefuncs module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.stylefuncs.maskPixelValues"><code class="docutils literal notranslate"><span class="pre">maskPixelValues()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.stylefuncs.medianFilter"><code class="docutils literal notranslate"><span class="pre">medianFilter()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="large_image.tilesource.html#module-large_image.tilesource.tiledict">large_image.tilesource.tiledict module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.tiledict.LazyTileDict"><code class="docutils literal notranslate"><span class="pre">LazyTileDict</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.tiledict.LazyTileDict.release"><code class="docutils literal notranslate"><span class="pre">LazyTileDict.release()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.tiledict.LazyTileDict.setFormat"><code class="docutils literal notranslate"><span class="pre">LazyTileDict.setFormat()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="large_image.tilesource.html#module-large_image.tilesource.tileiterator">large_image.tilesource.tileiterator module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.tileiterator.TileIterator"><code class="docutils literal notranslate"><span class="pre">TileIterator</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="large_image.tilesource.html#module-large_image.tilesource.utilities">large_image.tilesource.utilities module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.utilities.ImageBytes"><code class="docutils literal notranslate"><span class="pre">ImageBytes</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.utilities.ImageBytes.mimetype"><code class="docutils literal notranslate"><span class="pre">ImageBytes.mimetype</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.utilities.JSONDict"><code class="docutils literal notranslate"><span class="pre">JSONDict</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.utilities.addPILFormatsToOutputOptions"><code class="docutils literal notranslate"><span class="pre">addPILFormatsToOutputOptions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.utilities.dictToEtree"><code class="docutils literal notranslate"><span class="pre">dictToEtree()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.utilities.etreeToDict"><code class="docutils literal notranslate"><span class="pre">etreeToDict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.utilities.fullAlphaValue"><code class="docutils literal notranslate"><span class="pre">fullAlphaValue()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.utilities.getAvailableNamedPalettes"><code class="docutils literal notranslate"><span class="pre">getAvailableNamedPalettes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.utilities.getPaletteColors"><code class="docutils literal notranslate"><span class="pre">getPaletteColors()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.utilities.getTileFramesQuadInfo"><code class="docutils literal notranslate"><span class="pre">getTileFramesQuadInfo()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.utilities.histogramThreshold"><code class="docutils literal notranslate"><span class="pre">histogramThreshold()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.utilities.isValidPalette"><code class="docutils literal notranslate"><span class="pre">isValidPalette()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.utilities.nearPowerOfTwo"><code class="docutils literal notranslate"><span class="pre">nearPowerOfTwo()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="large_image.tilesource.html#module-large_image.tilesource">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.FileTileSource"><code class="docutils literal notranslate"><span class="pre">FileTileSource</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.FileTileSource.canRead"><code class="docutils literal notranslate"><span class="pre">FileTileSource.canRead()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.FileTileSource.getLRUHash"><code class="docutils literal notranslate"><span class="pre">FileTileSource.getLRUHash()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.FileTileSource.getState"><code class="docutils literal notranslate"><span class="pre">FileTileSource.getState()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileGeneralError"><code class="docutils literal notranslate"><span class="pre">TileGeneralError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileGeneralException"><code class="docutils literal notranslate"><span class="pre">TileGeneralException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource"><code class="docutils literal notranslate"><span class="pre">TileSource</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.axesToFrame"><code class="docutils literal notranslate"><span class="pre">TileSource.axesToFrame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.bandCount"><code class="docutils literal notranslate"><span class="pre">TileSource.bandCount</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.canRead"><code class="docutils literal notranslate"><span class="pre">TileSource.canRead()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.channelNames"><code class="docutils literal notranslate"><span class="pre">TileSource.channelNames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.convertRegionScale"><code class="docutils literal notranslate"><span class="pre">TileSource.convertRegionScale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.dtype"><code class="docutils literal notranslate"><span class="pre">TileSource.dtype</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.extensions"><code class="docutils literal notranslate"><span class="pre">TileSource.extensions</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.frameToAxes"><code class="docutils literal notranslate"><span class="pre">TileSource.frameToAxes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.frames"><code class="docutils literal notranslate"><span class="pre">TileSource.frames</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.geospatial"><code class="docutils literal notranslate"><span class="pre">TileSource.geospatial</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getAssociatedImage"><code class="docutils literal notranslate"><span class="pre">TileSource.getAssociatedImage()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getAssociatedImagesList"><code class="docutils literal notranslate"><span class="pre">TileSource.getAssociatedImagesList()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getBandInformation"><code class="docutils literal notranslate"><span class="pre">TileSource.getBandInformation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getBounds"><code class="docutils literal notranslate"><span class="pre">TileSource.getBounds()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getCenter"><code class="docutils literal notranslate"><span class="pre">TileSource.getCenter()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getICCProfiles"><code class="docutils literal notranslate"><span class="pre">TileSource.getICCProfiles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getInternalMetadata"><code class="docutils literal notranslate"><span class="pre">TileSource.getInternalMetadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getLRUHash"><code class="docutils literal notranslate"><span class="pre">TileSource.getLRUHash()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getLevelForMagnification"><code class="docutils literal notranslate"><span class="pre">TileSource.getLevelForMagnification()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getMagnificationForLevel"><code class="docutils literal notranslate"><span class="pre">TileSource.getMagnificationForLevel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getMetadata"><code class="docutils literal notranslate"><span class="pre">TileSource.getMetadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getNativeMagnification"><code class="docutils literal notranslate"><span class="pre">TileSource.getNativeMagnification()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getOneBandInformation"><code class="docutils literal notranslate"><span class="pre">TileSource.getOneBandInformation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getPixel"><code class="docutils literal notranslate"><span class="pre">TileSource.getPixel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getPointAtAnotherScale"><code class="docutils literal notranslate"><span class="pre">TileSource.getPointAtAnotherScale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getPreferredLevel"><code class="docutils literal notranslate"><span class="pre">TileSource.getPreferredLevel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getRegion"><code class="docutils literal notranslate"><span class="pre">TileSource.getRegion()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getRegionAtAnotherScale"><code class="docutils literal notranslate"><span class="pre">TileSource.getRegionAtAnotherScale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getSingleTile"><code class="docutils literal notranslate"><span class="pre">TileSource.getSingleTile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getSingleTileAtAnotherScale"><code class="docutils literal notranslate"><span class="pre">TileSource.getSingleTileAtAnotherScale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getState"><code class="docutils literal notranslate"><span class="pre">TileSource.getState()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getThumbnail"><code class="docutils literal notranslate"><span class="pre">TileSource.getThumbnail()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getTile"><code class="docutils literal notranslate"><span class="pre">TileSource.getTile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getTileCount"><code class="docutils literal notranslate"><span class="pre">TileSource.getTileCount()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.getTileMimeType"><code class="docutils literal notranslate"><span class="pre">TileSource.getTileMimeType()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.histogram"><code class="docutils literal notranslate"><span class="pre">TileSource.histogram()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.levels"><code class="docutils literal notranslate"><span class="pre">TileSource.levels</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.metadata"><code class="docutils literal notranslate"><span class="pre">TileSource.metadata</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.mimeTypes"><code class="docutils literal notranslate"><span class="pre">TileSource.mimeTypes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.name"><code class="docutils literal notranslate"><span class="pre">TileSource.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.nameMatches"><code class="docutils literal notranslate"><span class="pre">TileSource.nameMatches</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.newPriority"><code class="docutils literal notranslate"><span class="pre">TileSource.newPriority</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.sizeX"><code class="docutils literal notranslate"><span class="pre">TileSource.sizeX</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.sizeY"><code class="docutils literal notranslate"><span class="pre">TileSource.sizeY</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.style"><code class="docutils literal notranslate"><span class="pre">TileSource.style</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.tileFrames"><code class="docutils literal notranslate"><span class="pre">TileSource.tileFrames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.tileHeight"><code class="docutils literal notranslate"><span class="pre">TileSource.tileHeight</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.tileIterator"><code class="docutils literal notranslate"><span class="pre">TileSource.tileIterator()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.tileIteratorAtAnotherScale"><code class="docutils literal notranslate"><span class="pre">TileSource.tileIteratorAtAnotherScale()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.tileWidth"><code class="docutils literal notranslate"><span class="pre">TileSource.tileWidth</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSource.wrapKey"><code class="docutils literal notranslate"><span class="pre">TileSource.wrapKey()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSourceAssetstoreError"><code class="docutils literal notranslate"><span class="pre">TileSourceAssetstoreError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSourceAssetstoreException"><code class="docutils literal notranslate"><span class="pre">TileSourceAssetstoreException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSourceError"><code class="docutils literal notranslate"><span class="pre">TileSourceError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSourceException"><code class="docutils literal notranslate"><span class="pre">TileSourceException</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.TileSourceFileNotFoundError"><code class="docutils literal notranslate"><span class="pre">TileSourceFileNotFoundError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.canRead"><code class="docutils literal notranslate"><span class="pre">canRead()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.dictToEtree"><code class="docutils literal notranslate"><span class="pre">dictToEtree()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.etreeToDict"><code class="docutils literal notranslate"><span class="pre">etreeToDict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.getSourceNameFromDict"><code class="docutils literal notranslate"><span class="pre">getSourceNameFromDict()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.getTileSource"><code class="docutils literal notranslate"><span class="pre">getTileSource()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.listExtensions"><code class="docutils literal notranslate"><span class="pre">listExtensions()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.listMimeTypes"><code class="docutils literal notranslate"><span class="pre">listMimeTypes()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.listSources"><code class="docutils literal notranslate"><span class="pre">listSources()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.nearPowerOfTwo"><code class="docutils literal notranslate"><span class="pre">nearPowerOfTwo()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.new"><code class="docutils literal notranslate"><span class="pre">new()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="large_image.tilesource.html#large_image.tilesource.open"><code class="docutils literal notranslate"><span class="pre">open()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-large_image.config">
+<span id="large-image-config-module"></span><h2>large_image.config module<a class="headerlink" href="#module-large_image.config" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image.config.cpu_count">
+<span class="sig-prename descclassname"><span class="pre">large_image.config.</span></span><span class="sig-name descname"><span class="pre">cpu_count</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">logical</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../../_modules/large_image/config.html#cpu_count"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.config.cpu_count" title="Link to this definition"></a></dt>
+<dd><p>Get the usable CPU count.  If psutil is available, it is used, since it can
+determine the number of physical CPUS versus logical CPUs.  This returns
+the smaller of that value from psutil and the number of cpus allowed by the
+os scheduler, which means that for physical requests (logical=False), the
+returned value may be more the the number of physical cpus that are usable.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>logical</strong> – True to get the logical usable CPUs (which include
+hyperthreading).  False for the physical usable CPUs.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the number of usable CPUs.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image.config.getConfig">
+<span class="sig-prename descclassname"><span class="pre">large_image.config.</span></span><span class="sig-name descname"><span class="pre">getConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Logger</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="../../_modules/large_image/config.html#getConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.config.getConfig" title="Link to this definition"></a></dt>
+<dd><p>Get the config dictionary or a value from the cache config settings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – if None, return the config dictionary.  Otherwise, return the
+value of the key if it is set or the default value if it is not.</p></li>
+<li><p><strong>default</strong> – a value to return if a key is requested and not set.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>either the config dictionary or the value of a key.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image.config.getLogger">
+<span class="sig-prename descclassname"><span class="pre">large_image.config.</span></span><span class="sig-name descname"><span class="pre">getLogger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Logger</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Logger</span></span></span><a class="reference internal" href="../../_modules/large_image/config.html#getLogger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.config.getLogger" title="Link to this definition"></a></dt>
+<dd><p>Get a logger from the config.  Ensure that it is a valid logger.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – if None, return the ‘logger’.</p></li>
+<li><p><strong>default</strong> – a value to return if a key is requested and not set.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a logger.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image.config.minimizeCaching">
+<span class="sig-prename descclassname"><span class="pre">large_image.config.</span></span><span class="sig-name descname"><span class="pre">minimizeCaching</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image/config.html#minimizeCaching"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.config.minimizeCaching" title="Link to this definition"></a></dt>
+<dd><p>Set python cache sizes to very low values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>mode</strong> – None for all caching, ‘tile’ for the tile cache, ‘source’ for
+the source cache.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image.config.setConfig">
+<span class="sig-prename descclassname"><span class="pre">large_image.config.</span></span><span class="sig-name descname"><span class="pre">setConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Logger</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/large_image/config.html#setConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.config.setConfig" title="Link to this definition"></a></dt>
+<dd><p>Set a value in the config settings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – the key to set.</p></li>
+<li><p><strong>value</strong> – the value to store in the key.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image.config.total_memory">
+<span class="sig-prename descclassname"><span class="pre">large_image.config.</span></span><span class="sig-name descname"><span class="pre">total_memory</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../../_modules/large_image/config.html#total_memory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.config.total_memory" title="Link to this definition"></a></dt>
+<dd><p>Get the total memory in the system.  If this is in a container, try to
+determine the memory available to the cgroup.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the available memory in bytes, or 8 GB if unknown.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-large_image.constants">
+<span id="large-image-constants-module"></span><h2>large_image.constants module<a class="headerlink" href="#module-large_image.constants" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image.constants.SourcePriority">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.constants.</span></span><span class="sig-name descname"><span class="pre">SourcePriority</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image/constants.html#SourcePriority"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.constants.SourcePriority" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">IntEnum</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.constants.SourcePriority.FALLBACK">
+<span class="sig-name descname"><span class="pre">FALLBACK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">11</span></em><a class="headerlink" href="#large_image.constants.SourcePriority.FALLBACK" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.constants.SourcePriority.FALLBACK_HIGH">
+<span class="sig-name descname"><span class="pre">FALLBACK_HIGH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#large_image.constants.SourcePriority.FALLBACK_HIGH" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.constants.SourcePriority.HIGH">
+<span class="sig-name descname"><span class="pre">HIGH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">3</span></em><a class="headerlink" href="#large_image.constants.SourcePriority.HIGH" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.constants.SourcePriority.HIGHER">
+<span class="sig-name descname"><span class="pre">HIGHER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2</span></em><a class="headerlink" href="#large_image.constants.SourcePriority.HIGHER" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.constants.SourcePriority.IMPLICIT">
+<span class="sig-name descname"><span class="pre">IMPLICIT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">8</span></em><a class="headerlink" href="#large_image.constants.SourcePriority.IMPLICIT" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.constants.SourcePriority.IMPLICIT_HIGH">
+<span class="sig-name descname"><span class="pre">IMPLICIT_HIGH</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">7</span></em><a class="headerlink" href="#large_image.constants.SourcePriority.IMPLICIT_HIGH" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.constants.SourcePriority.IMPLICIT_LOW">
+<span class="sig-name descname"><span class="pre">IMPLICIT_LOW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">9</span></em><a class="headerlink" href="#large_image.constants.SourcePriority.IMPLICIT_LOW" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.constants.SourcePriority.LOW">
+<span class="sig-name descname"><span class="pre">LOW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#large_image.constants.SourcePriority.LOW" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.constants.SourcePriority.LOWER">
+<span class="sig-name descname"><span class="pre">LOWER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#large_image.constants.SourcePriority.LOWER" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.constants.SourcePriority.MANUAL">
+<span class="sig-name descname"><span class="pre">MANUAL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">12</span></em><a class="headerlink" href="#large_image.constants.SourcePriority.MANUAL" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.constants.SourcePriority.MEDIUM">
+<span class="sig-name descname"><span class="pre">MEDIUM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">4</span></em><a class="headerlink" href="#large_image.constants.SourcePriority.MEDIUM" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.constants.SourcePriority.NAMED">
+<span class="sig-name descname"><span class="pre">NAMED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#large_image.constants.SourcePriority.NAMED" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.constants.SourcePriority.PREFERRED">
+<span class="sig-name descname"><span class="pre">PREFERRED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1</span></em><a class="headerlink" href="#large_image.constants.SourcePriority.PREFERRED" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-large_image.exceptions">
+<span id="large-image-exceptions-module"></span><h2>large_image.exceptions module<a class="headerlink" href="#module-large_image.exceptions" title="Link to this heading"></a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="large_image.exceptions.TileCacheConfigurationError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.exceptions.</span></span><span class="sig-name descname"><span class="pre">TileCacheConfigurationError</span></span><a class="reference internal" href="../../_modules/large_image/exceptions.html#TileCacheConfigurationError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.exceptions.TileCacheConfigurationError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#large_image.exceptions.TileCacheError" title="large_image.exceptions.TileCacheError"><code class="xref py py-class docutils literal notranslate"><span class="pre">TileCacheError</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="large_image.exceptions.TileCacheError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.exceptions.</span></span><span class="sig-name descname"><span class="pre">TileCacheError</span></span><a class="reference internal" href="../../_modules/large_image/exceptions.html#TileCacheError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.exceptions.TileCacheError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#large_image.exceptions.TileGeneralError" title="large_image.exceptions.TileGeneralError"><code class="xref py py-class docutils literal notranslate"><span class="pre">TileGeneralError</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="large_image.exceptions.TileGeneralError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.exceptions.</span></span><span class="sig-name descname"><span class="pre">TileGeneralError</span></span><a class="reference internal" href="../../_modules/large_image/exceptions.html#TileGeneralError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.exceptions.TileGeneralError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.exceptions.TileGeneralException">
+<span class="sig-prename descclassname"><span class="pre">large_image.exceptions.</span></span><span class="sig-name descname"><span class="pre">TileGeneralException</span></span><a class="headerlink" href="#large_image.exceptions.TileGeneralException" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#large_image.exceptions.TileGeneralError" title="large_image.exceptions.TileGeneralError"><code class="xref py py-class docutils literal notranslate"><span class="pre">TileGeneralError</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="large_image.exceptions.TileSourceAssetstoreError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.exceptions.</span></span><span class="sig-name descname"><span class="pre">TileSourceAssetstoreError</span></span><a class="reference internal" href="../../_modules/large_image/exceptions.html#TileSourceAssetstoreError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.exceptions.TileSourceAssetstoreError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#large_image.exceptions.TileSourceError" title="large_image.exceptions.TileSourceError"><code class="xref py py-class docutils literal notranslate"><span class="pre">TileSourceError</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.exceptions.TileSourceAssetstoreException">
+<span class="sig-prename descclassname"><span class="pre">large_image.exceptions.</span></span><span class="sig-name descname"><span class="pre">TileSourceAssetstoreException</span></span><a class="headerlink" href="#large_image.exceptions.TileSourceAssetstoreException" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#large_image.exceptions.TileSourceAssetstoreError" title="large_image.exceptions.TileSourceAssetstoreError"><code class="xref py py-class docutils literal notranslate"><span class="pre">TileSourceAssetstoreError</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="large_image.exceptions.TileSourceError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.exceptions.</span></span><span class="sig-name descname"><span class="pre">TileSourceError</span></span><a class="reference internal" href="../../_modules/large_image/exceptions.html#TileSourceError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.exceptions.TileSourceError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#large_image.exceptions.TileGeneralError" title="large_image.exceptions.TileGeneralError"><code class="xref py py-class docutils literal notranslate"><span class="pre">TileGeneralError</span></code></a></p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.exceptions.TileSourceException">
+<span class="sig-prename descclassname"><span class="pre">large_image.exceptions.</span></span><span class="sig-name descname"><span class="pre">TileSourceException</span></span><a class="headerlink" href="#large_image.exceptions.TileSourceException" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#large_image.exceptions.TileSourceError" title="large_image.exceptions.TileSourceError"><code class="xref py py-class docutils literal notranslate"><span class="pre">TileSourceError</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="large_image.exceptions.TileSourceFileNotFoundError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.exceptions.</span></span><span class="sig-name descname"><span class="pre">TileSourceFileNotFoundError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image/exceptions.html#TileSourceFileNotFoundError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.exceptions.TileSourceFileNotFoundError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#large_image.exceptions.TileSourceError" title="large_image.exceptions.TileSourceError"><code class="xref py py-class docutils literal notranslate"><span class="pre">TileSourceError</span></code></a>, <code class="xref py py-class docutils literal notranslate"><span class="pre">FileNotFoundError</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="large_image.exceptions.TileSourceInefficientError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.exceptions.</span></span><span class="sig-name descname"><span class="pre">TileSourceInefficientError</span></span><a class="reference internal" href="../../_modules/large_image/exceptions.html#TileSourceInefficientError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.exceptions.TileSourceInefficientError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#large_image.exceptions.TileSourceError" title="large_image.exceptions.TileSourceError"><code class="xref py py-class docutils literal notranslate"><span class="pre">TileSourceError</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="large_image.exceptions.TileSourceMalformedError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.exceptions.</span></span><span class="sig-name descname"><span class="pre">TileSourceMalformedError</span></span><a class="reference internal" href="../../_modules/large_image/exceptions.html#TileSourceMalformedError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.exceptions.TileSourceMalformedError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#large_image.exceptions.TileSourceError" title="large_image.exceptions.TileSourceError"><code class="xref py py-class docutils literal notranslate"><span class="pre">TileSourceError</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="large_image.exceptions.TileSourceRangeError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.exceptions.</span></span><span class="sig-name descname"><span class="pre">TileSourceRangeError</span></span><a class="reference internal" href="../../_modules/large_image/exceptions.html#TileSourceRangeError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.exceptions.TileSourceRangeError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#large_image.exceptions.TileSourceError" title="large_image.exceptions.TileSourceError"><code class="xref py py-class docutils literal notranslate"><span class="pre">TileSourceError</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="large_image.exceptions.TileSourceXYZRangeError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.exceptions.</span></span><span class="sig-name descname"><span class="pre">TileSourceXYZRangeError</span></span><a class="reference internal" href="../../_modules/large_image/exceptions.html#TileSourceXYZRangeError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.exceptions.TileSourceXYZRangeError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#large_image.exceptions.TileSourceRangeError" title="large_image.exceptions.TileSourceRangeError"><code class="xref py py-class docutils literal notranslate"><span class="pre">TileSourceRangeError</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-large_image">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-large_image" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="large_image" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="large_image.cache_util.html" class="btn btn-neutral float-right" title="large_image.cache_util package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

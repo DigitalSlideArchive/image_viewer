@@ -1,0 +1,763 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_dicom.assetstore.dicomweb_assetstore_adapter &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/K.png"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../large_image_source_dicom.html">large_image_source_dicom</a></li>
+          <li class="breadcrumb-item"><a href="../assetstore.html">large_image_source_dicom.assetstore</a></li>
+      <li class="breadcrumb-item active">large_image_source_dicom.assetstore.dicomweb_assetstore_adapter</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image_source_dicom.assetstore.dicomweb_assetstore_adapter</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cherrypy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image_source_dicom.dicom_tags</span><span class="w"> </span><span class="kn">import</span> <span class="n">dicom_key_to_tag</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image_source_dicom.dicomweb_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_dicomweb_metadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">requests.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPError</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.api.rest</span><span class="w"> </span><span class="kn">import</span> <span class="n">setContentDisposition</span><span class="p">,</span> <span class="n">setResponseHeader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">ValidationException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.file</span><span class="w"> </span><span class="kn">import</span> <span class="n">File</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.folder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Folder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.item</span><span class="w"> </span><span class="kn">import</span> <span class="n">Item</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.utility.abstract_assetstore_adapter</span><span class="w"> </span><span class="kn">import</span> <span class="n">AbstractAssetstoreAdapter</span>
+
+<span class="n">DICOMWEB_META_KEY</span> <span class="o">=</span> <span class="s1">&#39;dicomweb_meta&#39;</span>
+
+<span class="n">BUF_SIZE</span> <span class="o">=</span> <span class="mi">65536</span>
+
+
+<div class="viewcode-block" id="DICOMwebAssetstoreAdapter">
+<a class="viewcode-back" href="../../../_build/large_image_source_dicom/large_image_source_dicom.assetstore.html#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DICOMwebAssetstoreAdapter</span><span class="p">(</span><span class="n">AbstractAssetstoreAdapter</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This defines the interface to be used by all assetstore adapters.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">assetstore</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">assetstore</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DICOMwebAssetstoreAdapter.validateInfo">
+<a class="viewcode-back" href="../../../_build/large_image_source_dicom/large_image_source_dicom.assetstore.html#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.validateInfo">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validateInfo</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
+        <span class="c1"># Ensure that the assetstore is marked read-only</span>
+        <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;readOnly&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="n">required_fields</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;url&#39;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="n">info</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">DICOMWEB_META_KEY</span><span class="p">,</span> <span class="p">{})</span>
+
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">required_fields</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">info</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ValidationException</span><span class="p">(</span><span class="s1">&#39;Missing field: &#39;</span> <span class="o">+</span> <span class="n">field</span><span class="p">)</span>
+
+        <span class="c1"># If these are empty, they need to be converted to None</span>
+        <span class="n">convert_empty_fields_to_none</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="s1">&#39;qido_prefix&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;wado_prefix&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;auth_type&#39;</span><span class="p">,</span>
+        <span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">convert_empty_fields_to_none</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">field</span><span class="p">),</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">info</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">():</span>
+                <span class="n">info</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;auth_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;token&#39;</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;auth_token&#39;</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;A token must be provided if the auth type is &quot;token&quot;&#39;</span>
+            <span class="k">raise</span> <span class="n">ValidationException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># Verify that we can connect to the server, if the authentication type</span>
+        <span class="c1"># allows it.</span>
+        <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;auth_type&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;token&#39;</span><span class="p">):</span>
+            <span class="n">study_instance_uid_tag</span> <span class="o">=</span> <span class="n">dicom_key_to_tag</span><span class="p">(</span><span class="s1">&#39;StudyInstanceUID&#39;</span><span class="p">)</span>
+            <span class="n">series_instance_uid_tag</span> <span class="o">=</span> <span class="n">dicom_key_to_tag</span><span class="p">(</span><span class="s1">&#39;SeriesInstanceUID&#39;</span><span class="p">)</span>
+
+            <span class="n">client</span> <span class="o">=</span> <span class="n">_create_dicomweb_client</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+            <span class="c1"># Try to search for series. If we get an http error, raise</span>
+            <span class="c1"># a validation exception.</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">series</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">search_for_series</span><span class="p">(</span>
+                    <span class="n">limit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                    <span class="n">fields</span><span class="o">=</span><span class="p">(</span><span class="n">study_instance_uid_tag</span><span class="p">,</span> <span class="n">series_instance_uid_tag</span><span class="p">),</span>
+                <span class="p">)</span>
+            <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Failed to validate DICOMweb server settings: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="k">raise</span> <span class="n">ValidationException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+            <span class="c1"># If we found a series, then test the wado prefix as well</span>
+            <span class="k">if</span> <span class="n">series</span><span class="p">:</span>
+                <span class="c1"># The previous query should have obtained uids for a specific</span>
+                <span class="c1"># study and series.</span>
+                <span class="n">study_uid</span> <span class="o">=</span> <span class="n">series</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">study_instance_uid_tag</span><span class="p">][</span><span class="s1">&#39;Value&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">series_uid</span> <span class="o">=</span> <span class="n">series</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">series_instance_uid_tag</span><span class="p">][</span><span class="s1">&#39;Value&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># Retrieve the metadata of this series as a wado prefix test</span>
+                    <span class="n">client</span><span class="o">.</span><span class="n">retrieve_series_metadata</span><span class="p">(</span>
+                        <span class="n">study_instance_uid</span><span class="o">=</span><span class="n">study_uid</span><span class="p">,</span>
+                        <span class="n">series_instance_uid</span><span class="o">=</span><span class="n">series_uid</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">except</span> <span class="n">HTTPError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Failed to validate DICOMweb WADO prefix: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span>
+                    <span class="k">raise</span> <span class="n">ValidationException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">doc</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">assetstore_meta</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">assetstore</span><span class="p">[</span><span class="n">DICOMWEB_META_KEY</span><span class="p">]</span>
+
+<div class="viewcode-block" id="DICOMwebAssetstoreAdapter.initUpload">
+<a class="viewcode-back" href="../../../_build/large_image_source_dicom/large_image_source_dicom.assetstore.html#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.initUpload">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initUpload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">upload</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;DICOMweb assetstores are import only.&#39;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DICOMwebAssetstoreAdapter.finalizeUpload">
+<a class="viewcode-back" href="../../../_build/large_image_source_dicom/large_image_source_dicom.assetstore.html#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.finalizeUpload">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">finalizeUpload</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">upload</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;DICOMweb assetstores are import only.&#39;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DICOMwebAssetstoreAdapter.deleteFile">
+<a class="viewcode-back" href="../../../_build/large_image_source_dicom/large_image_source_dicom.assetstore.html#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.deleteFile">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deleteFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="c1"># We don&#39;t actually need to do anything special</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="DICOMwebAssetstoreAdapter.setContentHeaders">
+<a class="viewcode-back" href="../../../_build/large_image_source_dicom/large_image_source_dicom.assetstore.html#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.setContentHeaders">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setContentHeaders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">endByte</span><span class="p">,</span> <span class="n">contentDisposition</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Sets the Content-Length, Content-Disposition, Content-Type, and also</span>
+<span class="sd">        the Content-Range header if this is a partial download.</span>
+
+<span class="sd">        :param file: The file being downloaded.</span>
+<span class="sd">        :param offset: The start byte of the download.</span>
+<span class="sd">        :type offset: int</span>
+<span class="sd">        :param endByte: The end byte of the download (non-inclusive).</span>
+<span class="sd">        :type endByte: int or None</span>
+<span class="sd">        :param contentDisposition: Content-Disposition response header</span>
+<span class="sd">            disposition-type value, if None, Content-Disposition will</span>
+<span class="sd">            be set to &#39;attachment; filename=$filename&#39;.</span>
+<span class="sd">        :type contentDisposition: str or None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">isRangeRequest</span> <span class="o">=</span> <span class="n">cherrypy</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Range&#39;</span><span class="p">)</span>
+        <span class="n">setResponseHeader</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">,</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;mimeType&#39;</span><span class="p">])</span>
+        <span class="n">setContentDisposition</span><span class="p">(</span><span class="n">file</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">contentDisposition</span> <span class="ow">or</span> <span class="s1">&#39;attachment&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Only set Content-Length and range request headers if we have a file size</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">endByte</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">endByte</span> <span class="o">&gt;</span> <span class="n">size</span><span class="p">:</span>
+                <span class="n">endByte</span> <span class="o">=</span> <span class="n">size</span>
+
+            <span class="n">setResponseHeader</span><span class="p">(</span><span class="s1">&#39;Content-Length&#39;</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">endByte</span> <span class="o">-</span> <span class="n">offset</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">offset</span> <span class="ow">or</span> <span class="n">endByte</span> <span class="o">&lt;</span> <span class="n">size</span> <span class="ow">or</span> <span class="n">isRangeRequest</span><span class="p">:</span>
+                <span class="n">setResponseHeader</span><span class="p">(</span><span class="s1">&#39;Content-Range&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;bytes </span><span class="si">{</span><span class="n">offset</span><span class="si">}</span><span class="s1">-</span><span class="si">{</span><span class="n">endByte</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DICOMwebAssetstoreAdapter.downloadFile">
+<a class="viewcode-back" href="../../../_build/large_image_source_dicom/large_image_source_dicom.assetstore.html#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.downloadFile">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">downloadFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">endByte</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                     <span class="n">contentDisposition</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">extraParameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">headers</span><span class="p">:</span>
+            <span class="n">setResponseHeader</span><span class="p">(</span><span class="s1">&#39;Accept-Ranges&#39;</span><span class="p">,</span> <span class="s1">&#39;bytes&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">setContentHeaders</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">endByte</span><span class="p">,</span> <span class="n">contentDisposition</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">stream</span><span class="p">():</span>
+            <span class="c1"># Perform the request</span>
+            <span class="c1"># Try a single-part download first. If that doesn&#39;t work, do multipart.</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_retrieve_instance_prefer_singlepart</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+            <span class="n">bytes_read</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stream_retrieve_instance_response</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">bytes_read</span> <span class="o">&lt;</span> <span class="n">offset</span><span class="p">:</span>
+                    <span class="c1"># We haven&#39;t reached the start of the offset yet</span>
+                    <span class="n">bytes_needed</span> <span class="o">=</span> <span class="n">offset</span> <span class="o">-</span> <span class="n">bytes_read</span>
+                    <span class="k">if</span> <span class="n">bytes_needed</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">):</span>
+                        <span class="c1"># Skip over the whole chunk...</span>
+                        <span class="n">bytes_read</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                        <span class="k">continue</span>
+                    <span class="c1"># Discard all bytes before the offset</span>
+                    <span class="n">chunk</span> <span class="o">=</span> <span class="n">chunk</span><span class="p">[</span><span class="n">bytes_needed</span><span class="p">:]</span>
+                    <span class="n">bytes_read</span> <span class="o">+=</span> <span class="n">bytes_needed</span>
+
+                <span class="k">if</span> <span class="n">endByte</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">bytes_read</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">endByte</span><span class="p">:</span>
+                    <span class="c1"># We have reached the end... remove all bytes after endByte</span>
+                    <span class="n">chunk</span> <span class="o">=</span> <span class="n">chunk</span><span class="p">[:</span><span class="n">endByte</span> <span class="o">-</span> <span class="n">bytes_read</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">chunk</span><span class="p">:</span>
+                        <span class="k">yield</span> <span class="n">chunk</span>
+
+                    <span class="n">bytes_read</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                    <span class="k">break</span>
+
+                <span class="k">yield</span> <span class="n">chunk</span>
+                <span class="n">bytes_read</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">stream</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_request_retrieve_instance_prefer_singlepart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">transfer_syntax</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">):</span>
+        <span class="c1"># Try to perform a singlepart request. If it fails, perform a multipart request</span>
+        <span class="c1"># instead.</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_retrieve_instance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">multipart</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                                                       <span class="n">transfer_syntax</span><span class="o">=</span><span class="n">transfer_syntax</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">:</span>
+            <span class="c1"># If there is an HTTPError, the server might not accept single-part requests...</span>
+            <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_singlepart_response</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">response</span>
+
+        <span class="c1"># Perform the multipart request instead</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_retrieve_instance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">transfer_syntax</span><span class="o">=</span><span class="n">transfer_syntax</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_request_retrieve_instance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">multipart</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">transfer_syntax</span><span class="o">=</span><span class="s1">&#39;*&#39;</span><span class="p">):</span>
+        <span class="c1"># Multipart requests are officially supported by the DICOMweb standard.</span>
+        <span class="c1"># Singlepart requests are not officially supported, but they are easier</span>
+        <span class="c1"># to work with.</span>
+        <span class="c1"># Google Healthcare API support it.</span>
+        <span class="c1"># See here: https://cloud.google.com/healthcare-api/docs/dicom#dicom_instances</span>
+
+        <span class="c1"># Create the URL</span>
+        <span class="n">client</span> <span class="o">=</span> <span class="n">_create_dicomweb_client</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">assetstore_meta</span><span class="p">)</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_create_retrieve_instance_url</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+
+        <span class="c1"># Build the headers</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">multipart</span><span class="p">:</span>
+            <span class="c1"># This is officially supported by the DICOMweb standard.</span>
+            <span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Accept&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">((</span>
+                <span class="s1">&#39;multipart/related&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;type=&quot;application/dicom&quot;&#39;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s1">&#39;transfer-syntax=</span><span class="si">{</span><span class="n">transfer_syntax</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># This is not officially supported by the DICOMweb standard,</span>
+            <span class="c1"># but it is easier to work with, and some servers such as</span>
+            <span class="c1"># Google Healthcare API support it.</span>
+            <span class="c1"># See here: https://cloud.google.com/healthcare-api/docs/dicom#dicom_instances</span>
+            <span class="n">headers</span><span class="p">[</span><span class="s1">&#39;Accept&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;application/dicom; transfer-syntax=</span><span class="si">{</span><span class="n">transfer_syntax</span><span class="si">}</span><span class="s1">&#39;</span>
+
+        <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">_http_get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_retrieve_instance_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">dicomweb_client.web</span><span class="w"> </span><span class="kn">import</span> <span class="n">_Transaction</span>
+
+        <span class="n">dicom_uids</span> <span class="o">=</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;dicom_uids&#39;</span><span class="p">]</span>
+        <span class="n">study_uid</span> <span class="o">=</span> <span class="n">dicom_uids</span><span class="p">[</span><span class="s1">&#39;study_uid&#39;</span><span class="p">]</span>
+        <span class="n">series_uid</span> <span class="o">=</span> <span class="n">dicom_uids</span><span class="p">[</span><span class="s1">&#39;series_uid&#39;</span><span class="p">]</span>
+        <span class="n">instance_uid</span> <span class="o">=</span> <span class="n">dicom_uids</span><span class="p">[</span><span class="s1">&#39;instance_uid&#39;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">_get_instances_url</span><span class="p">(</span>
+            <span class="n">_Transaction</span><span class="o">.</span><span class="n">RETRIEVE</span><span class="p">,</span>
+            <span class="n">study_uid</span><span class="p">,</span>
+            <span class="n">series_uid</span><span class="p">,</span>
+            <span class="n">instance_uid</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_stream_retrieve_instance_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="c1"># Check if the original request asked for multipart data</span>
+        <span class="k">if</span> <span class="s1">&#39;multipart/related&#39;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Accept&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+            <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stream_dicom_multipart_response</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># The content should *only* contain the DICOM file</span>
+            <span class="k">with</span> <span class="n">response</span><span class="p">:</span>
+                <span class="k">yield from</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">BUF_SIZE</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_media_type_and_boundary</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="n">content_type</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;content-type&#39;</span><span class="p">]</span>
+        <span class="n">media_type</span><span class="p">,</span> <span class="o">*</span><span class="n">ct_info</span> <span class="o">=</span> <span class="p">(</span><span class="n">ct</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">ct</span> <span class="ow">in</span> <span class="n">content_type</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;;&#39;</span><span class="p">))</span>
+        <span class="n">boundary</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ct_info</span><span class="p">:</span>
+            <span class="n">attr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">value</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">attr</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;boundary&#39;</span><span class="p">:</span>
+                <span class="n">boundary</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+                <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">media_type</span><span class="p">,</span> <span class="n">boundary</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_stream_dicom_multipart_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="c1"># The first part of this function was largely copied from dicomweb-client&#39;s</span>
+        <span class="c1"># _decode_multipart_message() function. But we can&#39;t use that function here</span>
+        <span class="c1"># because it relies on reading the whole DICOM file into memory. We want to</span>
+        <span class="c1"># avoid that and stream in chunks.</span>
+
+        <span class="c1"># Split the content-type to find the media type and boundary.</span>
+        <span class="n">media_type</span><span class="p">,</span> <span class="n">boundary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_media_type_and_boundary</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">media_type</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;multipart/related&#39;</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Unexpected media type: &quot;</span><span class="si">{</span><span class="n">media_type</span><span class="si">}</span><span class="s1">&quot;. Expected &quot;multipart/related&quot;.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># Ensure we have the multipart/related boundary.</span>
+        <span class="c1"># The beginning boundary and end boundary look slightly different (in my</span>
+        <span class="c1"># examples, beginning looks like &#39;--{boundary}\r\n&#39;, and ending looks like</span>
+        <span class="c1"># &#39;\r\n--{boundary}--&#39;). But we skip over the beginning boundary anyways</span>
+        <span class="c1"># since it is before the message body. An end boundary might look like this:</span>
+        <span class="c1"># \r\n--50d7ccd118978542c422543a7156abfce929e7615bc024e533c85801cd77--</span>
+        <span class="k">if</span> <span class="n">boundary</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">content_type</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s1">&#39;content-type&#39;</span><span class="p">]</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Failed to locate boundary in content-type: </span><span class="si">{</span><span class="n">content_type</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># Both dicomweb-client and requests-toolbelt check for</span>
+        <span class="c1"># the ending boundary exactly like so:</span>
+        <span class="n">ending</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">--&#39;</span> <span class="o">+</span> <span class="n">boundary</span>
+
+        <span class="c1"># Sometimes, there are a few extra bytes after the ending, such</span>
+        <span class="c1"># as &#39;--&#39; and &#39;\r\n&#39;. Imaging Data Commons has &#39;--\r\n&#39; at the end.</span>
+        <span class="c1"># But we don&#39;t care about what comes after the ending. As soon as we</span>
+        <span class="c1"># encounter the ending, we are done.</span>
+        <span class="n">ending_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">ending</span><span class="p">)</span>
+
+        <span class="c1"># Make sure the buffer is at least large enough to contain the</span>
+        <span class="c1"># ending_size - 1, so that the ending cannot be split between more than 2 chunks.</span>
+        <span class="n">buffer_size</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">BUF_SIZE</span><span class="p">,</span> <span class="n">ending_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="k">with</span> <span class="n">response</span><span class="p">:</span>
+            <span class="c1"># Create our iterator</span>
+            <span class="n">iterator</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">iter_content</span><span class="p">(</span><span class="n">buffer_size</span><span class="p">)</span>
+
+            <span class="c1"># First, stream until we encounter the first `\r\n\r\n`,</span>
+            <span class="c1"># which denotes the end of the header section.</span>
+            <span class="n">header_found</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">end_header_delimiter</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\r\n\r\n</span><span class="s1">&#39;</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">iterator</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">end_header_delimiter</span> <span class="ow">in</span> <span class="n">chunk</span><span class="p">:</span>
+                    <span class="n">idx</span> <span class="o">=</span> <span class="n">chunk</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">end_header_delimiter</span><span class="p">)</span>
+                    <span class="c1"># Save the first section of data. We will yield it later.</span>
+                    <span class="n">prev_chunk</span> <span class="o">=</span> <span class="n">chunk</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">end_header_delimiter</span><span class="p">):]</span>
+                    <span class="n">header_found</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">header_found</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Failed to find header in response content&#39;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+            <span class="c1"># Now the header has been finished. Stream the data until</span>
+            <span class="c1"># we encounter the ending boundary or finish the data.</span>
+            <span class="c1"># The &quot;prev_chunk&quot; will start out set to the section right after the header.</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="n">iterator</span><span class="p">:</span>
+                <span class="c1"># Ensure the chunk is large enough to contain the ending_size - 1, so</span>
+                <span class="c1"># we can be sure the ending won&#39;t be split across more than 2 chunks.</span>
+                <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">ending_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">chunk</span> <span class="o">+=</span> <span class="nb">next</span><span class="p">(</span><span class="n">iterator</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+                        <span class="k">break</span>
+
+                <span class="c1"># Check if the ending is split between the previous and current chunks.</span>
+                <span class="k">if</span> <span class="n">ending</span> <span class="ow">in</span> <span class="n">prev_chunk</span> <span class="o">+</span> <span class="n">chunk</span><span class="p">[:</span><span class="n">ending_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]:</span>
+                    <span class="c1"># We found the ending! Remove the ending boundary and return.</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">prev_chunk</span> <span class="o">+</span> <span class="n">chunk</span><span class="p">[:</span><span class="n">ending_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                    <span class="k">yield</span> <span class="n">data</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">ending</span><span class="p">,</span> <span class="n">maxsplit</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">return</span>
+
+                <span class="k">if</span> <span class="n">prev_chunk</span><span class="p">:</span>
+                    <span class="k">yield</span> <span class="n">prev_chunk</span>
+
+                <span class="n">prev_chunk</span> <span class="o">=</span> <span class="n">chunk</span>
+
+            <span class="c1"># We did not find the ending while looping.</span>
+            <span class="c1"># Check if it is in the final chunk.</span>
+            <span class="k">if</span> <span class="n">ending</span> <span class="ow">in</span> <span class="n">prev_chunk</span><span class="p">:</span>
+                <span class="c1"># Found the ending in the final chunk.</span>
+                <span class="k">yield</span> <span class="n">prev_chunk</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">ending</span><span class="p">,</span> <span class="n">maxsplit</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">return</span>
+
+            <span class="c1"># We should have encountered the ending earlier and returned</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Failed to find ending boundary in response content&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_infer_file_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="c1"># Try various methods to infer the file size, without streaming the</span>
+        <span class="c1"># whole file. Returns the file size if successful, or `None` if unsuccessful.</span>
+        <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># The file size was already determined.</span>
+            <span class="k">return</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Only method currently is inferring from single-part content_length</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_infer_file_size_singlepart_content_length</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_is_singlepart_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+        <span class="n">content_type</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Content-Type&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span> <span class="ow">and</span>
+            <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">x</span> <span class="ow">in</span> <span class="n">content_type</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;multipart/related&#39;</span><span class="p">,</span> <span class="s1">&#39;boundary&#39;</span><span class="p">))</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_infer_file_size_singlepart_content_length</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="c1"># First, try to see if single-part requests work, and if the Content-Length</span>
+        <span class="c1"># is returned. This works for Google Healthcare API.</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_retrieve_instance</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">multipart</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">HTTPError</span><span class="p">:</span>
+            <span class="c1"># If there is an HTTPError, the server might not accept single-part requests...</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_singlepart_response</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
+            <span class="c1"># Does not support single-part requests...</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="n">content_length</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Content-Length&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">content_length</span><span class="p">:</span>
+            <span class="c1"># The server did not return a Content-Length</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># The DICOM file size is equal to the Content-Length</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">content_length</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_importData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parentType</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">progress</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parentType</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;folder&#39;</span><span class="p">,</span> <span class="s1">&#39;user&#39;</span><span class="p">,</span> <span class="s1">&#39;collection&#39;</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Invalid parent type: </span><span class="si">{</span><span class="n">parentType</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="k">raise</span> <span class="n">ValidationException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">limit</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;limit&#39;</span><span class="p">)</span>
+        <span class="n">search_filters</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;search_filters&#39;</span><span class="p">,</span> <span class="p">{})</span>
+
+        <span class="n">meta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">assetstore_meta</span>
+
+        <span class="n">client</span> <span class="o">=</span> <span class="n">_create_dicomweb_client</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+
+        <span class="n">study_uid_key</span> <span class="o">=</span> <span class="n">dicom_key_to_tag</span><span class="p">(</span><span class="s1">&#39;StudyInstanceUID&#39;</span><span class="p">)</span>
+        <span class="n">series_uid_key</span> <span class="o">=</span> <span class="n">dicom_key_to_tag</span><span class="p">(</span><span class="s1">&#39;SeriesInstanceUID&#39;</span><span class="p">)</span>
+        <span class="n">instance_uid_key</span> <span class="o">=</span> <span class="n">dicom_key_to_tag</span><span class="p">(</span><span class="s1">&#39;SOPInstanceUID&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Search for studies. Apply the limit and search filters.</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">study_uid_key</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">progress</span><span class="p">:</span>
+            <span class="n">progress</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;Searching for studies...&#39;</span><span class="p">)</span>
+
+        <span class="n">studies_results</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">search_for_studies</span><span class="p">(</span>
+            <span class="n">limit</span><span class="o">=</span><span class="n">limit</span><span class="p">,</span>
+            <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">,</span>
+            <span class="n">search_filters</span><span class="o">=</span><span class="n">search_filters</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Search for all series in the returned studies.</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">study_uid_key</span><span class="p">,</span>
+            <span class="n">series_uid_key</span><span class="p">,</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">progress</span><span class="p">:</span>
+            <span class="n">progress</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s1">&#39;Searching for series...&#39;</span><span class="p">)</span>
+
+        <span class="n">series_results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">study</span> <span class="ow">in</span> <span class="n">studies_results</span><span class="p">:</span>
+            <span class="n">study_uid</span> <span class="o">=</span> <span class="n">study</span><span class="p">[</span><span class="n">study_uid_key</span><span class="p">][</span><span class="s1">&#39;Value&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">series_results</span> <span class="o">+=</span> <span class="n">client</span><span class="o">.</span><span class="n">search_for_series</span><span class="p">(</span><span class="n">study_uid</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
+
+        <span class="c1"># Create folders for each study, items for each series, and files for each instance.</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">result</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">series_results</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">progress</span><span class="p">:</span>
+                <span class="n">progress</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">series_results</span><span class="p">),</span> <span class="n">current</span><span class="o">=</span><span class="n">i</span><span class="p">,</span>
+                                <span class="n">message</span><span class="o">=</span><span class="s1">&#39;Importing series...&#39;</span><span class="p">)</span>
+
+            <span class="n">study_uid</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">study_uid_key</span><span class="p">][</span><span class="s1">&#39;Value&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">series_uid</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="n">series_uid_key</span><span class="p">][</span><span class="s1">&#39;Value&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="c1"># Create a folder for the study, and an item for the series</span>
+            <span class="n">folder</span> <span class="o">=</span> <span class="n">Folder</span><span class="p">()</span><span class="o">.</span><span class="n">createFolder</span><span class="p">(</span><span class="n">parent</span><span class="p">,</span> <span class="n">parentType</span><span class="o">=</span><span class="n">parentType</span><span class="p">,</span>
+                                           <span class="n">name</span><span class="o">=</span><span class="n">study_uid</span><span class="p">,</span> <span class="n">creator</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+                                           <span class="n">reuseExisting</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">createItem</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">series_uid</span><span class="p">,</span> <span class="n">creator</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">folder</span><span class="o">=</span><span class="n">folder</span><span class="p">,</span>
+                                     <span class="n">reuseExisting</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+            <span class="c1"># Set the DICOMweb metadata</span>
+            <span class="n">item</span><span class="p">[</span><span class="s1">&#39;dicomweb_meta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_dicomweb_metadata</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">study_uid</span><span class="p">,</span> <span class="n">series_uid</span><span class="p">)</span>
+            <span class="n">item</span><span class="p">[</span><span class="s1">&#39;dicom_uids&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;study_uid&#39;</span><span class="p">:</span> <span class="n">study_uid</span><span class="p">,</span>
+                <span class="s1">&#39;series_uid&#39;</span><span class="p">:</span> <span class="n">series_uid</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+            <span class="n">instance_results</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">search_for_instances</span><span class="p">(</span><span class="n">study_uid</span><span class="p">,</span> <span class="n">series_uid</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">instance</span> <span class="ow">in</span> <span class="n">instance_results</span><span class="p">:</span>
+                <span class="n">instance_uid</span> <span class="o">=</span> <span class="n">instance</span><span class="p">[</span><span class="n">instance_uid_key</span><span class="p">][</span><span class="s1">&#39;Value&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="n">file</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">createFile</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">instance_uid</span><span class="si">}</span><span class="s1">.dcm&#39;</span><span class="p">,</span>
+                    <span class="n">creator</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+                    <span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">,</span>
+                    <span class="n">reuseExisting</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="n">assetstore</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">assetstore</span><span class="p">,</span>
+                    <span class="n">mimeType</span><span class="o">=</span><span class="s1">&#39;application/dicom&#39;</span><span class="p">,</span>
+                    <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">saveFile</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">file</span><span class="p">[</span><span class="s1">&#39;dicom_uids&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;study_uid&#39;</span><span class="p">:</span> <span class="n">study_uid</span><span class="p">,</span>
+                    <span class="s1">&#39;series_uid&#39;</span><span class="p">:</span> <span class="n">series_uid</span><span class="p">,</span>
+                    <span class="s1">&#39;instance_uid&#39;</span><span class="p">:</span> <span class="n">instance_uid</span><span class="p">,</span>
+                <span class="p">}</span>
+                <span class="n">file</span><span class="p">[</span><span class="s1">&#39;imported&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+
+                <span class="c1"># Inferring the file size can take a long time, so don&#39;t</span>
+                <span class="c1"># do it right away, unless we figure out a way to make it faster.</span>
+                <span class="c1"># file[&#39;size&#39;] = self._infer_file_size(file)</span>
+                <span class="n">file</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+            <span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">items</span>
+
+<div class="viewcode-block" id="DICOMwebAssetstoreAdapter.importData">
+<a class="viewcode-back" href="../../../_build/large_image_source_dicom/large_image_source_dicom.assetstore.html#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.importData">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">importData</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="n">parentType</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">progress</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Import DICOMweb WSI instances from a DICOMweb server.</span>
+
+<span class="sd">        :param parent: The parent object to import into.</span>
+<span class="sd">        :param parentType: The model type of the parent object.</span>
+<span class="sd">        :type parentType: str</span>
+<span class="sd">        :param params: Additional parameters required for the import process.</span>
+<span class="sd">            This dictionary may include the following keys:</span>
+
+<span class="sd">            :limit: (optional) limit the number of studies imported.</span>
+<span class="sd">            :filters: (optional) a dictionary/JSON string of additional search</span>
+<span class="sd">                filters to use with dicomweb_client&#39;s `search_for_series()`</span>
+<span class="sd">                function.</span>
+
+<span class="sd">        :type params: dict</span>
+<span class="sd">        :param progress: Object on which to record progress if possible.</span>
+<span class="sd">        :type progress: :py:class:`girder.utility.progress.ProgressContext`</span>
+<span class="sd">        :param user: The Girder user performing the import.</span>
+<span class="sd">        :type user: dict or None</span>
+<span class="sd">        :return: a list of items that were created</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Validate the parameters</span>
+        <span class="n">limit</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;limit&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">limit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">error_msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Invalid limit: </span><span class="si">{</span><span class="n">limit</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">limit</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ValidationException</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">limit</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">ValidationException</span><span class="p">(</span><span class="n">error_msg</span><span class="p">)</span>
+
+        <span class="n">search_filters</span> <span class="o">=</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;filters&#39;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">search_filters</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">search_filters</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">search_filters</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Invalid filters: &quot;</span><span class="si">{</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;filters&quot;</span><span class="p">)</span><span class="si">}</span><span class="s1">&quot;. </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="k">raise</span> <span class="n">ValidationException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">items</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_importData</span><span class="p">(</span>
+            <span class="n">parent</span><span class="p">,</span>
+            <span class="n">parentType</span><span class="p">,</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;limit&#39;</span><span class="p">:</span> <span class="n">limit</span><span class="p">,</span>
+                <span class="s1">&#39;search_filters&#39;</span><span class="p">:</span> <span class="n">search_filters</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">progress</span><span class="p">,</span>
+            <span class="n">user</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">items</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;No studies matching the search filters were found&#39;</span>
+            <span class="k">raise</span> <span class="n">ValidationException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">items</span></div>
+
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">auth_session</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">_create_auth_session</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">assetstore_meta</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DICOMwebAssetstoreAdapter.getFileSize">
+<a class="viewcode-back" href="../../../_build/large_image_source_dicom/large_image_source_dicom.assetstore.html#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.getFileSize">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getFileSize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file</span><span class="p">):</span>
+        <span class="c1"># This function will compute the size of the DICOM file (a potentially</span>
+        <span class="c1"># expensive operation, since it may have to stream the whole file).</span>
+        <span class="c1"># The caller is expected to cache the result in file[&#39;size&#39;].</span>
+        <span class="c1"># This function is called when the size is needed, such as the girder</span>
+        <span class="c1"># fuse mount code, and range requests.</span>
+        <span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;size&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># It has already been computed once. Return the cached size.</span>
+            <span class="k">return</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Try to infer the file size without streaming, if possible.</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_infer_file_size</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">size</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">size</span>
+
+        <span class="c1"># We must stream the whole file to get the file size...</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_retrieve_instance_prefer_singlepart</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stream_retrieve_instance_response</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
+            <span class="n">size</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+
+        <span class="c1"># This should get cached in file[&#39;size&#39;] in File().updateSize().</span>
+        <span class="k">return</span> <span class="n">size</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_auth_session</span><span class="p">(</span><span class="n">meta</span><span class="p">):</span>
+    <span class="n">auth_type</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;auth_type&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">auth_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="k">if</span> <span class="n">auth_type</span> <span class="o">==</span> <span class="s1">&#39;token&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_create_token_auth_session</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;auth_token&#39;</span><span class="p">])</span>
+
+    <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Unhandled auth type: </span><span class="si">{</span><span class="n">auth_type</span><span class="si">}</span><span class="s1">&#39;</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_token_auth_session</span><span class="p">(</span><span class="n">token</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+    <span class="n">s</span><span class="o">.</span><span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;Authorization&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_dicomweb_client</span><span class="p">(</span><span class="n">meta</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">dicomweb_client.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">DICOMwebClient</span>
+
+    <span class="n">session</span> <span class="o">=</span> <span class="n">_create_auth_session</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+
+    <span class="c1"># Make the DICOMwebClient</span>
+    <span class="k">return</span> <span class="n">DICOMwebClient</span><span class="p">(</span>
+        <span class="n">url</span><span class="o">=</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">],</span>
+        <span class="n">qido_url_prefix</span><span class="o">=</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;qido_prefix&#39;</span><span class="p">),</span>
+        <span class="n">wado_url_prefix</span><span class="o">=</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;wado_prefix&#39;</span><span class="p">),</span>
+        <span class="n">session</span><span class="o">=</span><span class="n">session</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

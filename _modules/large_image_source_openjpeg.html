@@ -1,0 +1,463 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_openjpeg &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../_static/K.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">large_image_source_openjpeg</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image_source_openjpeg</h1><div class="highlight"><pre>
+<span></span><span class="c1">##############################################################################</span>
+<span class="c1">#  Copyright Kitware Inc.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed under the Apache License, Version 2.0 ( the &quot;License&quot; );</span>
+<span class="c1">#  you may not use this file except in compliance with the License.</span>
+<span class="c1">#  You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#    http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#  See the License for the specific language governing permissions and</span>
+<span class="c1">#  limitations under the License.</span>
+<span class="c1">##############################################################################</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">builtins</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">queue</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">struct</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">PackageNotFoundError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">_importlib_version</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">xml.etree</span><span class="w"> </span><span class="kn">import</span> <span class="n">ElementTree</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">PIL.Image</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.cache_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">LruCacheMetaclass</span><span class="p">,</span> <span class="n">methodcache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">TILE_FORMAT_NUMPY</span><span class="p">,</span> <span class="n">SourcePriority</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TileSourceError</span><span class="p">,</span> <span class="n">TileSourceFileNotFoundError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.tilesource</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileTileSource</span><span class="p">,</span> <span class="n">etreeToDict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.tilesource.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">_imageToNumpy</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">__version__</span> <span class="o">=</span> <span class="n">_importlib_version</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">PackageNotFoundError</span><span class="p">:</span>
+    <span class="c1"># package is not installed</span>
+    <span class="k">pass</span>
+
+<span class="n">glymur</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_lazyImport</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Import the glymur module.  This is done when needed rather than in the module</span>
+<span class="sd">    initialization because it is slow.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">glymur</span>
+
+    <span class="k">if</span> <span class="n">glymur</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">glymur</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;glymur module not found.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s1">&#39;glymur&#39;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="OpenjpegFileTileSource">
+<a class="viewcode-back" href="../_build/large_image_source_openjpeg/large_image_source_openjpeg.html#large_image_source_openjpeg.OpenjpegFileTileSource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OpenjpegFileTileSource</span><span class="p">(</span><span class="n">FileTileSource</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">LruCacheMetaclass</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides tile access to jp2 files and other files the openjpeg library can</span>
+<span class="sd">    read.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cacheName</span> <span class="o">=</span> <span class="s1">&#39;tilesource&#39;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;openjpeg&#39;</span>
+    <span class="n">extensions</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="kc">None</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">MEDIUM</span><span class="p">,</span>
+        <span class="s1">&#39;jp2&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>
+        <span class="s1">&#39;jpf&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>
+        <span class="s1">&#39;j2c&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>
+        <span class="s1">&#39;j2k&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>
+        <span class="s1">&#39;jpx&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">mimeTypes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="kc">None</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">FALLBACK</span><span class="p">,</span>
+        <span class="s1">&#39;image/j2c&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>
+        <span class="s1">&#39;image/jp2&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>
+        <span class="s1">&#39;image/jpx&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">_boxToTag</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="c1"># In the few samples I&#39;ve seen, both of these appear to be macro images</span>
+        <span class="sa">b</span><span class="s1">&#39;mig &#39;</span><span class="p">:</span> <span class="s1">&#39;macro&#39;</span><span class="p">,</span>
+        <span class="sa">b</span><span class="s1">&#39;mag &#39;</span><span class="p">:</span> <span class="s1">&#39;label&#39;</span><span class="p">,</span>
+        <span class="c1"># This contains a largish image</span>
+        <span class="c1"># b&#39;psi &#39;: &#39;other&#39;,</span>
+    <span class="p">}</span>
+    <span class="n">_xmlTag</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;mxl &#39;</span>
+
+    <span class="n">_minTileSize</span> <span class="o">=</span> <span class="mi">256</span>
+    <span class="n">_maxTileSize</span> <span class="o">=</span> <span class="mi">512</span>
+    <span class="n">_maxOpenHandles</span> <span class="o">=</span> <span class="mi">6</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the tile class.  See the base class for other available</span>
+<span class="sd">        parameters.</span>
+
+<span class="sd">        :param path: a filesystem path for the tile source.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="n">_lazyImport</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_getLargeImagePath</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_openjpeg</span> <span class="o">=</span> <span class="n">glymur</span><span class="o">.</span><span class="n">Jp2k</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openjpeg</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">FileNotFoundError</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;File cannot be opened via Glymur and OpenJPEG (no shape).&#39;</span>
+                <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">glymur</span><span class="o">.</span><span class="n">jp2box</span><span class="o">.</span><span class="n">InvalidJp2kError</span><span class="p">,</span> <span class="n">struct</span><span class="o">.</span><span class="n">error</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;File cannot be opened via Glymur and OpenJPEG.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">TileSourceFileNotFoundError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+            <span class="k">raise</span>
+        <span class="n">glymur</span><span class="o">.</span><span class="n">set_option</span><span class="p">(</span><span class="s1">&#39;lib.num_threads&#39;</span><span class="p">,</span> <span class="n">large_image</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_openjpegHandles</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">LifoQueue</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_maxOpenHandles</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_openjpegHandles</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_openjpegHandles</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_openjpeg</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openjpeg</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">IndexError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="s1">&#39;File cannot be opened via Glymur and OpenJPEG: </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">exc</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_openjpeg</span><span class="o">.</span><span class="n">codestream</span><span class="o">.</span><span class="n">segment</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">num_res</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;File cannot be opened via Glymur and OpenJPEG.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_minlevel</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span>
+            <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span><span class="p">))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span><span class="p">))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)))</span>
+        <span class="c1"># Small and large tiles are both inefficient.  Large tiles don&#39;t work</span>
+        <span class="c1"># with some viewers (leaflet and Slide Atlas, for instance)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_minTileSize</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxTileSize</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_maxTileSize</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_minTileSize</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span><span class="p">))</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_minlevel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openjpeg</span><span class="o">.</span><span class="n">codestream</span><span class="o">.</span><span class="n">segment</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">num_res</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_getAssociatedImages</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_populatedLevels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_minlevel</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getAssociatedImages</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Read associated images and metadata from boxes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_associatedImages</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">box</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openjpeg</span><span class="o">.</span><span class="n">box</span><span class="p">:</span>
+            <span class="n">box_id</span> <span class="o">=</span> <span class="n">box</span><span class="o">.</span><span class="n">box_id</span>
+            <span class="k">if</span> <span class="n">box_id</span> <span class="o">==</span> <span class="s1">&#39;xxxx&#39;</span><span class="p">:</span>
+                <span class="n">box_id</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">box</span><span class="p">,</span> <span class="s1">&#39;claimed_box_id&#39;</span><span class="p">,</span> <span class="n">box</span><span class="o">.</span><span class="n">box_id</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">box_id</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xmlTag</span> <span class="ow">or</span> <span class="n">box_id</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_boxToTag</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_readbox</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">data</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">box_id</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xmlTag</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_parseMetadataXml</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_associatedImages</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_boxToTag</span><span class="p">[</span><span class="n">box_id</span><span class="p">]]</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
+                        <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">pass</span>
+            <span class="k">if</span> <span class="n">box_id</span> <span class="o">==</span> <span class="s1">&#39;jp2c&#39;</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">segment</span> <span class="ow">in</span> <span class="n">box</span><span class="o">.</span><span class="n">codestream</span><span class="o">.</span><span class="n">segment</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">segment</span><span class="o">.</span><span class="n">marker_id</span> <span class="o">==</span> <span class="s1">&#39;CME&#39;</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">segment</span><span class="p">,</span> <span class="s1">&#39;ccme&#39;</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_parseMetadataXml</span><span class="p">(</span><span class="n">segment</span><span class="o">.</span><span class="n">ccme</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">box</span><span class="p">,</span> <span class="s1">&#39;box&#39;</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">subbox</span> <span class="ow">in</span> <span class="n">box</span><span class="o">.</span><span class="n">box</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">subbox</span><span class="p">,</span> <span class="s1">&#39;icc_profile&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_iccprofiles</span> <span class="o">=</span> <span class="p">[</span><span class="n">subbox</span><span class="o">.</span><span class="n">icc_profile</span><span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_nonemptyLevelsList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a list of one value per level where the value is None if the</span>
+<span class="sd">        level does not exist in the file and any other value if it does.</span>
+
+<span class="sd">        :param frame: the frame number.</span>
+<span class="sd">        :returns: a list of levels length.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="kc">True</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_populatedLevels</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span><span class="p">)]</span>
+
+<div class="viewcode-block" id="OpenjpegFileTileSource.getNativeMagnification">
+<a class="viewcode-back" href="../_build/large_image_source_openjpeg/large_image_source_openjpeg.html#large_image_source_openjpeg.OpenjpegFileTileSource.getNativeMagnification">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getNativeMagnification</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the magnification at a particular level.</span>
+
+<span class="sd">        :return: magnification, width of a pixel in mm, height of a pixel in mm.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mm_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mm_x&#39;</span><span class="p">)</span>
+        <span class="n">mm_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mm_y&#39;</span><span class="p">)</span>
+        <span class="c1"># Estimate the magnification if we don&#39;t have a direct value</span>
+        <span class="n">mag</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;magnification&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="mf">0.01</span> <span class="o">/</span> <span class="n">mm_x</span> <span class="k">if</span> <span class="n">mm_x</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;magnification&#39;</span><span class="p">:</span> <span class="n">mag</span><span class="p">,</span>
+            <span class="s1">&#39;mm_x&#39;</span><span class="p">:</span> <span class="n">mm_x</span><span class="p">,</span>
+            <span class="s1">&#39;mm_y&#39;</span><span class="p">:</span> <span class="n">mm_y</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parseMetadataXml</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">meta</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">,</span> <span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">xml</span> <span class="o">=</span> <span class="n">ElementTree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_description_record</span> <span class="o">=</span> <span class="n">etreeToDict</span><span class="p">(</span><span class="n">xml</span><span class="p">)</span>
+        <span class="n">xml</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_description_record</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Optrascan metadata</span>
+            <span class="n">scanDetails</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;ScanInfo&#39;</span><span class="p">,</span> <span class="n">xml</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;EncodeInfo&#39;</span><span class="p">))[</span><span class="s1">&#39;ScanDetails&#39;</span><span class="p">]</span>
+            <span class="n">mag</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">scanDetails</span><span class="p">[</span><span class="s1">&#39;Magnification&#39;</span><span class="p">])</span>
+            <span class="c1"># In microns; convert to mm</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">scanDetails</span><span class="p">[</span><span class="s1">&#39;PixelResolution&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="mf">1e-3</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;magnification&#39;</span><span class="p">:</span> <span class="n">mag</span><span class="p">,</span>
+                <span class="s1">&#39;mm_x&#39;</span><span class="p">:</span> <span class="n">scale</span><span class="p">,</span>
+                <span class="s1">&#39;mm_y&#39;</span><span class="p">:</span> <span class="n">scale</span><span class="p">,</span>
+            <span class="p">}</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getAssociatedImage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imageKey</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get an associated image in PIL format.</span>
+
+<span class="sd">        :param imageKey: the key of the associated image.</span>
+<span class="sd">        :return: the image in PIL format or None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_associatedImages</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">imageKey</span><span class="p">)</span>
+
+<div class="viewcode-block" id="OpenjpegFileTileSource.getAssociatedImagesList">
+<a class="viewcode-back" href="../_build/large_image_source_openjpeg/large_image_source_openjpeg.html#large_image_source_openjpeg.OpenjpegFileTileSource.getAssociatedImagesList">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getAssociatedImagesList</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a list of associated images.</span>
+
+<span class="sd">        :return: the list of image keys.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_associatedImages</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_readbox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">box</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">box</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">16</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">fp</span> <span class="o">=</span> <span class="n">builtins</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+            <span class="n">headerLength</span> <span class="o">=</span> <span class="mi">16</span>
+            <span class="n">fp</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">offset</span> <span class="o">+</span> <span class="n">headerLength</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">fp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">box</span><span class="o">.</span><span class="n">length</span> <span class="o">-</span> <span class="n">headerLength</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+<div class="viewcode-block" id="OpenjpegFileTileSource.getInternalMetadata">
+<a class="viewcode-back" href="../_build/large_image_source_openjpeg/large_image_source_openjpeg.html#large_image_source_openjpeg.OpenjpegFileTileSource.getInternalMetadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getInternalMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return additional known metadata about the tile source.  Data returned</span>
+<span class="sd">        from this method is not guaranteed to be in any particular format or</span>
+<span class="sd">        have specific values.</span>
+
+<span class="sd">        :returns: a dictionary of data or None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_description_record&#39;</span><span class="p">):</span>
+            <span class="n">results</span><span class="p">[</span><span class="s1">&#39;xml&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_description_record</span>
+        <span class="k">return</span> <span class="n">results</span></div>
+
+
+<div class="viewcode-block" id="OpenjpegFileTileSource.getTile">
+<a class="viewcode-back" href="../_build/large_image_source_openjpeg/large_image_source_openjpeg.html#large_image_source_openjpeg.OpenjpegFileTileSource.getTile">[docs]</a>
+    <span class="nd">@methodcache</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getTile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">pilImageAllowed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">numpyAllowed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_xyzInRange</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">step</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_xyzToCorners</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_minlevel</span> <span class="o">-</span> <span class="n">z</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxSkippedLevels</span><span class="p">:</span>
+            <span class="n">tile</span><span class="p">,</span> <span class="n">_format</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getTileFromEmptyLevel</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">tile</span> <span class="o">=</span> <span class="n">_imageToNumpy</span><span class="p">(</span><span class="n">tile</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">z</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_minlevel</span><span class="p">:</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_minlevel</span> <span class="o">-</span> <span class="n">z</span><span class="p">))</span>
+                <span class="n">step</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_minlevel</span><span class="p">))</span>
+            <span class="c1"># possibly open the file multiple times so multiple threads can access</span>
+            <span class="c1"># it concurrently.</span>
+            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># A timeout prevents uninterupptable waits on some platforms</span>
+                    <span class="n">openjpegHandle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_openjpegHandles</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+                    <span class="k">break</span>
+                <span class="k">except</span> <span class="n">queue</span><span class="o">.</span><span class="n">Empty</span><span class="p">:</span>
+                    <span class="k">continue</span>
+            <span class="k">if</span> <span class="n">openjpegHandle</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">openjpegHandle</span> <span class="o">=</span> <span class="n">glymur</span><span class="o">.</span><span class="n">Jp2k</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">tile</span> <span class="o">=</span> <span class="n">openjpegHandle</span><span class="p">[</span><span class="n">y0</span><span class="p">:</span><span class="n">y1</span><span class="p">:</span><span class="n">step</span><span class="p">,</span> <span class="n">x0</span><span class="p">:</span><span class="n">x1</span><span class="p">:</span><span class="n">step</span><span class="p">]</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_openjpegHandles</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="n">openjpegHandle</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">scale</span><span class="p">:</span>
+                <span class="n">tile</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[::</span><span class="n">scale</span><span class="p">,</span> <span class="p">::</span><span class="n">scale</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outputTile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">TILE_FORMAT_NUMPY</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span>
+                                <span class="n">pilImageAllowed</span><span class="p">,</span> <span class="n">numpyAllowed</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="open">
+<a class="viewcode-back" href="../_build/large_image_source_openjpeg/large_image_source_openjpeg.html#large_image_source_openjpeg.open">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">open</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create an instance of the module class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">OpenjpegFileTileSource</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="canRead">
+<a class="viewcode-back" href="../_build/large_image_source_openjpeg/large_image_source_openjpeg.html#large_image_source_openjpeg.canRead">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">canRead</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if an input can be read by the module class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">OpenjpegFileTileSource</span><span class="o">.</span><span class="n">canRead</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

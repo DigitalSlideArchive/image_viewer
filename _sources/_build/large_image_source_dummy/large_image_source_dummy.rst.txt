@@ -1,0 +1,10 @@
+large\_image\_source\_dummy package
+===================================
+
+Module contents
+---------------
+
+.. automodule:: large_image_source_dummy
+   :members:
+   :undoc-members:
+   :show-inheritance:

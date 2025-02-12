@@ -1,0 +1,537 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting Started &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="_static/K.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tile Source Options" href="tilesource_options.html" />
+    <link rel="prev" title="Large Image" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pip">Pip</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#conda">Conda</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#reading-image-metadata">Reading Image Metadata</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-a-region-of-an-image">Getting a Region of an Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#tile-serving">Tile Serving</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#iterating-across-an-image">Iterating Across an Image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#getting-a-thumbnail">Getting a Thumbnail</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#associated-images">Associated Images</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#projections">Projections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#images-with-multiple-frames">Images with Multiple Frames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#channels-bands-samples-axes-and-frames">Channels, Bands, Samples, Axes, and Frames</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#styles-changing-colors-scales-and-other-properties">Styles - Changing colors, scales, and other properties</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#writing-an-image">Writing an Image</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#multiple-frames">Multiple Frames</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#multiple-processes">Multiple processes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#more-examples">More examples</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Getting Started</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/getting_started.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Link to this heading"></a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">large_image</span></code> library can be used to read and access different file formats.  There are several common usage patterns.
+To read more about accepted file formats, visit the <a class="reference internal" href="formats.html"><span class="doc">Image Formats</span></a> page.</p>
+<p>These examples use <code class="docutils literal notranslate"><span class="pre">sample.tiff</span></code> as an example – any readable image can be used in this case. Visit <a class="reference external" href="https://demo.kitware.com/histomicstk/#folder/589e030a92ca9a00118a6166">demo.kitware.com</a> to download a sample image.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>In addition to installing the base <code class="docutils literal notranslate"><span class="pre">large-image</span></code> package, you’ll need at least one tile source which corresponds to your target file format(s) (a <code class="docutils literal notranslate"><span class="pre">large-image-source-xxx</span></code> package).   You can install everything from the main project with one of these commands:</p>
+<section id="pip">
+<h3>Pip<a class="headerlink" href="#pip" title="Link to this heading"></a></h3>
+<p>Install common tile sources on linux, OSX, or Windows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">large</span><span class="o">-</span><span class="n">image</span><span class="p">[</span><span class="n">common</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Install all tile sources on linux:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">large</span><span class="o">-</span><span class="n">image</span><span class="p">[</span><span class="nb">all</span><span class="p">]</span> <span class="o">--</span><span class="n">find</span><span class="o">-</span><span class="n">links</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">girder</span><span class="o">.</span><span class="n">github</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">large_image_wheels</span>
+</pre></div>
+</div>
+<p>When using large-image with an instance of <a class="reference external" href="https://girder.readthedocs.io/en/latest/">Girder</a>, install all tile sources and all Girder plugins on linux:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">large</span><span class="o">-</span><span class="n">image</span><span class="p">[</span><span class="nb">all</span><span class="p">]</span> <span class="n">girder</span><span class="o">-</span><span class="n">large</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">annotation</span><span class="p">[</span><span class="n">tasks</span><span class="p">]</span> <span class="o">--</span><span class="n">find</span><span class="o">-</span><span class="n">links</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">girder</span><span class="o">.</span><span class="n">github</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">large_image_wheels</span>
+</pre></div>
+</div>
+</section>
+<section id="conda">
+<h3>Conda<a class="headerlink" href="#conda" title="Link to this heading"></a></h3>
+<p>Conda makes dependency management a bit easier if not on Linux. The base module, converter module, and two of the source modules are available on conda-forge. You can install the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">large</span><span class="o">-</span><span class="n">image</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">large</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">source</span><span class="o">-</span><span class="n">gdal</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">large</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">source</span><span class="o">-</span><span class="n">tiff</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">large</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">converter</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="reading-image-metadata">
+<h2>Reading Image Metadata<a class="headerlink" href="#reading-image-metadata" title="Link to this heading"></a></h2>
+<p>All images have metadata that include the base image size, the base tile size, the number of conceptual levels, and information about the size of a pixel in the image if it is known.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;sample.tiff&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>This might print a result like:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;levels&#39;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+    <span class="s1">&#39;sizeX&#39;</span><span class="p">:</span> <span class="mi">58368</span><span class="p">,</span>
+    <span class="s1">&#39;sizeY&#39;</span><span class="p">:</span> <span class="mi">12288</span><span class="p">,</span>
+    <span class="s1">&#39;tileWidth&#39;</span><span class="p">:</span> <span class="mi">256</span><span class="p">,</span>
+    <span class="s1">&#39;tileHeight&#39;</span><span class="p">:</span> <span class="mi">256</span><span class="p">,</span>
+    <span class="s1">&#39;magnification&#39;</span><span class="p">:</span> <span class="mf">40.0</span><span class="p">,</span>
+    <span class="s1">&#39;mm_x&#39;</span><span class="p">:</span> <span class="mf">0.00025</span><span class="p">,</span>
+    <span class="s1">&#39;mm_y&#39;</span><span class="p">:</span> <span class="mf">0.00025</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">levels</span></code> doesn’t actually tell which resolutions are present in the file.  It is the number of levels that can be requested from the <code class="docutils literal notranslate"><span class="pre">getTile</span></code> method.  The levels can also be computed via <code class="docutils literal notranslate"><span class="pre">ceil(log(max(sizeX</span> <span class="pre">/</span> <span class="pre">tileWidth,</span> <span class="pre">sizeY</span> <span class="pre">/</span> <span class="pre">tileHeight))</span> <span class="pre">/</span> <span class="pre">log(2))</span> <span class="pre">+</span> <span class="pre">1</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">mm_x</span></code> and <code class="docutils literal notranslate"><span class="pre">mm_y</span></code> values are the size of a pixel in millimeters.  These can be <code class="docutils literal notranslate"><span class="pre">None</span></code> if the value is unknown.  The <code class="docutils literal notranslate"><span class="pre">magnification</span></code> is that reported by the file itself, and may be <code class="docutils literal notranslate"><span class="pre">None</span></code>.  The magnification can be approximated by <code class="docutils literal notranslate"><span class="pre">0.01</span> <span class="pre">/</span> <span class="pre">mm_x</span></code>.</p>
+</section>
+<section id="getting-a-region-of-an-image">
+<h2>Getting a Region of an Image<a class="headerlink" href="#getting-a-region-of-an-image" title="Link to this heading"></a></h2>
+<p>You can get a portion of an image at different resolutions and in different formats.  Internally, the large_image library reads the minimum amount of the file necessary to return the requested data, caching partial results in many instances so that a subsequent query may be faster.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;sample.tiff&#39;</span><span class="p">)</span>
+<span class="n">image</span><span class="p">,</span> <span class="n">mime_type</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getRegion</span><span class="p">(</span>
+    <span class="n">region</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">11000</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">1500</span><span class="p">),</span>
+    <span class="n">output</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">maxWidth</span><span class="o">=</span><span class="mi">1000</span><span class="p">),</span>
+    <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;PNG&#39;</span><span class="p">)</span>
+<span class="c1"># image is a PNG that is 1000 x 100.  Specifically, it will be a bytes</span>
+<span class="c1"># object that represent a PNG encoded image.</span>
+</pre></div>
+</div>
+<p>You could also get this as a <code class="docutils literal notranslate"><span class="pre">numpy</span></code> array:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;sample.tiff&#39;</span><span class="p">)</span>
+<span class="n">nparray</span><span class="p">,</span> <span class="n">mime_type</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getRegion</span><span class="p">(</span>
+    <span class="n">region</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">11000</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">1500</span><span class="p">),</span>
+    <span class="n">output</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">maxWidth</span><span class="o">=</span><span class="mi">1000</span><span class="p">),</span>
+    <span class="nb">format</span><span class="o">=</span><span class="n">large_image</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">TILE_FORMAT_NUMPY</span><span class="p">)</span>
+<span class="c1"># Our source image happens to be RGB, so nparray is a numpy array of shape</span>
+<span class="c1"># (100, 1000, 3)</span>
+</pre></div>
+</div>
+<p>You can specify the size in physical coordinates:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;sample.tiff&#39;</span><span class="p">)</span>
+<span class="n">nparray</span><span class="p">,</span> <span class="n">mime_type</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getRegion</span><span class="p">(</span>
+    <span class="n">region</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mf">0.125</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">2.75</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.375</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;mm&#39;</span><span class="p">),</span>
+    <span class="n">scale</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">mm_x</span><span class="o">=</span><span class="mf">0.0025</span><span class="p">),</span>
+    <span class="nb">format</span><span class="o">=</span><span class="n">large_image</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">TILE_FORMAT_NUMPY</span><span class="p">)</span>
+<span class="c1"># Since our source image had mm_x = 0.00025 for its scale, this has the</span>
+<span class="c1"># same result as the previous example.</span>
+</pre></div>
+</div>
+</section>
+<section id="tile-serving">
+<h2>Tile Serving<a class="headerlink" href="#tile-serving" title="Link to this heading"></a></h2>
+<p>One of the uses of large_image is to get tiles that can be used in image or map viewers.  Most of these viewers expect tiles that are a fixed size and known resolution.  The <code class="docutils literal notranslate"><span class="pre">getTile</span></code> method returns tiles as stored in the original image and the original tile size.  If there are missing levels, these are synthesized – this is only done for missing powers-of-two levels or missing tiles. For instance,</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;sample.tiff&#39;</span><span class="p">)</span>
+<span class="c1"># getTile takes x, y, z, where x and y are the tile location within the</span>
+<span class="c1"># level and z is level where 0 is the lowest resolution.</span>
+<span class="n">tile0</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getTile</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="c1"># tile0 is the lowest resolution tile that shows the whole image.  It will</span>
+<span class="c1"># be a JPEG or PNG or some other image format depending on the source</span>
+<span class="n">tile002</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getTile</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="c1"># tile002 will be a tile representing no more than 1/4 the width of the</span>
+<span class="c1"># image in the upper-left corner.  Since the z (third parameter) is 2, the</span>
+<span class="c1"># level will have up to 2**2 x 2**2 (4 x 4) tiles.  An image doesn&#39;t</span>
+<span class="c1"># necessarily have all tiles in that range, as the image may not be square.</span>
+</pre></div>
+</div>
+<p>Some methods such as <code class="docutils literal notranslate"><span class="pre">getRegion</span></code> and <code class="docutils literal notranslate"><span class="pre">getThumbnail</span></code> allow you to specify format on the fly.  But note that since tiles need to be cached in a consistent format, <code class="docutils literal notranslate"><span class="pre">getTile</span></code> always returns the same format depending on what encoding was specified when it was opened:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;sample.tiff&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;PNG&#39;</span><span class="p">)</span>
+<span class="n">tile0</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getTile</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="c1"># tile is now guaranteed to be a PNG</span>
+</pre></div>
+</div>
+<p>Tiles are always <code class="docutils literal notranslate"><span class="pre">tileWidth</span></code> by <code class="docutils literal notranslate"><span class="pre">tileHeight</span></code> in pixels.  At the maximum level (<code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">=</span> <span class="pre">levels</span> <span class="pre">-</span> <span class="pre">1</span></code>), the number of tiles in that level will range in <code class="docutils literal notranslate"><span class="pre">x</span></code> from <code class="docutils literal notranslate"><span class="pre">0</span></code> to strictly less than <code class="docutils literal notranslate"><span class="pre">sizeX</span> <span class="pre">/</span> <span class="pre">tileWidth</span></code>, and <code class="docutils literal notranslate"><span class="pre">y</span></code> from <code class="docutils literal notranslate"><span class="pre">0</span></code> to strictly less than <code class="docutils literal notranslate"><span class="pre">sizeY</span> <span class="pre">/</span> <span class="pre">tileHeight</span></code>.  For each lower level, the is a power of two less tiles.  For instance, when <code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">=</span> <span class="pre">levels</span> <span class="pre">-</span> <span class="pre">2</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span></code> ranges from <code class="docutils literal notranslate"><span class="pre">0</span></code> to less than <code class="docutils literal notranslate"><span class="pre">sizeX</span> <span class="pre">/</span> <span class="pre">tileWidth</span> <span class="pre">/</span> <span class="pre">2</span></code>; at <code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">=</span> <span class="pre">levels</span> <span class="pre">-</span> <span class="pre">3</span></code>, <code class="docutils literal notranslate"><span class="pre">x</span></code> is less than <code class="docutils literal notranslate"><span class="pre">sizeX</span> <span class="pre">/</span> <span class="pre">tileWidth</span> <span class="pre">/</span> <span class="pre">4</span></code>.</p>
+</section>
+<section id="iterating-across-an-image">
+<h2>Iterating Across an Image<a class="headerlink" href="#iterating-across-an-image" title="Link to this heading"></a></h2>
+<p>Since most images are too large to conveniently fit in memory, it is useful to iterate through the image.
+The <code class="docutils literal notranslate"><span class="pre">tileIterator</span></code> function can take the same parameters as <code class="docutils literal notranslate"><span class="pre">getRegion</span></code> to pick an output size and scale, but can also specify a tile size and overlap.
+You can also get a specific tile with those parameters.  This tiling doesn’t have to have any correspondence to the tiling of the original file.
+The data for each tile is loaded lazily, only once <code class="docutils literal notranslate"><span class="pre">tile['tile']</span></code> or <code class="docutils literal notranslate"><span class="pre">tile['format']</span></code> is accessed.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;sample.tiff&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">source</span><span class="o">.</span><span class="n">tileIterator</span><span class="p">(</span>
+    <span class="n">tile_size</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">512</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">512</span><span class="p">),</span>
+    <span class="nb">format</span><span class="o">=</span><span class="n">large_image</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">TILE_FORMAT_NUMPY</span>
+<span class="p">):</span>
+    <span class="c1"># tile is a dictionary of information about the specific tile</span>
+    <span class="c1"># tile[&#39;tile&#39;] contains the actual numpy or image data</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tile</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;tile&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="c1"># This will print something like:</span>
+    <span class="c1">#   0 0 (512, 512, 3)</span>
+    <span class="c1">#   512 0 (512, 512, 3)</span>
+    <span class="c1">#   1024 0 (512, 512, 3)</span>
+    <span class="c1">#   ...</span>
+    <span class="c1">#   56832 11776 (512, 512, 3)</span>
+    <span class="c1">#   57344 11776 (512, 512, 3)</span>
+    <span class="c1">#   57856 11776 (512, 512, 3)</span>
+</pre></div>
+</div>
+<p>You can overlap tiles.  For instance, if you are running an algorithm where there are edge effects, you probably want an overlap that is big enough that you can trim off or ignore those effects:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;sample.tiff&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">source</span><span class="o">.</span><span class="n">tileIterator</span><span class="p">(</span>
+    <span class="n">tile_size</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">2048</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">2048</span><span class="p">),</span>
+    <span class="n">tile_overlap</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="nb">format</span><span class="o">=</span><span class="n">large_image</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">TILE_FORMAT_NUMPY</span>
+<span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tile</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;tile&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="c1"># This will print something like:</span>
+    <span class="c1">#   0 0 (2048, 2048, 3)</span>
+    <span class="c1">#   1920 0 (2048, 2048, 3)</span>
+    <span class="c1">#   3840 0 (2048, 2048, 3)</span>
+    <span class="c1">#   ...</span>
+    <span class="c1">#   53760 11520 (768, 2048, 3)</span>
+    <span class="c1">#   55680 11520 (768, 2048, 3)</span>
+    <span class="c1">#   57600 11520 (768, 768, 3)</span>
+</pre></div>
+</div>
+</section>
+<section id="getting-a-thumbnail">
+<h2>Getting a Thumbnail<a class="headerlink" href="#getting-a-thumbnail" title="Link to this heading"></a></h2>
+<p>You can get a thumbnail of an image in different formats or resolutions.  The default is typically JPEG and no larger than 256 x 256.  Getting a thumbnail is essentially the same as doing <code class="docutils literal notranslate"><span class="pre">getRegion</span></code>, except that it always uses the entire image and has a maximum width and/or height.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;sample.tiff&#39;</span><span class="p">)</span>
+<span class="n">image</span><span class="p">,</span> <span class="n">mime_type</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getThumbnail</span><span class="p">()</span>
+<span class="nb">open</span><span class="p">(</span><span class="s1">&#39;thumb.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You can get the thumbnail in other image formats and sizes:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;sample.tiff&#39;</span><span class="p">)</span>
+<span class="n">image</span><span class="p">,</span> <span class="n">mime_type</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getThumbnail</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">640</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">480</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;PNG&#39;</span><span class="p">)</span>
+<span class="nb">open</span><span class="p">(</span><span class="s1">&#39;thumb.png&#39;</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="associated-images">
+<h2>Associated Images<a class="headerlink" href="#associated-images" title="Link to this heading"></a></h2>
+<p>Many digital pathology images (also called whole slide images or WSI) contain secondary images that have additional information.  This commonly includes label and macro images.  A label image is a separate image of just the label of a slide.  A macro image is a small image of the entire slide either including or excluding the label.  There can be other associated images, too.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;sample.tiff&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">getAssociatedImagesList</span><span class="p">())</span>
+<span class="c1"># This prints something like:</span>
+<span class="c1">#   [&#39;label&#39;, &#39;macro&#39;]</span>
+<span class="n">image</span><span class="p">,</span> <span class="n">mime_type</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getAssociatedImage</span><span class="p">(</span><span class="s1">&#39;macro&#39;</span><span class="p">)</span>
+<span class="c1"># image is a binary image, such as a JPEG</span>
+<span class="n">image</span><span class="p">,</span> <span class="n">mime_type</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getAssociatedImage</span><span class="p">(</span><span class="s1">&#39;macro&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;PNG&#39;</span><span class="p">)</span>
+<span class="c1"># image is now a PNG</span>
+<span class="n">image</span><span class="p">,</span> <span class="n">mime_type</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getAssociatedImage</span><span class="p">(</span><span class="s1">&#39;macro&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="n">large_image</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">TILE_FORMAT_NUMPY</span><span class="p">)</span>
+<span class="c1"># image is now a numpy array</span>
+</pre></div>
+</div>
+<p>You can get associated images in different encodings and formats.  The entire image is always returned.</p>
+</section>
+<section id="projections">
+<h2>Projections<a class="headerlink" href="#projections" title="Link to this heading"></a></h2>
+<p>large_image handles geospatial images.  These can be handled as any other image in pixel-space by just opening them normally.  Alternately, these can be opened with a new projection and then referenced using that projection.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="c1"># Open in Web Mercator projection</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;sample.geo.tiff&#39;</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;EPSG:3857&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">()[</span><span class="s1">&#39;bounds&#39;</span><span class="p">])</span>
+<span class="c1"># This will have the corners in Web Mercator meters, the projection, and</span>
+<span class="c1"># the minimum and maximum ranges.</span>
+<span class="c1">#   We could also have done</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">getBounds</span><span class="p">())</span>
+<span class="c1"># The 0, 0, 0 tile is now the whole world excepting the poles</span>
+<span class="n">tile0</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getTile</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="images-with-multiple-frames">
+<h2>Images with Multiple Frames<a class="headerlink" href="#images-with-multiple-frames" title="Link to this heading"></a></h2>
+<p>Some images have multiple “frames”.  Conceptually, these are images that could have multiple channels as separate images, such as those from fluorescence microscopy, multiple “z” values from serial sectioning of thick tissue or adjustment of focal plane in a microscope, multiple time (“t”) values, or multiple regions of interest (frequently referred as “xy”, “p”, or “v” values).</p>
+<p>Any of the frames of such an image are accessed by adding a <code class="docutils literal notranslate"><span class="pre">frame=&lt;integer&gt;</span></code> parameter to the <code class="docutils literal notranslate"><span class="pre">getTile</span></code>, <code class="docutils literal notranslate"><span class="pre">getRegion</span></code>, <code class="docutils literal notranslate"><span class="pre">tileIterator</span></code>, or other methods.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;sample.ome.tiff&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">())</span>
+<span class="c1"># This will print something like</span>
+<span class="c1">#   {</span>
+<span class="c1">#     &#39;magnification&#39;: 8.130081300813009,</span>
+<span class="c1">#     &#39;mm_x&#39;: 0.00123,</span>
+<span class="c1">#     &#39;mm_y&#39;: 0.00123,</span>
+<span class="c1">#     &#39;sizeX&#39;: 2106,</span>
+<span class="c1">#     &#39;sizeY&#39;: 2016,</span>
+<span class="c1">#     &#39;tileHeight&#39;: 1024,</span>
+<span class="c1">#     &#39;tileWidth&#39;: 1024,</span>
+<span class="c1">#     &#39;IndexRange&#39;: {&#39;IndexC&#39;: 3},</span>
+<span class="c1">#     &#39;IndexStride&#39;: {&#39;IndexC&#39;: 1},</span>
+<span class="c1">#     &#39;frames&#39;: [</span>
+<span class="c1">#       {&#39;Frame&#39;: 0, &#39;Index&#39;: 0, &#39;IndexC&#39;: 0, &#39;IndexT&#39;: 0, &#39;IndexZ&#39;: 0},</span>
+<span class="c1">#       {&#39;Frame&#39;: 1, &#39;Index&#39;: 0, &#39;IndexC&#39;: 1, &#39;IndexT&#39;: 0, &#39;IndexZ&#39;: 0},</span>
+<span class="c1">#       {&#39;Frame&#39;: 2, &#39;Index&#39;: 0, &#39;IndexC&#39;: 2, &#39;IndexT&#39;: 0, &#39;IndexZ&#39;: 0}</span>
+<span class="c1">#     ]</span>
+<span class="c1">#   }</span>
+<span class="n">nparray</span><span class="p">,</span> <span class="n">mime_type</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getRegion</span><span class="p">(</span>
+    <span class="n">frame</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="nb">format</span><span class="o">=</span><span class="n">large_image</span><span class="o">.</span><span class="n">constants</span><span class="o">.</span><span class="n">TILE_FORMAT_NUMPY</span><span class="p">)</span>
+<span class="c1"># nparray will contain data from the middle channel image</span>
+</pre></div>
+</div>
+</section>
+<section id="channels-bands-samples-axes-and-frames">
+<h2>Channels, Bands, Samples, Axes, and Frames<a class="headerlink" href="#channels-bands-samples-axes-and-frames" title="Link to this heading"></a></h2>
+<p>Various large image formats refer to channels, bands, and samples.  This isn’t consistent across different libraries.  In an attempt to harmonize the geospatial and medical image terminology, large_image uses <code class="docutils literal notranslate"><span class="pre">bands</span></code> or <code class="docutils literal notranslate"><span class="pre">samples</span></code> to refer to image plane components, such as red, green, blue, and alpha.  For geospatial data this can often have additional bands, such as near infrared or panchromatic.  <code class="docutils literal notranslate"><span class="pre">channels</span></code> are stored as separate frames and can be interpreted as different imaging modalities.  For example, a fluorescence microscopy image might have DAPI, CY5, and A594 channels.  A common color photograph file has 3 bands (also called samples) and 1 channel.</p>
+<p>At times, image <code class="docutils literal notranslate"><span class="pre">axes</span></code> are used to indicate the order of data, especially when interpreted as an n-dimensional array.  The <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> axes are the horizontal and vertical dimensions of the image.  The <code class="docutils literal notranslate"><span class="pre">s</span></code> axis is the <code class="docutils literal notranslate"><span class="pre">bands</span></code> or <code class="docutils literal notranslate"><span class="pre">samples</span></code>, such as red, green, and blue.  The <code class="docutils literal notranslate"><span class="pre">c</span></code> axis is the <code class="docutils literal notranslate"><span class="pre">channels</span></code> with special support for channel names.  This corresponds to distinct frames.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">z</span></code> and <code class="docutils literal notranslate"><span class="pre">t</span></code> are common enough that they are sometimes considered as primary axes.  <code class="docutils literal notranslate"><span class="pre">z</span></code> corresponds to the direction orthogonal to <code class="docutils literal notranslate"><span class="pre">x</span></code> and <code class="docutils literal notranslate"><span class="pre">y</span></code> and is usually associated with altitude or microscope stage height.  <code class="docutils literal notranslate"><span class="pre">t</span></code> is time.</p>
+<p>Other axes are supported provided their names are case-insensitively unique.</p>
+<p>Many image formats (such as TIFF) can contain multiple images within a single file.  A single image within the file can have multiple bands.  Channels, time series, and other axes are stored as separate images.</p>
+<p>By default, the <code class="docutils literal notranslate"><span class="pre">getTile</span></code>, <code class="docutils literal notranslate"><span class="pre">getRegion</span></code>, and <code class="docutils literal notranslate"><span class="pre">tileIterator</span></code> methods will return all of the bands of a single frame.  The specific bands returned can be modified using the <code class="docutils literal notranslate"><span class="pre">style</span></code> parameter.  The specific frame, including any channel or other axes, is specified with the <code class="docutils literal notranslate"><span class="pre">frame</span></code> parameter.</p>
+<p>Since if can be useful to ask for a specific frame based on the axes values there are <code class="docutils literal notranslate"><span class="pre">frameFromAxes</span></code> and <code class="docutils literal notranslate"><span class="pre">axesFromFrame</span></code> utility functions.</p>
+</section>
+<section id="styles-changing-colors-scales-and-other-properties">
+<h2>Styles - Changing colors, scales, and other properties<a class="headerlink" href="#styles-changing-colors-scales-and-other-properties" title="Link to this heading"></a></h2>
+<p>By default, reading from an image gets the values stored in the image file.  If you get a JPEG or PNG as the output, the values will be 8-bit per channel.  If you get values as a numpy array, they will have their original resolution.  Depending on the source image, this could be 16-bit per channel, floats, or other data types.</p>
+<p>Especially when working with high bit-depth images, it can be useful to modify the output.  For example, you can adjust the color range:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;sample.tiff&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span> <span class="s1">&#39;max&#39;</span><span class="p">})</span>
+<span class="c1"># now, any calls to getRegion, getTile, tileIterator, etc. will adjust the</span>
+<span class="c1"># intensity so that the lowest value is mapped to black and the brightest</span>
+<span class="c1"># value is mapped to white.</span>
+<span class="n">image</span><span class="p">,</span> <span class="n">mime_type</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getRegion</span><span class="p">(</span>
+    <span class="n">region</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">11000</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">1500</span><span class="p">),</span>
+    <span class="n">output</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">maxWidth</span><span class="o">=</span><span class="mi">1000</span><span class="p">))</span>
+<span class="c1"># image will use the full dynamic range</span>
+</pre></div>
+</div>
+<p>You can also composite a multi-frame image into a false-color output:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;sample.tiff&#39;</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;bands&#39;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s1">&#39;frame&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span> <span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="s1">&#39;palette&#39;</span><span class="p">:</span> <span class="s1">&#39;#f00&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;frame&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span> <span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="s1">&#39;palette&#39;</span><span class="p">:</span> <span class="s1">&#39;#0f0&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="s1">&#39;frame&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">:</span> <span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="s1">&#39;palette&#39;</span><span class="p">:</span> <span class="s1">&#39;#00f&#39;</span><span class="p">},</span>
+<span class="p">]})</span>
+<span class="c1"># Composite frames 0, 3, and 4 to red, green, and blue channels.</span>
+<span class="n">image</span><span class="p">,</span> <span class="n">mime_type</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getRegion</span><span class="p">(</span>
+    <span class="n">region</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">top</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">11000</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mi">1500</span><span class="p">),</span>
+    <span class="n">output</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">maxWidth</span><span class="o">=</span><span class="mi">1000</span><span class="p">))</span>
+<span class="c1"># image is false-color and full dynamic range of specific frames</span>
+</pre></div>
+</div>
+</section>
+<section id="writing-an-image">
+<h2>Writing an Image<a class="headerlink" href="#writing-an-image" title="Link to this heading"></a></h2>
+<p>If you wish to visualize numpy data, <code class="docutils literal notranslate"><span class="pre">large_image</span></code> can write a tiled image.
+This requires a tile source that supports writing to be installed.
+As of this writing, the <code class="docutils literal notranslate"><span class="pre">large-image-source-zarr</span></code> and <code class="docutils literal notranslate"><span class="pre">large-image-source-vips</span></code> sources both support this.
+If both are installed, the <code class="docutils literal notranslate"><span class="pre">large-image-source-zarr</span></code> is the default.
+Some of the API options available for <code class="docutils literal notranslate"><span class="pre">large-image-source-zarr</span></code> are not available for <code class="docutils literal notranslate"><span class="pre">large-image-source-vips</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">nparray</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="n">fancy_algorithm</span><span class="p">():</span>
+    <span class="c1"># We could optionally add a mask to limit the output</span>
+    <span class="n">source</span><span class="o">.</span><span class="n">addTile</span><span class="p">(</span><span class="n">nparray</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+<span class="n">source</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;/tmp/sample.tiff&#39;</span><span class="p">,</span> <span class="n">lossy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="multiple-frames">
+<h3>Multiple Frames<a class="headerlink" href="#multiple-frames" title="Link to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">large-image-source-zarr</span></code> can be used to store multiframe data with arbitrary axes.
+The example below demonstrates the creation of an image with five axes: T, Z, Y, X, S.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+
+<span class="n">time_values</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">]</span>
+<span class="n">z_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">9</span><span class="p">]</span>
+<span class="n">tile_pos_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1024</span><span class="p">,</span> <span class="mi">2048</span><span class="p">,</span> <span class="mi">3072</span><span class="p">,</span> <span class="mi">4096</span><span class="p">]</span>
+
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">t_index</span><span class="p">,</span> <span class="n">t_value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">time_values</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">z_index</span><span class="p">,</span> <span class="n">z_value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">z_values</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">y_value</span> <span class="ow">in</span> <span class="n">tile_pos_values</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">x_value</span> <span class="ow">in</span> <span class="n">tile_pos_values</span><span class="p">:</span>
+
+                <span class="c1"># tile is a numpy array with shape (1024, 1024, 3)</span>
+                <span class="c1"># this shape corresponds to the following axes, respectively: (Y, X, S)</span>
+                <span class="n">tile</span> <span class="o">=</span> <span class="n">get_my_data_tile</span><span class="p">(</span><span class="n">x_value</span><span class="p">,</span> <span class="n">y_value</span><span class="p">,</span> <span class="n">z_value</span><span class="p">,</span> <span class="n">t_value</span><span class="p">)</span>
+
+                <span class="n">source</span><span class="o">.</span><span class="n">addTile</span><span class="p">(</span>
+                    <span class="n">tile</span><span class="p">,</span>
+                    <span class="n">x_value</span><span class="p">,</span>
+                    <span class="n">y_value</span><span class="p">,</span>
+                    <span class="n">z</span><span class="o">=</span><span class="n">z_index</span><span class="p">,</span>
+                    <span class="n">time</span><span class="o">=</span><span class="n">t_index</span><span class="p">,</span>
+
+                    <span class="c1"># z_value and t_value are optional parameters to store the</span>
+                    <span class="c1"># true values at the provided z index and t index</span>
+                    <span class="n">z_value</span><span class="o">=</span><span class="n">z_value</span><span class="p">,</span>
+                    <span class="n">time_value</span><span class="o">=</span><span class="n">t_value</span><span class="p">,</span>
+                <span class="p">)</span>
+<span class="n">source</span><span class="o">.</span><span class="n">frameUnits</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">t</span><span class="o">=</span><span class="s1">&#39;ms&#39;</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="s1">&#39;cm&#39;</span><span class="p">)</span>
+
+<span class="c1"># The writer supports a variety of formats</span>
+<span class="n">source</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;/tmp/sample.zarr.zip&#39;</span><span class="p">,</span> <span class="n">lossy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You may also choose to read tiles from one source and write modified tiles to a new source:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+
+<span class="n">original_source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s1">&#39;path/to/original/image.tiff&#39;</span><span class="p">)</span>
+<span class="n">new_source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">original_source</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;frames&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+    <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">original_source</span><span class="o">.</span><span class="n">tileIterator</span><span class="p">(</span><span class="n">frame</span><span class="o">=</span><span class="n">frame</span><span class="p">[</span><span class="s1">&#39;Frame&#39;</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;numpy&#39;</span><span class="p">):</span>
+        <span class="n">tile_data</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;tile&#39;</span><span class="p">],</span> <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">]</span>
+        <span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;z&#39;</span><span class="p">:</span> <span class="n">frame</span><span class="p">[</span><span class="s1">&#39;IndexZ&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;c&#39;</span><span class="p">:</span> <span class="n">frame</span><span class="p">[</span><span class="s1">&#39;IndexC&#39;</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="n">modified_tile</span> <span class="o">=</span> <span class="n">modify_tile</span><span class="p">(</span><span class="n">tile_data</span><span class="p">)</span>
+        <span class="n">new_source</span><span class="o">.</span><span class="n">addTile</span><span class="p">(</span><span class="n">modified_tile</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">y</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="n">new_source</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;path/to/new/image.tiff&#39;</span><span class="p">,</span> <span class="n">lossy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="multiple-processes">
+<h3>Multiple processes<a class="headerlink" href="#multiple-processes" title="Link to this heading"></a></h3>
+<p>In some cases, it may be beneficial to write to a single image from multiple processes or threads.</p>
+<p>There is one important thing to note about writing an image with multiple processes.
+In order to properly record the set of values along each frame axis, prior to any multiprocess concurrency,
+the first tile added should be at the maximum position so that the size of each dimension is preallocated.
+The following example demonstrates this step.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">multiprocessing</span>
+
+<span class="c1"># Important: Must be a pickleable function</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">add_tile_to_source</span><span class="p">(</span><span class="n">tilesource</span><span class="p">,</span> <span class="n">nparray</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+    <span class="n">tilesource</span><span class="o">.</span><span class="n">addTile</span><span class="p">(</span>
+        <span class="n">nparray</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">position</span>
+    <span class="p">)</span>
+
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+<span class="c1"># Important: Maximum size must be allocated before any multiprocess concurrency</span>
+<span class="n">add_tile_to_source</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="n">max_x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">max_y</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="n">max_z</span><span class="p">))</span>
+<span class="c1"># Also works with multiprocessing.ThreadPool, which does not need maximum size allocated first</span>
+<span class="k">with</span> <span class="n">multiprocessing</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+    <span class="n">pool</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span>
+        <span class="n">add_tile_to_source</span><span class="p">,</span>
+        <span class="p">[(</span><span class="n">source</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">t_pos</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span><span class="p">,</span> <span class="n">t_pos</span> <span class="ow">in</span> <span class="n">tileset</span><span class="p">]</span>
+    <span class="p">)</span>
+<span class="n">source</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s1">&#39;/tmp/sample.zarr.zip&#39;</span><span class="p">,</span> <span class="n">lossy</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="more-examples">
+<h3>More examples<a class="headerlink" href="#more-examples" title="Link to this heading"></a></h3>
+<p>To see more examples of using <code class="docutils literal notranslate"><span class="pre">large-image-source-zarr</span></code> to write images, see <a class="reference internal" href="notebooks.html"><span class="doc">Jupyter Notebook Examples</span></a> and the <a class="reference external" href="https://github.com/girder/large_image/blob/master/test/test_sink.py">Zarr Sink Tests</a>.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Large Image" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tilesource_options.html" class="btn btn-neutral float-right" title="Tile Source Options" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+large\_image\_source\_mapnik package
+====================================
+
+Submodules
+----------
+
+large\_image\_source\_mapnik.girder\_source module
+--------------------------------------------------
+
+.. automodule:: large_image_source_mapnik.girder_source
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: large_image_source_mapnik
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,475 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_mapnik package &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="large_image_source_multi" href="../large_image_source_multi/modules.html" />
+    <link rel="prev" title="large_image_source_mapnik" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../api_index.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../large_image/modules.html">large_image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_bioformats/modules.html">large_image_source_bioformats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_deepzoom/modules.html">large_image_source_deepzoom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_dicom/modules.html">large_image_source_dicom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_dummy/modules.html">large_image_source_dummy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_gdal/modules.html">large_image_source_gdal</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">large_image_source_mapnik</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">large_image_source_mapnik package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-large_image_source_mapnik.girder_source">large_image_source_mapnik.girder_source module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-large_image_source_mapnik">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_multi/modules.html">large_image_source_multi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_nd2/modules.html">large_image_source_nd2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_ometiff/modules.html">large_image_source_ometiff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_openjpeg/modules.html">large_image_source_openjpeg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_openslide/modules.html">large_image_source_openslide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_pil/modules.html">large_image_source_pil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_rasterio/modules.html">large_image_source_rasterio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_test/modules.html">large_image_source_test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_tiff/modules.html">large_image_source_tiff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_tifffile/modules.html">large_image_source_tifffile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_vips/modules.html">large_image_source_vips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_zarr/modules.html">large_image_source_zarr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_converter/modules.html">large_image_converter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_tasks/modules.html">large_image_tasks</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../api_index.html">API Documentation</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">large_image_source_mapnik</a></li>
+      <li class="breadcrumb-item active">large_image_source_mapnik package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/_build/large_image_source_mapnik/large_image_source_mapnik.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="large-image-source-mapnik-package">
+<h1>large_image_source_mapnik package<a class="headerlink" href="#large-image-source-mapnik-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-large_image_source_mapnik.girder_source">
+<span id="large-image-source-mapnik-girder-source-module"></span><h2>large_image_source_mapnik.girder_source module<a class="headerlink" href="#module-large_image_source_mapnik.girder_source" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image_source_mapnik.girder_source.MapnikGirderTileSource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image_source_mapnik.girder_source.</span></span><span class="sig-name descname"><span class="pre">MapnikGirderTileSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_mapnik/girder_source.html#MapnikGirderTileSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_mapnik.girder_source.MapnikGirderTileSource" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#large_image_source_mapnik.MapnikFileTileSource" title="large_image_source_mapnik.MapnikFileTileSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">MapnikFileTileSource</span></code></a>, <a class="reference internal" href="../large_image_source_gdal/large_image_source_gdal.html#large_image_source_gdal.girder_source.GDALGirderTileSource" title="large_image_source_gdal.girder_source.GDALGirderTileSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">GDALGirderTileSource</span></code></a></p>
+<p>Provides tile access to Girder items for mapnik layers.</p>
+<p>Initialize the tile class.  See the base class for other available
+parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – a filesystem path for the tile source.</p></li>
+<li><p><strong>projection</strong> – None to use pixel space, otherwise a proj4
+projection string or a case-insensitive string of the form
+‘EPSG:&lt;epsg number&gt;’.  If a string and case-insensitively prefixed
+with ‘proj4:’, that prefix is removed.  For instance,
+‘proj4:EPSG:3857’, ‘PROJ4:+init=epsg:3857’, and ‘+init=epsg:3857’,
+and ‘EPSG:3857’ are all equivalent.</p></li>
+<li><p><strong>style</strong> – <p>if None, use the default style for the file.  Otherwise,
+this is a string with a json-encoded dictionary.  The style is
+ignored if it does not contain ‘band’ or ‘bands’.  In addition to
+the base class parameters, the style can also contain the following
+keys:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>scheme: one of the mapnik.COLORIZER_xxx values.  Case</dt><dd><p>insensitive.  Possible values are at least ‘discrete’,
+‘linear’, and ‘exact’.  This defaults to ‘linear’.</p>
+</dd>
+<dt>composite: this is a string containing one of the mapnik</dt><dd><p>CompositeOp properties.  It defaults to ‘lighten’.</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>unitsPerPixel</strong> – The size of a pixel at the 0 tile size.  Ignored
+if the projection is None.  For projections, None uses the default,
+which is the distance between (-180,0) and (180,0) in EPSG:4326
+converted to the projection divided by the tile size.  Proj4
+projections that are not latlong (is_geographic is False) must
+specify unitsPerPixel.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.girder_source.MapnikGirderTileSource.cacheName">
+<span class="sig-name descname"><span class="pre">cacheName</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'tilesource'</span></em><a class="headerlink" href="#large_image_source_mapnik.girder_source.MapnikGirderTileSource.cacheName" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.girder_source.MapnikGirderTileSource.levels">
+<span class="sig-name descname"><span class="pre">levels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_mapnik.girder_source.MapnikGirderTileSource.levels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.girder_source.MapnikGirderTileSource.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'mapnik'</span></em><a class="headerlink" href="#large_image_source_mapnik.girder_source.MapnikGirderTileSource.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.girder_source.MapnikGirderTileSource.projection">
+<span class="sig-name descname"><span class="pre">projection</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span></em><a class="headerlink" href="#large_image_source_mapnik.girder_source.MapnikGirderTileSource.projection" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.girder_source.MapnikGirderTileSource.projectionOrigin">
+<span class="sig-name descname"><span class="pre">projectionOrigin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#large_image_source_mapnik.girder_source.MapnikGirderTileSource.projectionOrigin" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.girder_source.MapnikGirderTileSource.sizeX">
+<span class="sig-name descname"><span class="pre">sizeX</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_mapnik.girder_source.MapnikGirderTileSource.sizeX" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.girder_source.MapnikGirderTileSource.sizeY">
+<span class="sig-name descname"><span class="pre">sizeY</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_mapnik.girder_source.MapnikGirderTileSource.sizeY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.girder_source.MapnikGirderTileSource.sourceLevels">
+<span class="sig-name descname"><span class="pre">sourceLevels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_mapnik.girder_source.MapnikGirderTileSource.sourceLevels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.girder_source.MapnikGirderTileSource.sourceSizeX">
+<span class="sig-name descname"><span class="pre">sourceSizeX</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_mapnik.girder_source.MapnikGirderTileSource.sourceSizeX" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.girder_source.MapnikGirderTileSource.sourceSizeY">
+<span class="sig-name descname"><span class="pre">sourceSizeY</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_mapnik.girder_source.MapnikGirderTileSource.sourceSizeY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.girder_source.MapnikGirderTileSource.tileHeight">
+<span class="sig-name descname"><span class="pre">tileHeight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_mapnik.girder_source.MapnikGirderTileSource.tileHeight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.girder_source.MapnikGirderTileSource.tileWidth">
+<span class="sig-name descname"><span class="pre">tileWidth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_mapnik.girder_source.MapnikGirderTileSource.tileWidth" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.girder_source.MapnikGirderTileSource.unitsAcrossLevel0">
+<span class="sig-name descname"><span class="pre">unitsAcrossLevel0</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#large_image_source_mapnik.girder_source.MapnikGirderTileSource.unitsAcrossLevel0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-large_image_source_mapnik">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-large_image_source_mapnik" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image_source_mapnik.</span></span><span class="sig-name descname"><span class="pre">MapnikFileTileSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_mapnik.html#MapnikFileTileSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../large_image_source_gdal/large_image_source_gdal.html#large_image_source_gdal.GDALFileTileSource" title="large_image_source_gdal.GDALFileTileSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">GDALFileTileSource</span></code></a></p>
+<p>Provides tile access to geospatial files.</p>
+<p>Initialize the tile class.  See the base class for other available
+parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – a filesystem path for the tile source.</p></li>
+<li><p><strong>projection</strong> – None to use pixel space, otherwise a proj4
+projection string or a case-insensitive string of the form
+‘EPSG:&lt;epsg number&gt;’.  If a string and case-insensitively prefixed
+with ‘proj4:’, that prefix is removed.  For instance,
+‘proj4:EPSG:3857’, ‘PROJ4:+init=epsg:3857’, and ‘+init=epsg:3857’,
+and ‘EPSG:3857’ are all equivalent.</p></li>
+<li><p><strong>style</strong> – <p>if None, use the default style for the file.  Otherwise,
+this is a string with a json-encoded dictionary.  The style is
+ignored if it does not contain ‘band’ or ‘bands’.  In addition to
+the base class parameters, the style can also contain the following
+keys:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>scheme: one of the mapnik.COLORIZER_xxx values.  Case</dt><dd><p>insensitive.  Possible values are at least ‘discrete’,
+‘linear’, and ‘exact’.  This defaults to ‘linear’.</p>
+</dd>
+<dt>composite: this is a string containing one of the mapnik</dt><dd><p>CompositeOp properties.  It defaults to ‘lighten’.</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+<li><p><strong>unitsPerPixel</strong> – The size of a pixel at the 0 tile size.  Ignored
+if the projection is None.  For projections, None uses the default,
+which is the distance between (-180,0) and (180,0) in EPSG:4326
+converted to the projection divided by the tile size.  Proj4
+projections that are not latlong (is_geographic is False) must
+specify unitsPerPixel.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.addStyle">
+<span class="sig-name descname"><span class="pre">addStyle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">m</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layerSrs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_mapnik.html#MapnikFileTileSource.addStyle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.addStyle" title="Link to this definition"></a></dt>
+<dd><p>Attaches raster style option to mapnik raster layer and adds the layer
+to the mapnik map.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>m</strong> – mapnik map.</p></li>
+<li><p><strong>layerSrs</strong> – the layer projection</p></li>
+<li><p><strong>extent</strong> – the extent to use for the mapnik layer.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.cacheName">
+<span class="sig-name descname"><span class="pre">cacheName</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'tilesource'</span></em><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.cacheName" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.extensions">
+<span class="sig-name descname"><span class="pre">extensions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../large_image/large_image.html#large_image.constants.SourcePriority" title="large_image.constants.SourcePriority"><span class="pre">SourcePriority</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'nc':</span> <span class="pre">SourcePriority.PREFERRED,</span> <span class="pre">'nitf':</span> <span class="pre">SourcePriority.HIGHER,</span> <span class="pre">'ntf':</span> <span class="pre">SourcePriority.HIGHER,</span> <span class="pre">'tif':</span> <span class="pre">SourcePriority.LOWER,</span> <span class="pre">'tiff':</span> <span class="pre">SourcePriority.LOWER,</span> <span class="pre">'vrt':</span> <span class="pre">SourcePriority.HIGHER,</span> <span class="pre">None:</span> <span class="pre">SourcePriority.LOW}</span></em><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.extensions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.getOneBandInformation">
+<span class="sig-name descname"><span class="pre">getOneBandInformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">band</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_mapnik.html#MapnikFileTileSource.getOneBandInformation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.getOneBandInformation" title="Link to this definition"></a></dt>
+<dd><p>Get band information for a single band.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>band</strong> – a 1-based band.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a dictionary of band information.  See getBandInformation.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.getTile">
+<span class="sig-name descname"><span class="pre">getTile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_mapnik.html#MapnikFileTileSource.getTile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.getTile" title="Link to this definition"></a></dt>
+<dd><p>Get a tile from a tile source, returning it as an binary image, a PIL
+image, or a numpy array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – the 0-based x position of the tile on the specified z level.
+0 is left.</p></li>
+<li><p><strong>y</strong> – the 0-based y position of the tile on the specified z level.
+0 is top.</p></li>
+<li><p><strong>z</strong> – the z level of the tile.  May range from [0, self.levels],
+where 0 is the lowest resolution, single tile for the whole source.</p></li>
+<li><p><strong>pilImageAllowed</strong> – True if a PIL image may be returned.</p></li>
+<li><p><strong>numpyAllowed</strong> – True if a numpy image may be returned.  ‘always’
+to return a numpy array.</p></li>
+<li><p><strong>sparseFallback</strong> – if False and a tile doesn’t exist, raise an
+error.  If True, check if a lower resolution tile exists, and, if
+so, interpolate the needed data for this tile.</p></li>
+<li><p><strong>frame</strong> – the frame number within the tile source.  None is the
+same as 0 for multi-frame sources.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>either a numpy array, a PIL image, or a memory object with an
+image file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.interpolateMinMax">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">interpolateMinMax</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_mapnik.html#MapnikFileTileSource.interpolateMinMax"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.interpolateMinMax" title="Link to this definition"></a></dt>
+<dd><p>Returns interpolated values for a given
+start, stop and count</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List of interpolated values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.levels">
+<span class="sig-name descname"><span class="pre">levels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.levels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.mimeTypes">
+<span class="sig-name descname"><span class="pre">mimeTypes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../large_image/large_image.html#large_image.constants.SourcePriority" title="large_image.constants.SourcePriority"><span class="pre">SourcePriority</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'image/geotiff':</span> <span class="pre">SourcePriority.HIGHER,</span> <span class="pre">'image/tiff':</span> <span class="pre">SourcePriority.LOWER,</span> <span class="pre">'image/x-tiff':</span> <span class="pre">SourcePriority.LOWER,</span> <span class="pre">None:</span> <span class="pre">SourcePriority.FALLBACK}</span></em><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.mimeTypes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'mapnik'</span></em><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.projection">
+<span class="sig-name descname"><span class="pre">projection</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span></em><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.projection" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.projectionOrigin">
+<span class="sig-name descname"><span class="pre">projectionOrigin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.projectionOrigin" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.sizeX">
+<span class="sig-name descname"><span class="pre">sizeX</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.sizeX" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.sizeY">
+<span class="sig-name descname"><span class="pre">sizeY</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.sizeY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.sourceLevels">
+<span class="sig-name descname"><span class="pre">sourceLevels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.sourceLevels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.sourceSizeX">
+<span class="sig-name descname"><span class="pre">sourceSizeX</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.sourceSizeX" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.sourceSizeY">
+<span class="sig-name descname"><span class="pre">sourceSizeY</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.sourceSizeY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.tileHeight">
+<span class="sig-name descname"><span class="pre">tileHeight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.tileHeight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.tileWidth">
+<span class="sig-name descname"><span class="pre">tileWidth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.tileWidth" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_mapnik.MapnikFileTileSource.unitsAcrossLevel0">
+<span class="sig-name descname"><span class="pre">unitsAcrossLevel0</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#large_image_source_mapnik.MapnikFileTileSource.unitsAcrossLevel0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_source_mapnik.canRead">
+<span class="sig-prename descclassname"><span class="pre">large_image_source_mapnik.</span></span><span class="sig-name descname"><span class="pre">canRead</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_mapnik.html#canRead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_mapnik.canRead" title="Link to this definition"></a></dt>
+<dd><p>Check if an input can be read by the module class.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_source_mapnik.open">
+<span class="sig-prename descclassname"><span class="pre">large_image_source_mapnik.</span></span><span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_mapnik.html#open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_mapnik.open" title="Link to this definition"></a></dt>
+<dd><p>Create an instance of the module class.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="large_image_source_mapnik" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../large_image_source_multi/modules.html" class="btn btn-neutral float-right" title="large_image_source_multi" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

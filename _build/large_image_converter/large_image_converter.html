@@ -1,0 +1,387 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_converter package &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="large_image_tasks" href="../large_image_tasks/modules.html" />
+    <link rel="prev" title="large_image_converter" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../api_index.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../large_image/modules.html">large_image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_bioformats/modules.html">large_image_source_bioformats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_deepzoom/modules.html">large_image_source_deepzoom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_dicom/modules.html">large_image_source_dicom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_dummy/modules.html">large_image_source_dummy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_gdal/modules.html">large_image_source_gdal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_mapnik/modules.html">large_image_source_mapnik</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_multi/modules.html">large_image_source_multi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_nd2/modules.html">large_image_source_nd2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_ometiff/modules.html">large_image_source_ometiff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_openjpeg/modules.html">large_image_source_openjpeg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_openslide/modules.html">large_image_source_openslide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_pil/modules.html">large_image_source_pil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_rasterio/modules.html">large_image_source_rasterio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_test/modules.html">large_image_source_test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_tiff/modules.html">large_image_source_tiff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_tifffile/modules.html">large_image_source_tifffile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_vips/modules.html">large_image_source_vips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_zarr/modules.html">large_image_source_zarr</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">large_image_converter</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">large_image_converter package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-large_image_converter.format_aperio">large_image_converter.format_aperio module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-large_image_converter">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_tasks/modules.html">large_image_tasks</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../api_index.html">API Documentation</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">large_image_converter</a></li>
+      <li class="breadcrumb-item active">large_image_converter package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/_build/large_image_converter/large_image_converter.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="large-image-converter-package">
+<h1>large_image_converter package<a class="headerlink" href="#large-image-converter-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-large_image_converter.format_aperio">
+<span id="large-image-converter-format-aperio-module"></span><h2>large_image_converter.format_aperio module<a class="headerlink" href="#module-large_image_converter.format_aperio" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_converter.format_aperio.adjust_params">
+<span class="sig-prename descclassname"><span class="pre">large_image_converter.format_aperio.</span></span><span class="sig-name descname"><span class="pre">adjust_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geospatial</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_converter/format_aperio.html#adjust_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_converter.format_aperio.adjust_params" title="Link to this definition"></a></dt>
+<dd><p>Adjust options for aperio format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>geospatial</strong> – True if the source is geospatial.</p></li>
+<li><p><strong>params</strong> – the conversion options.  Possibly modified.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>suffix: the recommended suffix for the new file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_converter.format_aperio.create_thumbnail_and_label">
+<span class="sig-prename descclassname"><span class="pre">large_image_converter.format_aperio.</span></span><span class="sig-name descname"><span class="pre">create_thumbnail_and_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">tempPath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ifdCount</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">needsLabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labelPosition</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_converter/format_aperio.html#create_thumbnail_and_label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_converter.format_aperio.create_thumbnail_and_label" title="Link to this definition"></a></dt>
+<dd><p>Create a thumbnail and, optionally, label image for the aperio file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tempPath</strong> – a temporary file in a temporary directory.</p></li>
+<li><p><strong>info</strong> – the tifftools info that will be written to the tiff tile;
+modified.</p></li>
+<li><p><strong>ifdCount</strong> – the number of ifds in the first tiled image.  This is 1 if
+there are subifds.</p></li>
+<li><p><strong>needsLabel</strong> – true if a label image needs to be added.</p></li>
+<li><p><strong>labelPosition</strong> – the position in the ifd list where a label image
+should be inserted.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_converter.format_aperio.modify_tiff_before_write">
+<span class="sig-prename descclassname"><span class="pre">large_image_converter.format_aperio.</span></span><span class="sig-name descname"><span class="pre">modify_tiff_before_write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ifdIndices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tempPath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lidata</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_converter/format_aperio.html#modify_tiff_before_write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_converter.format_aperio.modify_tiff_before_write" title="Link to this definition"></a></dt>
+<dd><p>Adjust the metadata and ifds for a tiff file to make it compatible with
+Aperio (svs).</p>
+<p>Aperio files are tiff files which are stored without subifds in the order
+full res, optional thumbnail, half res, quarter res, …, full res, half
+res, quarter res, …, label, macro.  All ifds have an ImageDescription
+that start with an aperio header followed by some dimension information and
+then an option key-.value list</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>info</strong> – the tifftools info that will be written to the tiff tile;
+modified.</p></li>
+<li><p><strong>ifdIndices</strong> – the 0-based index of the full resolution ifd of each
+frame followed by the ifd of the first associated image.</p></li>
+<li><p><strong>tempPath</strong> – a temporary file in a temporary directory.</p></li>
+<li><p><strong>lidata</strong> – large_image data including metadata and associated images.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_converter.format_aperio.modify_tiled_ifd">
+<span class="sig-prename descclassname"><span class="pre">large_image_converter.format_aperio.</span></span><span class="sig-name descname"><span class="pre">modify_tiled_ifd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ifd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ifdIndices</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lidata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">liDesc</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_converter/format_aperio.html#modify_tiled_ifd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_converter.format_aperio.modify_tiled_ifd" title="Link to this definition"></a></dt>
+<dd><p>Modify a tiled image to add aperio metadata and ensure tags are set
+appropriately.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>info</strong> – the tifftools info that will be written to the tiff tile;
+modified.</p></li>
+<li><p><strong>ifd</strong> – the full resolution ifd as read by tifftools.</p></li>
+<li><p><strong>idx</strong> – index of this ifd.</p></li>
+<li><p><strong>ifdIndices</strong> – the 0-based index of the full resolution ifd of each
+frame followed by the ifd of the first associated image.</p></li>
+<li><p><strong>lidata</strong> – large_image data including metadata and associated images.</p></li>
+<li><p><strong>liDesc</strong> – the parsed json from the original large_image_converter
+description.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_converter.format_aperio.modify_vips_image_before_output">
+<span class="sig-prename descclassname"><span class="pre">large_image_converter.format_aperio.</span></span><span class="sig-name descname"><span class="pre">modify_vips_image_before_output</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">convertParams</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_converter/format_aperio.html#modify_vips_image_before_output"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_converter.format_aperio.modify_vips_image_before_output" title="Link to this definition"></a></dt>
+<dd><p>Make sure the vips image is either 1 or 3 bands.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>image</strong> – a vips image.</p></li>
+<li><p><strong>convertParams</strong> – the parameters that will be used for compression.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a vips image.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-large_image_converter">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-large_image_converter" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_converter.convert">
+<span class="sig-prename descclassname"><span class="pre">large_image_converter.</span></span><span class="sig-name descname"><span class="pre">convert</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inputPath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputPath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_converter.html#convert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_converter.convert" title="Link to this definition"></a></dt>
+<dd><p>Take a source input file and output a pyramidal tiff file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>inputPath</strong> – the path to the input file or base file of a set.</p></li>
+<li><p><strong>outputPath</strong> – the path of the output file.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Optional parameters that can be specified in kwargs:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>tileSize</strong> – the horizontal and vertical tile size.</p></li>
+<li><p><strong>format</strong> – one of ‘tiff’ or ‘aperio’.  Default is ‘tiff’.</p></li>
+<li><p><strong>onlyFrame</strong> – None for all frames or the 0-based frame number to just
+convert a single frame of the source.</p></li>
+<li><p><strong>compression</strong> – one of ‘jpeg’, ‘deflate’ (zip), ‘lzw’, ‘packbits’,
+‘zstd’, or ‘none’.</p></li>
+<li><p><strong>quality</strong> – a jpeg or webp quality passed to vips.  0 is small, 100 is
+high quality.  90 or above is recommended.  For webp, 0 is lossless.</p></li>
+<li><p><strong>level</strong> – compression level for zstd, 1-22 (default is 10) and deflate,
+1-9.</p></li>
+<li><p><strong>predictor</strong> – one of ‘none’, ‘horizontal’, ‘float’, or ‘yes’ used for
+lzw and deflate.  Default is horizontal for non-geospatial data and yes
+for geospatial.</p></li>
+<li><p><strong>psnr</strong> – psnr value for jp2k, higher results in large files.  0 is
+lossless.</p></li>
+<li><p><strong>cr</strong> – jp2k compression ratio.  1 is lossless, 100 will try to make
+a file 1% the size of the original, etc.</p></li>
+<li><p><strong>subifds</strong> – if True (the default), when creating a multi-frame file,
+store lower resolution tiles in sub-ifds.  If False, store all data in
+primary ifds.</p></li>
+<li><p><strong>overwrite</strong> – if not True, throw an exception if the output path
+already exists.</p></li>
+</ul>
+</dd>
+</dl>
+<p>Additional optional parameters:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>geospatial</strong> – if not None, a boolean indicating if this file is
+geospatial.  If not specified or None, this will be checked.</p></li>
+<li><p><strong>_concurrency</strong> – the number of cpus to use during conversion.  None to
+use the logical cpu count.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>outputPath if successful</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_converter.format_hook">
+<span class="sig-prename descclassname"><span class="pre">large_image_converter.</span></span><span class="sig-name descname"><span class="pre">format_hook</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">funcname</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_converter.html#format_hook"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_converter.format_hook" title="Link to this definition"></a></dt>
+<dd><p>Call a function specific to a file format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>funcname</strong> – name of the function.</p></li>
+<li><p><strong>args</strong> – parameters to pass to the function.</p></li>
+<li><p><strong>kwargs</strong> – parameters to pass to the function.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>dependent on the function.  False to indicate no further
+processing should be done.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_converter.is_geospatial">
+<span class="sig-prename descclassname"><span class="pre">large_image_converter.</span></span><span class="sig-name descname"><span class="pre">is_geospatial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_converter.html#is_geospatial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_converter.is_geospatial" title="Link to this definition"></a></dt>
+<dd><p>Check if a path is likely to be a geospatial file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> – The path to the file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if geospatial.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_converter.is_vips">
+<span class="sig-prename descclassname"><span class="pre">large_image_converter.</span></span><span class="sig-name descname"><span class="pre">is_vips</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">matchSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_converter.html#is_vips"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_converter.is_vips" title="Link to this definition"></a></dt>
+<dd><p>Check if a path is readable by vips.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – The path to the file</p></li>
+<li><p><strong>matchSize</strong> – if not None, the image read by vips must be the specified
+(width, height) tuple in pixels.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if readable by vips.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_converter.json_serial">
+<span class="sig-prename descclassname"><span class="pre">large_image_converter.</span></span><span class="sig-name descname"><span class="pre">json_serial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_converter.html#json_serial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_converter.json_serial" title="Link to this definition"></a></dt>
+<dd><p>Fallback serializier for json.  This serializes datetime objects to iso
+format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>obj</strong> – an object to serialize.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a serialized string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="large_image_converter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../large_image_tasks/modules.html" class="btn btn-neutral float-right" title="large_image_tasks" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

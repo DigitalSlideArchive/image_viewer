@@ -1,0 +1,510 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_dicom.assetstore package &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="large_image_source_dummy" href="../large_image_source_dummy/modules.html" />
+    <link rel="prev" title="large_image_source_dicom package" href="large_image_source_dicom.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../api_index.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../large_image/modules.html">large_image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_bioformats/modules.html">large_image_source_bioformats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_deepzoom/modules.html">large_image_source_deepzoom</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">large_image_source_dicom</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="large_image_source_dicom.html">large_image_source_dicom package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="large_image_source_dicom.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_dicom.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_dicom.html#module-large_image_source_dicom.dicom_metadata">large_image_source_dicom.dicom_metadata module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_dicom.html#module-large_image_source_dicom.dicom_tags">large_image_source_dicom.dicom_tags module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_dicom.html#module-large_image_source_dicom.dicomweb_utils">large_image_source_dicom.dicomweb_utils module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_dicom.html#module-large_image_source_dicom.girder_plugin">large_image_source_dicom.girder_plugin module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_dicom.html#module-large_image_source_dicom.girder_source">large_image_source_dicom.girder_source module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image_source_dicom.html#module-large_image_source_dicom">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_dummy/modules.html">large_image_source_dummy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_gdal/modules.html">large_image_source_gdal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_mapnik/modules.html">large_image_source_mapnik</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_multi/modules.html">large_image_source_multi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_nd2/modules.html">large_image_source_nd2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_ometiff/modules.html">large_image_source_ometiff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_openjpeg/modules.html">large_image_source_openjpeg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_openslide/modules.html">large_image_source_openslide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_pil/modules.html">large_image_source_pil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_rasterio/modules.html">large_image_source_rasterio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_test/modules.html">large_image_source_test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_tiff/modules.html">large_image_source_tiff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_tifffile/modules.html">large_image_source_tifffile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_vips/modules.html">large_image_source_vips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_zarr/modules.html">large_image_source_zarr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_converter/modules.html">large_image_converter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_tasks/modules.html">large_image_tasks</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../api_index.html">API Documentation</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">large_image_source_dicom</a></li>
+          <li class="breadcrumb-item"><a href="large_image_source_dicom.html">large_image_source_dicom package</a></li>
+      <li class="breadcrumb-item active">large_image_source_dicom.assetstore package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/_build/large_image_source_dicom/large_image_source_dicom.assetstore.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="large-image-source-dicom-assetstore-package">
+<h1>large_image_source_dicom.assetstore package<a class="headerlink" href="#large-image-source-dicom-assetstore-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-large_image_source_dicom.assetstore.dicomweb_assetstore_adapter">
+<span id="large-image-source-dicom-assetstore-dicomweb-assetstore-adapter-module"></span><h2>large_image_source_dicom.assetstore.dicomweb_assetstore_adapter module<a class="headerlink" href="#module-large_image_source_dicom.assetstore.dicomweb_assetstore_adapter" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.</span></span><span class="sig-name descname"><span class="pre">DICOMwebAssetstoreAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assetstore</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/dicomweb_assetstore_adapter.html#DICOMwebAssetstoreAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractAssetstoreAdapter</span></code></p>
+<p>This defines the interface to be used by all assetstore adapters.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.assetstore_meta">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">assetstore_meta</span></span><a class="headerlink" href="#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.assetstore_meta" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.auth_session">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">auth_session</span></span><a class="headerlink" href="#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.auth_session" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.deleteFile">
+<span class="sig-name descname"><span class="pre">deleteFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/dicomweb_assetstore_adapter.html#DICOMwebAssetstoreAdapter.deleteFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.deleteFile" title="Link to this definition"></a></dt>
+<dd><p>This is called when a File is deleted to allow the adapter to remove
+the data from within the assetstore. This method should not modify
+or delete the file object, as the caller will delete it afterward.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>dict</em>) – The File document about to be deleted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.downloadFile">
+<span class="sig-name descname"><span class="pre">downloadFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endByte</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contentDisposition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extraParameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/dicomweb_assetstore_adapter.html#DICOMwebAssetstoreAdapter.downloadFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.downloadFile" title="Link to this definition"></a></dt>
+<dd><p>This method is in charge of returning a value to the RESTful endpoint
+that can be used to download the file. This should either return a
+generator function that yields the bytes of the file (which will stream
+the file directly), or modify the response headers and raise a
+<cite>cherrypy.HTTPRedirect</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>dict</em>) – The file document being downloaded.</p></li>
+<li><p><strong>offset</strong> (<em>int</em>) – Offset in bytes to start the download at.</p></li>
+<li><p><strong>headers</strong> (<em>bool</em>) – Flag for whether headers should be sent on the response.</p></li>
+<li><p><strong>endByte</strong> (<em>int</em><em> or </em><em>None</em>) – Final byte to download. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, downloads to the
+end of the file.</p></li>
+<li><p><strong>contentDisposition</strong> (<em>str</em><em> or </em><em>None</em>) – Value for Content-Disposition response
+header disposition-type value.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.finalizeUpload">
+<span class="sig-name descname"><span class="pre">finalizeUpload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/dicomweb_assetstore_adapter.html#DICOMwebAssetstoreAdapter.finalizeUpload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.finalizeUpload" title="Link to this definition"></a></dt>
+<dd><p>Call this once the last chunk has been processed. This method does not
+need to delete the upload document as that will be deleted by the
+caller afterward. This method may augment the File document, and must
+return the File document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>upload</strong> (<em>dict</em>) – The upload document.</p></li>
+<li><p><strong>file</strong> (<em>dict</em>) – The file document that was created.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The file document with optional modifications.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.getFileSize">
+<span class="sig-name descname"><span class="pre">getFileSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/dicomweb_assetstore_adapter.html#DICOMwebAssetstoreAdapter.getFileSize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.getFileSize" title="Link to this definition"></a></dt>
+<dd><p>Get the file size (computing it, if necessary). Default behavior simply
+returns <cite>file.get(‘size’, 0)</cite>. This method exists because some
+assetstores do not compute the file size immediately, but only when
+it is actually needed. The assetstore may also need to update the file
+size after some changes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.importData">
+<span class="sig-name descname"><span class="pre">importData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parentType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/dicomweb_assetstore_adapter.html#DICOMwebAssetstoreAdapter.importData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.importData" title="Link to this definition"></a></dt>
+<dd><p>Import DICOMweb WSI instances from a DICOMweb server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parent</strong> – The parent object to import into.</p></li>
+<li><p><strong>parentType</strong> (<em>str</em>) – The model type of the parent object.</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – <p>Additional parameters required for the import process.
+This dictionary may include the following keys:</p>
+<dl class="field-list simple">
+<dt class="field-odd">limit<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(optional) limit the number of studies imported.</p>
+</dd>
+<dt class="field-even">filters<span class="colon">:</span></dt>
+<dd class="field-even"><p>(optional) a dictionary/JSON string of additional search
+filters to use with dicomweb_client’s <cite>search_for_series()</cite>
+function.</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>progress</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">girder.utility.progress.ProgressContext</span></code>) – Object on which to record progress if possible.</p></li>
+<li><p><strong>user</strong> (<em>dict</em><em> or </em><em>None</em>) – The Girder user performing the import.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a list of items that were created</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.initUpload">
+<span class="sig-name descname"><span class="pre">initUpload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upload</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/dicomweb_assetstore_adapter.html#DICOMwebAssetstoreAdapter.initUpload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.initUpload" title="Link to this definition"></a></dt>
+<dd><p>This must be called before any chunks are uploaded to do any
+additional behavior and optionally augment the upload document. The
+method must return the upload document. Default behavior is to
+simply return the upload document unmodified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>upload</strong> (<em>dict</em>) – The upload document to optionally augment.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.setContentHeaders">
+<span class="sig-name descname"><span class="pre">setContentHeaders</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endByte</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contentDisposition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/dicomweb_assetstore_adapter.html#DICOMwebAssetstoreAdapter.setContentHeaders"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.setContentHeaders" title="Link to this definition"></a></dt>
+<dd><p>Sets the Content-Length, Content-Disposition, Content-Type, and also
+the Content-Range header if this is a partial download.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> – The file being downloaded.</p></li>
+<li><p><strong>offset</strong> (<em>int</em>) – The start byte of the download.</p></li>
+<li><p><strong>endByte</strong> (<em>int</em><em> or </em><em>None</em>) – The end byte of the download (non-inclusive).</p></li>
+<li><p><strong>contentDisposition</strong> (<em>str</em><em> or </em><em>None</em>) – Content-Disposition response header
+disposition-type value, if None, Content-Disposition will
+be set to ‘attachment; filename=$filename’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.validateInfo">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">validateInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/dicomweb_assetstore_adapter.html#DICOMwebAssetstoreAdapter.validateInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.dicomweb_assetstore_adapter.DICOMwebAssetstoreAdapter.validateInfo" title="Link to this definition"></a></dt>
+<dd><p>Adapters may implement this if they need to perform any validation
+steps whenever the assetstore info is saved to the database. It should
+return the document with any necessary alterations in the success case,
+or throw an exception if validation fails.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-large_image_source_dicom.assetstore.rest">
+<span id="large-image-source-dicom-assetstore-rest-module"></span><h2>large_image_source_dicom.assetstore.rest module<a class="headerlink" href="#module-large_image_source_dicom.assetstore.rest" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.rest.DICOMwebAssetstoreResource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image_source_dicom.assetstore.rest.</span></span><span class="sig-name descname"><span class="pre">DICOMwebAssetstoreResource</span></span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/rest.html#DICOMwebAssetstoreResource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.rest.DICOMwebAssetstoreResource" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.rest.DICOMwebAssetstoreResource.importData">
+<span class="sig-name descname"><span class="pre">importData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assetstore</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destinationId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destinationType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filters</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/rest.html#DICOMwebAssetstoreResource.importData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.rest.DICOMwebAssetstoreResource.importData" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-large_image_source_dicom.assetstore">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-large_image_source_dicom.assetstore" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image_source_dicom.assetstore.</span></span><span class="sig-name descname"><span class="pre">DICOMwebAssetstoreAdapter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">assetstore</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/dicomweb_assetstore_adapter.html#DICOMwebAssetstoreAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractAssetstoreAdapter</span></code></p>
+<p>This defines the interface to be used by all assetstore adapters.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.assetstore_meta">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">assetstore_meta</span></span><a class="headerlink" href="#large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.assetstore_meta" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.auth_session">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">auth_session</span></span><a class="headerlink" href="#large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.auth_session" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.deleteFile">
+<span class="sig-name descname"><span class="pre">deleteFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/dicomweb_assetstore_adapter.html#DICOMwebAssetstoreAdapter.deleteFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.deleteFile" title="Link to this definition"></a></dt>
+<dd><p>This is called when a File is deleted to allow the adapter to remove
+the data from within the assetstore. This method should not modify
+or delete the file object, as the caller will delete it afterward.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>file</strong> (<em>dict</em>) – The File document about to be deleted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.downloadFile">
+<span class="sig-name descname"><span class="pre">downloadFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endByte</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contentDisposition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extraParameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/dicomweb_assetstore_adapter.html#DICOMwebAssetstoreAdapter.downloadFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.downloadFile" title="Link to this definition"></a></dt>
+<dd><p>This method is in charge of returning a value to the RESTful endpoint
+that can be used to download the file. This should either return a
+generator function that yields the bytes of the file (which will stream
+the file directly), or modify the response headers and raise a
+<cite>cherrypy.HTTPRedirect</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> (<em>dict</em>) – The file document being downloaded.</p></li>
+<li><p><strong>offset</strong> (<em>int</em>) – Offset in bytes to start the download at.</p></li>
+<li><p><strong>headers</strong> (<em>bool</em>) – Flag for whether headers should be sent on the response.</p></li>
+<li><p><strong>endByte</strong> (<em>int</em><em> or </em><em>None</em>) – Final byte to download. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, downloads to the
+end of the file.</p></li>
+<li><p><strong>contentDisposition</strong> (<em>str</em><em> or </em><em>None</em>) – Value for Content-Disposition response
+header disposition-type value.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.finalizeUpload">
+<span class="sig-name descname"><span class="pre">finalizeUpload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upload</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/dicomweb_assetstore_adapter.html#DICOMwebAssetstoreAdapter.finalizeUpload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.finalizeUpload" title="Link to this definition"></a></dt>
+<dd><p>Call this once the last chunk has been processed. This method does not
+need to delete the upload document as that will be deleted by the
+caller afterward. This method may augment the File document, and must
+return the File document.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>upload</strong> (<em>dict</em>) – The upload document.</p></li>
+<li><p><strong>file</strong> (<em>dict</em>) – The file document that was created.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The file document with optional modifications.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.getFileSize">
+<span class="sig-name descname"><span class="pre">getFileSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/dicomweb_assetstore_adapter.html#DICOMwebAssetstoreAdapter.getFileSize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.getFileSize" title="Link to this definition"></a></dt>
+<dd><p>Get the file size (computing it, if necessary). Default behavior simply
+returns <cite>file.get(‘size’, 0)</cite>. This method exists because some
+assetstores do not compute the file size immediately, but only when
+it is actually needed. The assetstore may also need to update the file
+size after some changes.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.importData">
+<span class="sig-name descname"><span class="pre">importData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parentType</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/dicomweb_assetstore_adapter.html#DICOMwebAssetstoreAdapter.importData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.importData" title="Link to this definition"></a></dt>
+<dd><p>Import DICOMweb WSI instances from a DICOMweb server.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parent</strong> – The parent object to import into.</p></li>
+<li><p><strong>parentType</strong> (<em>str</em>) – The model type of the parent object.</p></li>
+<li><p><strong>params</strong> (<em>dict</em>) – <p>Additional parameters required for the import process.
+This dictionary may include the following keys:</p>
+<dl class="field-list simple">
+<dt class="field-odd">limit<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(optional) limit the number of studies imported.</p>
+</dd>
+<dt class="field-even">filters<span class="colon">:</span></dt>
+<dd class="field-even"><p>(optional) a dictionary/JSON string of additional search
+filters to use with dicomweb_client’s <cite>search_for_series()</cite>
+function.</p>
+</dd>
+</dl>
+</p></li>
+<li><p><strong>progress</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">girder.utility.progress.ProgressContext</span></code>) – Object on which to record progress if possible.</p></li>
+<li><p><strong>user</strong> (<em>dict</em><em> or </em><em>None</em>) – The Girder user performing the import.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a list of items that were created</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.initUpload">
+<span class="sig-name descname"><span class="pre">initUpload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upload</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/dicomweb_assetstore_adapter.html#DICOMwebAssetstoreAdapter.initUpload"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.initUpload" title="Link to this definition"></a></dt>
+<dd><p>This must be called before any chunks are uploaded to do any
+additional behavior and optionally augment the upload document. The
+method must return the upload document. Default behavior is to
+simply return the upload document unmodified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>upload</strong> (<em>dict</em>) – The upload document to optionally augment.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.setContentHeaders">
+<span class="sig-name descname"><span class="pre">setContentHeaders</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">endByte</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">contentDisposition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/dicomweb_assetstore_adapter.html#DICOMwebAssetstoreAdapter.setContentHeaders"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.setContentHeaders" title="Link to this definition"></a></dt>
+<dd><p>Sets the Content-Length, Content-Disposition, Content-Type, and also
+the Content-Range header if this is a partial download.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> – The file being downloaded.</p></li>
+<li><p><strong>offset</strong> (<em>int</em>) – The start byte of the download.</p></li>
+<li><p><strong>endByte</strong> (<em>int</em><em> or </em><em>None</em>) – The end byte of the download (non-inclusive).</p></li>
+<li><p><strong>contentDisposition</strong> (<em>str</em><em> or </em><em>None</em>) – Content-Disposition response header
+disposition-type value, if None, Content-Disposition will
+be set to ‘attachment; filename=$filename’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.validateInfo">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">validateInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore/dicomweb_assetstore_adapter.html#DICOMwebAssetstoreAdapter.validateInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.DICOMwebAssetstoreAdapter.validateInfo" title="Link to this definition"></a></dt>
+<dd><p>Adapters may implement this if they need to perform any validation
+steps whenever the assetstore info is saved to the database. It should
+return the document with any necessary alterations in the success case,
+or throw an exception if validation fails.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_source_dicom.assetstore.load">
+<span class="sig-prename descclassname"><span class="pre">large_image_source_dicom.assetstore.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dicom/assetstore.html#load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dicom.assetstore.load" title="Link to this definition"></a></dt>
+<dd><p>Load the plugin into Girder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>info</strong> – a dictionary of plugin information.  The name key contains the
+name of the plugin according to Girder.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="large_image_source_dicom.html" class="btn btn-neutral float-left" title="large_image_source_dicom package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../large_image_source_dummy/modules.html" class="btn btn-neutral float-right" title="large_image_source_dummy" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

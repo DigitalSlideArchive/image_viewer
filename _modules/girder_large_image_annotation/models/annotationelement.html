@@ -1,0 +1,821 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>girder_large_image_annotation.models.annotationelement &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/K.png"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../girder_large_image_annotation.html">girder_large_image_annotation</a></li>
+      <li class="breadcrumb-item active">girder_large_image_annotation.models.annotationelement</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for girder_large_image_annotation.models.annotationelement</h1><div class="highlight"><pre>
+<span></span><span class="c1">##############################################################################</span>
+<span class="c1">#  Copyright Kitware Inc.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed under the Apache License, Version 2.0 ( the &quot;License&quot; );</span>
+<span class="c1">#  you may not use this file except in compliance with the License.</span>
+<span class="c1">#  You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#    http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#  See the License for the specific language governing permissions and</span>
+<span class="c1">#  limitations under the License.</span>
+<span class="c1">##############################################################################</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">concurrent.futures</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pymongo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder_large_image.models.image_item</span><span class="w"> </span><span class="kn">import</span> <span class="n">ImageItem</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">AccessType</span><span class="p">,</span> <span class="n">SortDir</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.file</span><span class="w"> </span><span class="kn">import</span> <span class="n">File</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.item</span><span class="w"> </span><span class="kn">import</span> <span class="n">Item</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.model_base</span><span class="w"> </span><span class="kn">import</span> <span class="n">Model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.upload</span><span class="w"> </span><span class="kn">import</span> <span class="n">Upload</span>
+
+<span class="c1"># Some annotation elements can be very large.  If they pass a size threshold,</span>
+<span class="c1"># store part of them in an associated file.  This is slower, so don&#39;t do it for</span>
+<span class="c1"># small ones.</span>
+<span class="n">MAX_ELEMENT_CHECK</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">MAX_ELEMENT_DOCUMENT</span> <span class="o">=</span> <span class="mi">10000</span>
+<span class="n">MAX_ELEMENT_USER_DOCUMENT</span> <span class="o">=</span> <span class="mi">1000000</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Annotationelement">
+<a class="viewcode-back" href="../../../_build/girder_large_image_annotation/girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Annotationelement</span><span class="p">(</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">bboxKeys</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;left&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;bbox.highx&#39;</span><span class="p">,</span> <span class="s1">&#39;$gte&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;right&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;bbox.lowx&#39;</span><span class="p">,</span> <span class="s1">&#39;$lt&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;top&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;bbox.highy&#39;</span><span class="p">,</span> <span class="s1">&#39;$gte&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;bottom&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;bbox.lowy&#39;</span><span class="p">,</span> <span class="s1">&#39;$lt&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;low&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;bbox.highz&#39;</span><span class="p">,</span> <span class="s1">&#39;$gte&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;high&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;bbox.lowz&#39;</span><span class="p">,</span> <span class="s1">&#39;$lt&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;minimumSize&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;bbox.size&#39;</span><span class="p">,</span> <span class="s1">&#39;$gte&#39;</span><span class="p">),</span>
+        <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;bbox.size&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="s1">&#39;details&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;bbox.details&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+    <span class="p">}</span>
+
+<div class="viewcode-block" id="Annotationelement.initialize">
+<a class="viewcode-back" href="../../../_build/girder_large_image_annotation/girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.initialize">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;annotationelement&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ensureIndices</span><span class="p">([</span>
+            <span class="s1">&#39;annotationId&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;_version&#39;</span><span class="p">,</span>
+            <span class="p">([</span>
+                <span class="p">(</span><span class="s1">&#39;annotationId&#39;</span><span class="p">,</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;bbox.lowx&#39;</span><span class="p">,</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;bbox.highx&#39;</span><span class="p">,</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;bbox.size&#39;</span><span class="p">,</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">),</span>
+            <span class="p">],</span> <span class="p">{</span>
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;annotationBboxIdx&#39;</span><span class="p">,</span>
+            <span class="p">}),</span>
+            <span class="p">([</span>
+                <span class="p">(</span><span class="s1">&#39;annotationId&#39;</span><span class="p">,</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;bbox.size&#39;</span><span class="p">,</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">),</span>
+            <span class="p">],</span> <span class="p">{</span>
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;annotationBboxSizeIdx&#39;</span><span class="p">,</span>
+            <span class="p">}),</span>
+            <span class="p">([</span>
+                <span class="p">(</span><span class="s1">&#39;annotationId&#39;</span><span class="p">,</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;_version&#39;</span><span class="p">,</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;element.group&#39;</span><span class="p">,</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+            <span class="p">],</span> <span class="p">{</span>
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;annotationGroupIdx&#39;</span><span class="p">,</span>
+            <span class="p">}),</span>
+            <span class="p">([</span>
+                <span class="p">(</span><span class="s1">&#39;annotationId&#39;</span><span class="p">,</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;_version&#39;</span><span class="p">,</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+            <span class="p">],</span> <span class="p">{</span>
+                <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;annotationElementIdIdx&#39;</span><span class="p">,</span>
+            <span class="p">}),</span>
+            <span class="p">([</span>
+                <span class="p">(</span><span class="s1">&#39;created&#39;</span><span class="p">,</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;_version&#39;</span><span class="p">,</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+            <span class="p">],</span> <span class="p">{}),</span>
+            <span class="s1">&#39;element.girderId&#39;</span><span class="p">,</span>
+        <span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">exposeFields</span><span class="p">(</span><span class="n">AccessType</span><span class="o">.</span><span class="n">READ</span><span class="p">,</span> <span class="p">(</span>
+            <span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="s1">&#39;_version&#39;</span><span class="p">,</span> <span class="s1">&#39;annotationId&#39;</span><span class="p">,</span> <span class="s1">&#39;created&#39;</span><span class="p">,</span> <span class="s1">&#39;element&#39;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">versionId</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Annotationelement.getNextVersionValue">
+<a class="viewcode-back" href="../../../_build/girder_large_image_annotation/girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.getNextVersionValue">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getNextVersionValue</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Maintain a version number.  This is a single sequence that can be used</span>
+<span class="sd">        to ensure we have the correct set of elements for an annotation.</span>
+
+<span class="sd">        :returns: an integer version number that is strictly increasing.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">version</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">versionId</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">find_one_and_update</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">versionId</span><span class="p">},</span>
+                <span class="p">{</span><span class="s1">&#39;$inc&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;_version&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}})</span>
+        <span class="k">if</span> <span class="n">version</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">versionObject</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;annotationId&#39;</span><span class="p">:</span> <span class="s1">&#39;version_sequence&#39;</span><span class="p">})</span>
+            <span class="k">if</span> <span class="n">versionObject</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">startingId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">({},</span> <span class="n">sort</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;_version&#39;</span><span class="p">,</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">)])</span>
+                <span class="n">startingId</span> <span class="o">=</span> <span class="n">startingId</span><span class="p">[</span><span class="s1">&#39;_version&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">startingId</span> <span class="k">else</span> <span class="mi">0</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">versionId</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">insert_one</span><span class="p">(</span>
+                    <span class="p">{</span><span class="s1">&#39;annotationId&#39;</span><span class="p">:</span> <span class="s1">&#39;version_sequence&#39;</span><span class="p">,</span> <span class="s1">&#39;_version&#39;</span><span class="p">:</span> <span class="n">startingId</span><span class="p">},</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">inserted_id</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">versionId</span> <span class="o">=</span> <span class="n">versionObject</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span>
+            <span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">find_one_and_update</span><span class="p">(</span>
+                <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">versionId</span><span class="p">},</span>
+                <span class="p">{</span><span class="s1">&#39;$inc&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;_version&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}})</span>
+        <span class="k">return</span> <span class="n">version</span><span class="p">[</span><span class="s1">&#39;_version&#39;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="Annotationelement.getElements">
+<a class="viewcode-back" href="../../../_build/girder_large_image_annotation/girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.getElements">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getElements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">annotation</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given an annotation, fetch the elements from the database and add them</span>
+<span class="sd">        to it.</span>
+
+<span class="sd">        When a region is used to request specific element, the following</span>
+<span class="sd">        keys can be specified:</span>
+
+<span class="sd">            :left, right, top, bottom, low, high: the spatial area where</span>
+<span class="sd">                elements are located, all in pixels.  If an element&#39;s bounding</span>
+<span class="sd">                box is at least partially within the requested area, that</span>
+<span class="sd">                element is included.</span>
+<span class="sd">            :minimumSize: the minimum size of an element to return.</span>
+<span class="sd">            :sort, sortdir: standard sort options.  The sort key can include</span>
+<span class="sd">                size and details.</span>
+<span class="sd">            :limit: limit the total number of elements by this value.  Defaults</span>
+<span class="sd">                to no limit.</span>
+<span class="sd">            :offset: the offset within the query to start returning values.  If</span>
+<span class="sd">                maxDetails is used, to get subsequent sets of elements, the</span>
+<span class="sd">                offset needs to be increased by the actual number of elements</span>
+<span class="sd">                returned from a previous query, which will vary based on the</span>
+<span class="sd">                details of the elements.</span>
+<span class="sd">            :maxDetails: if specified, limit the total number of elements by</span>
+<span class="sd">                the sum of their details values.  This is applied in addition</span>
+<span class="sd">                to limit.  The sum of the details values of the elements may</span>
+<span class="sd">                exceed maxDetails slightly (the sum of all but the last element</span>
+<span class="sd">                will be less than maxDetails, but the last element may exceed</span>
+<span class="sd">                the value).</span>
+<span class="sd">            :minElements: if maxDetails is specified, always return this many</span>
+<span class="sd">                elements even if they are very detailed.</span>
+<span class="sd">            :centroids: if specified and true, only return the id, center of</span>
+<span class="sd">                the bounding box, and bounding box size for each element.</span>
+
+<span class="sd">        :param annotation: the annotation to get elements for.  Modified.</span>
+<span class="sd">        :param region: if present, a dictionary restricting which annotations</span>
+<span class="sd">            are returned.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;_elementQuery&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;annotation&#39;</span><span class="p">][</span><span class="s1">&#39;elements&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">yieldElements</span><span class="p">(</span>
+            <span class="n">annotation</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;_elementQuery&#39;</span><span class="p">]))</span></div>
+
+
+<div class="viewcode-block" id="Annotationelement.countElements">
+<a class="viewcode-back" href="../../../_build/girder_large_image_annotation/girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.countElements">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">countElements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">annotation</span><span class="p">):</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;annotationId&#39;</span><span class="p">:</span> <span class="n">annotation</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_annotationId&#39;</span><span class="p">,</span> <span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]),</span>
+            <span class="s1">&#39;_version&#39;</span><span class="p">:</span> <span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;_version&#39;</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">count_documents</span><span class="p">(</span><span class="n">query</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Annotationelement.yieldElements">
+<a class="viewcode-back" href="../../../_build/girder_large_image_annotation/girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.yieldElements">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">yieldElements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">annotation</span><span class="p">,</span> <span class="n">region</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bbox</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>  <span class="c1"># noqa</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given an annotation, fetch the elements from the database.</span>
+
+<span class="sd">        When a region is used to request specific element, the following</span>
+<span class="sd">        keys can be specified:</span>
+
+<span class="sd">            :left, right, top, bottom, low, high: the spatial area where</span>
+<span class="sd">                elements are located, all in pixels.  If an element&#39;s bounding</span>
+<span class="sd">                box is at least partially within the requested area, that</span>
+<span class="sd">                element is included.</span>
+<span class="sd">            :minimumSize: the minimum size of an element to return.</span>
+<span class="sd">            :sort, sortdir: standard sort options.  The sort key can include</span>
+<span class="sd">                size and details.</span>
+<span class="sd">            :limit: limit the total number of elements by this value.  Defaults</span>
+<span class="sd">                to no limit.</span>
+<span class="sd">            :offset: the offset within the query to start returning values.  If</span>
+<span class="sd">                maxDetails is used, to get subsequent sets of elements, the</span>
+<span class="sd">                offset needs to be increased by the actual number of elements</span>
+<span class="sd">                returned from a previous query, which will vary based on the</span>
+<span class="sd">                details of the elements.</span>
+<span class="sd">            :maxDetails: if specified, limit the total number of elements by</span>
+<span class="sd">                the sum of their details values.  This is applied in addition</span>
+<span class="sd">                to limit.  The sum of the details values of the elements may</span>
+<span class="sd">                exceed maxDetails slightly (the sum of all but the last element</span>
+<span class="sd">                will be less than maxDetails, but the last element may exceed</span>
+<span class="sd">                the value).</span>
+<span class="sd">            :minElements: if maxDetails is specified, always return this many</span>
+<span class="sd">                elements even if they are very detailed.</span>
+<span class="sd">            :centroids: if specified and true, only return the id, center of</span>
+<span class="sd">                the bounding box, and bounding box size for each element.</span>
+<span class="sd">            :bbox: if specified and true and centroids are not specified,</span>
+<span class="sd">                add _bbox to each element with the bounding box record.</span>
+
+<span class="sd">        :param annotation: the annotation to get elements for.  Modified.</span>
+<span class="sd">        :param region: if present, a dictionary restricting which annotations</span>
+<span class="sd">            are returned.</span>
+<span class="sd">        :param info: an optional dictionary that will be modified with</span>
+<span class="sd">            additional query information, including count (total number of</span>
+<span class="sd">            available elements), returned (number of elements in response),</span>
+<span class="sd">            maxDetails (as specified by the region dictionary), details (sum of</span>
+<span class="sd">            details returned), limit (as specified by region), centroids (a</span>
+<span class="sd">            boolean based on the region specification).</span>
+<span class="sd">        :param bbox: if True, always return bounding box information.</span>
+<span class="sd">        :returns: a list of elements.  If centroids were requested, each entry</span>
+<span class="sd">            is a list with str(id), x, y, size.  Otherwise, each entry is the</span>
+<span class="sd">            element record.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="n">info</span> <span class="k">if</span> <span class="n">info</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="n">region</span> <span class="o">=</span> <span class="n">region</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;annotationId&#39;</span><span class="p">:</span> <span class="n">annotation</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_annotationId&#39;</span><span class="p">,</span> <span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]),</span>
+            <span class="s1">&#39;_version&#39;</span><span class="p">:</span> <span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;_version&#39;</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">region</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bboxKeys</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">bboxKeys</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bboxKeys</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;$gte&#39;</span> <span class="ow">and</span> <span class="nb">float</span><span class="p">(</span><span class="n">region</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">query</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bboxKeys</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">bboxKeys</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">1</span><span class="p">]:</span> <span class="nb">float</span><span class="p">(</span><span class="n">region</span><span class="p">[</span><span class="n">key</span><span class="p">])}</span>
+        <span class="k">if</span> <span class="n">region</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sort&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bboxKeys</span><span class="p">:</span>
+            <span class="n">sortkey</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bboxKeys</span><span class="p">[</span><span class="n">region</span><span class="p">[</span><span class="s1">&#39;sort&#39;</span><span class="p">]][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">sortkey</span> <span class="o">=</span> <span class="n">region</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sort&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;_id&#39;</span>
+        <span class="n">sortdir</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">region</span><span class="p">[</span><span class="s1">&#39;sortdir&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">region</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sortdir&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">ASCENDING</span>
+        <span class="n">limit</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">region</span><span class="p">[</span><span class="s1">&#39;limit&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">region</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;limit&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="n">maxDetails</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">region</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;maxDetails&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">minElements</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">region</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;minElements&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">queryLimit</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">minElements</span><span class="p">,</span> <span class="n">maxDetails</span><span class="p">)</span> <span class="k">if</span> <span class="n">maxDetails</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="ow">not</span> <span class="n">limit</span> <span class="ow">or</span> <span class="nb">max</span><span class="p">(</span><span class="n">minElements</span><span class="p">,</span> <span class="n">maxDetails</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">limit</span><span class="p">)</span> <span class="k">else</span> <span class="n">limit</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">region</span><span class="p">[</span><span class="s1">&#39;offset&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">region</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;offset&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">0</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;element query </span><span class="si">%r</span><span class="s1"> for </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">region</span><span class="p">)</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;element&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;bbox.details&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;datafile&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="n">centroids</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">region</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;centroids&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;true&#39;</span>
+        <span class="k">if</span> <span class="n">centroids</span><span class="p">:</span>
+            <span class="c1"># fields = {&#39;_id&#39;: True, &#39;element&#39;: True, &#39;bbox&#39;: True}</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s1">&#39;element.id&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s1">&#39;bbox&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+            <span class="n">proplist</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">propskeys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;fillColor&#39;</span><span class="p">,</span> <span class="s1">&#39;lineColor&#39;</span><span class="p">,</span> <span class="s1">&#39;lineWidth&#39;</span><span class="p">,</span> <span class="s1">&#39;closed&#39;</span><span class="p">]</span>
+            <span class="c1"># This should match the javascript</span>
+            <span class="n">defaultProps</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;fillColor&#39;</span><span class="p">:</span> <span class="s1">&#39;rgba(0,0,0,0)&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;lineColor&#39;</span><span class="p">:</span> <span class="s1">&#39;rgb(0,0,0)&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;lineWidth&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">propskeys</span><span class="p">:</span>
+                <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;element.</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">props</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;centroids&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;props&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">proplist</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;propskeys&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">propskeys</span>
+        <span class="k">elif</span> <span class="n">region</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bbox&#39;</span><span class="p">):</span>
+            <span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;bbox.details&#39;</span><span class="p">)</span>
+            <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="n">bbox</span><span class="p">:</span>
+            <span class="n">fields</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;bbox.details&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">elementCursor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
+            <span class="n">query</span><span class="o">=</span><span class="n">query</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="p">[(</span><span class="n">sortkey</span><span class="p">,</span> <span class="n">sortdir</span><span class="p">)],</span> <span class="n">limit</span><span class="o">=</span><span class="n">queryLimit</span><span class="p">,</span>
+            <span class="n">offset</span><span class="o">=</span><span class="n">offset</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
+
+        <span class="n">info</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="s1">&#39;count&#39;</span><span class="p">:</span> <span class="n">elementCursor</span><span class="o">.</span><span class="n">count</span><span class="p">(),</span>
+            <span class="s1">&#39;offset&#39;</span><span class="p">:</span> <span class="n">offset</span><span class="p">,</span>
+            <span class="s1">&#39;filter&#39;</span><span class="p">:</span> <span class="n">query</span><span class="p">,</span>
+            <span class="s1">&#39;sort&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">sortkey</span><span class="p">,</span> <span class="n">sortdir</span><span class="p">],</span>
+        <span class="p">})</span>
+        <span class="n">details</span> <span class="o">=</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">maxDetails</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;maxDetails&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">maxDetails</span>
+        <span class="k">if</span> <span class="n">minElements</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;minElements&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">minElements</span>
+        <span class="k">if</span> <span class="n">limit</span><span class="p">:</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;limit&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">limit</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">elementCursor</span><span class="p">:</span>
+            <span class="n">element</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;element&#39;</span><span class="p">]</span>
+            <span class="n">element</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">centroids</span><span class="p">:</span>
+                <span class="n">bbox</span> <span class="o">=</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bbox&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">bbox</span> <span class="ow">or</span> <span class="s1">&#39;lowx&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bbox</span> <span class="ow">or</span> <span class="s1">&#39;size&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">bbox</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">prop</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+                    <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">defaultProps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">propskeys</span>
+                    <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">defaultProps</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">))</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">prop</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">props</span><span class="p">:</span>
+                    <span class="n">props</span><span class="p">[</span><span class="n">prop</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">props</span><span class="p">)</span>
+                    <span class="n">proplist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">prop</span><span class="p">))</span>
+                <span class="k">yield</span> <span class="p">[</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]),</span>
+                    <span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowx&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highx&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+                    <span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowy&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highy&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span>
+                    <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;point&#39;</span> <span class="k">else</span> <span class="mi">0</span><span class="p">,</span>
+                    <span class="n">props</span><span class="p">[</span><span class="n">prop</span><span class="p">],</span>
+                <span class="p">]</span>
+                <span class="n">details</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;datafile&#39;</span><span class="p">):</span>
+                    <span class="n">datafile</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;datafile&#39;</span><span class="p">]</span>
+                    <span class="n">data</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span>
+                    <span class="n">chunksize</span> <span class="o">=</span> <span class="mi">1024</span> <span class="o">**</span> <span class="mi">2</span>
+                    <span class="k">with</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">datafile</span><span class="p">[</span><span class="s1">&#39;fileId&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span> <span class="k">as</span> <span class="n">fptr</span><span class="p">:</span>
+                        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                            <span class="n">chunk</span> <span class="o">=</span> <span class="n">fptr</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">chunksize</span><span class="p">)</span>
+                            <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">):</span>
+                                <span class="k">break</span>
+                            <span class="n">data</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                    <span class="n">data</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                    <span class="n">element</span><span class="p">[</span><span class="n">datafile</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="s1">&#39;userFileId&#39;</span> <span class="ow">in</span> <span class="n">datafile</span><span class="p">:</span>
+                        <span class="n">data</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span>
+                        <span class="n">chunksize</span> <span class="o">=</span> <span class="mi">1024</span> <span class="o">**</span> <span class="mi">2</span>
+                        <span class="k">with</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">datafile</span><span class="p">[</span><span class="s1">&#39;userFileId&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span> <span class="k">as</span> <span class="n">fptr</span><span class="p">:</span>
+                            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+                                <span class="n">chunk</span> <span class="o">=</span> <span class="n">fptr</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">chunksize</span><span class="p">)</span>
+                                <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">chunk</span><span class="p">):</span>
+                                    <span class="k">break</span>
+                                <span class="n">data</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
+                        <span class="n">data</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+                        <span class="n">element</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">region</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bbox&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;bbox&#39;</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">:</span>
+                    <span class="n">element</span><span class="p">[</span><span class="s1">&#39;_bbox&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="s1">&#39;bbox&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">info</span><span class="p">:</span>
+                        <span class="n">info</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="k">for</span> <span class="n">axis</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">,</span> <span class="s1">&#39;z&#39;</span><span class="p">}:</span>
+                        <span class="n">lkey</span><span class="p">,</span> <span class="n">hkey</span> <span class="o">=</span> <span class="s1">&#39;low&#39;</span> <span class="o">+</span> <span class="n">axis</span><span class="p">,</span> <span class="s1">&#39;high&#39;</span> <span class="o">+</span> <span class="n">axis</span>
+                        <span class="k">if</span> <span class="n">lkey</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">hkey</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">]:</span>
+                            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">][</span><span class="n">lkey</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span>
+                                <span class="n">info</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">lkey</span><span class="p">,</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">][</span><span class="n">lkey</span><span class="p">]),</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">][</span><span class="n">lkey</span><span class="p">])</span>
+                            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">][</span><span class="n">hkey</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+                                <span class="n">info</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">hkey</span><span class="p">,</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">][</span><span class="n">hkey</span><span class="p">]),</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">][</span><span class="n">hkey</span><span class="p">])</span>
+                <span class="k">elif</span> <span class="n">bbox</span> <span class="ow">and</span> <span class="s1">&#39;bbox&#39;</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">:</span>
+                    <span class="n">element</span><span class="p">[</span><span class="s1">&#39;_bbox&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;bbox&#39;</span><span class="p">]</span>
+                <span class="k">yield</span> <span class="n">element</span>
+                <span class="n">details</span> <span class="o">+=</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bbox&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;details&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">maxDetails</span> <span class="ow">and</span> <span class="n">details</span> <span class="o">&gt;=</span> <span class="n">maxDetails</span> <span class="ow">and</span> <span class="n">count</span> <span class="o">&gt;=</span> <span class="n">minElements</span><span class="p">:</span>
+                <span class="k">break</span>
+        <span class="n">info</span><span class="p">[</span><span class="s1">&#39;returned&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">count</span>
+        <span class="n">info</span><span class="p">[</span><span class="s1">&#39;details&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">details</span></div>
+
+
+<div class="viewcode-block" id="Annotationelement.removeWithQuery">
+<a class="viewcode-back" href="../../../_build/girder_large_image_annotation/girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.removeWithQuery">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">removeWithQuery</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove all documents matching a given query from the collection.</span>
+<span class="sd">        For safety reasons, you may not pass an empty query.</span>
+
+<span class="sd">        Note: this does NOT return a Mongo DeleteResult.</span>
+
+<span class="sd">        :param query: The search query for documents to delete,</span>
+<span class="sd">            see general MongoDB docs for &quot;find()&quot;</span>
+<span class="sd">        :type query: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">query</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;query must be specified&#39;</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">attachedQuery</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">attachedQuery</span><span class="p">[</span><span class="s1">&#39;datafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;$exists&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">attachedQuery</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;fileId&#39;</span><span class="p">,</span> <span class="s1">&#39;userFileId&#39;</span><span class="p">}:</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">element</span><span class="p">[</span><span class="s1">&#39;datafile&#39;</span><span class="p">]:</span>
+                    <span class="n">file</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="s1">&#39;datafile&#39;</span><span class="p">][</span><span class="n">key</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">file</span><span class="p">:</span>
+                        <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">bulk_write</span><span class="p">([</span><span class="n">pymongo</span><span class="o">.</span><span class="n">DeleteMany</span><span class="p">(</span><span class="n">query</span><span class="p">)],</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Annotationelement.removeElements">
+<a class="viewcode-back" href="../../../_build/girder_large_image_annotation/girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.removeElements">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">removeElements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">annotation</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove all elements related to the specified annotation.</span>
+
+<span class="sd">        :param annotation: the annotation to remove elements from.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">removeWithQuery</span><span class="p">({</span><span class="s1">&#39;annotationId&#39;</span><span class="p">:</span> <span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]})</span></div>
+
+
+<div class="viewcode-block" id="Annotationelement.removeOldElements">
+<a class="viewcode-back" href="../../../_build/girder_large_image_annotation/girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.removeOldElements">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">removeOldElements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">annotation</span><span class="p">,</span> <span class="n">oldversion</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove all elements related to the specified annotation.</span>
+
+<span class="sd">        :param annotation: the annotation to remove elements from.</span>
+<span class="sd">        :param oldversion: if present, remove versions up to this number.  If</span>
+<span class="sd">                           none, remove versions earlier than the version in</span>
+<span class="sd">                           the annotation record.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;annotationId&#39;</span><span class="p">:</span> <span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]}</span>
+        <span class="k">if</span> <span class="n">oldversion</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">oldversion</span> <span class="o">&gt;=</span> <span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;_version&#39;</span><span class="p">]:</span>
+            <span class="n">query</span><span class="p">[</span><span class="s1">&#39;_version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;$lt&#39;</span><span class="p">:</span> <span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;_version&#39;</span><span class="p">]}</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">query</span><span class="p">[</span><span class="s1">&#39;_version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;$lte&#39;</span><span class="p">:</span> <span class="n">oldversion</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">removeWithQuery</span><span class="p">(</span><span class="n">query</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_overlayBounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">overlayElement</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute bounding box information in the X-Y plane for an</span>
+<span class="sd">        image overlay element.</span>
+
+<span class="sd">        This uses numpy to perform the specified transform on the given girder</span>
+<span class="sd">        image item in order to obtain bounding box coordinates.</span>
+
+<span class="sd">        :param overlayElement: An annotation element of type &#39;image&#39;.</span>
+<span class="sd">        :returns: a tuple with 4 values: lowx, highx, lowy, highy. Runtime exceptions</span>
+<span class="sd">         during loading the image metadata will result in the tuple (0, 0, 0, 0).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">overlayElement</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="s1">&#39;pixelmap&#39;</span><span class="p">]:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Function _overlayBounds only accepts annotation elements &#39;</span>
+                   <span class="s1">&#39;of type &quot;image&quot;, &quot;pixelmap.&quot;&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+        <span class="n">lowx</span> <span class="o">=</span> <span class="n">highx</span> <span class="o">=</span> <span class="n">lowy</span> <span class="o">=</span> <span class="n">highy</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">overlayItemId</span> <span class="o">=</span> <span class="n">overlayElement</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;girderId&#39;</span><span class="p">)</span>
+            <span class="n">imageItem</span> <span class="o">=</span> <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">overlayItemId</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">overlayImageMetadata</span> <span class="o">=</span> <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">(</span><span class="n">imageItem</span><span class="p">)</span>
+            <span class="n">corners</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+                <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">overlayImageMetadata</span><span class="p">[</span><span class="s1">&#39;sizeY&#39;</span><span class="p">]],</span>
+                <span class="p">[</span><span class="n">overlayImageMetadata</span><span class="p">[</span><span class="s1">&#39;sizeX&#39;</span><span class="p">],</span> <span class="n">overlayImageMetadata</span><span class="p">[</span><span class="s1">&#39;sizeY&#39;</span><span class="p">]],</span>
+                <span class="p">[</span><span class="n">overlayImageMetadata</span><span class="p">[</span><span class="s1">&#39;sizeX&#39;</span><span class="p">],</span> <span class="mi">0</span><span class="p">],</span>
+            <span class="p">]</span>
+            <span class="n">transform</span> <span class="o">=</span> <span class="n">overlayElement</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;transform&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">transformMatrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">transform</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;matrix&#39;</span><span class="p">,</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]]))</span>
+            <span class="n">corners</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">corner</span><span class="p">),</span> <span class="n">transformMatrix</span><span class="p">)</span> <span class="k">for</span> <span class="n">corner</span> <span class="ow">in</span> <span class="n">corners</span><span class="p">]</span>
+            <span class="n">offsetArray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">transform</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;xoffset&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">transform</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;yoffset&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)])</span>
+            <span class="n">corners</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">corner</span><span class="p">,</span> <span class="n">offsetArray</span><span class="p">)</span> <span class="k">for</span> <span class="n">corner</span> <span class="ow">in</span> <span class="n">corners</span><span class="p">]</span>
+            <span class="c1"># use .item() to convert back to native python types</span>
+            <span class="n">lowx</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="n">corner</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">corner</span> <span class="ow">in</span> <span class="n">corners</span><span class="p">])</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <span class="n">highx</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">corner</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">corner</span> <span class="ow">in</span> <span class="n">corners</span><span class="p">])</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <span class="n">lowy</span> <span class="o">=</span> <span class="nb">min</span><span class="p">([</span><span class="n">corner</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">corner</span> <span class="ow">in</span> <span class="n">corners</span><span class="p">])</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+            <span class="n">highy</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="n">corner</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">corner</span> <span class="ow">in</span> <span class="n">corners</span><span class="p">])</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Error generating bounding box for image overlay annotation&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">lowx</span><span class="p">,</span> <span class="n">highx</span><span class="p">,</span> <span class="n">lowy</span><span class="p">,</span> <span class="n">highy</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_boundingBox</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">element</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Compute bounding box information for an annotation element.</span>
+
+<span class="sd">        This computes the enclosing bounding box of an element.  For points, an</span>
+<span class="sd">        small non-zero-area region is used centered on the point.</span>
+<span class="sd">        Additionally, a metric is stored for the complexity of the element.</span>
+<span class="sd">        The size of the bounding box&#39;s x-y diagonal is also stored.</span>
+
+<span class="sd">        :param element: the element to compute the bounding box for.</span>
+<span class="sd">        :returns: the bounding box dictionary.  This contains &#39;lowx&#39;, &#39;lowy&#39;,</span>
+<span class="sd">            &#39;lowz&#39;, &#39;highx&#39;, &#39;highy&#39;, and &#39;highz, which are the minimum and</span>
+<span class="sd">            maximum values in each dimension, &#39;details&#39; with the complexity of</span>
+<span class="sd">            the element, and &#39;size&#39; with the x-y diagonal size of the bounding</span>
+<span class="sd">            box.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bbox</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="s1">&#39;points&#39;</span> <span class="ow">in</span> <span class="n">element</span><span class="p">:</span>
+            <span class="n">pts</span> <span class="o">=</span> <span class="n">element</span><span class="p">[</span><span class="s1">&#39;points&#39;</span><span class="p">]</span>
+            <span class="n">p0</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pts</span><span class="p">]</span>
+            <span class="n">p1</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pts</span><span class="p">]</span>
+            <span class="n">p2</span> <span class="o">=</span> <span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pts</span><span class="p">]</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">p0</span><span class="p">)</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p0</span><span class="p">)</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p1</span><span class="p">)</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">p2</span><span class="p">)</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;details&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">pts</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;griddata&#39;</span><span class="p">:</span>
+            <span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">element</span><span class="p">[</span><span class="s1">&#39;origin&#39;</span><span class="p">]</span>
+            <span class="n">isElements</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;interpretation&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;choropleth&#39;</span>
+            <span class="n">x1</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">+</span> <span class="n">element</span><span class="p">[</span><span class="s1">&#39;dx&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="s1">&#39;gridWidth&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">isElements</span> <span class="k">else</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="n">y1</span> <span class="o">=</span> <span class="n">y0</span> <span class="o">+</span> <span class="n">element</span><span class="p">[</span><span class="s1">&#39;dy&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">element</span><span class="p">[</span><span class="s1">&#39;gridWidth&#39;</span><span class="p">])</span> <span class="o">-</span>
+                                       <span class="p">(</span><span class="mi">1</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">isElements</span> <span class="k">else</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">)</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="n">y1</span><span class="p">)</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">)</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="n">y1</span><span class="p">)</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;details&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;type&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="s1">&#39;pixelmap&#39;</span><span class="p">]:</span>
+            <span class="n">lowx</span><span class="p">,</span> <span class="n">highx</span><span class="p">,</span> <span class="n">lowy</span><span class="p">,</span> <span class="n">highy</span> <span class="o">=</span> <span class="n">Annotationelement</span><span class="p">()</span><span class="o">.</span><span class="n">_overlayBounds</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lowx</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">highx</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lowy</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">highy</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;details&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">center</span> <span class="o">=</span> <span class="n">element</span><span class="p">[</span><span class="s1">&#39;center&#39;</span><span class="p">]</span>
+            <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highz&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">center</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="k">if</span> <span class="s1">&#39;width&#39;</span> <span class="ow">in</span> <span class="n">element</span><span class="p">:</span>
+                <span class="n">w</span> <span class="o">=</span> <span class="n">element</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.5</span>
+                <span class="n">h</span> <span class="o">=</span> <span class="n">element</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">0.5</span>
+                <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rotation&#39;</span><span class="p">):</span>
+                    <span class="n">absin</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="s1">&#39;rotation&#39;</span><span class="p">]))</span>
+                    <span class="n">abcos</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">element</span><span class="p">[</span><span class="s1">&#39;rotation&#39;</span><span class="p">]))</span>
+                    <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">abcos</span> <span class="o">*</span> <span class="n">w</span><span class="p">,</span> <span class="n">absin</span> <span class="o">*</span> <span class="n">h</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="n">absin</span> <span class="o">*</span> <span class="n">w</span><span class="p">,</span> <span class="n">abcos</span> <span class="o">*</span> <span class="n">h</span><span class="p">)</span>
+                <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">w</span>
+                <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">h</span>
+                <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">w</span>
+                <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">h</span>
+                <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;details&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="k">elif</span> <span class="s1">&#39;radius&#39;</span> <span class="ow">in</span> <span class="n">element</span><span class="p">:</span>
+                <span class="n">rad</span> <span class="o">=</span> <span class="n">element</span><span class="p">[</span><span class="s1">&#39;radius&#39;</span><span class="p">]</span>
+                <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">rad</span>
+                <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">rad</span>
+                <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">rad</span>
+                <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">rad</span>
+                <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;details&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># This is a fall back for points.  Although they have no</span>
+                <span class="c1"># dimension, make the bounding box have some extent.</span>
+                <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span>
+                <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="mf">0.5</span>
+                <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">center</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span>
+                <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">center</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span>
+                <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;details&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highy&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowy&#39;</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span>
+            <span class="p">(</span><span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;highx&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">bbox</span><span class="p">[</span><span class="s1">&#39;lowx&#39;</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>
+        <span class="c1"># we may want to store perimeter or area as that could help when we</span>
+        <span class="c1"># simplify to points</span>
+        <span class="k">return</span> <span class="n">bbox</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_entryIsLarge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return True is an entry is alrge enough it might not fit in a mongo</span>
+<span class="sd">        document.</span>
+
+<span class="sd">        :param entry: the entry to check.</span>
+<span class="sd">        :returns: True if the entry is large.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;element&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;points&#39;</span><span class="p">,</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;element&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s1">&#39;values&#39;</span><span class="p">,</span> <span class="p">[])))</span> <span class="o">&gt;</span> <span class="n">MAX_ELEMENT_DOCUMENT</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;user&#39;</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;element&#39;</span><span class="p">]</span> <span class="ow">and</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;element&#39;</span><span class="p">],</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">4</span><span class="p">))</span> <span class="o">&gt;</span> <span class="n">MAX_ELEMENT_USER_DOCUMENT</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+<div class="viewcode-block" id="Annotationelement.saveElementAsFile">
+<a class="viewcode-back" href="../../../_build/girder_large_image_annotation/girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.saveElementAsFile">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">saveElementAsFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">annotation</span><span class="p">,</span> <span class="n">entries</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        If an element has a large points or values array, save that array to an</span>
+<span class="sd">        attached file.</span>
+
+<span class="sd">        :param annotation: the parent annotation.</span>
+<span class="sd">        :param entries: the database entries document.  Modified.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;itemId&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">entries</span><span class="p">[:</span><span class="n">MAX_ELEMENT_CHECK</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entryIsLarge</span><span class="p">(</span><span class="n">entry</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">element</span> <span class="o">=</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;element&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">entries</span><span class="p">[</span><span class="n">idx</span><span class="p">][</span><span class="s1">&#39;element&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">element</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;points&#39;</span> <span class="k">if</span> <span class="s1">&#39;points&#39;</span> <span class="ow">in</span> <span class="n">element</span> <span class="k">else</span> <span class="s1">&#39;values&#39;</span>
+            <span class="c1"># Use the highest protocol support by all python versions we</span>
+            <span class="c1"># support</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+            <span class="n">elementFile</span> <span class="o">=</span> <span class="n">Upload</span><span class="p">()</span><span class="o">.</span><span class="n">uploadFromFile</span><span class="p">(</span>
+                <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;_annotationElementData&#39;</span><span class="p">,</span>
+                <span class="n">parentType</span><span class="o">=</span><span class="s1">&#39;item&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">item</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">mimeType</span><span class="o">=</span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="n">attachParent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">userdata</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="s1">&#39;user&#39;</span> <span class="ow">in</span> <span class="n">element</span><span class="p">:</span>
+                <span class="n">userdata</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">element</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;user&#39;</span><span class="p">),</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+                <span class="n">userFile</span> <span class="o">=</span> <span class="n">Upload</span><span class="p">()</span><span class="o">.</span><span class="n">uploadFromFile</span><span class="p">(</span>
+                    <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">userdata</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">userdata</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;_annotationElementUserData&#39;</span><span class="p">,</span>
+                    <span class="n">parentType</span><span class="o">=</span><span class="s1">&#39;item&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">item</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                    <span class="n">mimeType</span><span class="o">=</span><span class="s1">&#39;application/json&#39;</span><span class="p">,</span> <span class="n">attachParent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;datafile&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="n">key</span><span class="p">,</span>
+                <span class="s1">&#39;fileId&#39;</span><span class="p">:</span> <span class="n">elementFile</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="n">userdata</span><span class="p">:</span>
+                <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;datafile&#39;</span><span class="p">][</span><span class="s1">&#39;userFileId&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">userFile</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Storing element as file (</span><span class="si">%r</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">entry</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Annotationelement.updateElementChunk">
+<a class="viewcode-back" href="../../../_build/girder_large_image_annotation/girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.updateElementChunk">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">updateElementChunk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">elements</span><span class="p">,</span> <span class="n">chunk</span><span class="p">,</span> <span class="n">chunkSize</span><span class="p">,</span> <span class="n">annotation</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="n">insertLock</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Update the database for a chunk of elements.  See the updateElements</span>
+<span class="sd">        method for details.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lastTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">chunkStartTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">entries</span> <span class="o">=</span> <span class="p">[{</span>
+            <span class="s1">&#39;annotationId&#39;</span><span class="p">:</span> <span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;_version&#39;</span><span class="p">:</span> <span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;_version&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;created&#39;</span><span class="p">:</span> <span class="n">now</span><span class="p">,</span>
+            <span class="s1">&#39;bbox&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_boundingBox</span><span class="p">(</span><span class="n">element</span><span class="p">),</span>
+            <span class="s1">&#39;element&#39;</span><span class="p">:</span> <span class="n">element</span><span class="p">,</span>
+        <span class="p">}</span> <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">[</span><span class="n">chunk</span><span class="p">:</span><span class="n">chunk</span> <span class="o">+</span> <span class="n">chunkSize</span><span class="p">]]</span>
+        <span class="n">prepTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">chunkStartTime</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">MAX_ELEMENT_CHECK</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_entryIsLarge</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">[:</span><span class="n">MAX_ELEMENT_CHECK</span><span class="p">])):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">saveElementAsFile</span><span class="p">(</span><span class="n">annotation</span><span class="p">,</span> <span class="n">entries</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">insertLock</span><span class="p">:</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">insert_many</span><span class="p">(</span><span class="n">entries</span><span class="p">,</span> <span class="n">ordered</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">pos</span><span class="p">,</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">entries</span><span class="p">):</span>
+            <span class="k">if</span> <span class="s1">&#39;id&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;element&#39;</span><span class="p">]:</span>
+                <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;element&#39;</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">inserted_ids</span><span class="p">[</span><span class="n">pos</span><span class="p">])</span>
+        <span class="c1"># If the insert is slow, log information about it.</span>
+        <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">lastTime</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;insert </span><span class="si">%d</span><span class="s1"> elements in </span><span class="si">%4.2f</span><span class="s1">s (prep time </span><span class="si">%4.2f</span><span class="s1">s), chunk </span><span class="si">%d</span><span class="s1">/</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">),</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">chunkStartTime</span><span class="p">,</span> <span class="n">prepTime</span><span class="p">,</span>
+                <span class="n">chunk</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">entries</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">)))</span>
+            <span class="n">lastTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Annotationelement.updateElements">
+<a class="viewcode-back" href="../../../_build/girder_large_image_annotation/girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.updateElements">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">updateElements</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">annotation</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given an annotation, extract the elements from it and update the</span>
+<span class="sd">        database of them.</span>
+
+<span class="sd">        :param annotation: the annotation to save elements for.  Modified.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">elements</span> <span class="o">=</span> <span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;annotation&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;elements&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+        <span class="n">threads</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">()</span>
+        <span class="n">chunkSize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">100000</span> <span class="o">//</span> <span class="n">threads</span><span class="p">,</span> <span class="mi">10000</span><span class="p">))</span>
+        <span class="n">insertLock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">threads</span><span class="p">)</span> <span class="k">as</span> <span class="n">pool</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">chunk</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">),</span> <span class="n">chunkSize</span><span class="p">):</span>
+                <span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">updateElementChunk</span><span class="p">,</span> <span class="n">elements</span><span class="p">,</span> <span class="n">chunk</span><span class="p">,</span>
+                            <span class="n">chunkSize</span><span class="p">,</span> <span class="n">annotation</span><span class="p">,</span> <span class="n">now</span><span class="p">,</span> <span class="n">insertLock</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">startTime</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;inserted </span><span class="si">%d</span><span class="s1"> elements in </span><span class="si">%4.2f</span><span class="s1">s&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">elements</span><span class="p">),</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">startTime</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="Annotationelement.getElementGroupSet">
+<a class="viewcode-back" href="../../../_build/girder_large_image_annotation/girder_large_image_annotation.models.html#girder_large_image_annotation.models.annotationelement.Annotationelement.getElementGroupSet">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getElementGroupSet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">annotation</span><span class="p">):</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;annotationId&#39;</span><span class="p">:</span> <span class="n">annotation</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;_annotationId&#39;</span><span class="p">,</span> <span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]),</span>
+            <span class="s1">&#39;_version&#39;</span><span class="p">:</span> <span class="n">annotation</span><span class="p">[</span><span class="s1">&#39;_version&#39;</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="n">groups</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([</span>
+            <span class="n">group</span> <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">distinct</span><span class="p">(</span><span class="s1">&#39;element.group&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="n">query</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+        <span class="p">])</span>
+        <span class="n">query</span><span class="p">[</span><span class="s1">&#39;element.group&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">find_one</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
+            <span class="n">groups</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">groups</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

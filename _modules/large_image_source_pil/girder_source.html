@@ -1,0 +1,209 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_pil.girder_source &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../large_image_source_pil.html">large_image_source_pil</a></li>
+      <li class="breadcrumb-item active">large_image_source_pil.girder_source</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image_source_pil.girder_source</h1><div class="highlight"><pre>
+<span></span><span class="c1">#############################################################################</span>
+<span class="c1">#  Copyright Kitware Inc.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed under the Apache License, Version 2.0 ( the &quot;License&quot; );</span>
+<span class="c1">#  you may not use this file except in compliance with the License.</span>
+<span class="c1">#  You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#    http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#  See the License for the specific language governing permissions and</span>
+<span class="c1">#  limitations under the License.</span>
+<span class="c1">#############################################################################</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cherrypy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder_large_image.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">PluginSettings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder_large_image.girder_tilesource</span><span class="w"> </span><span class="kn">import</span> <span class="n">GirderTileSource</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.setting</span><span class="w"> </span><span class="kn">import</span> <span class="n">Setting</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.cache_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">methodcache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">TILE_FORMAT_PIL</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TileSourceError</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">PILFileTileSource</span>
+
+
+<div class="viewcode-block" id="PILGirderTileSource">
+<a class="viewcode-back" href="../../_build/large_image_source_pil/large_image_source_pil.html#large_image_source_pil.girder_source.PILGirderTileSource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">PILGirderTileSource</span><span class="p">(</span><span class="n">PILFileTileSource</span><span class="p">,</span> <span class="n">GirderTileSource</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides tile access to Girder items with a PIL file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Cache size is based on what the class needs, which does not include</span>
+    <span class="c1"># individual tiles</span>
+    <span class="n">cacheName</span> <span class="o">=</span> <span class="s1">&#39;tilesource&#39;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;pil&#39;</span>
+
+<div class="viewcode-block" id="PILGirderTileSource.defaultMaxSize">
+<a class="viewcode-back" href="../../_build/large_image_source_pil/large_image_source_pil.html#large_image_source_pil.girder_source.PILGirderTileSource.defaultMaxSize">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">defaultMaxSize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">Setting</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_MAX_SMALL_IMAGE_SIZE</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="PILGirderTileSource.getLRUHash">
+<a class="viewcode-back" href="../../_build/large_image_source_pil/large_image_source_pil.html#large_image_source_pil.girder_source.PILGirderTileSource.getLRUHash">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getLRUHash</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">GirderTileSource</span><span class="o">.</span><span class="n">getLRUHash</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;,</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;maxSize&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">args</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="PILGirderTileSource.getState">
+<a class="viewcode-back" href="../../_build/large_image_source_pil/large_image_source_pil.html#large_image_source_pil.girder_source.PILGirderTileSource.getState">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">getState</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_maxSize</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PILGirderTileSource.getTile">
+<a class="viewcode-back" href="../../_build/large_image_source_pil/large_image_source_pil.html#large_image_source_pil.girder_source.PILGirderTileSource.getTile">[docs]</a>
+    <span class="nd">@methodcache</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getTile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">pilImageAllowed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">numpyAllowed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">mayRedirect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">z</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;z layer does not exist&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;x is outside layer&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">y</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;y is outside layer&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">mayRedirect</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">pilImageAllowed</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">numpyAllowed</span> <span class="ow">and</span>
+                <span class="n">cherrypy</span><span class="o">.</span><span class="n">request</span> <span class="ow">and</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_pilFormatMatches</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="p">,</span> <span class="n">mayRedirect</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)):</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">/api/v1/file/</span><span class="si">%s</span><span class="s1">/download&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="n">cherrypy</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">base</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;fileId&#39;</span><span class="p">])</span>
+            <span class="k">raise</span> <span class="n">cherrypy</span><span class="o">.</span><span class="n">HTTPRedirect</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outputTile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pilImage</span><span class="p">,</span> <span class="n">TILE_FORMAT_PIL</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span>
+                                <span class="n">pilImageAllowed</span><span class="p">,</span> <span class="n">numpyAllowed</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

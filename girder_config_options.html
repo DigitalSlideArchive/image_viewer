@@ -1,0 +1,611 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Girder Configuration Options &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="_static/K.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Girder Annotation Configuration Options" href="girder_annotation_config_options.html" />
+    <link rel="prev" title="Girder Integration" href="girder_index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="girder_index.html">Girder Integration</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Girder Configuration Options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#general-plugin-settings">General Plugin Settings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#yaml-configuration-files">YAML Configuration Files</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#large-image-config-yaml">.large_image_config.yaml</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#editing-configuration-files">Editing Configuration Files</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="girder_annotation_config_options.html">Girder Annotation Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="girder_caching.html">Caching Large Image in Girder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dicomweb_assetstore.html">DICOMweb Assetstore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plottable.html">Plottable Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html">Upgrading from Previous Versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/girder_large_image/modules.html">girder_large_image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/girder_large_image_annotation/modules.html">girder_large_image_annotation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="girder_index.html">Girder Integration</a></li>
+      <li class="breadcrumb-item active">Girder Configuration Options</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/girder_config_options.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="girder-configuration-options">
+<h1>Girder Configuration Options<a class="headerlink" href="#girder-configuration-options" title="Link to this heading"></a></h1>
+<section id="general-plugin-settings">
+<h2>General Plugin Settings<a class="headerlink" href="#general-plugin-settings" title="Link to this heading"></a></h2>
+<p>There are some general plugin settings that affect large_image as a Girder plugin.  These settings can be accessed by an Admin user through the <code class="docutils literal notranslate"><span class="pre">Admin</span> <span class="pre">Console</span></code> / <code class="docutils literal notranslate"><span class="pre">Plugins</span></code> and selecting the gear icon next to <code class="docutils literal notranslate"><span class="pre">Large</span> <span class="pre">image</span></code>.</p>
+</section>
+<section id="yaml-configuration-files">
+<h2>YAML Configuration Files<a class="headerlink" href="#yaml-configuration-files" title="Link to this heading"></a></h2>
+<p>Some settings can be specified per-folder tree using yaml files.  For these settings, if the configuration file exists in the current folder it is used.  If not, the parent folders are checked iteratively up to the parent collection or user.  If no configuration file is found, the <code class="docutils literal notranslate"><span class="pre">.config</span></code> folder in the collection or user is checked for the file.  Lastly, the <code class="docutils literal notranslate"><span class="pre">Configuration</span> <span class="pre">Folder</span></code> specified on the plugin settings page is checked for the configuration file.</p>
+<p>The configuration files can have different configurations based on the user’s access level and group membership.</p>
+<p>The yaml file has the following structure:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="c1"># most settings are key-value pairs, where the value could be another</span>
+<span class="c1"># dictionary with keys and values, lists, or other valid data.</span>
+<span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">value</span><span class="o">&gt;</span>
+<span class="c1"># The access key is special</span>
+<span class="n">access</span><span class="p">:</span>
+  <span class="c1"># logged in users get these settings</span>
+  <span class="n">user</span><span class="p">:</span>
+    <span class="c1"># If the value is a dictionary and the key matches a key at the base</span>
+    <span class="c1"># level, then the values are combined.  To completely replace the base</span>
+    <span class="c1"># value, add the special key &quot;__all__&quot; and set it&#39;s value to true.</span>
+    <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">value</span><span class="o">&gt;</span>
+  <span class="c1"># admin users get these settings</span>
+  <span class="n">admin</span><span class="p">:</span>
+    <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">value</span><span class="o">&gt;</span>
+<span class="c1"># The groups key specifies that specific user groups have distinct settings</span>
+<span class="n">groups</span><span class="p">:</span>
+  <span class="o">&lt;</span><span class="n">group</span> <span class="n">name</span><span class="o">&gt;</span><span class="p">:</span>
+    <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">value</span><span class="o">&gt;</span>
+    <span class="c1"># groups can specify access based on user or admin, too.</span>
+    <span class="n">access</span><span class="p">:</span> <span class="o">...</span>
+<span class="c1"># The users key specifies that a specific user has distinct settings</span>
+<span class="n">users</span><span class="p">:</span>
+  <span class="o">&lt;</span><span class="n">user</span> <span class="n">login</span><span class="o">&gt;</span><span class="p">:</span>
+    <span class="o">&lt;</span><span class="n">key</span><span class="o">&gt;</span><span class="p">:</span> <span class="o">&lt;</span><span class="n">value</span><span class="o">&gt;</span>
+<span class="c1"># If __inherit__ is true, then merge this config file with the next config</span>
+<span class="c1"># file in the parent folder hierarchy.</span>
+<span class="n">__inherit__</span><span class="p">:</span> <span class="n">true</span>
+</pre></div>
+</div>
+<section id="large-image-config-yaml">
+<h3>.large_image_config.yaml<a class="headerlink" href="#large-image-config-yaml" title="Link to this heading"></a></h3>
+<section id="item-lists">
+<h4>Item Lists<a class="headerlink" href="#item-lists" title="Link to this heading"></a></h4>
+<p>This is used to specify how items appear in item lists.  There are two settings, one for folders in the main Girder UI and one for folders in dialogs (such as when browsing in the file dialog).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="c1"># If present, show a table with column headers in item lists</span>
+<span class="n">itemList</span><span class="p">:</span>
+  <span class="c1"># layout does not need to be specified.</span>
+  <span class="n">layout</span><span class="p">:</span>
+    <span class="c1"># The default list (with flatten: false) shows only the items in the</span>
+    <span class="c1"># current folder; flattening the list shows items in the current folder</span>
+    <span class="c1"># and all subfolders.  This can also be &quot;only&quot;, in which case the</span>
+    <span class="c1"># flatten option will start enabled and, when flattened, the folder</span>
+    <span class="c1"># list will be hidden.</span>
+    <span class="n">flatten</span><span class="p">:</span> <span class="n">true</span>
+    <span class="c1"># The default layout is a list.  This can optionally be &quot;grid&quot;</span>
+    <span class="n">mode</span><span class="p">:</span> <span class="n">grid</span>
+    <span class="c1"># max-width is only used in grid mode.  It is the maximum width in</span>
+    <span class="c1"># pixels for grid entries.  It defaults to 250.</span>
+    <span class="nb">max</span><span class="o">-</span><span class="n">width</span><span class="p">:</span> <span class="mi">250</span>
+  <span class="c1"># group does not need to be specified.  Instead of listing items</span>
+  <span class="c1"># directly, multiple items can be grouped  together.</span>
+  <span class="n">group</span><span class="p">:</span>
+    <span class="c1"># keys is a single metadata value reference (see the column metadata</span>
+    <span class="c1"># records), or a list of such records.</span>
+    <span class="n">keys</span><span class="p">:</span> <span class="n">dicom</span><span class="o">.</span><span class="n">PatientID</span>
+    <span class="c1"># counts is optional.  If specified, the left side is either a metadata</span>
+    <span class="c1"># value references or &quot;_id&quot; to just count total items.  The right side</span>
+    <span class="c1"># is where, conceptually, the count is stored in the item.meta record.</span>
+    <span class="c1"># to show a column of the counts, add a metadata column with a value</span>
+    <span class="c1"># equal to this.  That is, in this example, all items with the same</span>
+    <span class="c1"># meta.dicom.PatientID are grouped as a single row, and two count</span>
+    <span class="c1"># columns are generated.  The unique values for each group row of</span>
+    <span class="c1"># meta.dicom.StudyInstanceUID and counted and that count is added to</span>
+    <span class="c1"># meta._count.studiescount.</span>
+    <span class="n">counts</span><span class="p">:</span>
+      <span class="n">dicom</span><span class="o">.</span><span class="n">StudyInstanceUID</span><span class="p">:</span> <span class="n">_count</span><span class="o">.</span><span class="n">studiescount</span>
+      <span class="n">dicom</span><span class="o">.</span><span class="n">SeriesInstanceUID</span><span class="p">:</span> <span class="n">_count</span><span class="o">.</span><span class="n">seriescount</span>
+  <span class="c1"># navigate does nto need to be specified.  It changes the behavior of</span>
+  <span class="c1"># clicking on an item from showing the item page to another action.</span>
+  <span class="n">navigate</span><span class="p">:</span>
+    <span class="c1"># type can be &quot;item&quot;: the default, open the item page, &quot;itemList&quot;: go</span>
+    <span class="c1"># to the named item page, or &quot;open&quot; to open an application</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="n">itemList</span>
+    <span class="c1"># if the type is &quot;itemList&quot;, the name is the name of the itemList to</span>
+    <span class="c1"># display.  If the type is &quot;open&quot;, the name is the name of the</span>
+    <span class="c1"># registered  application that should be opened by preference (e.g.,</span>
+    <span class="c1"># &quot;histomicsui&quot; or &quot;volview&quot;).  If that application does not report it</span>
+    <span class="c1"># can open the item or no name is specified, the highest priority</span>
+    <span class="c1"># application that can open the item will be used.</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">studyList</span>
+  <span class="c1"># show these columns in order from left to right.  Each column has a</span>
+  <span class="c1"># &quot;type&quot; and &quot;value&quot;.  It optionally has a &quot;title&quot; used for the column</span>
+  <span class="c1"># header, and a &quot;format&quot; used for searching and filtering.  The &quot;label&quot;,</span>
+  <span class="c1"># if any, is displayed to the left of the column value.  This is more</span>
+  <span class="c1"># useful in an grid view than in a column view.</span>
+  <span class="n">columns</span><span class="p">:</span>
+    <span class="o">-</span>
+      <span class="c1"># The &quot;image&quot; type&#39;s value is either &quot;thumbnail&quot; or the name of an</span>
+      <span class="c1"># associated image, such as &quot;macro&quot; or &quot;label&quot;.</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">image</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">thumbnail</span>
+      <span class="n">title</span><span class="p">:</span> <span class="n">Thumbnail</span>
+      <span class="c1"># The maximum size of images can be specified.  It defaults to 160 x</span>
+      <span class="c1"># 100.  It will always maintain the original aspect ratio.</span>
+      <span class="n">width</span><span class="p">:</span> <span class="mi">250</span>
+      <span class="n">height</span><span class="p">:</span> <span class="mi">250</span>
+    <span class="o">-</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">image</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">label</span>
+      <span class="n">title</span><span class="p">:</span> <span class="n">Slide</span> <span class="n">Label</span>
+    <span class="o">-</span>
+      <span class="c1"># The &quot;record&quot; type is from the default item record.  The value is</span>
+      <span class="c1"># one of &quot;name&quot;, &quot;description&quot;, &quot;created&quot;, &quot;updated&quot;, &quot;size&quot;, or</span>
+      <span class="c1"># &quot;controls&quot;.</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">record</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">name</span>
+    <span class="o">-</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">record</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">size</span>
+    <span class="o">-</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">record</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">controls</span>
+    <span class="o">-</span>
+      <span class="c1"># The &quot;metadata&quot; type is taken from the item&#39;s &quot;meta&quot; contents.  It</span>
+      <span class="c1"># can be a nested key by using dots in its name.</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">metadata</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">Stain</span>
+      <span class="c1"># &quot;format&quot; can be &quot;text&quot;, &quot;number&quot;, &quot;category&quot;, &quot;datetime&quot;, &quot;date&quot;,</span>
+      <span class="c1"># &quot;time&quot;.  &quot;datetime&quot;, &quot;date&quot;, and &quot;time&quot; use the user&#39;s browser&#39;s</span>
+      <span class="c1"># locale to convert the date and/or time to their browser&#39;s preferred</span>
+      <span class="c1"># format.  Other values may be specified later.</span>
+      <span class="nb">format</span><span class="p">:</span> <span class="n">text</span>
+    <span class="o">-</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">metadata</span>
+      <span class="c1"># This will get &quot;Label&quot; from the first entry in array &quot;gloms&quot;</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">gloms</span><span class="mf">.0</span><span class="o">.</span><span class="n">Label</span>
+      <span class="n">title</span><span class="p">:</span> <span class="n">First</span> <span class="n">Glom</span> <span class="n">Label</span>
+    <span class="o">-</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">metadata</span>
+      <span class="c1"># You can use some javascript-like properties, such as .length for</span>
+      <span class="c1"># the length of arrays.</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">gloms</span><span class="o">.</span><span class="n">length</span>
+      <span class="n">title</span><span class="p">:</span> <span class="n">Number</span> <span class="n">of</span> <span class="n">Gloms</span>
+      <span class="c1"># You can have this value be populated for just some of the items by</span>
+      <span class="c1"># specifying an &quot;only&quot; list.  Each entry in the only list must have</span>
+      <span class="c1"># the &quot;type&quot; and &quot;value&quot; as per the column it is filtering on, plus a</span>
+      <span class="c1"># &quot;match&quot; value that is used as a case-insensitive RegExp.  All such</span>
+      <span class="c1"># limits must match to show the value.</span>
+      <span class="n">only</span><span class="p">:</span>
+        <span class="o">-</span>
+          <span class="nb">type</span><span class="p">:</span> <span class="n">record</span>
+          <span class="n">value</span><span class="p">:</span> <span class="n">name</span>
+          <span class="c1"># only show this for items whose names end with &quot;.svs&quot;.</span>
+          <span class="n">match</span><span class="p">:</span> <span class="s2">&quot;</span><span class="se">\\</span><span class="s2">.svs$&quot;</span>
+    <span class="c1"># You can edit metadata in a item list by adding the edit: true entry</span>
+    <span class="c1"># and the options from the itemMetadata records that are detailed</span>
+    <span class="c1"># below.  In this case, edits to metadata that validate are saved</span>
+    <span class="c1"># immediately.</span>
+    <span class="o">-</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">metadata</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">userstain</span>
+      <span class="n">title</span><span class="p">:</span> <span class="n">User</span> <span class="n">Stain</span>
+      <span class="n">label</span><span class="p">:</span> <span class="n">User</span> <span class="n">Stain</span>
+      <span class="n">edit</span><span class="p">:</span> <span class="n">true</span>
+      <span class="c1"># description is used as both a tooltip and as placeholder text</span>
+      <span class="n">description</span><span class="p">:</span> <span class="n">Staining</span> <span class="n">method</span>
+      <span class="c1"># if required is true, the value can&#39;t be empty</span>
+      <span class="n">required</span><span class="p">:</span> <span class="n">true</span>
+      <span class="c1"># If a regex is specified, the value must match</span>
+      <span class="c1"># regex: &#39;^(Eosin|H&amp;E|Other)$&#39;</span>
+      <span class="c1"># If an enum is specified, the value is set via a dropdown select box</span>
+      <span class="n">enum</span><span class="p">:</span>
+        <span class="o">-</span> <span class="n">Eosin</span>
+        <span class="o">-</span> <span class="n">H</span><span class="o">&amp;</span><span class="n">E</span>
+        <span class="o">-</span> <span class="n">Other</span>
+      <span class="c1"># If a default is specified, if the value is unset, it will show this</span>
+      <span class="c1"># value in the control</span>
+      <span class="n">default</span><span class="p">:</span> <span class="n">H</span><span class="o">&amp;</span><span class="n">E</span>
+  <span class="n">defaultSort</span><span class="p">:</span>
+    <span class="c1"># The default lists a sort order for sortable columns.  This must have</span>
+    <span class="c1"># type, value, and dir for each entry, where dir is either &quot;up&quot; or</span>
+    <span class="c1"># &quot;down&quot;.</span>
+    <span class="o">-</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">metadata</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">Stain</span>
+      <span class="nb">dir</span><span class="p">:</span> <span class="n">up</span>
+    <span class="o">-</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">record</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">name</span>
+      <span class="nb">dir</span><span class="p">:</span> <span class="n">down</span>
+<span class="n">itemListDialog</span><span class="p">:</span>
+  <span class="c1"># Show these columns</span>
+  <span class="n">columns</span><span class="p">:</span>
+    <span class="o">-</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">image</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">thumbnail</span>
+      <span class="n">title</span><span class="p">:</span> <span class="n">Thumbnail</span>
+    <span class="o">-</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">record</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">name</span>
+    <span class="o">-</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">metadata</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">Stain</span>
+      <span class="nb">format</span><span class="p">:</span> <span class="n">text</span>
+    <span class="o">-</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">record</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">size</span>
+</pre></div>
+</div>
+<p>If there are no large images in a folder, none of the image columns will appear.</p>
+</section>
+<section id="named-item-lists">
+<h4>Named Item Lists<a class="headerlink" href="#named-item-lists" title="Link to this heading"></a></h4>
+<p>Multiple item lists can be stored with specific names.  A default item list can be specified.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="c1"># If present and the value is a key in the namedItemLists section, that</span>
+<span class="c1"># list will be shown unless the URL routes to a different list.</span>
+<span class="n">defaultItemList</span><span class="p">:</span> <span class="n">images</span>
+<span class="c1"># Any number of items can be in the namedItemLists section.  Each name</span>
+<span class="c1"># must be distinct.  The system can show the specific list by routing to</span>
+<span class="c1"># ?namedList=&lt;name&gt; as part of the url after the folder id.</span>
+<span class="n">namedItemLists</span><span class="p">:</span>
+  <span class="n">image</span><span class="p">:</span>
+    <span class="n">layout</span><span class="p">:</span>
+      <span class="n">mode</span><span class="p">:</span> <span class="nb">list</span>
+    <span class="n">columns</span><span class="p">:</span>
+      <span class="o">-</span>
+        <span class="nb">type</span><span class="p">:</span> <span class="n">image</span>
+        <span class="n">value</span><span class="p">:</span> <span class="n">thumbnail</span>
+        <span class="n">title</span><span class="p">:</span> <span class="n">Thumbnail</span>
+      <span class="o">-</span>
+        <span class="nb">type</span><span class="p">:</span> <span class="n">image</span>
+        <span class="n">value</span><span class="p">:</span> <span class="n">label</span>
+        <span class="n">title</span><span class="p">:</span> <span class="n">Slide</span> <span class="n">Label</span>
+      <span class="o">-</span>
+        <span class="c1"># The &quot;record&quot; type is from the default item record.  The value is</span>
+        <span class="c1"># one of &quot;name&quot;, &quot;size&quot;, or &quot;controls&quot;.</span>
+        <span class="nb">type</span><span class="p">:</span> <span class="n">record</span>
+        <span class="n">value</span><span class="p">:</span> <span class="n">name</span>
+      <span class="o">-</span>
+        <span class="nb">type</span><span class="p">:</span> <span class="n">record</span>
+        <span class="n">value</span><span class="p">:</span> <span class="n">size</span>
+      <span class="o">-</span>
+        <span class="nb">type</span><span class="p">:</span> <span class="n">record</span>
+        <span class="n">value</span><span class="p">:</span> <span class="n">controls</span>
+</pre></div>
+</div>
+</section>
+<section id="item-metadata">
+<h4>Item Metadata<a class="headerlink" href="#item-metadata" title="Link to this heading"></a></h4>
+<p>By default, item metadata can contain any keys and values.  These can be given better titles and restricted in their data types.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="c1"># If present, offer to add these specific keys and restrict their datatypes</span>
+<span class="n">itemMetadata</span><span class="p">:</span>
+  <span class="o">-</span>
+    <span class="c1"># value is the key name within the metadata</span>
+    <span class="n">value</span><span class="p">:</span> <span class="n">stain</span>
+    <span class="c1"># title is the displayed titles</span>
+    <span class="n">title</span><span class="p">:</span> <span class="n">Stain</span>
+    <span class="c1"># description is used as both a tooltip and as placeholder text</span>
+    <span class="n">description</span><span class="p">:</span> <span class="n">Staining</span> <span class="n">method</span>
+    <span class="c1"># if required is true, the delete button does not appear</span>
+    <span class="n">required</span><span class="p">:</span> <span class="n">true</span>
+    <span class="c1"># If a regex is specified, the value must match</span>
+    <span class="c1"># regex: &#39;^(Eosin|H&amp;E|Other)$&#39;</span>
+    <span class="c1"># If an enum is specified, the value is set via a dropdown select box</span>
+    <span class="n">enum</span><span class="p">:</span>
+      <span class="o">-</span> <span class="n">Eosin</span>
+      <span class="o">-</span> <span class="n">H</span><span class="o">&amp;</span><span class="n">E</span>
+      <span class="o">-</span> <span class="n">Other</span>
+    <span class="c1"># If a default is specified, when the value is created, it will show</span>
+    <span class="c1"># this value in the control</span>
+    <span class="n">default</span><span class="p">:</span> <span class="n">H</span><span class="o">&amp;</span><span class="n">E</span>
+  <span class="o">-</span>
+    <span class="n">value</span><span class="p">:</span> <span class="n">rating</span>
+    <span class="c1"># type can be &quot;number&quot;, &quot;integer&quot;, or &quot;text&quot; (default)</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="n">number</span>
+    <span class="c1"># minimum and maximum are inclusive</span>
+    <span class="n">minimum</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">maximum</span><span class="p">:</span> <span class="mi">10</span>
+    <span class="c1"># Exclusive values can be specified instead</span>
+    <span class="c1"># exclusiveMinimum: 0</span>
+    <span class="c1"># exclusiveMaximum: 10</span>
+</pre></div>
+</div>
+</section>
+<section id="image-frame-presets">
+<h4>Image Frame Presets<a class="headerlink" href="#image-frame-presets" title="Link to this heading"></a></h4>
+<p>This is used to specify a list of presets for viewing images in the folder.
+Presets can be customized and saved in the GeoJS Image Viewer.
+To retrieve saved presets, use <code class="docutils literal notranslate"><span class="pre">[serverURL]/api/v1/item/[itemID]/internal_metadata/presets</span></code>.
+You can convert the response to YAML and paste it into the <code class="docutils literal notranslate"><span class="pre">imageFramePresets</span></code> key in your config file.</p>
+<p>Each preset can specify a name, a view mode, an image frame, and style options.</p>
+<ul class="simple">
+<li><p>The name of a preset can be any string which uniquely identifies the preset.</p></li>
+<li><p>There are four options for mode:</p>
+<ul>
+<li><p>Frame control</p>
+<ul>
+<li><p>id: 0</p></li>
+<li><p>name: Frame</p></li>
+</ul>
+</li>
+<li><p>Axis control</p>
+<ul>
+<li><p>id: 1</p></li>
+<li><p>name: Axis</p></li>
+</ul>
+</li>
+<li><p>Channel Compositing</p>
+<ul>
+<li><p>id: 2</p></li>
+<li><p>name: Channel Compositing</p></li>
+</ul>
+</li>
+<li><p>Band Compositing</p>
+<ul>
+<li><p>id: 3</p></li>
+<li><p>name: Band Compositing</p></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>The frame of a preset is a 0-based index representing a single frame in a multiframe image.
+For single-frame images, this value will always be 0.
+For channel compositing, each channel will have a <code class="docutils literal notranslate"><span class="pre">framedelta</span></code> value which represents distance from this base frame value.
+The result of channel compositing is multiple frames (calculated via framedelta) composited together.</p></li>
+<li><p>The style of a preset is a dictionary with a schema similar to the [style schema for tile retrieval](tilesource_options.rst#style). The value for a preset’s style consists of a band definition, where each band may have the following:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">band</span></code>: A 1-based index of a band within the current frame</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">framedelta</span></code>: An integer representing distance from the current frame, used for compositing multiple frames together</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">palette</span></code>: A hexadecimal string beginning with “#” representing a color to stain this frame</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min</span></code>: The value to map to the first palette value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max</span></code>: The value to map to the last palette value</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">autoRange</span></code>: A shortcut for excluding a percentage from each end of the value distribution in the image. Express as a float.</p></li>
+</ul>
+</li>
+</ul>
+<p>The YAML below includes some example presets.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="c1"># If present, each preset in this list will be added to the preset list</span>
+<span class="c1"># of every image in the folder for which the preset is applicable</span>
+<span class="n">imageFramePresets</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Frame</span> <span class="n">control</span> <span class="o">-</span> <span class="n">Frame</span> <span class="mi">4</span>
+  <span class="n">frame</span><span class="p">:</span> <span class="mi">4</span>
+  <span class="n">mode</span><span class="p">:</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="mi">0</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Frame</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Axis</span> <span class="n">control</span> <span class="o">-</span> <span class="n">Frame</span> <span class="mi">25</span>
+  <span class="n">frame</span><span class="p">:</span> <span class="mi">25</span>
+  <span class="n">mode</span><span class="p">:</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="mi">1</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Axis</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="mi">3</span> <span class="n">channels</span>
+  <span class="n">frame</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="n">mode</span><span class="p">:</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Channel</span> <span class="n">Compositing</span>
+  <span class="n">style</span><span class="p">:</span>
+    <span class="n">bands</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">framedelta</span><span class="p">:</span> <span class="mi">0</span>
+      <span class="n">palette</span><span class="p">:</span> <span class="s2">&quot;#0000FF&quot;</span>
+    <span class="o">-</span> <span class="n">framedelta</span><span class="p">:</span> <span class="mi">1</span>
+      <span class="n">palette</span><span class="p">:</span> <span class="s2">&quot;#FF0000&quot;</span>
+    <span class="o">-</span> <span class="n">framedelta</span><span class="p">:</span> <span class="mi">2</span>
+      <span class="n">palette</span><span class="p">:</span> <span class="s2">&quot;#00FF00&quot;</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="mi">3</span> <span class="n">bands</span>
+  <span class="n">frame</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="n">mode</span><span class="p">:</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="mi">3</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Band</span> <span class="n">Compositing</span>
+  <span class="n">style</span><span class="p">:</span>
+    <span class="n">bands</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">band</span><span class="p">:</span> <span class="mi">1</span>
+      <span class="n">palette</span><span class="p">:</span> <span class="s2">&quot;#0000FF&quot;</span>
+    <span class="o">-</span> <span class="n">band</span><span class="p">:</span> <span class="mi">2</span>
+      <span class="n">palette</span><span class="p">:</span> <span class="s2">&quot;#FF0000&quot;</span>
+    <span class="o">-</span> <span class="n">band</span><span class="p">:</span> <span class="mi">3</span>
+      <span class="n">palette</span><span class="p">:</span> <span class="s2">&quot;#00FF00&quot;</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Channels</span> <span class="k">with</span> <span class="n">Min</span> <span class="ow">and</span> <span class="n">Max</span>
+  <span class="n">frame</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="n">mode</span><span class="p">:</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Channel</span> <span class="n">Compositing</span>
+  <span class="n">style</span><span class="p">:</span>
+    <span class="n">bands</span><span class="p">:</span>
+    <span class="o">-</span> <span class="nb">min</span><span class="p">:</span> <span class="mi">18000</span>
+      <span class="nb">max</span><span class="p">:</span> <span class="mi">43000</span>
+      <span class="n">framedelta</span><span class="p">:</span> <span class="mi">0</span>
+      <span class="n">palette</span><span class="p">:</span> <span class="s2">&quot;#0000FF&quot;</span>
+    <span class="o">-</span> <span class="nb">min</span><span class="p">:</span> <span class="mi">18000</span>
+      <span class="nb">max</span><span class="p">:</span> <span class="mi">43000</span>
+      <span class="n">framedelta</span><span class="p">:</span> <span class="mi">1</span>
+      <span class="n">palette</span><span class="p">:</span> <span class="s2">&quot;#FF0000&quot;</span>
+    <span class="o">-</span> <span class="nb">min</span><span class="p">:</span> <span class="mi">18000</span>
+      <span class="nb">max</span><span class="p">:</span> <span class="mi">43000</span>
+      <span class="n">framedelta</span><span class="p">:</span> <span class="mi">2</span>
+      <span class="n">palette</span><span class="p">:</span> <span class="s2">&quot;#00FF00&quot;</span>
+    <span class="o">-</span> <span class="nb">min</span><span class="p">:</span> <span class="mi">18000</span>
+      <span class="nb">max</span><span class="p">:</span> <span class="mi">43000</span>
+      <span class="n">framedelta</span><span class="p">:</span> <span class="mi">3</span>
+      <span class="n">palette</span><span class="p">:</span> <span class="s2">&quot;#FFFF00&quot;</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Auto</span> <span class="n">Ranged</span> <span class="n">Channels</span>
+  <span class="n">frame</span><span class="p">:</span> <span class="mi">0</span>
+  <span class="n">mode</span><span class="p">:</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="mi">2</span>
+    <span class="n">name</span><span class="p">:</span> <span class="n">Channel</span> <span class="n">Compositing</span>
+  <span class="n">style</span><span class="p">:</span>
+    <span class="n">bands</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">autoRange</span><span class="p">:</span> <span class="mf">0.2</span>
+      <span class="n">framedelta</span><span class="p">:</span> <span class="mi">0</span>
+      <span class="n">palette</span><span class="p">:</span> <span class="s2">&quot;#0000FF&quot;</span>
+    <span class="o">-</span> <span class="n">autoRange</span><span class="p">:</span> <span class="mf">0.2</span>
+      <span class="n">framedelta</span><span class="p">:</span> <span class="mi">1</span>
+      <span class="n">palette</span><span class="p">:</span> <span class="s2">&quot;#FF0000&quot;</span>
+    <span class="o">-</span> <span class="n">autoRange</span><span class="p">:</span> <span class="mf">0.2</span>
+      <span class="n">framedelta</span><span class="p">:</span> <span class="mi">2</span>
+      <span class="n">palette</span><span class="p">:</span> <span class="s2">&quot;#00FF00&quot;</span>
+    <span class="o">-</span> <span class="n">autoRange</span><span class="p">:</span> <span class="mf">0.2</span>
+      <span class="n">framedelta</span><span class="p">:</span> <span class="mi">3</span>
+      <span class="n">palette</span><span class="p">:</span> <span class="s2">&quot;#FFFF00&quot;</span>
+    <span class="o">-</span> <span class="n">autoRange</span><span class="p">:</span> <span class="mf">0.2</span>
+      <span class="n">framedelta</span><span class="p">:</span> <span class="mi">4</span>
+      <span class="n">palette</span><span class="p">:</span> <span class="s2">&quot;#FF00FF&quot;</span>
+    <span class="o">-</span> <span class="n">autoRange</span><span class="p">:</span> <span class="mf">0.2</span>
+      <span class="n">framedelta</span><span class="p">:</span> <span class="mi">5</span>
+      <span class="n">palette</span><span class="p">:</span> <span class="s2">&quot;#00FFFF&quot;</span>
+    <span class="o">-</span> <span class="n">autoRange</span><span class="p">:</span> <span class="mf">0.2</span>
+      <span class="n">framedelta</span><span class="p">:</span> <span class="mi">6</span>
+      <span class="n">palette</span><span class="p">:</span> <span class="s2">&quot;#FF8000&quot;</span>
+</pre></div>
+</div>
+</section>
+<section id="image-frame-preset-defaults">
+<h4>Image Frame Preset Defaults<a class="headerlink" href="#image-frame-preset-defaults" title="Link to this heading"></a></h4>
+<p>This is used to specify a list of preset defaults, in order of precedence.
+These presets are to be automatically applied to an image in this folder if they are applicable.
+In the case that a preset is not applicable to an image, the next item in this list will be used.</p>
+<p>** Important: the presets named in this list must have corresponding entries in the <code class="docutils literal notranslate"><span class="pre">imageFramePresets</span></code> configuration, else this configuration will have no effect. **</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="c1"># The preset named &quot;Primary Preset&quot; will be applied to all images in this folder.</span>
+<span class="c1"># Any images for which &quot;Primary Preset&quot; does not apply will have &quot;Secondary Preset&quot; applied.</span>
+<span class="c1"># Any images for which neither &quot;Primary Preset&quot; nor &quot;Secondary Preset&quot; apply will have &quot;Tertiary Preset&quot; applied.</span>
+<span class="n">imageFramePresetDefaults</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Primary</span> <span class="n">Preset</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Secondary</span> <span class="n">Preset</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Tertiary</span> <span class="n">Preset</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="c1"># This example would be used with the example for ``imageFramePresets`` shown above.</span>
+<span class="c1"># Images with 7 or more channels would use &quot;Auto Ranged Channels&quot;</span>
+<span class="c1"># Images with fewer than 7 but at least 4 channels would use &quot;Channels with Min and Max&quot;</span>
+<span class="c1"># Images with 3 channels would use &quot;3 channels&quot;</span>
+<span class="c1"># Images with fewer than 3 channels would not have a default preset applied.</span>
+<span class="n">imageFramePresetDefaults</span><span class="p">:</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Auto</span> <span class="n">Ranged</span> <span class="n">Channels</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="n">Channels</span> <span class="k">with</span> <span class="n">Min</span> <span class="ow">and</span> <span class="n">Max</span>
+<span class="o">-</span> <span class="n">name</span><span class="p">:</span> <span class="mi">3</span> <span class="n">channels</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="editing-configuration-files">
+<h2>Editing Configuration Files<a class="headerlink" href="#editing-configuration-files" title="Link to this heading"></a></h2>
+<p>Some file types can be edited on their item page.  This is detected based on the mime type associated with the file: <code class="docutils literal notranslate"><span class="pre">application/json</span></code> for json files and <code class="docutils literal notranslate"><span class="pre">text/yaml</span></code> or <code class="docutils literal notranslate"><span class="pre">text/x-yaml</span></code> for yaml files.  If a user has enough permissions, these can be modified and saved.  Note that this does not alter imported files; rather, on save it will create a new file in the assetstore and use that; this works fine for using the configuration files.</p>
+<p>For admins, there is also support for the <code class="docutils literal notranslate"><span class="pre">application/x-girder-ini</span></code> mime type for Girder configuration files.   This has a special option to replace the existing Girder configuration and restart the server and should be used with due caution.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="girder_index.html" class="btn btn-neutral float-left" title="Girder Integration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="girder_annotation_config_options.html" class="btn btn-neutral float-right" title="Girder Annotation Configuration Options" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

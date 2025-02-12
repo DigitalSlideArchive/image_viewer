@@ -1,0 +1,330 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_dummy package &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="large_image_source_gdal" href="../large_image_source_gdal/modules.html" />
+    <link rel="prev" title="large_image_source_dummy" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../api_index.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../large_image/modules.html">large_image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_bioformats/modules.html">large_image_source_bioformats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_deepzoom/modules.html">large_image_source_deepzoom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_dicom/modules.html">large_image_source_dicom</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">large_image_source_dummy</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">large_image_source_dummy package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#module-large_image_source_dummy">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_gdal/modules.html">large_image_source_gdal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_mapnik/modules.html">large_image_source_mapnik</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_multi/modules.html">large_image_source_multi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_nd2/modules.html">large_image_source_nd2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_ometiff/modules.html">large_image_source_ometiff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_openjpeg/modules.html">large_image_source_openjpeg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_openslide/modules.html">large_image_source_openslide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_pil/modules.html">large_image_source_pil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_rasterio/modules.html">large_image_source_rasterio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_test/modules.html">large_image_source_test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_tiff/modules.html">large_image_source_tiff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_tifffile/modules.html">large_image_source_tifffile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_vips/modules.html">large_image_source_vips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_zarr/modules.html">large_image_source_zarr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_converter/modules.html">large_image_converter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_tasks/modules.html">large_image_tasks</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../api_index.html">API Documentation</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">large_image_source_dummy</a></li>
+      <li class="breadcrumb-item active">large_image_source_dummy package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/_build/large_image_source_dummy/large_image_source_dummy.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="large-image-source-dummy-package">
+<h1>large_image_source_dummy package<a class="headerlink" href="#large-image-source-dummy-package" title="Link to this heading"></a></h1>
+<section id="module-large_image_source_dummy">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-large_image_source_dummy" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image_source_dummy.DummyTileSource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image_source_dummy.</span></span><span class="sig-name descname"><span class="pre">DummyTileSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dummy.html#DummyTileSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dummy.DummyTileSource" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../large_image/large_image.tilesource.html#large_image.tilesource.base.TileSource" title="large_image.tilesource.base.TileSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">TileSource</span></code></a></p>
+<p>Initialize the tile class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>jpegQuality</strong> – when serving jpegs, use this quality.</p></li>
+<li><p><strong>jpegSubsampling</strong> – when serving jpegs, use this subsampling (0 is
+full chroma, 1 is half, 2 is quarter).</p></li>
+<li><p><strong>encoding</strong> – ‘JPEG’, ‘PNG’, ‘TIFF’, or ‘TILED’.</p></li>
+<li><p><strong>edge</strong> – False to leave edge tiles whole, True or ‘crop’ to crop
+edge tiles, otherwise, an #rrggbb color to fill edges.</p></li>
+<li><p><strong>tiffCompression</strong> – the compression format to use when encoding a
+TIFF.</p></li>
+<li><p><strong>style</strong> – <p>if None, use the default style for the file.  Otherwise,
+this is a string with a json-encoded dictionary.  The style can
+contain the following keys:</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">band<span class="colon">:</span></dt>
+<dd class="field-odd"><p>if -1 or None, and if style is specified at all, the
+greyscale value is used.  Otherwise, a 1-based numerical
+index into the channels of the image or a string that
+matches the interpretation of the band (‘red’, ‘green’,
+‘blue’, ‘gray’, ‘alpha’).  Note that ‘gray’ on an RGB or
+RGBA image will use the green band.</p>
+</dd>
+<dt class="field-even">frame<span class="colon">:</span></dt>
+<dd class="field-even"><p>if specified, override the frame value for this band.
+When used as part of a bands list, this can be used to
+composite multiple frames together.  It is most efficient
+if at least one band either doesn’t specify a frame
+parameter or specifies the same frame value as the primary
+query.</p>
+</dd>
+<dt class="field-odd">framedelta<span class="colon">:</span></dt>
+<dd class="field-odd"><p>if specified and frame is not specified, override
+the frame value for this band by using the current frame
+plus this value.</p>
+</dd>
+<dt class="field-even">min<span class="colon">:</span></dt>
+<dd class="field-even"><p>the value to map to the first palette value.  Defaults to
+0.  ‘auto’ to use 0 if the reported minimum and maximum of
+the band are between [0, 255] or use the reported minimum
+otherwise.  ‘min’ or ‘max’ to always uses the reported
+minimum or maximum.  ‘full’ to always use 0.</p>
+</dd>
+<dt class="field-odd">max<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the value to map to the last palette value.  Defaults to
+255.  ‘auto’ to use 0 if the reported minimum and maximum
+of the band are between [0, 255] or use the reported
+maximum otherwise.  ‘min’ or ‘max’ to always uses the
+reported minimum or maximum.  ‘full’ to use the maximum
+value of the base data type (either 1, 255, or 65535).</p>
+</dd>
+<dt class="field-even">palette<span class="colon">:</span></dt>
+<dd class="field-even"><p>a single color string, a palette name, or a list of
+two or more color strings.  Color strings are of the form
+#RRGGBB, #RRGGBBAA, #RGB, #RGBA, or any string parseable by
+the PIL modules, or, if it is installed, by matplotlib.   A
+single color string is the same as the list [‘#000’,
+&lt;color&gt;].  Palette names are the name of a palettable
+palette or, if available, a matplotlib palette.</p>
+</dd>
+<dt class="field-odd">nodata<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the value to use for missing data.  null or unset to
+not use a nodata value.</p>
+</dd>
+<dt class="field-even">composite<span class="colon">:</span></dt>
+<dd class="field-even"><p>either ‘lighten’ or ‘multiply’.  Defaults to
+‘lighten’ for all except the alpha band.</p>
+</dd>
+<dt class="field-odd">clamp<span class="colon">:</span></dt>
+<dd class="field-odd"><p>either True to clamp (also called clip or crop) values
+outside of the [min, max] to the ends of the palette or
+False to make outside values transparent.</p>
+</dd>
+<dt class="field-even">dtype<span class="colon">:</span></dt>
+<dd class="field-even"><p>convert the results to the specified numpy dtype.
+Normally, if a style is applied, the results are
+intermediately a float numpy array with a value range of
+[0,255].  If this is ‘uint16’, it will be cast to that and
+multiplied by 65535/255.  If ‘float’, it will be divided by
+255.  If ‘source’, this uses the dtype of the source image.</p>
+</dd>
+<dt class="field-odd">axis<span class="colon">:</span></dt>
+<dd class="field-odd"><p>keep only the specified axis from the numpy intermediate
+results.  This can be used to extract a single channel
+after compositing.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Alternately, the style object can contain a single key of ‘bands’,
+which has a value which is a list of style dictionaries as above,
+excepting that each must have a band that is not -1.  Bands are
+composited in the order listed.  This base object may also contain
+the ‘dtype’ and ‘axis’ values.</p>
+</p></li>
+<li><p><strong>noCache</strong> – if True, the style can be adjusted dynamically and the
+source is not elibible for caching.  If there is no intention to
+reuse the source at a later time, this can have performance
+benefits, such as when first cataloging images that can be read.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dummy.DummyTileSource.canRead">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">canRead</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dummy.html#DummyTileSource.canRead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dummy.DummyTileSource.canRead" title="Link to this definition"></a></dt>
+<dd><p>Check if we can read the input.  This takes the same parameters as
+__init__.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if this class can read the input.  False if it cannot.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_dummy.DummyTileSource.extensions">
+<span class="sig-name descname"><span class="pre">extensions</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="../large_image/large_image.html#large_image.constants.SourcePriority" title="large_image.constants.SourcePriority"><span class="pre">SourcePriority</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{None:</span> <span class="pre">SourcePriority.MANUAL}</span></em><a class="headerlink" href="#large_image_source_dummy.DummyTileSource.extensions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_dummy.DummyTileSource.getTile">
+<span class="sig-name descname"><span class="pre">getTile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dummy.html#DummyTileSource.getTile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dummy.DummyTileSource.getTile" title="Link to this definition"></a></dt>
+<dd><p>Get a tile from a tile source, returning it as an binary image, a PIL
+image, or a numpy array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – the 0-based x position of the tile on the specified z level.
+0 is left.</p></li>
+<li><p><strong>y</strong> – the 0-based y position of the tile on the specified z level.
+0 is top.</p></li>
+<li><p><strong>z</strong> – the z level of the tile.  May range from [0, self.levels],
+where 0 is the lowest resolution, single tile for the whole source.</p></li>
+<li><p><strong>pilImageAllowed</strong> – True if a PIL image may be returned.</p></li>
+<li><p><strong>numpyAllowed</strong> – True if a numpy image may be returned.  ‘always’
+to return a numpy array.</p></li>
+<li><p><strong>sparseFallback</strong> – if False and a tile doesn’t exist, raise an
+error.  If True, check if a lower resolution tile exists, and, if
+so, interpolate the needed data for this tile.</p></li>
+<li><p><strong>frame</strong> – the frame number within the tile source.  None is the
+same as 0 for multi-frame sources.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>either a numpy array, a PIL image, or a memory object with an
+image file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_dummy.DummyTileSource.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'dummy'</span></em><a class="headerlink" href="#large_image_source_dummy.DummyTileSource.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_source_dummy.canRead">
+<span class="sig-prename descclassname"><span class="pre">large_image_source_dummy.</span></span><span class="sig-name descname"><span class="pre">canRead</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dummy.html#canRead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dummy.canRead" title="Link to this definition"></a></dt>
+<dd><p>Check if an input can be read by the module class.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_source_dummy.open">
+<span class="sig-prename descclassname"><span class="pre">large_image_source_dummy.</span></span><span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_dummy.html#open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_dummy.open" title="Link to this definition"></a></dt>
+<dd><p>Create an instance of the module class.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="large_image_source_dummy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../large_image_source_gdal/modules.html" class="btn btn-neutral float-right" title="large_image_source_gdal" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

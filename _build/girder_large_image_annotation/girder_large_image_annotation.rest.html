@@ -1,0 +1,310 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>girder_large_image_annotation.rest package &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="girder_large_image_annotation.utils package" href="girder_large_image_annotation.utils.html" />
+    <link rel="prev" title="girder_large_image_annotation.models package" href="girder_large_image_annotation.models.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../girder_index.html">Girder Integration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../girder_config_options.html">Girder Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../girder_annotation_config_options.html">Girder Annotation Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../girder_caching.html">Caching Large Image in Girder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dicomweb_assetstore.html">DICOMweb Assetstore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../plottable.html">Plottable Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../upgrade.html">Upgrading from Previous Versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../girder_large_image/modules.html">girder_large_image</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">girder_large_image_annotation</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="girder_large_image_annotation.html">girder_large_image_annotation package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="girder_large_image_annotation.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.html#module-girder_large_image_annotation.constants">girder_large_image_annotation.constants module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.html#module-girder_large_image_annotation.handlers">girder_large_image_annotation.handlers module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.html#module-girder_large_image_annotation">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../girder_index.html">Girder Integration</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">girder_large_image_annotation</a></li>
+          <li class="breadcrumb-item"><a href="girder_large_image_annotation.html">girder_large_image_annotation package</a></li>
+      <li class="breadcrumb-item active">girder_large_image_annotation.rest package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/_build/girder_large_image_annotation/girder_large_image_annotation.rest.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="girder-large-image-annotation-rest-package">
+<h1>girder_large_image_annotation.rest package<a class="headerlink" href="#girder-large-image-annotation-rest-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-girder_large_image_annotation.rest.annotation">
+<span id="girder-large-image-annotation-rest-annotation-module"></span><h2>girder_large_image_annotation.rest.annotation module<a class="headerlink" href="#module-girder_large_image_annotation.rest.annotation" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">girder_large_image_annotation.rest.annotation.</span></span><span class="sig-name descname"><span class="pre">AnnotationResource</span></span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Resource</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.canCreateFolderAnnotations">
+<span class="sig-name descname"><span class="pre">canCreateFolderAnnotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.canCreateFolderAnnotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.canCreateFolderAnnotations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.copyAnnotation">
+<span class="sig-name descname"><span class="pre">copyAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.copyAnnotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.copyAnnotation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.createAnnotation">
+<span class="sig-name descname"><span class="pre">createAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.createAnnotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.createAnnotation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.createItemAnnotations">
+<span class="sig-name descname"><span class="pre">createItemAnnotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotations</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.createItemAnnotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.createItemAnnotations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.deleteAnnotation">
+<span class="sig-name descname"><span class="pre">deleteAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.deleteAnnotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.deleteAnnotation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.deleteFolderAnnotations">
+<span class="sig-name descname"><span class="pre">deleteFolderAnnotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.deleteFolderAnnotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.deleteFolderAnnotations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.deleteItemAnnotations">
+<span class="sig-name descname"><span class="pre">deleteItemAnnotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.deleteItemAnnotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.deleteItemAnnotations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.deleteMetadata">
+<span class="sig-name descname"><span class="pre">deleteMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.deleteMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.deleteMetadata" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.deleteOldAnnotations">
+<span class="sig-name descname"><span class="pre">deleteOldAnnotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">age</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">versions</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.deleteOldAnnotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.deleteOldAnnotations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.existFolderAnnotations">
+<span class="sig-name descname"><span class="pre">existFolderAnnotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurse</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.existFolderAnnotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.existFolderAnnotations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.find">
+<span class="sig-name descname"><span class="pre">find</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.find"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.find" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.findAnnotatedImages">
+<span class="sig-name descname"><span class="pre">findAnnotatedImages</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.findAnnotatedImages"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.findAnnotatedImages" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.getAnnotation">
+<span class="sig-name descname"><span class="pre">getAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.getAnnotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.getAnnotation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.getAnnotationAccess">
+<span class="sig-name descname"><span class="pre">getAnnotationAccess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.getAnnotationAccess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.getAnnotationAccess" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.getAnnotationHistory">
+<span class="sig-name descname"><span class="pre">getAnnotationHistory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.getAnnotationHistory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.getAnnotationHistory" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.getAnnotationHistoryList">
+<span class="sig-name descname"><span class="pre">getAnnotationHistoryList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.getAnnotationHistoryList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.getAnnotationHistoryList" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.getAnnotationSchema">
+<span class="sig-name descname"><span class="pre">getAnnotationSchema</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.getAnnotationSchema"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.getAnnotationSchema" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.getAnnotationWithFormat">
+<span class="sig-name descname"><span class="pre">getAnnotationWithFormat</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.getAnnotationWithFormat"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.getAnnotationWithFormat" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.getFolderAnnotations">
+<span class="sig-name descname"><span class="pre">getFolderAnnotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sortDir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">count</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.getFolderAnnotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.getFolderAnnotations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.getItemAnnotations">
+<span class="sig-name descname"><span class="pre">getItemAnnotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.getItemAnnotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.getItemAnnotations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.getItemListAnnotationCounts">
+<span class="sig-name descname"><span class="pre">getItemListAnnotationCounts</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">items</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.getItemListAnnotationCounts"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.getItemListAnnotationCounts" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.getItemPlottableData">
+<span class="sig-name descname"><span class="pre">getItemPlottableData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjacentItems</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requiredKeys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uuid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.getItemPlottableData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.getItemPlottableData" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.getItemPlottableElements">
+<span class="sig-name descname"><span class="pre">getItemPlottableElements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotations</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjacentItems</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uuid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.getItemPlottableElements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.getItemPlottableElements" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.getOldAnnotations">
+<span class="sig-name descname"><span class="pre">getOldAnnotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">age</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">versions</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.getOldAnnotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.getOldAnnotations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.returnFolderAnnotations">
+<span class="sig-name descname"><span class="pre">returnFolderAnnotations</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recurse</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.returnFolderAnnotations"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.returnFolderAnnotations" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.revertAnnotationHistory">
+<span class="sig-name descname"><span class="pre">revertAnnotationHistory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">version</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.revertAnnotationHistory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.revertAnnotationHistory" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.setFolderAnnotationAccess">
+<span class="sig-name descname"><span class="pre">setFolderAnnotationAccess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.setFolderAnnotationAccess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.setFolderAnnotationAccess" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.setMetadata">
+<span class="sig-name descname"><span class="pre">setMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowNull</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.setMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.setMetadata" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.updateAnnotation">
+<span class="sig-name descname"><span class="pre">updateAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.updateAnnotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.updateAnnotation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.rest.annotation.AnnotationResource.updateAnnotationAccess">
+<span class="sig-name descname"><span class="pre">updateAnnotationAccess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">params</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/rest/annotation.html#AnnotationResource.updateAnnotationAccess"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.rest.annotation.AnnotationResource.updateAnnotationAccess" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-girder_large_image_annotation.rest">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-girder_large_image_annotation.rest" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="girder_large_image_annotation.models.html" class="btn btn-neutral float-left" title="girder_large_image_annotation.models package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="girder_large_image_annotation.utils.html" class="btn btn-neutral float-right" title="girder_large_image_annotation.utils package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

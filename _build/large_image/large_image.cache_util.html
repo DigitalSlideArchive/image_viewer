@@ -1,0 +1,614 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image.cache_util package &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="large_image.tilesource package" href="large_image.tilesource.html" />
+    <link rel="prev" title="large_image package" href="large_image.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../api_index.html">API Documentation</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">large_image</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="large_image.html">large_image package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="large_image.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.html#module-large_image.config">large_image.config module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.html#module-large_image.constants">large_image.constants module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.html#module-large_image.exceptions">large_image.exceptions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="large_image.html#module-large_image">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_bioformats/modules.html">large_image_source_bioformats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_deepzoom/modules.html">large_image_source_deepzoom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_dicom/modules.html">large_image_source_dicom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_dummy/modules.html">large_image_source_dummy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_gdal/modules.html">large_image_source_gdal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_mapnik/modules.html">large_image_source_mapnik</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_multi/modules.html">large_image_source_multi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_nd2/modules.html">large_image_source_nd2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_ometiff/modules.html">large_image_source_ometiff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_openjpeg/modules.html">large_image_source_openjpeg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_openslide/modules.html">large_image_source_openslide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_pil/modules.html">large_image_source_pil</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_rasterio/modules.html">large_image_source_rasterio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_test/modules.html">large_image_source_test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_tiff/modules.html">large_image_source_tiff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_tifffile/modules.html">large_image_source_tifffile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_vips/modules.html">large_image_source_vips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_zarr/modules.html">large_image_source_zarr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_converter/modules.html">large_image_converter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_tasks/modules.html">large_image_tasks</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../api_index.html">API Documentation</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">large_image</a></li>
+          <li class="breadcrumb-item"><a href="large_image.html">large_image package</a></li>
+      <li class="breadcrumb-item active">large_image.cache_util package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/_build/large_image/large_image.cache_util.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="large-image-cache-util-package">
+<h1>large_image.cache_util package<a class="headerlink" href="#large-image-cache-util-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-large_image.cache_util.base">
+<span id="large-image-cache-util-base-module"></span><h2>large_image.cache_util.base module<a class="headerlink" href="#module-large_image.cache_util.base" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image.cache_util.base.BaseCache">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.cache_util.base.</span></span><span class="sig-name descname"><span class="pre">BaseCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maxsize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getsizeof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">_VT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image/cache_util/base.html#BaseCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.base.BaseCache" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Cache</span></code></p>
+<p>Base interface to cachetools.Cache for use with large-image.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image.cache_util.base.BaseCache.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None.</span>&#160; <span class="pre">Remove</span> <span class="pre">all</span> <span class="pre">items</span> <span class="pre">from</span> <span class="pre">D.</span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/base.html#BaseCache.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.base.BaseCache.clear" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image.cache_util.base.BaseCache.curritems">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">curritems</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image.cache_util.base.BaseCache.curritems" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image.cache_util.base.BaseCache.currsize">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">currsize</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image.cache_util.base.BaseCache.currsize" title="Link to this definition"></a></dt>
+<dd><p>The current size of the cache.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image.cache_util.base.BaseCache.getCache">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getCache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#large_image.cache_util.base.BaseCache" title="large_image.cache_util.base.BaseCache"><span class="pre">BaseCache</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">allocate_lock</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/base.html#BaseCache.getCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.base.BaseCache.getCache" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image.cache_util.base.BaseCache.logError">
+<span class="sig-name descname"><span class="pre">logError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">err</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/base.html#BaseCache.logError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.base.BaseCache.logError" title="Link to this definition"></a></dt>
+<dd><p>Log errors, but throttle them so as not to spam the logs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>err</strong> – error to log.</p></li>
+<li><p><strong>func</strong> – function to use for logging.  This is something like
+logprint.exception or logger.error.</p></li>
+<li><p><strong>msg</strong> – the message to log.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image.cache_util.base.BaseCache.maxsize">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maxsize</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image.cache_util.base.BaseCache.maxsize" title="Link to this definition"></a></dt>
+<dd><p>The maximum size of the cache.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-large_image.cache_util.cache">
+<span id="large-image-cache-util-cache-module"></span><h2>large_image.cache_util.cache module<a class="headerlink" href="#module-large_image.cache_util.cache" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image.cache_util.cache.LruCacheMetaclass">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.cache_util.cache.</span></span><span class="sig-name descname"><span class="pre">LruCacheMetaclass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image/cache_util/cache.html#LruCacheMetaclass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.cache.LruCacheMetaclass" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.cache_util.cache.LruCacheMetaclass.classCaches">
+<span class="sig-name descname"><span class="pre">classCaches</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">type</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#large_image.cache_util.cache.LruCacheMetaclass.classCaches" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.cache_util.cache.LruCacheMetaclass.namedCaches">
+<span class="sig-name descname"><span class="pre">namedCaches</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#large_image.cache_util.cache.LruCacheMetaclass.namedCaches" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image.cache_util.cache.getTileCache">
+<span class="sig-prename descclassname"><span class="pre">large_image.cache_util.cache.</span></span><span class="sig-name descname"><span class="pre">getTileCache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Cache</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">allocate_lock</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/cache.html#getTileCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.cache.getTileCache" title="Link to this definition"></a></dt>
+<dd><p>Get the preferred tile cache and lock.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tileCache and tileLock.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image.cache_util.cache.isTileCacheSetup">
+<span class="sig-prename descclassname"><span class="pre">large_image.cache_util.cache.</span></span><span class="sig-name descname"><span class="pre">isTileCacheSetup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/cache.html#isTileCacheSetup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.cache.isTileCacheSetup" title="Link to this definition"></a></dt>
+<dd><p>Return True if the tile cache has been created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if _tileCache is not None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image.cache_util.cache.methodcache">
+<span class="sig-prename descclassname"><span class="pre">large_image.cache_util.cache.</span></span><span class="sig-name descname"><span class="pre">methodcache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/cache.html#methodcache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.cache.methodcache" title="Link to this definition"></a></dt>
+<dd><p>Decorator to wrap a function with a memoizing callable that saves results
+in self.cache.  This is largely taken from cachetools, but uses a cache
+from self.cache rather than a passed value.  If self.cache_lock is
+present and not none, a lock is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> – if a function, use that for the key, otherwise use self.wrapKey.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image.cache_util.cache.strhash">
+<span class="sig-prename descclassname"><span class="pre">large_image.cache_util.cache.</span></span><span class="sig-name descname"><span class="pre">strhash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/cache.html#strhash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.cache.strhash" title="Link to this definition"></a></dt>
+<dd><p>Generate a string hash value for an arbitrary set of args and kwargs.  This
+relies on the repr of each element.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – arbitrary tuple of args.</p></li>
+<li><p><strong>kwargs</strong> – arbitrary dictionary of kwargs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>hashed string of the arguments.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-large_image.cache_util.cachefactory">
+<span id="large-image-cache-util-cachefactory-module"></span><h2>large_image.cache_util.cachefactory module<a class="headerlink" href="#module-large_image.cache_util.cachefactory" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image.cache_util.cachefactory.CacheFactory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.cache_util.cachefactory.</span></span><span class="sig-name descname"><span class="pre">CacheFactory</span></span><a class="reference internal" href="../../_modules/large_image/cache_util/cachefactory.html#CacheFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.cachefactory.CacheFactory" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image.cache_util.cachefactory.CacheFactory.getCache">
+<span class="sig-name descname"><span class="pre">getCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numItems</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cacheName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inProcess</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Cache</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">allocate_lock</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/cachefactory.html#CacheFactory.getCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.cachefactory.CacheFactory.getCache" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image.cache_util.cachefactory.CacheFactory.getCacheSize">
+<span class="sig-name descname"><span class="pre">getCacheSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numItems</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cacheName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/cachefactory.html#CacheFactory.getCacheSize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.cachefactory.CacheFactory.getCacheSize" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.cache_util.cachefactory.CacheFactory.logged">
+<span class="sig-name descname"><span class="pre">logged</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#large_image.cache_util.cachefactory.CacheFactory.logged" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image.cache_util.cachefactory.getFirstAvailableCache">
+<span class="sig-prename descclassname"><span class="pre">large_image.cache_util.cachefactory.</span></span><span class="sig-name descname"><span class="pre">getFirstAvailableCache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Cache</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">allocate_lock</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/cachefactory.html#getFirstAvailableCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.cachefactory.getFirstAvailableCache" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image.cache_util.cachefactory.loadCaches">
+<span class="sig-prename descclassname"><span class="pre">large_image.cache_util.cachefactory.</span></span><span class="sig-name descname"><span class="pre">loadCaches</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entryPointName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'large_image.cache'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sourceDict</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Cache</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/cachefactory.html#loadCaches"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.cachefactory.loadCaches" title="Link to this definition"></a></dt>
+<dd><p>Load all caches from entrypoints and add them to the
+availableCaches dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entryPointName</strong> – the name of the entry points to load.</p></li>
+<li><p><strong>sourceDict</strong> – a dictionary to populate with the loaded caches.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image.cache_util.cachefactory.pickAvailableCache">
+<span class="sig-prename descclassname"><span class="pre">large_image.cache_util.cachefactory.</span></span><span class="sig-name descname"><span class="pre">pickAvailableCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sizeEach</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">portion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxItems</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cacheName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/cachefactory.html#pickAvailableCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.cachefactory.pickAvailableCache" title="Link to this definition"></a></dt>
+<dd><p>Given an estimated size of an item, return how many of those items would
+fit in a fixed portion of the available virtual memory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sizeEach</strong> – the expected size of an item that could be cached.</p></li>
+<li><p><strong>portion</strong> – the inverse fraction of the memory which can be used.</p></li>
+<li><p><strong>maxItems</strong> – if specified, the number of items is never more than this
+value.</p></li>
+<li><p><strong>cacheName</strong> – if specified, the portion can be affected by the
+configuration.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the number of items that should be cached.  Always at least two,
+unless maxItems is less.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-large_image.cache_util.memcache">
+<span id="large-image-cache-util-memcache-module"></span><h2>large_image.cache_util.memcache module<a class="headerlink" href="#module-large_image.cache_util.memcache" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image.cache_util.memcache.MemCache">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.cache_util.memcache.</span></span><span class="sig-name descname"><span class="pre">MemCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getsizeof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">_VT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mustBeAvailable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image/cache_util/memcache.html#MemCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.memcache.MemCache" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#large_image.cache_util.base.BaseCache" title="large_image.cache_util.base.BaseCache"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseCache</span></code></a></p>
+<p>Use memcached as the backing cache.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image.cache_util.memcache.MemCache.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None.</span>&#160; <span class="pre">Remove</span> <span class="pre">all</span> <span class="pre">items</span> <span class="pre">from</span> <span class="pre">D.</span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/memcache.html#MemCache.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.memcache.MemCache.clear" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image.cache_util.memcache.MemCache.curritems">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">curritems</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image.cache_util.memcache.MemCache.curritems" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image.cache_util.memcache.MemCache.currsize">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">currsize</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image.cache_util.memcache.MemCache.currsize" title="Link to this definition"></a></dt>
+<dd><p>The current size of the cache.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image.cache_util.memcache.MemCache.getCache">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getCache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#large_image.cache_util.memcache.MemCache" title="large_image.cache_util.memcache.MemCache"><span class="pre">MemCache</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">allocate_lock</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/memcache.html#MemCache.getCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.memcache.MemCache.getCache" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image.cache_util.memcache.MemCache.maxsize">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maxsize</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image.cache_util.memcache.MemCache.maxsize" title="Link to this definition"></a></dt>
+<dd><p>The maximum size of the cache.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-large_image.cache_util.rediscache">
+<span id="large-image-cache-util-rediscache-module"></span><h2>large_image.cache_util.rediscache module<a class="headerlink" href="#module-large_image.cache_util.rediscache" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image.cache_util.rediscache.RedisCache">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.cache_util.rediscache.</span></span><span class="sig-name descname"><span class="pre">RedisCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'127.0.0.1:6379'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getsizeof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">_VT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mustBeAvailable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image/cache_util/rediscache.html#RedisCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.rediscache.RedisCache" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#large_image.cache_util.base.BaseCache" title="large_image.cache_util.base.BaseCache"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseCache</span></code></a></p>
+<p>Use redis as the backing cache.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image.cache_util.rediscache.RedisCache.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None.</span>&#160; <span class="pre">Remove</span> <span class="pre">all</span> <span class="pre">items</span> <span class="pre">from</span> <span class="pre">D.</span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/rediscache.html#RedisCache.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.rediscache.RedisCache.clear" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image.cache_util.rediscache.RedisCache.curritems">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">curritems</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image.cache_util.rediscache.RedisCache.curritems" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image.cache_util.rediscache.RedisCache.currsize">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">currsize</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image.cache_util.rediscache.RedisCache.currsize" title="Link to this definition"></a></dt>
+<dd><p>The current size of the cache.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image.cache_util.rediscache.RedisCache.getCache">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getCache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#large_image.cache_util.rediscache.RedisCache" title="large_image.cache_util.rediscache.RedisCache"><span class="pre">RedisCache</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">allocate_lock</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/rediscache.html#RedisCache.getCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.rediscache.RedisCache.getCache" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image.cache_util.rediscache.RedisCache.maxsize">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maxsize</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image.cache_util.rediscache.RedisCache.maxsize" title="Link to this definition"></a></dt>
+<dd><p>The maximum size of the cache.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-large_image.cache_util">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-large_image.cache_util" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image.cache_util.CacheFactory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.cache_util.</span></span><span class="sig-name descname"><span class="pre">CacheFactory</span></span><a class="reference internal" href="../../_modules/large_image/cache_util/cachefactory.html#CacheFactory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.CacheFactory" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image.cache_util.CacheFactory.getCache">
+<span class="sig-name descname"><span class="pre">getCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numItems</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cacheName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inProcess</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Cache</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">allocate_lock</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/cachefactory.html#CacheFactory.getCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.CacheFactory.getCache" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image.cache_util.CacheFactory.getCacheSize">
+<span class="sig-name descname"><span class="pre">getCacheSize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numItems</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cacheName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/cachefactory.html#CacheFactory.getCacheSize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.CacheFactory.getCacheSize" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.cache_util.CacheFactory.logged">
+<span class="sig-name descname"><span class="pre">logged</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#large_image.cache_util.CacheFactory.logged" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image.cache_util.LruCacheMetaclass">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.cache_util.</span></span><span class="sig-name descname"><span class="pre">LruCacheMetaclass</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bases</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">namespace</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image/cache_util/cache.html#LruCacheMetaclass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.LruCacheMetaclass" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">type</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.cache_util.LruCacheMetaclass.classCaches">
+<span class="sig-name descname"><span class="pre">classCaches</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">type</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#large_image.cache_util.LruCacheMetaclass.classCaches" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image.cache_util.LruCacheMetaclass.namedCaches">
+<span class="sig-name descname"><span class="pre">namedCaches</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#large_image.cache_util.LruCacheMetaclass.namedCaches" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image.cache_util.MemCache">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.cache_util.</span></span><span class="sig-name descname"><span class="pre">MemCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'127.0.0.1'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getsizeof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">_VT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mustBeAvailable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image/cache_util/memcache.html#MemCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.MemCache" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#large_image.cache_util.base.BaseCache" title="large_image.cache_util.base.BaseCache"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseCache</span></code></a></p>
+<p>Use memcached as the backing cache.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image.cache_util.MemCache.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None.</span>&#160; <span class="pre">Remove</span> <span class="pre">all</span> <span class="pre">items</span> <span class="pre">from</span> <span class="pre">D.</span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/memcache.html#MemCache.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.MemCache.clear" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image.cache_util.MemCache.curritems">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">curritems</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image.cache_util.MemCache.curritems" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image.cache_util.MemCache.currsize">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">currsize</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image.cache_util.MemCache.currsize" title="Link to this definition"></a></dt>
+<dd><p>The current size of the cache.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image.cache_util.MemCache.getCache">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getCache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#large_image.cache_util.memcache.MemCache" title="large_image.cache_util.memcache.MemCache"><span class="pre">MemCache</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">allocate_lock</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/memcache.html#MemCache.getCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.MemCache.getCache" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image.cache_util.MemCache.maxsize">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maxsize</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image.cache_util.MemCache.maxsize" title="Link to this definition"></a></dt>
+<dd><p>The maximum size of the cache.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image.cache_util.RedisCache">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image.cache_util.</span></span><span class="sig-name descname"><span class="pre">RedisCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'127.0.0.1:6379'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">getsizeof</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">_VT</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mustBeAvailable</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image/cache_util/rediscache.html#RedisCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.RedisCache" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#large_image.cache_util.base.BaseCache" title="large_image.cache_util.base.BaseCache"><code class="xref py py-class docutils literal notranslate"><span class="pre">BaseCache</span></code></a></p>
+<p>Use redis as the backing cache.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image.cache_util.RedisCache.clear">
+<span class="sig-name descname"><span class="pre">clear</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None.</span>&#160; <span class="pre">Remove</span> <span class="pre">all</span> <span class="pre">items</span> <span class="pre">from</span> <span class="pre">D.</span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/rediscache.html#RedisCache.clear"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.RedisCache.clear" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image.cache_util.RedisCache.curritems">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">curritems</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image.cache_util.RedisCache.curritems" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image.cache_util.RedisCache.currsize">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">currsize</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image.cache_util.RedisCache.currsize" title="Link to this definition"></a></dt>
+<dd><p>The current size of the cache.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image.cache_util.RedisCache.getCache">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getCache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#large_image.cache_util.rediscache.RedisCache" title="large_image.cache_util.rediscache.RedisCache"><span class="pre">RedisCache</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">allocate_lock</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/rediscache.html#RedisCache.getCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.RedisCache.getCache" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="large_image.cache_util.RedisCache.maxsize">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">maxsize</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image.cache_util.RedisCache.maxsize" title="Link to this definition"></a></dt>
+<dd><p>The maximum size of the cache.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image.cache_util.getTileCache">
+<span class="sig-prename descclassname"><span class="pre">large_image.cache_util.</span></span><span class="sig-name descname"><span class="pre">getTileCache</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Cache</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">allocate_lock</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/cache.html#getTileCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.getTileCache" title="Link to this definition"></a></dt>
+<dd><p>Get the preferred tile cache and lock.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tileCache and tileLock.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image.cache_util.isTileCacheSetup">
+<span class="sig-prename descclassname"><span class="pre">large_image.cache_util.</span></span><span class="sig-name descname"><span class="pre">isTileCacheSetup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/cache.html#isTileCacheSetup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.isTileCacheSetup" title="Link to this definition"></a></dt>
+<dd><p>Return True if the tile cache has been created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if _tileCache is not None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image.cache_util.methodcache">
+<span class="sig-prename descclassname"><span class="pre">large_image.cache_util.</span></span><span class="sig-name descname"><span class="pre">methodcache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/cache.html#methodcache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.methodcache" title="Link to this definition"></a></dt>
+<dd><p>Decorator to wrap a function with a memoizing callable that saves results
+in self.cache.  This is largely taken from cachetools, but uses a cache
+from self.cache rather than a passed value.  If self.cache_lock is
+present and not none, a lock is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>key</strong> – if a function, use that for the key, otherwise use self.wrapKey.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image.cache_util.pickAvailableCache">
+<span class="sig-prename descclassname"><span class="pre">large_image.cache_util.</span></span><span class="sig-name descname"><span class="pre">pickAvailableCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sizeEach</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">portion</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxItems</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cacheName</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/cachefactory.html#pickAvailableCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.pickAvailableCache" title="Link to this definition"></a></dt>
+<dd><p>Given an estimated size of an item, return how many of those items would
+fit in a fixed portion of the available virtual memory.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>sizeEach</strong> – the expected size of an item that could be cached.</p></li>
+<li><p><strong>portion</strong> – the inverse fraction of the memory which can be used.</p></li>
+<li><p><strong>maxItems</strong> – if specified, the number of items is never more than this
+value.</p></li>
+<li><p><strong>cacheName</strong> – if specified, the portion can be affected by the
+configuration.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the number of items that should be cached.  Always at least two,
+unless maxItems is less.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image.cache_util.strhash">
+<span class="sig-prename descclassname"><span class="pre">large_image.cache_util.</span></span><span class="sig-name descname"><span class="pre">strhash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../_modules/large_image/cache_util/cache.html#strhash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image.cache_util.strhash" title="Link to this definition"></a></dt>
+<dd><p>Generate a string hash value for an arbitrary set of args and kwargs.  This
+relies on the repr of each element.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – arbitrary tuple of args.</p></li>
+<li><p><strong>kwargs</strong> – arbitrary dictionary of kwargs.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>hashed string of the arguments.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="large_image.html" class="btn btn-neutral float-left" title="large_image package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="large_image.tilesource.html" class="btn btn-neutral float-right" title="large_image.tilesource package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

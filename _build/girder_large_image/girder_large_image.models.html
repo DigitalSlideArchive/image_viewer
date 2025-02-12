@@ -1,0 +1,409 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>girder_large_image.models package &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="girder_large_image.rest package" href="girder_large_image.rest.html" />
+    <link rel="prev" title="girder_large_image package" href="girder_large_image.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../girder_index.html">Girder Integration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../girder_config_options.html">Girder Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../girder_annotation_config_options.html">Girder Annotation Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../girder_caching.html">Caching Large Image in Girder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dicomweb_assetstore.html">DICOMweb Assetstore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../plottable.html">Plottable Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../upgrade.html">Upgrading from Previous Versions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">girder_large_image</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="girder_large_image.html">girder_large_image package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="girder_large_image.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#module-girder_large_image.constants">girder_large_image.constants module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#module-girder_large_image.girder_tilesource">girder_large_image.girder_tilesource module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#module-girder_large_image.loadmodelcache">girder_large_image.loadmodelcache module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.html#module-girder_large_image">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../girder_large_image_annotation/modules.html">girder_large_image_annotation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../girder_index.html">Girder Integration</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">girder_large_image</a></li>
+          <li class="breadcrumb-item"><a href="girder_large_image.html">girder_large_image package</a></li>
+      <li class="breadcrumb-item active">girder_large_image.models package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/_build/girder_large_image/girder_large_image.models.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="girder-large-image-models-package">
+<h1>girder_large_image.models package<a class="headerlink" href="#girder-large-image-models-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-girder_large_image.models.image_item">
+<span id="girder-large-image-models-image-item-module"></span><h2>girder_large_image.models.image_item module<a class="headerlink" href="#module-girder_large_image.models.image_item" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">girder_large_image.models.image_item.</span></span><span class="sig-name descname"><span class="pre">ImageItem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Item</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem.convertImage">
+<span class="sig-name descname"><span class="pre">convertImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fileObj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">localJob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem.convertImage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem.convertImage" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem.createImageItem">
+<span class="sig-name descname"><span class="pre">createImageItem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fileObj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">createJob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notify</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">localJob</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem.createImageItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem.createImageItem" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem.delete">
+<span class="sig-name descname"><span class="pre">delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skipFileIds</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem.delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem.delete" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem.getAndCacheImageOrDataRun">
+<span class="sig-name descname"><span class="pre">getAndCacheImageOrDataRun</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">checkAndCreate</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imageFunc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keydict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pickleCache</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lockkey</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem.getAndCacheImageOrDataRun"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem.getAndCacheImageOrDataRun" title="Link to this definition"></a></dt>
+<dd><p>Actually execute a cached function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem.getAssociatedImage">
+<span class="sig-name descname"><span class="pre">getAssociatedImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imageKey</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkAndCreate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem.getAssociatedImage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem.getAssociatedImage" title="Link to this definition"></a></dt>
+<dd><p>Return an associated image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> – the item with the tile source.</p></li>
+<li><p><strong>imageKey</strong> – the key of the associated image to retrieve.</p></li>
+<li><p><strong>kwargs</strong> – optional arguments.  Some options are width, height,
+encoding, jpegQuality, jpegSubsampling, and tiffCompression.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>imageData, imageMime: the image data and the mime type, or
+None if the associated image doesn’t exist.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem.getAssociatedImagesList">
+<span class="sig-name descname"><span class="pre">getAssociatedImagesList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem.getAssociatedImagesList"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem.getAssociatedImagesList" title="Link to this definition"></a></dt>
+<dd><p>Return a list of associated images.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>item</strong> – the item with the tile source.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a list of keys of associated images.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem.getBandInformation">
+<span class="sig-name descname"><span class="pre">getBandInformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">statistics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem.getBandInformation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem.getBandInformation" title="Link to this definition"></a></dt>
+<dd><p>Using a tile source, get band information of the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> – the item with the tile source.</p></li>
+<li><p><strong>kwargs</strong> – optional arguments.  See the tilesource
+getBandInformation method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>band information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem.getInternalMetadata">
+<span class="sig-name descname"><span class="pre">getInternalMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem.getInternalMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem.getInternalMetadata" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem.getMetadata">
+<span class="sig-name descname"><span class="pre">getMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem.getMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem.getMetadata" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem.getPixel">
+<span class="sig-name descname"><span class="pre">getPixel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem.getPixel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem.getPixel" title="Link to this definition"></a></dt>
+<dd><p>Using a tile source, get a single pixel from the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> – the item with the tile source.</p></li>
+<li><p><strong>kwargs</strong> – optional arguments.  Some options are left, top.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a dictionary of the color channel values, possibly with
+additional information</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem.getRegion">
+<span class="sig-name descname"><span class="pre">getRegion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem.getRegion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem.getRegion" title="Link to this definition"></a></dt>
+<dd><p>Using a tile source, get an arbitrary region of the image, optionally
+scaling the results.  Aspect ratio is preserved.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> – the item with the tile source.</p></li>
+<li><p><strong>kwargs</strong> – optional arguments.  Some options are left, top,
+right, bottom, regionWidth, regionHeight, units, width, height,
+encoding, jpegQuality, jpegSubsampling, and tiffCompression.  This
+is also passed to the tile source.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>regionData, regionMime: the image data and the mime type.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem.getThumbnail">
+<span class="sig-name descname"><span class="pre">getThumbnail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkAndCreate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem.getThumbnail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem.getThumbnail" title="Link to this definition"></a></dt>
+<dd><p>Using a tile source, get a basic thumbnail.  Aspect ratio is
+preserved.  If neither width nor height is given, a default value is
+used.  If both are given, the thumbnail will be no larger than either
+size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> – the item with the tile source.</p></li>
+<li><p><strong>checkAndCreate</strong> – if the thumbnail is already cached, just return
+True.  If it does not, create, cache, and return it.  If ‘nosave’,
+return values from the cache, but do not store new results in the
+cache.</p></li>
+<li><p><strong>width</strong> – maximum width in pixels.</p></li>
+<li><p><strong>height</strong> – maximum height in pixels.</p></li>
+<li><p><strong>kwargs</strong> – optional arguments.  Some options are encoding,
+jpegQuality, jpegSubsampling, tiffCompression, fill.  This is also
+passed to the tile source.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>thumbData, thumbMime: the image data and the mime type OR
+a generator which will yield a file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem.getTile">
+<span class="sig-name descname"><span class="pre">getTile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mayRedirect</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem.getTile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem.getTile" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem.histogram">
+<span class="sig-name descname"><span class="pre">histogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkAndCreate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem.histogram"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem.histogram" title="Link to this definition"></a></dt>
+<dd><p>Using a tile source, get a histogram of the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> – the item with the tile source.</p></li>
+<li><p><strong>kwargs</strong> – optional arguments.  See the tilesource histogram
+method.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>histogram object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem.initialize">
+<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem.initialize"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem.initialize" title="Link to this definition"></a></dt>
+<dd><p>Subclasses should override this and set the name of the collection as
+self.name. Also, they should set any indexed fields that they require.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem.removeThumbnailFiles">
+<span class="sig-name descname"><span class="pre">removeThumbnailFiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imageKey</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onlyList</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem.removeThumbnailFiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem.removeThumbnailFiles" title="Link to this definition"></a></dt>
+<dd><p>Remove all large image thumbnails from an item.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> – the item that owns the thumbnails.</p></li>
+<li><p><strong>keep</strong> – keep this many entries.</p></li>
+<li><p><strong>sort</strong> – the sort method used.  The first (keep) records in this
+sort order are kept.</p></li>
+<li><p><strong>imageKey</strong> – None for the basic thumbnail, otherwise an associated
+imageKey.</p></li>
+<li><p><strong>onlyList</strong> – if True, return a list of known thumbnails or data
+files that would be removed, but don’t remove them.</p></li>
+<li><p><strong>kwargs</strong> – additional parameters to determine which files to
+remove.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a tuple of (the number of files before removal, the number of
+files removed).</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem.tileFrames">
+<span class="sig-name descname"><span class="pre">tileFrames</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">checkAndCreate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'nosave'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem.tileFrames"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem.tileFrames" title="Link to this definition"></a></dt>
+<dd><p>Given the parameters for getRegion, plus a list of frames and the
+number of frames across, make a larger image composed of a region from
+each listed frame composited together.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> – the item with the tile source.</p></li>
+<li><p><strong>checkAndCreate</strong> – if False, use the cache.  If True and the result
+is already cached, just return True.  If is not, create, cache, and
+return it.  If ‘nosave’, return values from the cache, but do not
+store new results in the cache.</p></li>
+<li><p><strong>kwargs</strong> – optional arguments.  Some options are left, top,
+right, bottom, regionWidth, regionHeight, units, width, height,
+encoding, jpegQuality, jpegSubsampling, and tiffCompression.  This
+is also passed to the tile source.  These also include frameList
+and framesAcross.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>regionData, regionMime: the image data and the mime type.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.models.image_item.ImageItem.tileSource">
+<span class="sig-name descname"><span class="pre">tileSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/models/image_item.html#ImageItem.tileSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.models.image_item.ImageItem.tileSource" title="Link to this definition"></a></dt>
+<dd><p>Get a tile source for an item.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>item</strong> – the item with the tile source.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>magnification, width of a pixel in mm, height of a pixel in mm.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-girder_large_image.models">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-girder_large_image.models" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="girder_large_image.html" class="btn btn-neutral float-left" title="girder_large_image package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="girder_large_image.rest.html" class="btn btn-neutral float-right" title="girder_large_image.rest package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

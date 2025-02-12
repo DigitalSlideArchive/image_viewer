@@ -1,0 +1,10 @@
+girder\_large\_image\_annotation.utils package
+==============================================
+
+Module contents
+---------------
+
+.. automodule:: girder_large_image_annotation.utils
+   :members:
+   :undoc-members:
+   :show-inheritance:

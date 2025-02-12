@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_tasks.tasks &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../large_image_tasks.html">large_image_tasks</a></li>
+      <li class="breadcrumb-item active">large_image_tasks.tasks</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image_tasks.tasks</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder_worker.app</span><span class="w"> </span><span class="kn">import</span> <span class="n">app</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder_worker.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">girder_job</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<span class="nd">@girder_job</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Create a pyramidal tiff using vips&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;large_image_tiff&#39;</span><span class="p">)</span>
+<span class="nd">@app</span><span class="o">.</span><span class="n">task</span><span class="p">(</span><span class="n">bind</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">create_tiff</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inputFile</span><span class="p">,</span> <span class="n">outputName</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">outputDir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="mi">90</span><span class="p">,</span>
+                <span class="n">tileSize</span><span class="o">=</span><span class="mi">256</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Take a source input file, readable by vips, and output a pyramidal tiff</span>
+<span class="sd">    file.</span>
+
+<span class="sd">    :param inputFile: the path to the input file or base file of a set.</span>
+<span class="sd">    :param outputName: the name of the output file.  If None, the name is</span>
+<span class="sd">        based on the input name and current date and time.  May be a full path.</span>
+<span class="sd">    :param outputDir: the location to store the output.  If unspecified, the</span>
+<span class="sd">        inputFile&#39;s directory is used.  If the outputName is a fully qualified</span>
+<span class="sd">        path, this is ignored.</span>
+<span class="sd">    :param quality: a jpeg quality passed to vips.  0 is small, 100 is high</span>
+<span class="sd">        quality.  90 or above is recommended.</span>
+<span class="sd">    :param tileSize: the horizontal and vertical tile size.</span>
+<span class="sd">    Optional parameters that can be specified in kwargs:</span>
+<span class="sd">    :param compression: one of &#39;jpeg&#39;, &#39;deflate&#39; (zip), &#39;lzw&#39;, &#39;packbits&#39;, or</span>
+<span class="sd">        &#39;zstd&#39;.</span>
+<span class="sd">    :param level: compression level for zstd, 1-22 (default is 10).</span>
+<span class="sd">    :param predictor: one of &#39;none&#39;, &#39;horizontal&#39;, or &#39;float&#39; used for lzw and</span>
+<span class="sd">        deflate.</span>
+<span class="sd">    :param inputName: if no output name is specified, and this is specified,</span>
+<span class="sd">        this is used as the basis of the output name instead of extracting the</span>
+<span class="sd">        name from the inputFile path.</span>
+<span class="sd">    :returns: output path.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">large_image_converter</span>
+
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;large-image-converter&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">logger</span><span class="o">.</span><span class="n">handlers</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">))</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">logger</span><span class="o">.</span><span class="n">level</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s1">&#39;_concurrency&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+        <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;_concurrency&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span>
+    <span class="n">inputPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">inputFile</span><span class="p">))</span>
+    <span class="n">geospatial</span> <span class="o">=</span> <span class="n">large_image_converter</span><span class="o">.</span><span class="n">is_geospatial</span><span class="p">(</span><span class="n">inputPath</span><span class="p">)</span>
+    <span class="n">inputName</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;inputName&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">inputPath</span><span class="p">))</span>
+    <span class="n">suffix</span> <span class="o">=</span> <span class="n">large_image_converter</span><span class="o">.</span><span class="n">format_hook</span><span class="p">(</span><span class="s1">&#39;adjust_params&#39;</span><span class="p">,</span> <span class="n">geospatial</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="n">suffix</span> <span class="o">=</span> <span class="n">suffix</span> <span class="ow">or</span> <span class="p">(</span><span class="s1">&#39;.tiff&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">geospatial</span> <span class="k">else</span> <span class="s1">&#39;.geo.tiff&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">outputName</span><span class="p">:</span>
+        <span class="n">outputName</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">inputName</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">suffix</span>
+        <span class="k">if</span> <span class="n">outputName</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.geo&#39;</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">):</span>
+            <span class="n">outputName</span> <span class="o">=</span> <span class="n">outputName</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">outputName</span><span class="p">)</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">suffix</span><span class="p">)</span> <span class="o">-</span> <span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="n">suffix</span>
+        <span class="k">if</span> <span class="n">outputName</span> <span class="o">==</span> <span class="n">inputName</span><span class="p">:</span>
+            <span class="n">outputName</span> <span class="o">=</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">inputName</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span>
+                          <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">-%H%M%S&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">)</span>
+    <span class="n">renameOutput</span> <span class="o">=</span> <span class="n">outputName</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">outputName</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">suffix</span><span class="p">):</span>
+        <span class="n">outputName</span> <span class="o">+=</span> <span class="n">suffix</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">outputDir</span><span class="p">:</span>
+        <span class="n">outputDir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">inputPath</span><span class="p">)</span>
+    <span class="n">outputPath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outputDir</span><span class="p">,</span> <span class="n">outputName</span><span class="p">)</span>
+    <span class="n">large_image_converter</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span>
+        <span class="n">inputPath</span><span class="p">,</span> <span class="n">outputPath</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="n">quality</span><span class="p">,</span> <span class="n">tileSize</span><span class="o">=</span><span class="n">tileSize</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">outputPath</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Conversion command failed to produce output&#39;</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">renameOutput</span> <span class="o">!=</span> <span class="n">outputName</span><span class="p">:</span>
+        <span class="n">renamePath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">outputDir</span><span class="p">,</span> <span class="n">renameOutput</span><span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">outputPath</span><span class="p">,</span> <span class="n">renamePath</span><span class="p">)</span>
+        <span class="n">outputPath</span> <span class="o">=</span> <span class="n">renamePath</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Created a file of size </span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">outputPath</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">outputPath</span>
+
+
+<div class="viewcode-block" id="JobLogger">
+<a class="viewcode-back" href="../../_build/large_image_tasks/large_image_tasks.html#large_image_tasks.tasks.JobLogger">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">JobLogger</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Handler</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">NOTSET</span><span class="p">,</span> <span class="n">job</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_job</span> <span class="o">=</span> <span class="n">job</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="JobLogger.emit">
+<a class="viewcode-back" href="../../_build/large_image_tasks/large_image_tasks.html#large_image_tasks.tasks.JobLogger.emit">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">emit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">):</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">girder_jobs.models.job</span><span class="w"> </span><span class="kn">import</span> <span class="n">Job</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">updateJob</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_job</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">record</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="convert_image_job">
+<a class="viewcode-back" href="../../_build/large_image_tasks/large_image_tasks.html#large_image_tasks.tasks.convert_image_job">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">convert_image_job</span><span class="p">(</span><span class="n">job</span><span class="p">):</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">tempfile</span>
+
+    <span class="kn">from</span><span class="w"> </span><span class="nn">girder_jobs.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">girder_jobs.models.job</span><span class="w"> </span><span class="kn">import</span> <span class="n">Job</span>
+
+    <span class="kn">from</span><span class="w"> </span><span class="nn">girder.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">AccessType</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.file</span><span class="w"> </span><span class="kn">import</span> <span class="n">File</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.folder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Folder</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.item</span><span class="w"> </span><span class="kn">import</span> <span class="n">Item</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.upload</span><span class="w"> </span><span class="kn">import</span> <span class="n">Upload</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.user</span><span class="w"> </span><span class="kn">import</span> <span class="n">User</span>
+
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;kwargs&#39;</span><span class="p">]</span>
+    <span class="n">toFolder</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;toFolder&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;itemId&#39;</span><span class="p">),</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">fileObj</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;fileId&#39;</span><span class="p">),</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">userId</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">userId</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">if</span> <span class="n">userId</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">toFolder</span><span class="p">:</span>
+        <span class="n">parentType</span> <span class="o">=</span> <span class="s1">&#39;folder&#39;</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">Folder</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;folderId&#39;</span><span class="p">,</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;folderId&#39;</span><span class="p">]),</span>
+                               <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">AccessType</span><span class="o">.</span><span class="n">WRITE</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">parentType</span> <span class="o">=</span> <span class="s1">&#39;item&#39;</span>
+        <span class="n">parent</span> <span class="o">=</span> <span class="n">item</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">updateJob</span><span class="p">(</span>
+        <span class="n">job</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="s1">&#39;Started large image conversion</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="n">status</span><span class="o">=</span><span class="n">JobStatus</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">)</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;large-image-converter&#39;</span><span class="p">)</span>
+    <span class="n">handler</span> <span class="o">=</span> <span class="n">JobLogger</span><span class="p">(</span><span class="n">job</span><span class="o">=</span><span class="n">job</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">addHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span>
+    <span class="c1"># We could increase the default logging level here</span>
+    <span class="c1"># logger.setLevel(logging.DEBUG)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">inputPath</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">fileObj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;imported&#39;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">inputPath</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">getGirderMountFilePath</span><span class="p">(</span>
+                    <span class="n">fileObj</span><span class="p">,</span>
+                    <span class="o">**</span><span class="p">({</span><span class="s1">&#39;preferFlat&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span> <span class="k">if</span> <span class="s1">&#39;preferFlat&#39;</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">signature</span><span class="p">(</span>
+                        <span class="n">File</span><span class="o">.</span><span class="n">getGirderMountFilePath</span><span class="p">)</span><span class="o">.</span><span class="n">parameters</span> <span class="k">else</span> <span class="p">{}))</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="n">inputPath</span> <span class="o">=</span> <span class="n">inputPath</span> <span class="ow">or</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">getLocalFilePath</span><span class="p">(</span><span class="n">fileObj</span><span class="p">)</span>
+        <span class="k">with</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">TemporaryDirectory</span><span class="p">()</span> <span class="k">as</span> <span class="n">tempdir</span><span class="p">:</span>
+            <span class="n">dest</span> <span class="o">=</span> <span class="n">create_tiff</span><span class="p">(</span>
+                <span class="n">inputFile</span><span class="o">=</span><span class="n">inputPath</span><span class="p">,</span>
+                <span class="n">inputName</span><span class="o">=</span><span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+                <span class="n">outputDir</span><span class="o">=</span><span class="n">tempdir</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">updateJob</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="s1">&#39;Storing result</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dest</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fobj</span><span class="p">:</span>
+                <span class="n">fileObj</span> <span class="o">=</span> <span class="n">Upload</span><span class="p">()</span><span class="o">.</span><span class="n">uploadFromFile</span><span class="p">(</span>
+                    <span class="n">fobj</span><span class="p">,</span>
+                    <span class="n">size</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">dest</span><span class="p">),</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">name</span> <span class="ow">or</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">dest</span><span class="p">),</span>
+                    <span class="n">parentType</span><span class="o">=</span><span class="n">parentType</span><span class="p">,</span>
+                    <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span>
+                    <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">job</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">job</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="n">job</span><span class="p">[</span><span class="s1">&#39;results&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;file&#39;</span><span class="p">,</span> <span class="p">[])</span>
+                <span class="n">job</span><span class="p">[</span><span class="s1">&#39;results&#39;</span><span class="p">][</span><span class="s1">&#39;file&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">])</span>
+                <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">ERROR</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Failed in large image conversion&#39;</span><span class="p">)</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">updateJob</span><span class="p">(</span>
+            <span class="n">job</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="s1">&#39;Failed in large image conversion (</span><span class="si">%s</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">exc</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCESS</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">updateJob</span><span class="p">(</span>
+            <span class="n">job</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="s1">&#39;Finished large image conversion</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">removeHandler</span><span class="p">(</span><span class="n">handler</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="cache_tile_frames_job">
+<a class="viewcode-back" href="../../_build/large_image_tasks/large_image_tasks.html#large_image_tasks.tasks.cache_tile_frames_job">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">cache_tile_frames_job</span><span class="p">(</span><span class="n">job</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">girder_jobs.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">girder_jobs.models.job</span><span class="w"> </span><span class="kn">import</span> <span class="n">Job</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">girder_large_image.models.image_item</span><span class="w"> </span><span class="kn">import</span> <span class="n">ImageItem</span>
+
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;kwargs&#39;</span><span class="p">]</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;itemId&#39;</span><span class="p">),</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">updateJob</span><span class="p">(</span>
+        <span class="n">job</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="s1">&#39;Started caching tile frames</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="n">status</span><span class="o">=</span><span class="n">JobStatus</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tileFramesList&#39;</span><span class="p">):</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">job</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">CANCELED</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">updateJob</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="s1">&#39;Caching </span><span class="si">%r</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">entry</span><span class="p">)</span>
+            <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">tileFrames</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">checkAndCreate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">entry</span><span class="p">)</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">updateJob</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="s1">&#39;Finished caching tile frames</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Failed caching tile frames&#39;</span><span class="p">)</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">updateJob</span><span class="p">(</span>
+            <span class="n">job</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="s1">&#39;Failed caching tile frames (</span><span class="si">%s</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">exc</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">JobStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="cache_histograms_job">
+<a class="viewcode-back" href="../../_build/large_image_tasks/large_image_tasks.html#large_image_tasks.tasks.cache_histograms_job">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">cache_histograms_job</span><span class="p">(</span><span class="n">job</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">girder_jobs.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">girder_jobs.models.job</span><span class="w"> </span><span class="kn">import</span> <span class="n">Job</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">girder_large_image.models.image_item</span><span class="w"> </span><span class="kn">import</span> <span class="n">ImageItem</span>
+
+    <span class="n">kwargs</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;kwargs&#39;</span><span class="p">]</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;itemId&#39;</span><span class="p">),</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">updateJob</span><span class="p">(</span>
+        <span class="n">job</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="s1">&#39;Started caching histograms</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="n">status</span><span class="o">=</span><span class="n">JobStatus</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;histogramList&#39;</span><span class="p">):</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">job</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">CANCELED</span><span class="p">:</span>
+                <span class="k">return</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">updateJob</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="s1">&#39;Caching </span><span class="si">%r</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">entry</span><span class="p">)</span>
+            <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">checkAndCreate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">entry</span><span class="p">)</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">updateJob</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="s1">&#39;Finished caching histograms</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Failed caching histograms&#39;</span><span class="p">)</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">updateJob</span><span class="p">(</span>
+            <span class="n">job</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="s1">&#39;Failed caching histograms (</span><span class="si">%s</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">exc</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">JobStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

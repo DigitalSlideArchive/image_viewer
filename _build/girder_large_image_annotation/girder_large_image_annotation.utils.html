@@ -1,0 +1,494 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>girder_large_image_annotation.utils package &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="API Documentation" href="../../api_index.html" />
+    <link rel="prev" title="girder_large_image_annotation.rest package" href="girder_large_image_annotation.rest.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../girder_index.html">Girder Integration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../girder_config_options.html">Girder Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../girder_annotation_config_options.html">Girder Annotation Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../girder_caching.html">Caching Large Image in Girder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dicomweb_assetstore.html">DICOMweb Assetstore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../plottable.html">Plottable Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../upgrade.html">Upgrading from Previous Versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../girder_large_image/modules.html">girder_large_image</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">girder_large_image_annotation</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="girder_large_image_annotation.html">girder_large_image_annotation package</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="girder_large_image_annotation.html#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.html#module-girder_large_image_annotation.constants">girder_large_image_annotation.constants module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.html#module-girder_large_image_annotation.handlers">girder_large_image_annotation.handlers module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image_annotation.html#module-girder_large_image_annotation">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../girder_index.html">Girder Integration</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">girder_large_image_annotation</a></li>
+          <li class="breadcrumb-item"><a href="girder_large_image_annotation.html">girder_large_image_annotation package</a></li>
+      <li class="breadcrumb-item active">girder_large_image_annotation.utils package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/_build/girder_large_image_annotation/girder_large_image_annotation.utils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="girder-large-image-annotation-utils-package">
+<h1>girder_large_image_annotation.utils package<a class="headerlink" href="#girder-large-image-annotation-utils-package" title="Link to this heading"></a></h1>
+<section id="module-girder_large_image_annotation.utils">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-girder_large_image_annotation.utils" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.AnnotationGeoJSON">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">girder_large_image_annotation.utils.</span></span><span class="sig-name descname"><span class="pre">AnnotationGeoJSON</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotationId</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">asFeatures</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mustConvert</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#AnnotationGeoJSON"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.AnnotationGeoJSON" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Generate GeoJSON for an annotation via an iterator.</p>
+<p>Return an itertor for converting an annotation into geojson.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>annotatioId</strong> – the id of the annotation.  No permissions checks
+are performed.</p></li>
+<li><p><strong>asFeatures</strong> – if False, return a geojson string.  If True, return
+the features of the geojson.  This can be wrapped in
+<cite>{‘type’: ‘FeatureCollection’, ‘features: […output…]}</cite>
+to make it a full geojson object.</p></li>
+<li><p><strong>mustConvert</strong> – if True, raise an exception if any annotation
+elements cannot be converted.  Otherwise, skip those elements.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.AnnotationGeoJSON.circleType">
+<span class="sig-name descname"><span class="pre">circleType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#AnnotationGeoJSON.circleType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.AnnotationGeoJSON.circleType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.AnnotationGeoJSON.elementToGeoJSON">
+<span class="sig-name descname"><span class="pre">elementToGeoJSON</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#AnnotationGeoJSON.elementToGeoJSON"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.AnnotationGeoJSON.elementToGeoJSON" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.AnnotationGeoJSON.ellipseType">
+<span class="sig-name descname"><span class="pre">ellipseType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#AnnotationGeoJSON.ellipseType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.AnnotationGeoJSON.ellipseType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.AnnotationGeoJSON.geojson">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">geojson</span></span><a class="headerlink" href="#girder_large_image_annotation.utils.AnnotationGeoJSON.geojson" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.AnnotationGeoJSON.pointType">
+<span class="sig-name descname"><span class="pre">pointType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#AnnotationGeoJSON.pointType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.AnnotationGeoJSON.pointType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.AnnotationGeoJSON.polylineType">
+<span class="sig-name descname"><span class="pre">polylineType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#AnnotationGeoJSON.polylineType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.AnnotationGeoJSON.polylineType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.AnnotationGeoJSON.rectangleType">
+<span class="sig-name descname"><span class="pre">rectangleType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">geom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#AnnotationGeoJSON.rectangleType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.AnnotationGeoJSON.rectangleType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.AnnotationGeoJSON.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#AnnotationGeoJSON.rotate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.AnnotationGeoJSON.rotate" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.GeoJSONAnnotation">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">girder_large_image_annotation.utils.</span></span><span class="sig-name descname"><span class="pre">GeoJSONAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">geojson</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#GeoJSONAnnotation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.GeoJSONAnnotation" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.GeoJSONAnnotation.annotation">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">annotation</span></span><a class="headerlink" href="#girder_large_image_annotation.utils.GeoJSONAnnotation.annotation" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.GeoJSONAnnotation.annotationToJSON">
+<span class="sig-name descname"><span class="pre">annotationToJSON</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#GeoJSONAnnotation.annotationToJSON"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.GeoJSONAnnotation.annotationToJSON" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.GeoJSONAnnotation.circleType">
+<span class="sig-name descname"><span class="pre">circleType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#GeoJSONAnnotation.circleType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.GeoJSONAnnotation.circleType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.GeoJSONAnnotation.elementCount">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">elementCount</span></span><a class="headerlink" href="#girder_large_image_annotation.utils.GeoJSONAnnotation.elementCount" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.GeoJSONAnnotation.elements">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">elements</span></span><a class="headerlink" href="#girder_large_image_annotation.utils.GeoJSONAnnotation.elements" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.GeoJSONAnnotation.ellipseType">
+<span class="sig-name descname"><span class="pre">ellipseType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#GeoJSONAnnotation.ellipseType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.GeoJSONAnnotation.ellipseType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.GeoJSONAnnotation.linestringType">
+<span class="sig-name descname"><span class="pre">linestringType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#GeoJSONAnnotation.linestringType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.GeoJSONAnnotation.linestringType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.GeoJSONAnnotation.multilinestringType">
+<span class="sig-name descname"><span class="pre">multilinestringType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#GeoJSONAnnotation.multilinestringType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.GeoJSONAnnotation.multilinestringType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.GeoJSONAnnotation.multipointType">
+<span class="sig-name descname"><span class="pre">multipointType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#GeoJSONAnnotation.multipointType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.GeoJSONAnnotation.multipointType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.GeoJSONAnnotation.multipolygonType">
+<span class="sig-name descname"><span class="pre">multipolygonType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#GeoJSONAnnotation.multipolygonType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.GeoJSONAnnotation.multipolygonType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.GeoJSONAnnotation.pointType">
+<span class="sig-name descname"><span class="pre">pointType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#GeoJSONAnnotation.pointType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.GeoJSONAnnotation.pointType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.GeoJSONAnnotation.polygonType">
+<span class="sig-name descname"><span class="pre">polygonType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#GeoJSONAnnotation.polygonType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.GeoJSONAnnotation.polygonType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.GeoJSONAnnotation.polylineType">
+<span class="sig-name descname"><span class="pre">polylineType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#GeoJSONAnnotation.polylineType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.GeoJSONAnnotation.polylineType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.GeoJSONAnnotation.rectangleType">
+<span class="sig-name descname"><span class="pre">rectangleType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">elem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">result</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#GeoJSONAnnotation.rectangleType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.GeoJSONAnnotation.rectangleType" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.PlottableItemData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">girder_large_image_annotation.utils.</span></span><span class="sig-name descname"><span class="pre">PlottableItemData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adjacentItems</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sources</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uuid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#PlottableItemData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.PlottableItemData" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Get plottable data associated with an item.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>user</strong> – authenticating user.</p></li>
+<li><p><strong>item</strong> – the item record.</p></li>
+<li><p><strong>annotations</strong> – None, a list of annotation ids, or __all__.  If
+adjacent items are included, the most recent annotation with the
+same name will also be included.</p></li>
+<li><p><strong>adjacentItems</strong> – if True, include data from other items in the
+same folder.  If __all__, include data from other items even if the
+data is not present in the current item.</p></li>
+<li><p><strong>sources</strong> – None for all, or a string with a comma-separated list
+or a list of strings; when a list, the options are folder, item,
+annotation, datafile.</p></li>
+<li><p><strong>compute</strong> – None for none, or a dictionary with keys “columns”: a
+list of columns to include in the computation; if unspecified or an
+empty list, no computation is done, “function”: a string with the
+name of the function, such as umap, “params”: additional parameters
+to pass to the function.  If none of the requiredKeys are
+compute.(x|y|z), the computation will not be performed.  Only rows
+which have all selected columns present will be included in the
+computation.</p></li>
+<li><p><strong>uuid</strong> – An optional uuid to allow cancelling a previous request.
+If specified and there are any outstanding requests with the same
+uuid, they may be cancelled to save resources.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.PlottableItemData.allowedTypes">
+<span class="sig-name descname"><span class="pre">allowedTypes</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(&lt;class</span> <span class="pre">'str'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'bool'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'int'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'float'&gt;)</span></em><a class="headerlink" href="#girder_large_image_annotation.utils.PlottableItemData.allowedTypes" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.PlottableItemData.columns">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">columns</span></span><a class="headerlink" href="#girder_large_image_annotation.utils.PlottableItemData.columns" title="Link to this definition"></a></dt>
+<dd><p>Get a sorted list of plottable columns with some metadata for each.</p>
+<p>Each data entry contains</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">key<span class="colon">:</span></dt>
+<dd class="field-odd"><p>the column key.  For database entries, this is (item|
+annotation|annotationelement).(id|name|description|group|
+label).  For bounding boxes this is bbox.(x0|y0|x1|y1).  For
+data from meta / attributes / user, this is
+data.(key)[.0][.(key2)][.0]</p>
+</dd>
+<dt class="field-even">type<span class="colon">:</span></dt>
+<dd class="field-even"><p>‘string’ or ‘number’</p>
+</dd>
+<dt class="field-odd">title<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a human readable title</p>
+</dd>
+<dt class="field-even">count<span class="colon">:</span></dt>
+<dd class="field-even"><p>the number of non-null entries in the column</p>
+</dd>
+<dt class="field-odd">[distinct]<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a list of distinct values if there are less than some
+maximum number of distinct values.  This might not include
+values from adjacent items</p>
+</dd>
+<dt class="field-even">[distinctcount]<span class="colon">:</span></dt>
+<dd class="field-even"><p>if distinct is populated, this is len(distinct)</p>
+</dd>
+<dt class="field-odd">[min]<span class="colon">:</span></dt>
+<dd class="field-odd"><p>for number data types, the lowest value present</p>
+</dd>
+<dt class="field-even">[max]<span class="colon">:</span></dt>
+<dd class="field-even"><p>for number data types, the highest value present</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a sorted list of data entries.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.PlottableItemData.commonColumns">
+<span class="sig-name descname"><span class="pre">commonColumns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'annotation.description':</span> <span class="pre">'Annotation</span> <span class="pre">Description',</span> <span class="pre">'annotation.id':</span> <span class="pre">'Annotation</span> <span class="pre">ID',</span> <span class="pre">'annotation.name':</span> <span class="pre">'Annotation</span> <span class="pre">Name',</span> <span class="pre">'annotationelement.group':</span> <span class="pre">'Annotation</span> <span class="pre">Element</span> <span class="pre">Group',</span> <span class="pre">'annotationelement.id':</span> <span class="pre">'Annotation</span> <span class="pre">Element</span> <span class="pre">ID',</span> <span class="pre">'annotationelement.label':</span> <span class="pre">'Annotation</span> <span class="pre">Element</span> <span class="pre">Label',</span> <span class="pre">'annotationelement.type':</span> <span class="pre">'Annotation</span> <span class="pre">Element</span> <span class="pre">Type',</span> <span class="pre">'bbox.x0':</span> <span class="pre">'Bounding</span> <span class="pre">Box</span> <span class="pre">Low</span> <span class="pre">X',</span> <span class="pre">'bbox.x1':</span> <span class="pre">'Bounding</span> <span class="pre">Box</span> <span class="pre">High</span> <span class="pre">X',</span> <span class="pre">'bbox.y0':</span> <span class="pre">'Bounding</span> <span class="pre">Box</span> <span class="pre">Low</span> <span class="pre">Y',</span> <span class="pre">'bbox.y1':</span> <span class="pre">'Bounding</span> <span class="pre">Box</span> <span class="pre">High</span> <span class="pre">Y',</span> <span class="pre">'compute.x':</span> <span class="pre">'Dimension</span> <span class="pre">Reduction</span> <span class="pre">X',</span> <span class="pre">'compute.y':</span> <span class="pre">'Dimension</span> <span class="pre">Reduction</span> <span class="pre">Y',</span> <span class="pre">'compute.z':</span> <span class="pre">'Dimension</span> <span class="pre">Reduction</span> <span class="pre">Z',</span> <span class="pre">'item.description':</span> <span class="pre">'Item</span> <span class="pre">Description',</span> <span class="pre">'item.id':</span> <span class="pre">'Item</span> <span class="pre">ID',</span> <span class="pre">'item.name':</span> <span class="pre">'Item</span> <span class="pre">Name'}</span></em><a class="headerlink" href="#girder_large_image_annotation.utils.PlottableItemData.commonColumns" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.PlottableItemData.computeColumns">
+<span class="sig-name descname"><span class="pre">computeColumns</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'compute.x',</span> <span class="pre">'compute.y',</span> <span class="pre">'compute.z'}</span></em><a class="headerlink" href="#girder_large_image_annotation.utils.PlottableItemData.computeColumns" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.PlottableItemData.data">
+<span class="sig-name descname"><span class="pre">data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">columns</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">requiredColumns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#PlottableItemData.data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.PlottableItemData.data" title="Link to this definition"></a></dt>
+<dd><p>Get plottable data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>columns</strong> – the columns to return.  Either a list of column names
+or a comma-delimited string.</p></li>
+<li><p><strong>requiredColumns</strong> – only return data rows where all of these
+columns are non-None.  Either a list of column names of a
+comma-delimited string.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.PlottableItemData.datafileAnnotationElementSelector">
+<span class="sig-name descname"><span class="pre">datafileAnnotationElementSelector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cols</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#PlottableItemData.datafileAnnotationElementSelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.PlottableItemData.datafileAnnotationElementSelector" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.PlottableItemData.itemNameIDSelector">
+<span class="sig-name descname"><span class="pre">itemNameIDSelector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">isName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selector</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#PlottableItemData.itemNameIDSelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.PlottableItemData.itemNameIDSelector" title="Link to this definition"></a></dt>
+<dd><p>Given a data selector that returns something that is either an item id,
+an item name, or an item name prefix, return the canonical item or
+id string from the list of known items.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>isName</strong> – True to return the canonical name, False for the
+canonical id.</p></li>
+<li><p><strong>selector</strong> – the selector to get the initial value.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a function that can be used as an overall selector.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.PlottableItemData.keySelector">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">keySelector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">key2</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#PlottableItemData.keySelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.PlottableItemData.keySelector" title="Link to this definition"></a></dt>
+<dd><p>Given a pattern for getting data from a dictionary, return a selector
+that gets that piece of data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mode</strong> – one of key, key0, keykey, keykey0, key0key, representing
+key lookups in dictionaries or array indices.</p></li>
+<li><p><strong>key</strong> – the first key.</p></li>
+<li><p><strong>key2</strong> – the second key, if needed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a pair of functions that can be used to select the value from
+the record and data structure.  This takes (record, data, row) and
+returns a value.  The record is the base record used, the data is
+the base dictionary, and the row is the location in the index.  The
+second function takes (record, data) and returns either None or the
+number of rows that are present.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.PlottableItemData.maxAnnotationElements">
+<span class="sig-name descname"><span class="pre">maxAnnotationElements</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5000</span></em><a class="headerlink" href="#girder_large_image_annotation.utils.PlottableItemData.maxAnnotationElements" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.PlottableItemData.maxDistinct">
+<span class="sig-name descname"><span class="pre">maxDistinct</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#girder_large_image_annotation.utils.PlottableItemData.maxDistinct" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.PlottableItemData.maxItems">
+<span class="sig-name descname"><span class="pre">maxItems</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">1000</span></em><a class="headerlink" href="#girder_large_image_annotation.utils.PlottableItemData.maxItems" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.PlottableItemData.recordSelector">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">recordSelector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doctype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#PlottableItemData.recordSelector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.PlottableItemData.recordSelector" title="Link to this definition"></a></dt>
+<dd><p>Given a document type, return a function that returns the main data
+dictionary.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>doctype</strong> – one of folder, item, annotaiton, annotationelement.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a function that takes (record) and returns the data
+dictionary, if any.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image_annotation.utils.isGeoJSON">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image_annotation.utils.</span></span><span class="sig-name descname"><span class="pre">isGeoJSON</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">annotation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image_annotation/utils.html#isGeoJSON"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image_annotation.utils.isGeoJSON" title="Link to this definition"></a></dt>
+<dd><p>Check if a list or dictionary appears to contain a GeoJSON record.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>annotation</strong> – a list or dictionary.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if this appears to be GeoJSON</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="girder_large_image_annotation.rest.html" class="btn btn-neutral float-left" title="girder_large_image_annotation.rest package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../api_index.html" class="btn btn-neutral float-right" title="API Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

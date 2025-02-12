@@ -1,0 +1,29 @@
+large\_image\_source\_dicom.assetstore package
+==============================================
+
+Submodules
+----------
+
+large\_image\_source\_dicom.assetstore.dicomweb\_assetstore\_adapter module
+---------------------------------------------------------------------------
+
+.. automodule:: large_image_source_dicom.assetstore.dicomweb_assetstore_adapter
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+large\_image\_source\_dicom.assetstore.rest module
+--------------------------------------------------
+
+.. automodule:: large_image_source_dicom.assetstore.rest
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: large_image_source_dicom.assetstore
+   :members:
+   :undoc-members:
+   :show-inheritance:

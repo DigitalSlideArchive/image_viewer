@@ -1,0 +1,21 @@
+large\_image\_tasks package
+===========================
+
+Submodules
+----------
+
+large\_image\_tasks.tasks module
+--------------------------------
+
+.. automodule:: large_image_tasks.tasks
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: large_image_tasks
+   :members:
+   :undoc-members:
+   :show-inheritance:

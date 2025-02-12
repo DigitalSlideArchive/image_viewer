@@ -1,0 +1,195 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_dicom.dicomweb_utils &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../large_image_source_dicom.html">large_image_source_dicom</a></li>
+      <li class="breadcrumb-item active">large_image_source_dicom.dicomweb_utils</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image_source_dicom.dicomweb_utils</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">large_image_source_dicom.dicom_metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">extract_dicom_metadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image_source_dicom.dicom_tags</span><span class="w"> </span><span class="kn">import</span> <span class="n">dicom_key_to_tag</span>
+
+
+<div class="viewcode-block" id="get_dicomweb_metadata">
+<a class="viewcode-back" href="../../_build/large_image_source_dicom/large_image_source_dicom.html#large_image_source_dicom.dicomweb_utils.get_dicomweb_metadata">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_dicomweb_metadata</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">study_uid</span><span class="p">,</span> <span class="n">series_uid</span><span class="p">):</span>
+    <span class="c1"># Many series-level metadata items are available if we explicitly</span>
+    <span class="c1"># request for them in the `search_for_series()` calls.</span>
+    <span class="c1"># However, some things are not available in the series-level</span>
+    <span class="c1"># metadata - in particular, the specimen information is only</span>
+    <span class="c1"># on the instance-level metadata.</span>
+    <span class="c1"># It seems that, for the most part, all WSI DICOM instances in a</span>
+    <span class="c1"># series have virtually identical metadata (except one or two things,</span>
+    <span class="c1"># such as the suffix on the serial number, and sometimes one of the</span>
+    <span class="c1"># items in the specimen metadata).</span>
+    <span class="c1"># We will do as the SLIM viewer does: grab a single volume instance</span>
+    <span class="c1"># and use that for the metadata.</span>
+    <span class="n">volume_metadata</span> <span class="o">=</span> <span class="n">get_first_wsi_volume_metadata</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">study_uid</span><span class="p">,</span> <span class="n">series_uid</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">volume_metadata</span><span class="p">:</span>
+        <span class="c1"># No metadata</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pydicom</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">Dataset</span><span class="o">.</span><span class="n">from_json</span><span class="p">(</span><span class="n">volume_metadata</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">extract_dicom_metadata</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_first_wsi_volume_metadata">
+<a class="viewcode-back" href="../../_build/large_image_source_dicom/large_image_source_dicom.html#large_image_source_dicom.dicomweb_utils.get_first_wsi_volume_metadata">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_first_wsi_volume_metadata</span><span class="p">(</span><span class="n">client</span><span class="p">,</span> <span class="n">study_uid</span><span class="p">,</span> <span class="n">series_uid</span><span class="p">):</span>
+    <span class="c1"># Find the first WSI Volume and return the DICOMweb metadata</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">wsidicom.uid</span><span class="w"> </span><span class="kn">import</span> <span class="n">WSI_SOP_CLASS_UID</span>
+
+    <span class="n">image_type_tag</span> <span class="o">=</span> <span class="n">dicom_key_to_tag</span><span class="p">(</span><span class="s1">&#39;ImageType&#39;</span><span class="p">)</span>
+    <span class="n">instance_uid_tag</span> <span class="o">=</span> <span class="n">dicom_key_to_tag</span><span class="p">(</span><span class="s1">&#39;SOPInstanceUID&#39;</span><span class="p">)</span>
+
+    <span class="c1"># We can&#39;t include the SOPClassUID as a search filter because Imaging Data Commons</span>
+    <span class="c1"># produces an error if we do. Perform the filtering manually instead.</span>
+    <span class="n">class_uid_tag</span> <span class="o">=</span> <span class="n">dicom_key_to_tag</span><span class="p">(</span><span class="s1">&#39;SOPClassUID&#39;</span><span class="p">)</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">image_type_tag</span><span class="p">,</span>
+        <span class="n">instance_uid_tag</span><span class="p">,</span>
+        <span class="n">class_uid_tag</span><span class="p">,</span>
+    <span class="p">]</span>
+    <span class="n">wsi_instances</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">search_for_instances</span><span class="p">(</span>
+        <span class="n">study_uid</span><span class="p">,</span> <span class="n">series_uid</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="n">fields</span><span class="p">)</span>
+
+    <span class="n">volume_instance</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">instance</span> <span class="ow">in</span> <span class="n">wsi_instances</span><span class="p">:</span>
+        <span class="n">class_type</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">class_uid_tag</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Value&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">class_type</span> <span class="ow">or</span> <span class="n">class_type</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">WSI_SOP_CLASS_UID</span><span class="p">:</span>
+            <span class="c1"># Only look at WSI classes</span>
+            <span class="k">continue</span>
+
+        <span class="n">image_type</span> <span class="o">=</span> <span class="n">instance</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">image_type_tag</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Value&#39;</span><span class="p">)</span>
+        <span class="c1"># It would be nice if we could have a search filter for this, but</span>
+        <span class="c1"># I didn&#39;t see one...</span>
+        <span class="k">if</span> <span class="n">image_type</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_type</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">image_type</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;VOLUME&#39;</span><span class="p">:</span>
+            <span class="n">volume_instance</span> <span class="o">=</span> <span class="n">instance</span>
+            <span class="k">break</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">volume_instance</span><span class="p">:</span>
+        <span class="c1"># No volumes were found...</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">instance_uid</span> <span class="o">=</span> <span class="n">volume_instance</span><span class="p">[</span><span class="n">instance_uid_tag</span><span class="p">][</span><span class="s1">&#39;Value&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">retrieve_instance_metadata</span><span class="p">(</span><span class="n">study_uid</span><span class="p">,</span> <span class="n">series_uid</span><span class="p">,</span> <span class="n">instance_uid</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

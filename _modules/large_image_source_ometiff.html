@@ -1,0 +1,623 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_ometiff &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../_static/K.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">large_image_source_ometiff</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image_source_ometiff</h1><div class="highlight"><pre>
+<span></span><span class="c1">##############################################################################</span>
+<span class="c1">#  Copyright Kitware Inc.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed under the Apache License, Version 2.0 ( the &quot;License&quot; );</span>
+<span class="c1">#  you may not use this file except in compliance with the License.</span>
+<span class="c1">#  You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#    http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#  See the License for the specific language governing permissions and</span>
+<span class="c1">#  limitations under the License.</span>
+<span class="c1">##############################################################################</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">PackageNotFoundError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">_importlib_version</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">PIL.Image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image_source_tiff</span><span class="w"> </span><span class="kn">import</span> <span class="n">TiffFileTileSource</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image_source_tiff.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">InvalidOperationTiffError</span><span class="p">,</span> <span class="n">IOTiffError</span><span class="p">,</span> <span class="n">TiffError</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.cache_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">LruCacheMetaclass</span><span class="p">,</span> <span class="n">methodcache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">TILE_FORMAT_NUMPY</span><span class="p">,</span> <span class="n">TILE_FORMAT_PIL</span><span class="p">,</span> <span class="n">SourcePriority</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TileSourceError</span><span class="p">,</span> <span class="n">TileSourceFileNotFoundError</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">__version__</span> <span class="o">=</span> <span class="n">_importlib_version</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">PackageNotFoundError</span><span class="p">:</span>
+    <span class="c1"># package is not installed</span>
+    <span class="k">pass</span>
+
+
+<span class="n">_omeUnitsToMeters</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;Ym&#39;</span><span class="p">:</span> <span class="mf">1e24</span><span class="p">,</span>
+    <span class="s1">&#39;Zm&#39;</span><span class="p">:</span> <span class="mf">1e21</span><span class="p">,</span>
+    <span class="s1">&#39;Em&#39;</span><span class="p">:</span> <span class="mf">1e18</span><span class="p">,</span>
+    <span class="s1">&#39;Pm&#39;</span><span class="p">:</span> <span class="mf">1e15</span><span class="p">,</span>
+    <span class="s1">&#39;Tm&#39;</span><span class="p">:</span> <span class="mf">1e12</span><span class="p">,</span>
+    <span class="s1">&#39;Gm&#39;</span><span class="p">:</span> <span class="mf">1e9</span><span class="p">,</span>
+    <span class="s1">&#39;Mm&#39;</span><span class="p">:</span> <span class="mf">1e6</span><span class="p">,</span>
+    <span class="s1">&#39;km&#39;</span><span class="p">:</span> <span class="mf">1e3</span><span class="p">,</span>
+    <span class="s1">&#39;hm&#39;</span><span class="p">:</span> <span class="mf">1e2</span><span class="p">,</span>
+    <span class="s1">&#39;dam&#39;</span><span class="p">:</span> <span class="mf">1e1</span><span class="p">,</span>
+    <span class="s1">&#39;m&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;dm&#39;</span><span class="p">:</span> <span class="mf">1e-1</span><span class="p">,</span>
+    <span class="s1">&#39;cm&#39;</span><span class="p">:</span> <span class="mf">1e-2</span><span class="p">,</span>
+    <span class="s1">&#39;mm&#39;</span><span class="p">:</span> <span class="mf">1e-3</span><span class="p">,</span>
+    <span class="s1">&#39;</span><span class="se">\u00b5</span><span class="s1">m&#39;</span><span class="p">:</span> <span class="mf">1e-6</span><span class="p">,</span>
+    <span class="s1">&#39;nm&#39;</span><span class="p">:</span> <span class="mf">1e-9</span><span class="p">,</span>
+    <span class="s1">&#39;pm&#39;</span><span class="p">:</span> <span class="mf">1e-12</span><span class="p">,</span>
+    <span class="s1">&#39;fm&#39;</span><span class="p">:</span> <span class="mf">1e-15</span><span class="p">,</span>
+    <span class="s1">&#39;am&#39;</span><span class="p">:</span> <span class="mf">1e-18</span><span class="p">,</span>
+    <span class="s1">&#39;zm&#39;</span><span class="p">:</span> <span class="mf">1e-21</span><span class="p">,</span>
+    <span class="s1">&#39;ym&#39;</span><span class="p">:</span> <span class="mf">1e-24</span><span class="p">,</span>
+    <span class="s1">&#39;</span><span class="se">\u00c5</span><span class="s1">&#39;</span><span class="p">:</span> <span class="mf">1e-10</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="OMETiffFileTileSource">
+<a class="viewcode-back" href="../_build/large_image_source_ometiff/large_image_source_ometiff.html#large_image_source_ometiff.OMETiffFileTileSource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OMETiffFileTileSource</span><span class="p">(</span><span class="n">TiffFileTileSource</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">LruCacheMetaclass</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides tile access to TIFF files.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cacheName</span> <span class="o">=</span> <span class="s1">&#39;tilesource&#39;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;ometiff&#39;</span>
+    <span class="n">extensions</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="kc">None</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">LOW</span><span class="p">,</span>
+        <span class="s1">&#39;tif&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">MEDIUM</span><span class="p">,</span>
+        <span class="s1">&#39;tiff&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">MEDIUM</span><span class="p">,</span>
+        <span class="s1">&#39;ome&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">mimeTypes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;image/tiff&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">MEDIUM</span><span class="p">,</span>
+        <span class="s1">&#39;image/x-tiff&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">MEDIUM</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="c1"># The expect number of pixels that would need to be read to read the worst-</span>
+    <span class="c1"># case tile.</span>
+    <span class="n">_maxUntiledChunk</span> <span class="o">=</span> <span class="mi">512</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">*</span> <span class="mi">1024</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the tile class.  See the base class for other available</span>
+<span class="sd">        parameters.</span>
+
+<span class="sd">        :param path: a filesystem path for the tile source.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Note this is the super of the parent class, not of this class.</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TiffFileTileSource</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_getLargeImagePath</span><span class="p">())</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">base</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTiffDir</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mustBeTiled</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">TiffError</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">TileSourceFileNotFoundError</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Not a recognized OME Tiff&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="s1">&#39;_description_record&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_associatedImages</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">info</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;OME&#39;</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Not an OME Tiff&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_omeinfo</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;OME&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_checkForOMEZLoop</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parseOMEInfo</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Not a recognized OME Tiff&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">usesSubIfds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_checkForSubIfds</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+        <span class="n">omeimages</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;Pixels&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omeinfo</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">]</span> <span class="k">if</span>
+            <span class="nb">len</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;TiffData&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">])]</span>
+        <span class="n">levels</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;SizeX&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">base</span><span class="o">.</span><span class="n">tileWidth</span><span class="p">,</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;SizeY&#39;</span><span class="p">])</span> <span class="o">/</span> <span class="n">base</span><span class="o">.</span><span class="n">tileHeight</span><span class="p">))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">))))</span>
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">omeimages</span><span class="p">]</span>
+        <span class="n">omebylevel</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">levels</span><span class="p">,</span> <span class="n">omeimages</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_omeLevels</span> <span class="o">=</span> <span class="p">[</span><span class="n">omebylevel</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">omebylevel</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">base</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;istiled&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">usesSubIfds</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_omeLevels</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">max</span><span class="p">(</span><span class="n">usesSubIfds</span><span class="p">)</span> <span class="o">+</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_omeLevels</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tiffDirectories</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">getTiffDir</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;IFD&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)))</span>
+                <span class="k">if</span> <span class="n">entry</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omeLevels</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">usesSubIfds</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">lvl</span> <span class="ow">in</span> <span class="n">usesSubIfds</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffDirectories</span><span class="p">[</span><span class="n">lvl</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_tiffDirectories</span><span class="p">[</span><span class="n">lvl</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tiffDirectories</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">getTiffDir</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mustBeTiled</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">entry</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omeLevels</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_checkForInefficientDirectories</span><span class="p">(</span><span class="n">warn</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">_maxChunk</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">imageWidth</span><span class="p">,</span> <span class="n">base</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_skippedLevels</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> \
+                <span class="nb">min</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">imageHeight</span><span class="p">,</span> <span class="n">base</span><span class="o">.</span><span class="n">tileHeight</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_skippedLevels</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">_maxChunk</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxUntiledChunk</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Untiled image is too large to access with the OME Tiff source&#39;</span>
+                <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">tileWidth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">tileHeight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tiffDirectories</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">imageWidth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">=</span> <span class="n">base</span><span class="o">.</span><span class="n">imageHeight</span>
+
+        <span class="c1"># We can get the embedded images, but we don&#39;t currently use non-tiled</span>
+        <span class="c1"># images as associated images.  This would require enumerating tiff</span>
+        <span class="c1"># directories not mentioned by the ome list.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_checkForInefficientDirectories</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_checkForOMEZLoop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the OME description lists a Z-loop that isn&#39;t referenced by</span>
+<span class="sd">        the frames or TiffData list and is present based on the number of tiff</span>
+<span class="sd">        directories.  This can modify self._omeinfo.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omeinfo</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">zloopinfo</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">][</span><span class="s1">&#39;Description&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;Z Stack Loop: &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">zloop</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">zloopinfo</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">stepinfo</span> <span class="o">=</span> <span class="n">zloopinfo</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;Step: &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+            <span class="n">stepmm</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">stepinfo</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">stepmm</span> <span class="o">*=</span> <span class="p">{</span><span class="s1">&#39;mm&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\xb5</span><span class="s1">m&#39;</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">}[</span><span class="n">stepinfo</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="n">planes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">][</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;Plane&#39;</span><span class="p">])</span>
+            <span class="k">for</span> <span class="n">plane</span> <span class="ow">in</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">][</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;Plane&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">plane</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TheZ&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">return</span>
+            <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">][</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;SizeZ&#39;</span><span class="p">])</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">return</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="n">zloop</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">stepmm</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">planes</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">][</span><span class="s1">&#39;Pixels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TiffData&#39;</span><span class="p">,</span> <span class="p">{})):</span>
+            <span class="k">return</span>
+        <span class="n">expecteddir</span> <span class="o">=</span> <span class="n">planes</span> <span class="o">*</span> <span class="n">zloop</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">lastdir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTiffDir</span><span class="p">(</span><span class="n">expecteddir</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">mustBeTiled</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">lastdir</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lastdirectory&#39;</span><span class="p">):</span>
+                <span class="k">return</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">tiffdata</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">zloop</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">plane</span> <span class="ow">in</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">][</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;Plane&#39;</span><span class="p">]:</span>
+                <span class="n">td</span> <span class="o">=</span> <span class="n">plane</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">td</span><span class="p">[</span><span class="s1">&#39;TheZ&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+                <span class="c1"># This position is probably wrong -- it seems like the</span>
+                <span class="c1"># listed position is likely to be the center of the stack, not</span>
+                <span class="c1"># the bottom, but we&#39;d have to confirm it.</span>
+                <span class="n">td</span><span class="p">[</span><span class="s1">&#39;PositionZ&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">td</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PositionZ&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">+</span> <span class="n">z</span> <span class="o">*</span> <span class="n">stepmm</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
+                <span class="n">tiffdata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">td</span><span class="p">)</span>
+        <span class="n">info</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">][</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;TiffData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tiffdata</span>
+        <span class="n">info</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">][</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;Plane&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tiffdata</span>
+        <span class="n">info</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">][</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;PlanesFromZloop&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;true&#39;</span>
+        <span class="n">info</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">][</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;SizeZ&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">zloop</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_checkForSubIfds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if the first ifd has sub-ifds.  If so, expect lower resolutions</span>
+<span class="sd">        to be in subifds, not in primary ifds.</span>
+
+<span class="sd">        :param base: base tiff directory</span>
+<span class="sd">        :returns: either False if no subifds are lower resolution, or a</span>
+<span class="sd">            dictionary of levels (keys) and values that are subifd numbers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">levels</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span>
+                <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">imageWidth</span><span class="p">)</span> <span class="o">/</span> <span class="n">base</span><span class="o">.</span><span class="n">tileWidth</span><span class="p">),</span>
+                <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">base</span><span class="o">.</span><span class="n">imageHeight</span><span class="p">)</span> <span class="o">/</span> <span class="n">base</span><span class="o">.</span><span class="n">tileHeight</span><span class="p">))</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="mi">2</span><span class="p">)))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">filled</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">z</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">subdir</span> <span class="o">=</span> <span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">z</span>
+                <span class="n">scale</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">subdir</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="nb">dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTiffDir</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">mustBeTiled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">subDirectoryNum</span><span class="o">=</span><span class="n">subdir</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nb">dir</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span>
+                        <span class="p">(</span><span class="nb">dir</span><span class="o">.</span><span class="n">tileWidth</span> <span class="ow">in</span> <span class="p">{</span><span class="n">base</span><span class="o">.</span><span class="n">tileWidth</span><span class="p">,</span> <span class="nb">dir</span><span class="o">.</span><span class="n">imageWidth</span><span class="p">})</span> <span class="ow">and</span>
+                        <span class="p">(</span><span class="nb">dir</span><span class="o">.</span><span class="n">tileHeight</span> <span class="ow">in</span> <span class="p">{</span><span class="n">base</span><span class="o">.</span><span class="n">tileHeight</span><span class="p">,</span> <span class="nb">dir</span><span class="o">.</span><span class="n">imageHeight</span><span class="p">})</span> <span class="ow">and</span>
+                        <span class="nb">abs</span><span class="p">(</span><span class="nb">dir</span><span class="o">.</span><span class="n">imageWidth</span> <span class="o">*</span> <span class="n">scale</span> <span class="o">-</span> <span class="n">base</span><span class="o">.</span><span class="n">imageWidth</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">scale</span> <span class="ow">and</span>
+                        <span class="nb">abs</span><span class="p">(</span><span class="nb">dir</span><span class="o">.</span><span class="n">imageHeight</span> <span class="o">*</span> <span class="n">scale</span> <span class="o">-</span> <span class="n">base</span><span class="o">.</span><span class="n">imageHeight</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">scale</span><span class="p">):</span>
+                    <span class="n">filled</span><span class="p">[</span><span class="n">z</span><span class="p">]</span> <span class="o">=</span> <span class="n">subdir</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">filled</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="n">filled</span><span class="p">[</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">return</span> <span class="n">filled</span>
+        <span class="k">except</span> <span class="n">TiffError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parseOMEInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># noqa</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omeinfo</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_omeinfo</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_omeinfo</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">]]</span>
+        <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omeinfo</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">img</span><span class="p">[</span><span class="s1">&#39;Pixels&#39;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;OME Tiff has multiple pixels&#39;</span>
+                <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">img</span><span class="p">[</span><span class="s1">&#39;Pixels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;TiffData&#39;</span><span class="p">),</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">img</span><span class="p">[</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;TiffData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">img</span><span class="p">[</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;TiffData&#39;</span><span class="p">]]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">img</span><span class="p">[</span><span class="s1">&#39;Pixels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Plane&#39;</span><span class="p">),</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">img</span><span class="p">[</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;Plane&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">img</span><span class="p">[</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;Plane&#39;</span><span class="p">]]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">img</span><span class="p">[</span><span class="s1">&#39;Pixels&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Channels&#39;</span><span class="p">),</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="n">img</span><span class="p">[</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;Channels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">img</span><span class="p">[</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;Channels&#39;</span><span class="p">]]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omeinfo</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;Pixels&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Plane&#39;</span><span class="p">),</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;Plane&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;Plane&#39;</span><span class="p">]]</span>
+            <span class="k">if</span> <span class="p">((</span><span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">])</span> <span class="ow">or</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">and</span>
+                    <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Plane&#39;</span><span class="p">,</span> <span class="p">[]))</span> <span class="ow">or</span>
+                     <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Channel&#39;</span><span class="p">,</span> <span class="p">[])))):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">])</span> <span class="ow">or</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="p">{}</span> <span class="ow">or</span>
+                        <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PlaneCount&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">==</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">planes</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                        <span class="s1">&#39;Plane&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Channel&#39;</span><span class="p">)))</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">planes</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                        <span class="n">planes</span> <span class="o">=</span> <span class="p">[</span><span class="n">planes</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;SizeC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">plane</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">planes</span><span class="p">):</span>
+                        <span class="n">plane</span><span class="p">[</span><span class="s1">&#39;IndexC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">planes</span>
+                <span class="k">elif</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PlaneCount&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">==</span>
+                        <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Plane&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Channel&#39;</span><span class="p">,</span> <span class="p">[])))):</span>
+                    <span class="n">planes</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Plane&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Channel&#39;</span><span class="p">)))</span>
+                    <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">plane</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">planes</span><span class="p">):</span>
+                        <span class="n">plane</span><span class="p">[</span><span class="s1">&#39;IFD&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">plane</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                            <span class="s1">&#39;IFD&#39;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;IFD&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span> <span class="o">+</span> <span class="n">idx</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">planes</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">]]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">({</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;UUID&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;FileName&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">]})</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;OME Tiff references multiple files&#39;</span>
+                <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">])</span> <span class="o">==</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;SizeT&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;SizeZ&#39;</span><span class="p">])):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;SizeC&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omeinfo</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">:]:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">img</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">img</span><span class="p">[</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;TiffData&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;IFD&#39;</span><span class="p">]:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_addAssociatedImage</span><span class="p">(</span>
+                                <span class="nb">int</span><span class="p">(</span><span class="n">img</span><span class="p">[</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;TiffData&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;IFD&#39;</span><span class="p">]),</span>
+                                <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">img</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                        <span class="k">pass</span>
+            <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omeinfo</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">multiple</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omeinfo</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">:]:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">bpix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omeinfo</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;Pixels&#39;</span><span class="p">]</span>
+                        <span class="n">imgpix</span> <span class="o">=</span> <span class="n">img</span><span class="p">[</span><span class="s1">&#39;Pixels&#39;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="n">imgpix</span><span class="p">[</span><span class="s1">&#39;SizeX&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">bpix</span><span class="p">[</span><span class="s1">&#39;SizeX&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">imgpix</span><span class="p">[</span><span class="s1">&#39;SizeY&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">bpix</span><span class="p">[</span><span class="s1">&#39;SizeY&#39;</span><span class="p">]:</span>
+                            <span class="n">multiple</span> <span class="o">=</span> <span class="kc">True</span>
+                            <span class="k">break</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                        <span class="n">multiple</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="n">multiple</span><span class="p">:</span>
+                    <span class="c1"># We should handle this as SizeXY</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;OME Tiff references multiple images&#39;</span>
+                    <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">])</span> <span class="o">!=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;SizeC&#39;</span><span class="p">])</span> <span class="o">*</span>
+                    <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;SizeT&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;SizeZ&#39;</span><span class="p">])</span> <span class="ow">or</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">])</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Plane&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">]))):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;OME Tiff contains frames that contain multiple planes&#39;</span>
+                <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">,</span> <span class="ne">IndexError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;OME Tiff does not contain an expected record&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+<div class="viewcode-block" id="OMETiffFileTileSource.getMetadata">
+<a class="viewcode-back" href="../_build/large_image_source_ometiff/large_image_source_ometiff.html#large_image_source_ometiff.OMETiffFileTileSource.getMetadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a dictionary of metadata containing levels, sizeX, sizeY,</span>
+<span class="sd">        tileWidth, tileHeight, magnification, mm_x, mm_y, and frames.</span>
+
+<span class="sd">        :returns: metadata dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">()</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;frames&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Plane&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">]))</span>
+        <span class="n">channels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omeinfo</span><span class="p">[</span><span class="s1">&#39;Image&#39;</span><span class="p">]:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">channels</span> <span class="o">=</span> <span class="p">[</span><span class="n">channel</span><span class="p">[</span><span class="s1">&#39;Name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="n">img</span><span class="p">[</span><span class="s1">&#39;Pixels&#39;</span><span class="p">][</span><span class="s1">&#39;Channel&#39;</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="k">break</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">channels</span><span class="p">))</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+                <span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">channels</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;frames&#39;</span><span class="p">])):</span>
+            <span class="n">channels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;Z&#39;</span><span class="p">,</span> <span class="s1">&#39;T&#39;</span><span class="p">}:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;frames&#39;</span><span class="p">]))</span> <span class="o">==</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Size</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">k</span><span class="p">))</span> <span class="ow">and</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;frames&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">and</span>
+                    <span class="n">result</span><span class="p">[</span><span class="s1">&#39;frames&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Index</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">k</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;frames&#39;</span><span class="p">])):</span>
+                    <span class="n">result</span><span class="p">[</span><span class="s1">&#39;frames&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">][</span><span class="s1">&#39;Index</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span>
+        <span class="c1"># Standardize &quot;TheX&quot; to &quot;IndexX&quot; values</span>
+        <span class="n">reftbl</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">([</span>
+            <span class="p">(</span><span class="s1">&#39;TheC&#39;</span><span class="p">,</span> <span class="s1">&#39;IndexC&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;TheZ&#39;</span><span class="p">,</span> <span class="s1">&#39;IndexZ&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;TheT&#39;</span><span class="p">,</span> <span class="s1">&#39;IndexT&#39;</span><span class="p">),</span>
+            <span class="p">(</span><span class="s1">&#39;FirstC&#39;</span><span class="p">,</span> <span class="s1">&#39;IndexC&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;FirstZ&#39;</span><span class="p">,</span> <span class="s1">&#39;IndexZ&#39;</span><span class="p">),</span> <span class="p">(</span><span class="s1">&#39;FirstT&#39;</span><span class="p">,</span> <span class="s1">&#39;IndexT&#39;</span><span class="p">),</span>
+        <span class="p">])</span>
+        <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;frames&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">reftbl</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">frame</span> <span class="ow">and</span> <span class="n">reftbl</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">frame</span><span class="p">:</span>
+                    <span class="n">frame</span><span class="p">[</span><span class="n">reftbl</span><span class="p">[</span><span class="n">key</span><span class="p">]]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">frame</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+                <span class="n">frame</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_addMetadataFrameInformation</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">channels</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="OMETiffFileTileSource.getInternalMetadata">
+<a class="viewcode-back" href="../_build/large_image_source_ometiff/large_image_source_ometiff.html#large_image_source_ometiff.OMETiffFileTileSource.getInternalMetadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getInternalMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return additional known metadata about the tile source.  Data returned</span>
+<span class="sd">        from this method is not guaranteed to be in any particular format or</span>
+<span class="sd">        have specific values.</span>
+
+<span class="sd">        :returns: a dictionary of data or None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;omeinfo&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omeinfo</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="OMETiffFileTileSource.getNativeMagnification">
+<a class="viewcode-back" href="../_build/large_image_source_ometiff/large_image_source_ometiff.html#large_image_source_ometiff.OMETiffFileTileSource.getNativeMagnification">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getNativeMagnification</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the magnification for the highest-resolution level.</span>
+
+<span class="sd">        :return: magnification, width of a pixel in mm, height of a pixel in mm.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">getNativeMagnification</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;mm_x&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;PhysicalSizeX&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;mm_x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;PhysicalSizeX&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="mf">1e3</span> <span class="o">*</span>
+                <span class="n">_omeUnitsToMeters</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PhysicalSizeXUnit&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\u00b5</span><span class="s1">m&#39;</span><span class="p">)])</span>
+        <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;mm_y&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s1">&#39;PhysicalSizeY&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;mm_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;PhysicalSizeY&#39;</span><span class="p">])</span> <span class="o">*</span> <span class="mf">1e3</span> <span class="o">*</span>
+                <span class="n">_omeUnitsToMeters</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PhysicalSizeYUnit&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\u00b5</span><span class="s1">m&#39;</span><span class="p">)])</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;magnification&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mm_x&#39;</span><span class="p">):</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;magnification&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.01</span> <span class="o">/</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;mm_x&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="OMETiffFileTileSource.getTile">
+<a class="viewcode-back" href="../_build/large_image_source_ometiff/large_image_source_ometiff.html#large_image_source_ometiff.OMETiffFileTileSource.getTile">[docs]</a>
+    <span class="nd">@methodcache</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getTile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">pilImageAllowed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">numpyAllowed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                <span class="n">sparseFallback</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">z</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">z</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omeLevels</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_omeLevels</span><span class="p">[</span><span class="n">z</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;frame&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)))</span> <span class="ow">and</span>
+                <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_style&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">getTile</span><span class="p">(</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">pilImageAllowed</span><span class="o">=</span><span class="n">pilImageAllowed</span><span class="p">,</span>
+                <span class="n">numpyAllowed</span><span class="o">=</span><span class="n">numpyAllowed</span><span class="p">,</span> <span class="n">sparseFallback</span><span class="o">=</span><span class="n">sparseFallback</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getFrame</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">frame</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">frame</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omebase</span><span class="p">[</span><span class="s1">&#39;TiffData&#39;</span><span class="p">]):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Frame does not exist&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">subdir</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omeLevels</span><span class="p">[</span><span class="n">z</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">dirnum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omeLevels</span><span class="p">[</span><span class="n">z</span><span class="p">][</span><span class="s1">&#39;TiffData&#39;</span><span class="p">][</span><span class="n">frame</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;IFD&#39;</span><span class="p">,</span> <span class="n">frame</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">dirnum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omeLevels</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;TiffData&#39;</span><span class="p">][</span><span class="n">frame</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;IFD&#39;</span><span class="p">,</span> <span class="n">frame</span><span class="p">))</span>
+            <span class="n">subdir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">z</span>
+        <span class="nb">dir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDirFromCache</span><span class="p">(</span><span class="n">dirnum</span><span class="p">,</span> <span class="n">subdir</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">subdir</span><span class="p">:</span>
+            <span class="n">scale</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">subdir</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">dir</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span>
+                    <span class="p">(</span><span class="nb">dir</span><span class="o">.</span><span class="n">tileWidth</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span><span class="p">,</span> <span class="nb">dir</span><span class="o">.</span><span class="n">imageWidth</span><span class="p">})</span> <span class="ow">or</span>
+                    <span class="p">(</span><span class="nb">dir</span><span class="o">.</span><span class="n">tileHeight</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span><span class="p">,</span> <span class="nb">dir</span><span class="o">.</span><span class="n">imageHeight</span><span class="p">})</span> <span class="ow">or</span>
+                    <span class="nb">abs</span><span class="p">(</span><span class="nb">dir</span><span class="o">.</span><span class="n">imageWidth</span> <span class="o">*</span> <span class="n">scale</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">scale</span> <span class="ow">or</span>
+                    <span class="nb">abs</span><span class="p">(</span><span class="nb">dir</span><span class="o">.</span><span class="n">imageHeight</span> <span class="o">*</span> <span class="n">scale</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">scale</span><span class="p">):</span>
+                <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">getTile</span><span class="p">(</span>
+                    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">pilImageAllowed</span><span class="o">=</span><span class="n">pilImageAllowed</span><span class="p">,</span>
+                    <span class="n">numpyAllowed</span><span class="o">=</span><span class="n">numpyAllowed</span><span class="p">,</span> <span class="n">sparseFallback</span><span class="o">=</span><span class="n">sparseFallback</span><span class="p">,</span>
+                    <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">tile</span> <span class="o">=</span> <span class="nb">dir</span><span class="o">.</span><span class="n">getTile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">asarray</span><span class="o">=</span><span class="n">numpyAllowed</span> <span class="o">==</span> <span class="s1">&#39;always&#39;</span><span class="p">)</span>
+            <span class="nb">format</span> <span class="o">=</span> <span class="s1">&#39;JPEG&#39;</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">Image</span><span class="p">):</span>
+                <span class="nb">format</span> <span class="o">=</span> <span class="n">TILE_FORMAT_PIL</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+                <span class="nb">format</span> <span class="o">=</span> <span class="n">TILE_FORMAT_NUMPY</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outputTile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="nb">format</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">pilImageAllowed</span><span class="p">,</span>
+                                    <span class="n">numpyAllowed</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">InvalidOperationTiffError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">except</span> <span class="n">IOTiffError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTileIOTiffError</span><span class="p">(</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">pilImageAllowed</span><span class="o">=</span><span class="n">pilImageAllowed</span><span class="p">,</span>
+                <span class="n">numpyAllowed</span><span class="o">=</span><span class="n">numpyAllowed</span><span class="p">,</span> <span class="n">sparseFallback</span><span class="o">=</span><span class="n">sparseFallback</span><span class="p">,</span>
+                <span class="n">exception</span><span class="o">=</span><span class="n">e</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="OMETiffFileTileSource.getPreferredLevel">
+<a class="viewcode-back" href="../_build/large_image_source_ometiff/large_image_source_ometiff.html#large_image_source_ometiff.OMETiffFileTileSource.getPreferredLevel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getPreferredLevel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given a desired level (0 is minimum resolution, self.levels - 1 is max</span>
+<span class="sd">        resolution), return the level that contains actual data that is no</span>
+<span class="sd">        lower resolution.</span>
+
+<span class="sd">        :param level: desired level</span>
+<span class="sd">        :returns level: a level with actual data that is no lower resolution.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">level</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">baselevel</span> <span class="o">=</span> <span class="n">level</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffDirectories</span><span class="p">[</span><span class="n">level</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">level</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">dirnum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_omeLevels</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;TiffData&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;IFD&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+                <span class="n">subdir</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">levels</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">level</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDirFromCache</span><span class="p">(</span><span class="n">dirnum</span><span class="p">,</span> <span class="n">subdir</span><span class="p">):</span>
+                    <span class="k">break</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="n">level</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">while</span> <span class="n">level</span> <span class="o">-</span> <span class="n">baselevel</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxSkippedLevels</span><span class="p">:</span>
+            <span class="n">level</span> <span class="o">-=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_maxSkippedLevels</span>
+        <span class="k">return</span> <span class="n">level</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="open">
+<a class="viewcode-back" href="../_build/large_image_source_ometiff/large_image_source_ometiff.html#large_image_source_ometiff.open">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">open</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create an instance of the module class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">OMETiffFileTileSource</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="canRead">
+<a class="viewcode-back" href="../_build/large_image_source_ometiff/large_image_source_ometiff.html#large_image_source_ometiff.canRead">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">canRead</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if an input can be read by the module class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">OMETiffFileTileSource</span><span class="o">.</span><span class="n">canRead</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

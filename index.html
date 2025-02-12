@@ -1,0 +1,257 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Large Image &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="_static/K.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Getting Started" href="getting_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Large Image</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="large-image">
+<h1>Large Image<a class="headerlink" href="#large-image" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://circleci.com/gh/girder/large_image"><img alt="Build Status" src="https://img.shields.io/circleci/build/github/girder/large_image.svg" /></a> <a class="reference external" href="https://codecov.io/github/girder/large_image?branch=master"><img alt="codecov.io" src="https://img.shields.io/codecov/c/github/girder/large_image.svg" /></a> <a class="reference external" href="https://raw.githubusercontent.com/girder/large_image/master/LICENSE"><img alt="License" src="https://img.shields.io/badge/license-Apache%202-blue.svg" /></a> <a class="reference external" href="https://zenodo.org/badge/latestdoi/45569214"><img alt="doi-badge" src="https://img.shields.io/badge/DOI-10.5281%2Fzenodo.4723355-blue.svg" /></a> <a class="reference external" href="https://pypi.org/project/large-image/"><img alt="pypi-badge" src="https://img.shields.io/pypi/v/large-image.svg?logo=python&amp;logoColor=white" /></a></p>
+<p><em>Python modules to work with large, multiresolution images.</em></p>
+<p>Large Image is developed and maintained by the Data &amp; Analytics group at <a class="reference external" href="https://kitware.com">Kitware, Inc.</a> for processing large geospatial and medical images. This provides the backbone for several of our image analysis platforms including <a class="reference external" href="https://github.com/ResonantGeoData/ResonantGeoData">Resonant GeoData</a>, <a class="reference external" href="https://github.com/DigitalSlideArchive/HistomicsUI">HistomicsUI</a>, and <a class="reference external" href="https://digitalslidearchive.github.io/digital_slide_archive/">the Digital Slide Archive</a>.</p>
+<section id="highlights">
+<h2>Highlights<a class="headerlink" href="#highlights" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Tile serving made easy</p></li>
+<li><p>Supports a wide variety of geospatial and medical image formats</p></li>
+<li><p>Convert to tiled Cloud Optimized (Geo)Tiffs (also known as pyramidal tiffs)</p></li>
+<li><p>Python methods for retiling or accessing regions of images efficiently</p></li>
+<li><p>Options for restyling tiles, such as dynamically applying color and band transform</p></li>
+</ul>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>In addition to installing the base <code class="docutils literal notranslate"><span class="pre">large-image</span></code> package, you’ll need at least one tile source which corresponds to your target file format(s) (a <code class="docutils literal notranslate"><span class="pre">large-image-source-xxx</span></code> package).   You can install everything from the main project with one of these commands:</p>
+<section id="pip">
+<h3>Pip<a class="headerlink" href="#pip" title="Link to this heading"></a></h3>
+<p>Install common tile sources on linux, OSX, or Windows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">large</span><span class="o">-</span><span class="n">image</span><span class="p">[</span><span class="n">common</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>Install all tile sources on linux:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">large</span><span class="o">-</span><span class="n">image</span><span class="p">[</span><span class="nb">all</span><span class="p">]</span> <span class="o">--</span><span class="n">find</span><span class="o">-</span><span class="n">links</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">girder</span><span class="o">.</span><span class="n">github</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">large_image_wheels</span>
+</pre></div>
+</div>
+<p>When using large-image with an instance of <a class="reference external" href="https://girder.readthedocs.io/en/latest/">Girder</a>, install all tile sources and all Girder plugins on linux:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">large</span><span class="o">-</span><span class="n">image</span><span class="p">[</span><span class="nb">all</span><span class="p">]</span> <span class="n">girder</span><span class="o">-</span><span class="n">large</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">annotation</span><span class="p">[</span><span class="n">tasks</span><span class="p">]</span> <span class="o">--</span><span class="n">find</span><span class="o">-</span><span class="n">links</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">girder</span><span class="o">.</span><span class="n">github</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">large_image_wheels</span>
+</pre></div>
+</div>
+</section>
+<section id="conda">
+<h3>Conda<a class="headerlink" href="#conda" title="Link to this heading"></a></h3>
+<p>Conda makes dependency management a bit easier if not on Linux. The base module, converter module, and two of the source modules are available on conda-forge. You can install the following:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">large</span><span class="o">-</span><span class="n">image</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">large</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">source</span><span class="o">-</span><span class="n">gdal</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">large</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">source</span><span class="o">-</span><span class="n">tiff</span>
+<span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">large</span><span class="o">-</span><span class="n">image</span><span class="o">-</span><span class="n">converter</span>
+</pre></div>
+</div>
+</section>
+<section id="docker-image">
+<h3>Docker Image<a class="headerlink" href="#docker-image" title="Link to this heading"></a></h3>
+<p>Included in this repository’s packages is a pre-built Docker image that has all
+of the dependencies to read any supported image format.</p>
+<p>This is particularly useful if you do not want to install some of the heavier
+dependencies like GDAL on your system or want a dedicated and isolated
+environment for working with large images.</p>
+<p>To use, pull the image and run it by mounting a local volume where the
+imagery is stored:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">docker</span> <span class="n">pull</span> <span class="n">ghcr</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">girder</span><span class="o">/</span><span class="n">large_image</span><span class="p">:</span><span class="n">latest</span>
+<span class="n">docker</span> <span class="n">run</span> <span class="o">-</span><span class="n">v</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">images</span><span class="p">:</span><span class="o">/</span><span class="n">opt</span><span class="o">/</span><span class="n">images</span> <span class="n">ghcr</span><span class="o">.</span><span class="n">io</span><span class="o">/</span><span class="n">girder</span><span class="o">/</span><span class="n">large_image</span><span class="p">:</span><span class="n">latest</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="modules">
+<h2>Modules<a class="headerlink" href="#modules" title="Link to this heading"></a></h2>
+<p>Large Image consists of several Python modules designed to work together.  These include:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image</span></code>: The core module.</p>
+<p>You can specify extras_require of the name of any tile source included with this repository.  For instance, you can do <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">large-image[tiff]</span></code>.  There are additional extras_require options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">sources</span></code>: all of the tile sources in the repository, a specific source name (e.g., <code class="docutils literal notranslate"><span class="pre">tiff</span></code>)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">memcached</span></code>: use memcached for tile caching</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">converter</span></code>: include the converter module</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">colormaps</span></code>: use matplotlib for named color palettes used in styles</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tiledoutput</span></code>: support for emitting large regions as tiled tiffs</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">performance</span></code>: include optional modules that can improve performance</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">common</span></code>: all of the tile sources and above packages that will install directly from pypi without other external libraries on linux, OSX, and Windows.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">all</span></code>: for all of the above</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-converter</span></code>: A utility for using pyvips and other libraries to convert images into pyramidal tiff files that can be read efficiently by large_image.
+You can specify extras_require of <code class="docutils literal notranslate"><span class="pre">jp2k</span></code> to include modules to allow output to JPEG2000 compression, <code class="docutils literal notranslate"><span class="pre">sources</span></code> to include all sources, <code class="docutils literal notranslate"><span class="pre">stats</span></code> to include modules to allow computing compression noise statistics, <code class="docutils literal notranslate"><span class="pre">geospatial</span></code> to include support for converting geospatial sources, or <code class="docutils literal notranslate"><span class="pre">all</span></code> for all of the optional extras_require.</p></li>
+<li><p>Tile sources:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-source-bioformats</span></code>: A tile source for reading any file handled by the Java Bioformats library.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-source-deepzoom</span></code>: A tile source for reading Deepzoom tiles.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-source-dicom</span></code>: A tile source for reading DICOM Whole Slide Images (WSI).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-source-gdal</span></code>: A tile source for reading geotiff files via GDAL.  This handles source data with more complex transforms than the mapnik tile source.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-source-mapnik</span></code>: A tile source for reading geotiff and netcdf files via Mapnik and GDAL.  This handles more vector issues than the gdal tile source.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-source-multi</span></code>: A tile source for compositing other tile sources into a single multi-frame source.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-source-nd2</span></code>: A tile source for reading nd2 (NIS Element) images.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-source-ometiff</span></code>: A tile source using the tiff library that can handle most multi-frame OMETiff files that are compliant with the specification.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-source-openjpeg</span></code>: A tile source using the Glymur library to read jp2 (JPEG 2000) files.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-source-openslide</span></code>: A tile source using the OpenSlide library.  This works with svs, ndpi, Mirax, tiff, vms, and other file formats.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-source-pil</span></code>: A tile source for small images via the Python Imaging Library (Pillow). By default, the maximum size is 4096, but the maximum size can be configured.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-source-tiff</span></code>: A tile source for reading pyramidal tiff files in common compression formats.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-source-tifffile</span></code>: A tile source using the tifffile library that can handle a wide variety of tiff-like files.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-source-vips</span></code>: A tile source for reading any files handled by libvips.  This also can be used for writing tiled images from numpy arrays (up to 4 dimensions).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-source-zarr</span></code>: A tile source using the zarr library that can handle OME-Zarr (OME-NGFF) files as well as some other zarr files. This can also be used for writing N-dimensional tiled images from numpy arrays. Written images can be saved as any supported format.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-source-test</span></code>: A tile source that generates test tiles, including a simple fractal pattern.  Useful for testing extreme zoom levels.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-source-dummy</span></code>: A tile source that does nothing. This is an absolutely minimal implementation of a tile source used for testing. If you want to create a custom tile source, start with this implementation.</p></li>
+</ul>
+</li>
+</ul>
+<p>As a <a class="reference external" href="https://girder.readthedocs.io/en/latest/">Girder</a> plugin, <code class="docutils literal notranslate"><span class="pre">large-image</span></code> adds end points to access all of the image formats it can read both to get metadata and to act as a tile server.
+In the Girder UI, <code class="docutils literal notranslate"><span class="pre">large-image</span></code> shows images on item pages, and can show thumbnails in item lists when browsing folders.
+There is also cache management to balance memory use and speed of response in Girder when <code class="docutils literal notranslate"><span class="pre">large-image</span></code> is used as a tile server.</p>
+<p>Most tile sources can be used with Girder Large Image.  You can specify an extras_require of <code class="docutils literal notranslate"><span class="pre">girder</span></code> to install the following packages:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">girder-large-image</span></code>: Large Image as a Girder 3.x plugin.
+You can install <code class="docutils literal notranslate"><span class="pre">large-image[tasks]</span></code> to install a Girder Worker task that can convert otherwise unreadable images to pyramidal tiff files.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">girder-large-image-annotation</span></code>: Adds models to the Girder database for supporting annotating large images.  These annotations can be rendered on images. Annotations can include polygons, points, image overlays, and other types. Each annotation can have a label and metadata.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">large-image-tasks</span></code>: A utility for running the converter via Girder Worker.
+You can specify an extras_require of <code class="docutils literal notranslate"><span class="pre">girder</span></code> to include modules needed to work with the Girder remote worker or <code class="docutils literal notranslate"><span class="pre">worker</span></code> to include modules needed on the remote side of the Girder remote worker.  If neither is specified, some conversion tasks can be run using Girder local jobs.</p></li>
+</ul>
+</div></blockquote>
+<div class="toctree-wrapper compound">
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_index.html">API Documentation</a></li>
+</ul>
+</div>
+</section>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+</ul>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="getting_started.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

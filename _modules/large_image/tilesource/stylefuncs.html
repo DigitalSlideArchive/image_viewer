@@ -1,0 +1,234 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image.tilesource.stylefuncs &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/K.png"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../tilesource.html">large_image.tilesource</a></li>
+      <li class="breadcrumb-item active">large_image.tilesource.stylefuncs</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image.tilesource.stylefuncs</h1><div class="highlight"><pre>
+<span></span><span class="c1"># This module contains functions for use in styles</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">types</span><span class="w"> </span><span class="kn">import</span> <span class="n">SimpleNamespace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">_imageToNumpy</span><span class="p">,</span> <span class="n">_imageToPIL</span>
+
+
+<div class="viewcode-block" id="maskPixelValues">
+<a class="viewcode-back" href="../../../_build/large_image/large_image.tilesource.html#large_image.tilesource.stylefuncs.maskPixelValues">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">maskPixelValues</span><span class="p">(</span>
+        <span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">SimpleNamespace</span><span class="p">,</span>
+        <span class="n">values</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="o">...</span><span class="p">]]],</span>
+        <span class="n">negative</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">positive</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is a style utility function that returns a black-and-white 8-bit image</span>
+<span class="sd">    where the image is white if the pixel of the source image is in a list of</span>
+<span class="sd">    values and black otherwise.  The values is a list where each entry can</span>
+<span class="sd">    either be a tuple the same length as the band dimension of the output image</span>
+<span class="sd">    or a single value which is handled as 0xBBGGRR.</span>
+
+<span class="sd">    :param image: a numpy array of Y, X, Bands.</span>
+<span class="sd">    :param context: the style context.  context.image is the source image</span>
+<span class="sd">    :param values: an array of values, each of which is either an array of the</span>
+<span class="sd">        same number of bands as the source image or a single value of the form</span>
+<span class="sd">        0xBBGGRR assuming uint8 data.</span>
+<span class="sd">    :param negative: None to use [0, 0, 0, 255], or an RGBA uint8 value for</span>
+<span class="sd">        pixels not in the value list.</span>
+<span class="sd">    :param positive: None to use [255, 255, 255, 0], or an RGBA uint8 value for</span>
+<span class="sd">        pixels in the value list.</span>
+<span class="sd">    :returns: an RGBA numpy image which is exactly black or transparent white.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">src</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">image</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span> <span class="kc">False</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">values</span><span class="p">:</span>
+        <span class="n">vallist</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">float</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">vallist</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">vallist</span> <span class="o">=</span> <span class="p">[</span><span class="n">val</span> <span class="o">%</span> <span class="mi">256</span><span class="p">,</span> <span class="n">val</span> <span class="o">//</span> <span class="mi">256</span> <span class="o">%</span> <span class="mi">256</span><span class="p">,</span> <span class="n">val</span> <span class="o">//</span> <span class="mi">65536</span> <span class="o">%</span> <span class="mi">256</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">vallist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="n">vallist</span> <span class="o">=</span> <span class="p">(</span><span class="n">vallist</span> <span class="o">+</span> <span class="p">[</span><span class="mi">255</span><span class="p">]</span> <span class="o">*</span> <span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">])[:</span><span class="n">src</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+        <span class="n">match</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vallist</span><span class="p">)</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">mask</span> <span class="o">|</span> <span class="p">(</span><span class="n">src</span> <span class="o">==</span> <span class="n">match</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">image</span><span class="p">[</span><span class="n">mask</span> <span class="o">!=</span> <span class="kc">True</span><span class="p">]</span> <span class="o">=</span> <span class="n">negative</span> <span class="ow">or</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">]</span>  <span class="c1"># noqa E712</span>
+    <span class="n">image</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">positive</span> <span class="ow">or</span> <span class="p">[</span><span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+    <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">image</span></div>
+
+
+
+<div class="viewcode-block" id="medianFilter">
+<a class="viewcode-back" href="../../../_build/large_image/large_image.tilesource.html#large_image.tilesource.stylefuncs.medianFilter">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">medianFilter</span><span class="p">(</span>
+        <span class="n">image</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">context</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">SimpleNamespace</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">kernel</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">weight</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This is a style utility function that applies a median rank filter to the</span>
+<span class="sd">    image to sharpen it.</span>
+
+<span class="sd">    :param image: a numpy array of Y, X, Bands.</span>
+<span class="sd">    :param context: the style context.  context.image is the source image</span>
+<span class="sd">    :param kernel: the filter kernel size.</span>
+<span class="sd">    :param weight: the weight of the difference between the image and the</span>
+<span class="sd">        filtered image that is used to add into the image.  0 is no effect/</span>
+<span class="sd">    :returns: an numpy image which is the filtered version of the source.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">PIL.ImageFilter</span>
+
+    <span class="n">filt</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">ImageFilter</span><span class="o">.</span><span class="n">MedianFilter</span><span class="p">(</span><span class="n">kernel</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">pilimg</span> <span class="o">=</span> <span class="n">_imageToPIL</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="n">pilimg</span> <span class="o">=</span> <span class="n">_imageToPIL</span><span class="p">(</span><span class="n">image</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pilimg</span> <span class="o">=</span> <span class="n">_imageToPIL</span><span class="p">(</span><span class="n">image</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">fimg</span> <span class="o">=</span> <span class="n">_imageToNumpy</span><span class="p">(</span><span class="n">pilimg</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">filt</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">mul</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">clip</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;f&#39;</span> <span class="ow">and</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">image</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">256</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">image</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">mul</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">clip</span> <span class="o">=</span> <span class="mi">255</span>
+    <span class="k">elif</span> <span class="n">image</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;f&#39;</span> <span class="ow">and</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">image</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">65536</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">image</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">mul</span> <span class="o">=</span> <span class="mi">257</span>
+        <span class="n">clip</span> <span class="o">=</span> <span class="mi">65535</span>
+    <span class="k">elif</span> <span class="n">image</span><span class="o">.</span><span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">:</span>
+        <span class="n">mul</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="mi">32</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">255</span>
+        <span class="n">clip</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">32</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">image</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;f&#39;</span><span class="p">:</span>
+        <span class="n">mul</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">mul</span><span class="p">:</span>
+        <span class="n">pimg</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pimg</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="n">pimg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">pimg</span><span class="p">,</span> <span class="p">(</span><span class="n">pimg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pimg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">pimg</span> <span class="o">=</span> <span class="n">pimg</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="n">fimg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span>
+        <span class="n">dimg</span> <span class="o">=</span> <span class="p">(</span><span class="n">pimg</span> <span class="o">-</span> <span class="n">fimg</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">*</span> <span class="n">mul</span><span class="p">)</span> <span class="o">*</span> <span class="n">weight</span>
+        <span class="n">pimg</span> <span class="o">=</span> <span class="n">pimg</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="n">fimg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span> <span class="o">+</span> <span class="n">dimg</span>
+        <span class="k">if</span> <span class="n">clip</span><span class="p">:</span>
+            <span class="n">pimg</span> <span class="o">=</span> <span class="n">pimg</span><span class="o">.</span><span class="n">clip</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">clip</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">image</span><span class="p">[:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">pimg</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span> <span class="p">(</span><span class="n">pimg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pimg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">image</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="n">fimg</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]]</span> <span class="o">=</span> <span class="n">pimg</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">image</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

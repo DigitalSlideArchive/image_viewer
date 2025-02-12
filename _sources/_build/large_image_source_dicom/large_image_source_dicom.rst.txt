@@ -1,0 +1,61 @@
+large\_image\_source\_dicom package
+===================================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   large_image_source_dicom.assetstore
+
+Submodules
+----------
+
+large\_image\_source\_dicom.dicom\_metadata module
+--------------------------------------------------
+
+.. automodule:: large_image_source_dicom.dicom_metadata
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+large\_image\_source\_dicom.dicom\_tags module
+----------------------------------------------
+
+.. automodule:: large_image_source_dicom.dicom_tags
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+large\_image\_source\_dicom.dicomweb\_utils module
+--------------------------------------------------
+
+.. automodule:: large_image_source_dicom.dicomweb_utils
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+large\_image\_source\_dicom.girder\_plugin module
+-------------------------------------------------
+
+.. automodule:: large_image_source_dicom.girder_plugin
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+large\_image\_source\_dicom.girder\_source module
+-------------------------------------------------
+
+.. automodule:: large_image_source_dicom.girder_source
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: large_image_source_dicom
+   :members:
+   :undoc-members:
+   :show-inheritance:

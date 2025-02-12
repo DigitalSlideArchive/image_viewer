@@ -1,0 +1,560 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_mapnik &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../_static/K.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">large_image_source_mapnik</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image_source_mapnik</h1><div class="highlight"><pre>
+<span></span><span class="c1">#############################################################################</span>
+<span class="c1">#  Copyright Kitware Inc.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed under the Apache License, Version 2.0 ( the &quot;License&quot; );</span>
+<span class="c1">#  you may not use this file except in compliance with the License.</span>
+<span class="c1">#  You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#    http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#  See the License for the specific language governing permissions and</span>
+<span class="c1">#  limitations under the License.</span>
+<span class="c1">#############################################################################</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">functools</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">PackageNotFoundError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">_importlib_version</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">mapnik</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">PIL.Image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image_source_gdal</span><span class="w"> </span><span class="kn">import</span> <span class="n">GDALFileTileSource</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">osgeo</span><span class="w"> </span><span class="kn">import</span> <span class="n">gdal</span><span class="p">,</span> <span class="n">gdalconst</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.cache_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">LruCacheMetaclass</span><span class="p">,</span> <span class="n">methodcache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">TILE_FORMAT_PIL</span><span class="p">,</span> <span class="n">SourcePriority</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TileSourceError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.tilesource.utilities</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONDict</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">__version__</span> <span class="o">=</span> <span class="n">_importlib_version</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">PackageNotFoundError</span><span class="p">:</span>
+    <span class="c1"># package is not installed</span>
+    <span class="k">pass</span>
+
+
+<span class="n">mapnik</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">set_severity</span><span class="p">(</span><span class="n">mapnik</span><span class="o">.</span><span class="n">severity_type</span><span class="o">.</span><span class="n">Debug</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="MapnikFileTileSource">
+<a class="viewcode-back" href="../_build/large_image_source_mapnik/large_image_source_mapnik.html#large_image_source_mapnik.MapnikFileTileSource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">MapnikFileTileSource</span><span class="p">(</span><span class="n">GDALFileTileSource</span><span class="p">,</span> <span class="n">metaclass</span><span class="o">=</span><span class="n">LruCacheMetaclass</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provides tile access to geospatial files.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">cacheName</span> <span class="o">=</span> <span class="s1">&#39;tilesource&#39;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;mapnik&#39;</span>
+    <span class="n">extensions</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="kc">None</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">LOW</span><span class="p">,</span>
+        <span class="s1">&#39;nc&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">PREFERRED</span><span class="p">,</span>  <span class="c1"># netcdf</span>
+        <span class="c1"># National Imagery Transmission Format</span>
+        <span class="s1">&#39;ntf&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">HIGHER</span><span class="p">,</span>
+        <span class="s1">&#39;nitf&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">HIGHER</span><span class="p">,</span>
+        <span class="s1">&#39;tif&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">LOWER</span><span class="p">,</span>
+        <span class="s1">&#39;tiff&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">LOWER</span><span class="p">,</span>
+        <span class="s1">&#39;vrt&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">HIGHER</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">mimeTypes</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="kc">None</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">FALLBACK</span><span class="p">,</span>
+        <span class="s1">&#39;image/geotiff&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">HIGHER</span><span class="p">,</span>
+        <span class="s1">&#39;image/tiff&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">LOWER</span><span class="p">,</span>
+        <span class="s1">&#39;image/x-tiff&#39;</span><span class="p">:</span> <span class="n">SourcePriority</span><span class="o">.</span><span class="n">LOWER</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">unitsPerPixel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the tile class.  See the base class for other available</span>
+<span class="sd">        parameters.</span>
+
+<span class="sd">        :param path: a filesystem path for the tile source.</span>
+<span class="sd">        :param projection: None to use pixel space, otherwise a proj4</span>
+<span class="sd">            projection string or a case-insensitive string of the form</span>
+<span class="sd">            &#39;EPSG:&lt;epsg number&gt;&#39;.  If a string and case-insensitively prefixed</span>
+<span class="sd">            with &#39;proj4:&#39;, that prefix is removed.  For instance,</span>
+<span class="sd">            &#39;proj4:EPSG:3857&#39;, &#39;PROJ4:+init=epsg:3857&#39;, and &#39;+init=epsg:3857&#39;,</span>
+<span class="sd">            and &#39;EPSG:3857&#39; are all equivalent.</span>
+<span class="sd">        :param style: if None, use the default style for the file.  Otherwise,</span>
+<span class="sd">            this is a string with a json-encoded dictionary.  The style is</span>
+<span class="sd">            ignored if it does not contain &#39;band&#39; or &#39;bands&#39;.  In addition to</span>
+<span class="sd">            the base class parameters, the style can also contain the following</span>
+<span class="sd">            keys:</span>
+
+<span class="sd">                scheme: one of the mapnik.COLORIZER_xxx values.  Case</span>
+<span class="sd">                    insensitive.  Possible values are at least &#39;discrete&#39;,</span>
+<span class="sd">                    &#39;linear&#39;, and &#39;exact&#39;.  This defaults to &#39;linear&#39;.</span>
+<span class="sd">                composite: this is a string containing one of the mapnik</span>
+<span class="sd">                    CompositeOp properties.  It defaults to &#39;lighten&#39;.</span>
+
+<span class="sd">        :param unitsPerPixel: The size of a pixel at the 0 tile size.  Ignored</span>
+<span class="sd">            if the projection is None.  For projections, None uses the default,</span>
+<span class="sd">            which is the distance between (-180,0) and (180,0) in EPSG:4326</span>
+<span class="sd">            converted to the projection divided by the tile size.  Proj4</span>
+<span class="sd">            projections that are not latlong (is_geographic is False) must</span>
+<span class="sd">            specify unitsPerPixel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">projection</span> <span class="ow">and</span> <span class="n">projection</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;epsg&#39;</span><span class="p">):</span>
+            <span class="n">projection</span> <span class="o">=</span> <span class="n">projection</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">path</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span> <span class="n">unitsPerPixel</span><span class="o">=</span><span class="n">unitsPerPixel</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">GetDriver</span><span class="p">()</span><span class="o">.</span><span class="n">ShortName</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;MBTiles&#39;</span><span class="p">,</span> <span class="s1">&#39;Rasterlite&#39;</span><span class="p">,</span> <span class="s1">&#39;SQLite&#39;</span><span class="p">}:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;File will not be opened via mapbox&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;mapnik source using the GDAL </span><span class="si">%s</span><span class="s1"> driver&#39;</span><span class="p">,</span>
+                          <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">GetDriver</span><span class="p">()</span><span class="o">.</span><span class="n">ShortName</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_openVectorSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ds</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;File will not be opened via mapnik&#39;</span>
+        <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_checkNetCDF</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if this file is a netCDF file.  If so, get some metadata about</span>
+<span class="sd">        available datasets.</span>
+
+<span class="sd">        This assumes things about the projection that may not be true for all</span>
+<span class="sd">        netCDF files.  It could also be extended to get better data about</span>
+<span class="sd">        time bounds and other series data and to prevent selecting subdatasets</span>
+<span class="sd">        that are not spatially appropriate.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDriver</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;netCDF&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">datasets</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDatasetLock</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">desc</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">GetSubDatasets</span><span class="p">():</span>
+                <span class="n">parts</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">dataset</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+                    <span class="s1">&#39;desc&#39;</span><span class="p">:</span> <span class="n">desc</span><span class="p">,</span>
+                    <span class="s1">&#39;dim&#39;</span><span class="p">:</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;[]&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)],</span>
+                    <span class="s1">&#39;key&#39;</span><span class="p">:</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="s1">&#39;format&#39;</span><span class="p">:</span> <span class="n">parts</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span>
+                <span class="p">}</span>
+                <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">functools</span><span class="o">.</span><span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="n">y</span><span class="p">,</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;dim&#39;</span><span class="p">])</span>
+                <span class="n">datasets</span><span class="p">[</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">dataset</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">datasets</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">RasterCount</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">GetProjection</span><span class="p">()):</span>
+                <span class="k">return</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_netcdf</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;datasets&#39;</span><span class="p">:</span> <span class="n">datasets</span><span class="p">,</span>
+                <span class="s1">&#39;metadata&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">GetMetadata_Dict</span><span class="p">(),</span>
+            <span class="p">}</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">datasets</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">getBounds</span><span class="p">(</span><span class="s1">&#39;epsg:3857&#39;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_bounds</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_netcdf</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDatasetLock</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">RasterCount</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_netcdf</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">([(</span>
+                    <span class="ow">not</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;_bnds&#39;</span><span class="p">),</span>
+                    <span class="s1">&#39;character&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;format&#39;</span><span class="p">],</span>
+                    <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;values&#39;</span><span class="p">],</span>
+                    <span class="nb">len</span><span class="p">(</span><span class="n">ds</span><span class="p">[</span><span class="s1">&#39;dim&#39;</span><span class="p">]),</span>
+                    <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;dim&#39;</span><span class="p">],</span>
+                    <span class="n">ds</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">])</span> <span class="k">for</span> <span class="n">ds</span> <span class="ow">in</span> <span class="n">datasets</span><span class="o">.</span><span class="n">values</span><span class="p">()])[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="c1"># The base netCDF file reports different dimensions than the</span>
+                <span class="c1"># subdatasets.  For now, use the &quot;best&quot; subdataset&#39;s dimensions</span>
+                <span class="n">dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_netcdf</span><span class="p">[</span><span class="s1">&#39;datasets&#39;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">_netcdf</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">]]</span>
+                <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;dataset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">gdalconst</span><span class="o">.</span><span class="n">GA_ReadOnly</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sourceSizeX</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeX</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;dataset&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">RasterXSize</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">sourceSizeY</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sizeY</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;dataset&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">RasterYSize</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;dataset&#39;</span><span class="p">]</span>  <span class="c1"># use for projection information</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_style&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_style</span> <span class="o">=</span> <span class="n">JSONDict</span><span class="p">({</span>
+                <span class="s1">&#39;band&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_netcdf</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;:1&#39;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_netcdf</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="s1">&#39;scheme&#39;</span><span class="p">:</span> <span class="s1">&#39;linear&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;palette&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;#000000&#39;</span><span class="p">,</span> <span class="s1">&#39;#ffffff&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;min&#39;</span><span class="p">:</span> <span class="s1">&#39;min&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;max&#39;</span><span class="p">:</span> <span class="s1">&#39;max&#39;</span><span class="p">,</span>
+            <span class="p">})</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setDefaultStyle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Don&#39;t inherit from GDAL tilesource.&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getTileLock</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_mapnikMap&#39;</span><span class="p">):</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapnikMap</span>
+
+<div class="viewcode-block" id="MapnikFileTileSource.interpolateMinMax">
+<a class="viewcode-back" href="../_build/large_image_source_mapnik/large_image_source_mapnik.html#large_image_source_mapnik.MapnikFileTileSource.interpolateMinMax">[docs]</a>
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">interpolateMinMax</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">stop</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Returns interpolated values for a given</span>
+<span class="sd">        start, stop and count</span>
+
+<span class="sd">        :returns: List of interpolated values</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">step</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">stop</span><span class="p">)</span> <span class="o">-</span> <span class="nb">float</span><span class="p">(</span><span class="n">start</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">count</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Minimum and maximum values should be numbers, &quot;auto&quot;, &quot;min&quot;, or &quot;max&quot;.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="n">step</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">count</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="MapnikFileTileSource.getOneBandInformation">
+<a class="viewcode-back" href="../_build/large_image_source_mapnik/large_image_source_mapnik.html#large_image_source_mapnik.MapnikFileTileSource.getOneBandInformation">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getOneBandInformation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">band</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">band</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">bandInfo</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">getOneBandInformation</span><span class="p">(</span><span class="n">band</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># netcdf</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getDatasetLock</span><span class="p">:</span>
+                <span class="n">dataset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_netcdf</span><span class="p">[</span><span class="s1">&#39;datasets&#39;</span><span class="p">][</span><span class="n">band</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">dataset</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bands&#39;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">dataset</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;dataset&#39;</span><span class="p">):</span>
+                        <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;dataset&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">gdalconst</span><span class="o">.</span><span class="n">GA_ReadOnly</span><span class="p">)</span>
+                    <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;bands&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBandInformation</span><span class="p">(</span><span class="n">dataset</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;dataset&#39;</span><span class="p">])</span>
+                <span class="n">bandInfo</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;bands&#39;</span><span class="p">][</span><span class="n">band</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">bandInfo</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">bandInfo</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">bandInfo</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_colorizerFromStyle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">style</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a specified style to a mapnik raster symbolizer.</span>
+
+<span class="sd">        :param style: a style object.</span>
+<span class="sd">        :returns: a mapnik raster colorizer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">scheme</span> <span class="o">=</span> <span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;scheme&#39;</span><span class="p">,</span> <span class="s1">&#39;linear&#39;</span><span class="p">)</span>
+            <span class="n">mapnik_scheme</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mapnik</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;COLORIZER_</span><span class="si">{</span><span class="n">scheme</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="n">mapnik_scheme</span> <span class="o">=</span> <span class="n">mapnik</span><span class="o">.</span><span class="n">COLORIZER_DISCRETE</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Scheme has to be either &quot;discrete&quot; or &quot;linear&quot;.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">colorizer</span> <span class="o">=</span> <span class="n">mapnik</span><span class="o">.</span><span class="n">RasterColorizer</span><span class="p">(</span><span class="n">mapnik_scheme</span><span class="p">,</span> <span class="n">mapnik</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">bandInfo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getOneBandInformation</span><span class="p">(</span><span class="n">style</span><span class="p">[</span><span class="s1">&#39;band&#39;</span><span class="p">])</span>
+        <span class="n">minimum</span> <span class="o">=</span> <span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">maximum</span> <span class="o">=</span> <span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+        <span class="n">minimum</span> <span class="o">=</span> <span class="n">bandInfo</span><span class="p">[</span><span class="n">minimum</span><span class="p">]</span> <span class="k">if</span> <span class="n">minimum</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">minimum</span>
+        <span class="n">maximum</span> <span class="o">=</span> <span class="n">bandInfo</span><span class="p">[</span><span class="n">maximum</span><span class="p">]</span> <span class="k">if</span> <span class="n">maximum</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="s1">&#39;max&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="n">maximum</span>
+        <span class="k">if</span> <span class="n">minimum</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">bandInfo</span><span class="p">[</span><span class="s1">&#39;min&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">255</span> <span class="ow">and</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">bandInfo</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">255</span><span class="p">):</span>
+                <span class="n">minimum</span> <span class="o">=</span> <span class="n">bandInfo</span><span class="p">[</span><span class="s1">&#39;min&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">minimum</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">maximum</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">bandInfo</span><span class="p">[</span><span class="s1">&#39;min&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">255</span> <span class="ow">and</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">bandInfo</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">255</span><span class="p">):</span>
+                <span class="n">maximum</span> <span class="o">=</span> <span class="n">bandInfo</span><span class="p">[</span><span class="s1">&#39;max&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">maximum</span> <span class="o">=</span> <span class="mi">255</span>
+        <span class="k">if</span> <span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;palette&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;colortable&#39;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bandInfo</span><span class="p">[</span><span class="s1">&#39;colortable&#39;</span><span class="p">]):</span>
+                <span class="n">colorizer</span><span class="o">.</span><span class="n">add_stop</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">mapnik</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="o">*</span><span class="n">color</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">colors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getHexColors</span><span class="p">(</span><span class="n">style</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;palette&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;#000000&#39;</span><span class="p">,</span> <span class="s1">&#39;#ffffff&#39;</span><span class="p">]))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;A palette must have at least 2 colors.&#39;</span>
+                <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interpolateMinMax</span><span class="p">(</span><span class="n">minimum</span><span class="p">,</span> <span class="n">maximum</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">colors</span><span class="p">))</span>
+            <span class="k">for</span> <span class="n">value</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">colors</span><span class="p">)):</span>
+                <span class="n">colorizer</span><span class="o">.</span><span class="n">add_stop</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">mapnik</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="n">color</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">colorizer</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_addStyleToMap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">layerSrs</span><span class="p">,</span> <span class="n">colorizer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">band</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                       <span class="n">composite</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nodata</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a mapik raster symbolizer to a map.</span>
+
+<span class="sd">        :param m: mapnik map.</span>
+<span class="sd">        :param layerSrs: the layer projection</span>
+<span class="sd">        :param colorizer: a mapnik colorizer.</span>
+<span class="sd">        :param band: an integer band number.  -1 for default.</span>
+<span class="sd">        :param extent: the extent to use for the mapnik layer.</span>
+<span class="sd">        :param composite: the composite operation to use.  This is one of</span>
+<span class="sd">            mapnik.CompositeOp.xxx, typically lighten or multiply.</span>
+<span class="sd">        :param nodata: the value to use for missing data or None to use all</span>
+<span class="sd">            data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">styleName</span> <span class="o">=</span> <span class="s1">&#39;Raster Style&#39;</span>
+        <span class="k">if</span> <span class="n">band</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">styleName</span> <span class="o">+=</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">band</span><span class="p">)</span>
+        <span class="n">rule</span> <span class="o">=</span> <span class="n">mapnik</span><span class="o">.</span><span class="n">Rule</span><span class="p">()</span>
+        <span class="n">sym</span> <span class="o">=</span> <span class="n">mapnik</span><span class="o">.</span><span class="n">RasterSymbolizer</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">colorizer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">sym</span><span class="o">.</span><span class="n">colorizer</span> <span class="o">=</span> <span class="n">colorizer</span>
+        <span class="nb">getattr</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span> <span class="s1">&#39;symbols&#39;</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">rule</span><span class="p">,</span> <span class="s1">&#39;symbolizers&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sym</span><span class="p">)</span>
+        <span class="n">style</span> <span class="o">=</span> <span class="n">mapnik</span><span class="o">.</span><span class="n">Style</span><span class="p">()</span>
+        <span class="n">style</span><span class="o">.</span><span class="n">rules</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rule</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">composite</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">style</span><span class="o">.</span><span class="n">comp_op</span> <span class="o">=</span> <span class="n">composite</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">append_style</span><span class="p">(</span><span class="n">styleName</span><span class="p">,</span> <span class="n">style</span><span class="p">)</span>
+        <span class="n">lyr</span> <span class="o">=</span> <span class="n">mapnik</span><span class="o">.</span><span class="n">Layer</span><span class="p">(</span><span class="s1">&#39;layer&#39;</span><span class="p">)</span>
+        <span class="n">lyr</span><span class="o">.</span><span class="n">srs</span> <span class="o">=</span> <span class="n">layerSrs</span>
+        <span class="n">gdalpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_largeImagePath</span>
+        <span class="n">gdalband</span> <span class="o">=</span> <span class="n">band</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_netcdf&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">band</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">gdalband</span> <span class="o">=</span> <span class="n">band</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">gdalpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_netcdf</span><span class="p">[</span><span class="s1">&#39;datasets&#39;</span><span class="p">][</span><span class="n">band</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">base</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">gdalpath</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="n">gdalband</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="n">extent</span><span class="p">,</span> <span class="n">nodata</span><span class="o">=</span><span class="n">nodata</span><span class="p">)</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">params</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">}</span>
+        <span class="n">lyr</span><span class="o">.</span><span class="n">datasource</span> <span class="o">=</span> <span class="n">mapnik</span><span class="o">.</span><span class="n">Gdal</span><span class="p">(</span><span class="o">**</span><span class="n">params</span><span class="p">)</span>
+        <span class="n">lyr</span><span class="o">.</span><span class="n">styles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">styleName</span><span class="p">)</span>
+        <span class="n">m</span><span class="o">.</span><span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lyr</span><span class="p">)</span>
+
+<div class="viewcode-block" id="MapnikFileTileSource.addStyle">
+<a class="viewcode-back" href="../_build/large_image_source_mapnik/large_image_source_mapnik.html#large_image_source_mapnik.MapnikFileTileSource.addStyle">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">addStyle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">m</span><span class="p">,</span> <span class="n">layerSrs</span><span class="p">,</span> <span class="n">extent</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Attaches raster style option to mapnik raster layer and adds the layer</span>
+<span class="sd">        to the mapnik map.</span>
+
+<span class="sd">        :param m: mapnik map.</span>
+<span class="sd">        :param layerSrs: the layer projection</span>
+<span class="sd">        :param extent: the extent to use for the mapnik layer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">style</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_styleBands</span><span class="p">()</span>
+        <span class="n">bands</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBandInformation</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">style</span><span class="p">):</span>
+            <span class="n">style</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;band&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s1">&#39;mapnik addTile specified style: </span><span class="si">%r</span><span class="s1">, used style </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;style&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">style</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">styleBand</span> <span class="ow">in</span> <span class="n">style</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">styleBand</span><span class="p">[</span><span class="s1">&#39;band&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">colorizer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_colorizerFromStyle</span><span class="p">(</span><span class="n">styleBand</span><span class="p">)</span>
+                <span class="n">composite</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">mapnik</span><span class="o">.</span><span class="n">CompositeOp</span><span class="p">,</span> <span class="n">styleBand</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                    <span class="s1">&#39;composite&#39;</span><span class="p">,</span> <span class="s1">&#39;multiply&#39;</span> <span class="k">if</span> <span class="n">styleBand</span><span class="p">[</span><span class="s1">&#39;band&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;alpha&#39;</span> <span class="k">else</span> <span class="s1">&#39;lighten&#39;</span><span class="p">))</span>
+                <span class="n">nodata</span> <span class="o">=</span> <span class="n">styleBand</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;nodata&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">nodata</span> <span class="o">==</span> <span class="s1">&#39;auto&#39;</span><span class="p">:</span>
+                    <span class="n">nodata</span> <span class="o">=</span> <span class="n">bands</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;nodata&#39;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">colorizer</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">composite</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">nodata</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_addStyleToMap</span><span class="p">(</span>
+                <span class="n">m</span><span class="p">,</span> <span class="n">layerSrs</span><span class="p">,</span> <span class="n">colorizer</span><span class="p">,</span> <span class="n">styleBand</span><span class="p">[</span><span class="s1">&#39;band&#39;</span><span class="p">],</span> <span class="n">extent</span><span class="p">,</span> <span class="n">composite</span><span class="p">,</span> <span class="n">nodata</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MapnikFileTileSource.getTile">
+<a class="viewcode-back" href="../_build/large_image_source_mapnik/large_image_source_mapnik.html#large_image_source_mapnik.MapnikFileTileSource.getTile">[docs]</a>
+    <span class="nd">@methodcache</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getTile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>  <span class="c1"># noqa</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">:</span>
+            <span class="n">mapSrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span>
+            <span class="n">layerSrs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getProj4String</span><span class="p">()</span>
+            <span class="n">extent</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">overscan</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_repeatLongitude&#39;</span><span class="p">):</span>
+                <span class="c1"># If the original dataset is in a latitude/longitude</span>
+                <span class="c1"># projection, and does cover more than 360 degrees in longitude</span>
+                <span class="c1"># (with some slop), and is outside of the bounds of</span>
+                <span class="c1"># [-180, 180], we want to render it twice, once at the</span>
+                <span class="c1"># specified longitude and once offset to ensure that we cover</span>
+                <span class="c1"># [-180, 180].  This is done by altering the projection&#39;s</span>
+                <span class="c1"># prime meridian by 360 degrees.  If none of the dataset is in</span>
+                <span class="c1"># the range of [-180, 180], this doesn&#39;t apply the shift</span>
+                <span class="c1"># either.</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_repeatLongitude</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proj4Proj</span><span class="p">(</span><span class="n">layerSrs</span><span class="p">)</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">is_geographic</span><span class="p">:</span>
+                    <span class="n">bounds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBounds</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;xmax&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">361</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">180</span> <span class="ow">and</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;xmax&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">180</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_repeatLongitude</span> <span class="o">=</span> <span class="n">layerSrs</span> <span class="o">+</span> <span class="s1">&#39; +pm=+360&#39;</span>
+                        <span class="k">elif</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;xmax&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">180</span> <span class="ow">and</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">180</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_repeatLongitude</span> <span class="o">=</span> <span class="n">layerSrs</span> <span class="o">+</span> <span class="s1">&#39; +pm=-360&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mapSrs</span> <span class="o">=</span> <span class="s1">&#39;+proj=longlat +axis=enu&#39;</span>
+            <span class="n">layerSrs</span> <span class="o">=</span> <span class="s1">&#39;+proj=longlat +axis=enu&#39;</span>
+            <span class="c1"># There appears to be a bug in some versions of mapnik/gdal when</span>
+            <span class="c1"># requesting a tile with a bounding box that has a corner exactly</span>
+            <span class="c1"># at (0, extentMaxY), so make a slightly larger image and crop it.</span>
+            <span class="n">extent</span> <span class="o">=</span> <span class="s1">&#39;0 0 </span><span class="si">%d</span><span class="s1"> </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sourceSizeX</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sourceSizeY</span><span class="p">)</span>
+            <span class="n">overscan</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTileCorners</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">:</span>
+            <span class="c1"># If we are using a projection, the tile could contain no data.</span>
+            <span class="c1"># Don&#39;t bother having mapnik render the blank tile -- just output</span>
+            <span class="c1"># it.</span>
+            <span class="n">bounds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getBounds</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">xmin</span> <span class="o">&gt;=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;xmax&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">xmax</span> <span class="o">&lt;=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;xmin&#39;</span><span class="p">]</span> <span class="ow">or</span>
+                    <span class="n">ymin</span> <span class="o">&gt;=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ymax&#39;</span><span class="p">]</span> <span class="ow">or</span> <span class="n">ymax</span> <span class="o">&lt;=</span> <span class="n">bounds</span><span class="p">[</span><span class="s1">&#39;ymin&#39;</span><span class="p">]):</span>
+                <span class="n">pilimg</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;RGBA&#39;</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span><span class="p">))</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outputTile</span><span class="p">(</span>
+                    <span class="n">pilimg</span><span class="p">,</span> <span class="n">TILE_FORMAT_PIL</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">applyStyle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">overscan</span><span class="p">:</span>
+            <span class="n">pw</span> <span class="o">=</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span>
+            <span class="n">py</span> <span class="o">=</span> <span class="p">(</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span>
+            <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="n">xmin</span> <span class="o">-</span> <span class="n">pw</span> <span class="o">*</span> <span class="n">overscan</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">+</span> <span class="n">pw</span> <span class="o">*</span> <span class="n">overscan</span>
+            <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">ymin</span> <span class="o">-</span> <span class="n">py</span> <span class="o">*</span> <span class="n">overscan</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">+</span> <span class="n">py</span> <span class="o">*</span> <span class="n">overscan</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getTileLock</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_mapnikMap&#39;</span><span class="p">):</span>
+                <span class="n">mapnik</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">set_severity</span><span class="p">(</span><span class="n">mapnik</span><span class="o">.</span><span class="n">severity_type</span><span class="o">.</span><span class="n">Debug</span><span class="p">)</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="n">mapnik</span><span class="o">.</span><span class="n">Map</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">+</span> <span class="n">overscan</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span> <span class="o">+</span> <span class="n">overscan</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span>
+                    <span class="n">mapSrs</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">addStyle</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">layerSrs</span><span class="p">,</span> <span class="n">extent</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_repeatLongitude&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">addStyle</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_repeatLongitude</span><span class="p">,</span> <span class="n">extent</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_mapnikMap</span> <span class="o">=</span> <span class="n">m</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">m</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mapnikMap</span>
+            <span class="n">m</span><span class="o">.</span><span class="n">zoom_to_box</span><span class="p">(</span><span class="n">mapnik</span><span class="o">.</span><span class="n">Box2d</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymax</span><span class="p">))</span>
+            <span class="n">img</span> <span class="o">=</span> <span class="n">mapnik</span><span class="o">.</span><span class="n">Image</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span> <span class="o">+</span> <span class="n">overscan</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span> <span class="o">+</span> <span class="n">overscan</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">mapnik</span><span class="o">.</span><span class="n">render</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">img</span><span class="p">)</span>
+                <span class="n">pilimg</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">frombytes</span><span class="p">(</span>
+                    <span class="s1">&#39;RGBA&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">width</span><span class="p">(),</span> <span class="n">img</span><span class="o">.</span><span class="n">height</span><span class="p">()),</span>
+                    <span class="nb">getattr</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="s1">&#39;tostring&#39;</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="s1">&#39;to_string&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))())</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Failed to getTile&#39;</span><span class="p">)</span>
+                <span class="n">pilimg</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;RGBA&#39;</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">overscan</span><span class="p">:</span>
+            <span class="n">pilimg</span> <span class="o">=</span> <span class="n">pilimg</span><span class="o">.</span><span class="n">crop</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pilimg</span><span class="o">.</span><span class="n">width</span> <span class="o">-</span> <span class="n">overscan</span><span class="p">),</span>
+                                  <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">pilimg</span><span class="o">.</span><span class="n">height</span> <span class="o">-</span> <span class="n">overscan</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_outputTile</span><span class="p">(</span><span class="n">pilimg</span><span class="p">,</span> <span class="n">TILE_FORMAT_PIL</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">applyStyle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="open">
+<a class="viewcode-back" href="../_build/large_image_source_mapnik/large_image_source_mapnik.html#large_image_source_mapnik.open">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">open</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create an instance of the module class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">MapnikFileTileSource</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="canRead">
+<a class="viewcode-back" href="../_build/large_image_source_mapnik/large_image_source_mapnik.html#large_image_source_mapnik.canRead">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">canRead</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Check if an input can be read by the module class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">MapnikFileTileSource</span><span class="o">.</span><span class="n">canRead</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

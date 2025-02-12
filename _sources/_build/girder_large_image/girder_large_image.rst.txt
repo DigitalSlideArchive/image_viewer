@@ -1,0 +1,46 @@
+girder\_large\_image package
+============================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   girder_large_image.models
+   girder_large_image.rest
+
+Submodules
+----------
+
+girder\_large\_image.constants module
+-------------------------------------
+
+.. automodule:: girder_large_image.constants
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+girder\_large\_image.girder\_tilesource module
+----------------------------------------------
+
+.. automodule:: girder_large_image.girder_tilesource
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+girder\_large\_image.loadmodelcache module
+------------------------------------------
+
+.. automodule:: girder_large_image.loadmodelcache
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: girder_large_image
+   :members:
+   :undoc-members:
+   :show-inheritance:

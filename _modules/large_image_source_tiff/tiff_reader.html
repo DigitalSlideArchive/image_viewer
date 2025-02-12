@@ -1,0 +1,1058 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_tiff.tiff_reader &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../large_image_source_tiff.html">large_image_source_tiff</a></li>
+      <li class="breadcrumb-item active">large_image_source_tiff.tiff_reader</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image_source_tiff.tiff_reader</h1><div class="highlight"><pre>
+<span></span><span class="c1">###############################################################################</span>
+<span class="c1">#  Copyright Kitware Inc.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed under the Apache License, Version 2.0 ( the &quot;License&quot; );</span>
+<span class="c1">#  you may not use this file except in compliance with the License.</span>
+<span class="c1">#  You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#    http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#  See the License for the specific language governing permissions and</span>
+<span class="c1">#  limitations under the License.</span>
+<span class="c1">###############################################################################</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">ctypes</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">xml.etree</span><span class="w"> </span><span class="kn">import</span> <span class="n">ElementTree</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cachetools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">PIL.Image</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.cache_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">methodcache</span><span class="p">,</span> <span class="n">strhash</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.tilesource</span><span class="w"> </span><span class="kn">import</span> <span class="n">etreeToDict</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">InvalidOperationTiffError</span><span class="p">,</span> <span class="n">IOOpenTiffError</span><span class="p">,</span> <span class="n">IOTiffError</span><span class="p">,</span> <span class="n">ValidationTiffError</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">libtiff</span><span class="w"> </span><span class="kn">import</span> <span class="n">libtiff_ctypes</span>
+<span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+    <span class="c1"># If the python libtiff module doesn&#39;t contain a pregenerated module for</span>
+    <span class="c1"># the appropriate version of libtiff, it tries to generate a module from</span>
+    <span class="c1"># the libtiff header file.  If it can&#39;t find this file (possibly because it</span>
+    <span class="c1"># is in a virtual environment), it raises a ValueError instead of an</span>
+    <span class="c1"># ImportError.  We convert this to an ImportError, so that we will print a</span>
+    <span class="c1"># more lucid error message and just fail to load this one tile source</span>
+    <span class="c1"># instead of failing to load the whole plugin.</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+        <span class="s1">&#39;Failed to import libtiff; try upgrading the python module (</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">exc</span><span class="p">)</span>
+    <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">))</span>
+
+<span class="c1"># This suppress warnings about unknown tags</span>
+<span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">suppress_warnings</span><span class="p">()</span>
+<span class="c1"># Suppress errors to stderr</span>
+<span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">suppress_errors</span><span class="p">()</span>
+
+
+<span class="n">_ctypesFormattbl</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">SAMPLEFORMAT_UINT</span><span class="p">):</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">SAMPLEFORMAT_INT</span><span class="p">):</span> <span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">SAMPLEFORMAT_UINT</span><span class="p">):</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">SAMPLEFORMAT_INT</span><span class="p">):</span> <span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">SAMPLEFORMAT_IEEEFP</span><span class="p">):</span> <span class="n">np</span><span class="o">.</span><span class="n">float16</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">SAMPLEFORMAT_UINT</span><span class="p">):</span> <span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">SAMPLEFORMAT_INT</span><span class="p">):</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">SAMPLEFORMAT_IEEEFP</span><span class="p">):</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">SAMPLEFORMAT_UINT</span><span class="p">):</span> <span class="n">np</span><span class="o">.</span><span class="n">uint64</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">SAMPLEFORMAT_INT</span><span class="p">):</span> <span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">SAMPLEFORMAT_IEEEFP</span><span class="p">):</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span>
+<span class="p">}</span>
+
+
+<div class="viewcode-block" id="patchLibtiff">
+<a class="viewcode-back" href="../../_build/large_image_source_tiff/large_image_source_tiff.html#large_image_source_tiff.tiff_reader.patchLibtiff">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">patchLibtiff</span><span class="p">():</span>
+    <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">libtiff</span><span class="o">.</span><span class="n">TIFFFieldWithTag</span><span class="o">.</span><span class="n">restype</span> <span class="o">=</span> \
+        <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">TIFFFieldInfo</span><span class="p">)</span>
+    <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">libtiff</span><span class="o">.</span><span class="n">TIFFFieldWithTag</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> \
+        <span class="p">(</span><span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">TIFF</span><span class="p">,</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">c_ttag_t</span><span class="p">)</span>
+
+    <span class="c1"># BigTIFF 64-bit unsigned integer</span>
+    <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">TIFFDataType</span><span class="o">.</span><span class="n">TIFF_LONG8</span> <span class="o">=</span> <span class="mi">16</span>
+    <span class="c1"># BigTIFF 64-bit signed integer</span>
+    <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">TIFFDataType</span><span class="o">.</span><span class="n">TIFF_SLONG8</span> <span class="o">=</span> <span class="mi">17</span>
+    <span class="c1"># BigTIFF 64-bit unsigned integer (offset)</span>
+    <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">TIFFDataType</span><span class="o">.</span><span class="n">TIFF_IFD8</span> <span class="o">=</span> <span class="mi">18</span></div>
+
+
+
+<span class="n">patchLibtiff</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="TiledTiffDirectory">
+<a class="viewcode-back" href="../../_build/large_image_source_tiff/large_image_source_tiff.html#large_image_source_tiff.tiff_reader.TiledTiffDirectory">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TiledTiffDirectory</span><span class="p">:</span>
+
+    <span class="n">CoreFunctions</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">&#39;SetDirectory&#39;</span><span class="p">,</span> <span class="s1">&#39;SetSubDirectory&#39;</span><span class="p">,</span> <span class="s1">&#39;GetField&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;LastDirectory&#39;</span><span class="p">,</span> <span class="s1">&#39;GetMode&#39;</span><span class="p">,</span> <span class="s1">&#39;IsTiled&#39;</span><span class="p">,</span> <span class="s1">&#39;IsByteSwapped&#39;</span><span class="p">,</span> <span class="s1">&#39;IsUpSampled&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;IsMSB2LSB&#39;</span><span class="p">,</span> <span class="s1">&#39;NumberOfStrips&#39;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filePath</span><span class="p">,</span> <span class="n">directoryNum</span><span class="p">,</span> <span class="n">mustBeTiled</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">subDirectoryNum</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create a new reader for a tiled image file directory in a TIFF file.</span>
+
+<span class="sd">        :param filePath: A path to a TIFF file on disk.</span>
+<span class="sd">        :type filePath: str</span>
+<span class="sd">        :param directoryNum: The number of the TIFF image file directory to</span>
+<span class="sd">            open.</span>
+<span class="sd">        :type directoryNum: int</span>
+<span class="sd">        :param mustBeTiled: if True, only tiled images validate.  If False,</span>
+<span class="sd">            only non-tiled images validate.  None validates both.</span>
+<span class="sd">        :type mustBeTiled: bool</span>
+<span class="sd">        :param subDirectoryNum: if set, the number of the TIFF subdirectory.</span>
+<span class="sd">        :type subDirectoryNum: int</span>
+<span class="sd">        :param validate: if False, don&#39;t validate that images can be read.</span>
+<span class="sd">        :type mustBeTiled: bool</span>
+<span class="sd">        :raises: InvalidOperationTiffError or IOTiffError or</span>
+<span class="sd">            ValidationTiffError</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+        <span class="c1"># create local cache to store Jpeg tables and getTileByteCountsType</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cache</span> <span class="o">=</span> <span class="n">cachetools</span><span class="o">.</span><span class="n">LRUCache</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_mustBeTiled</span> <span class="o">=</span> <span class="n">mustBeTiled</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tileLock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_open</span><span class="p">(</span><span class="n">filePath</span><span class="p">,</span> <span class="n">directoryNum</span><span class="p">,</span> <span class="n">subDirectoryNum</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_loadMetadata</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Could not parse tiff metadata&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">IOOpenTiffError</span><span class="p">(</span>
+                <span class="s1">&#39;Could not open TIFF file: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">filePath</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s1">&#39;TiffDirectory </span><span class="si">%d</span><span class="s1">:</span><span class="si">%d</span><span class="s1"> Information </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="n">directoryNum</span><span class="p">,</span> <span class="n">subDirectoryNum</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">validate</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_validate</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">ValidationTiffError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_close</span><span class="p">()</span>
+            <span class="k">raise</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__del__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_close</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_open</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filePath</span><span class="p">,</span> <span class="n">directoryNum</span><span class="p">,</span> <span class="n">subDirectoryNum</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Open a TIFF file to a given file and IFD number.</span>
+
+<span class="sd">        :param filePath: A path to a TIFF file on disk.</span>
+<span class="sd">        :type filePath: str</span>
+<span class="sd">        :param directoryNum: The number of the TIFF IFD to be used.</span>
+<span class="sd">        :type directoryNum: int</span>
+<span class="sd">        :param subDirectoryNum: The number of the TIFF sub-IFD to be used.</span>
+<span class="sd">        :type subDirectoryNum: int</span>
+<span class="sd">        :raises: InvalidOperationTiffError or IOTiffError</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_close</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filePath</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">InvalidOperationTiffError</span><span class="p">(</span>
+                <span class="s1">&#39;TIFF file does not exist: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">filePath</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">bytePath</span> <span class="o">=</span> <span class="n">filePath</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bytePath</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+                <span class="n">bytePath</span> <span class="o">=</span> <span class="n">filePath</span><span class="o">.</span><span class="n">encode</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span> <span class="o">=</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">TIFF</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">bytePath</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">IOOpenTiffError</span><span class="p">(</span>
+                <span class="s1">&#39;Could not open TIFF file: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">filePath</span><span class="p">)</span>
+        <span class="c1"># pylibtiff changed the case of some functions between version 0.4 and</span>
+        <span class="c1"># the version that supports libtiff 4.0.6.  To support both, ensure</span>
+        <span class="c1"># that the cased functions exist.</span>
+        <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">CoreFunctions</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="p">,</span> <span class="n">func</span><span class="p">)</span> <span class="ow">and</span>
+                    <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="p">,</span> <span class="n">func</span><span class="o">.</span><span class="n">lower</span><span class="p">())):</span>
+                <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="p">,</span> <span class="n">func</span><span class="o">.</span><span class="n">lower</span><span class="p">()))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_setDirectory</span><span class="p">(</span><span class="n">directoryNum</span><span class="p">,</span> <span class="n">subDirectoryNum</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_setDirectory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directoryNum</span><span class="p">,</span> <span class="n">subDirectoryNum</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_directoryNum</span> <span class="o">=</span> <span class="n">directoryNum</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="o">.</span><span class="n">SetDirectory</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_directoryNum</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="n">IOTiffError</span><span class="p">(</span>
+                <span class="s1">&#39;Could not set TIFF directory to </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">directoryNum</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_subDirectoryNum</span> <span class="o">=</span> <span class="n">subDirectoryNum</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subDirectoryNum</span><span class="p">:</span>
+            <span class="n">subifds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="o">.</span><span class="n">GetField</span><span class="p">(</span><span class="s1">&#39;subifd&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">subifds</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_subDirectoryNum</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="ow">or</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_subDirectoryNum</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">subifds</span><span class="p">)):</span>
+                <span class="k">raise</span> <span class="n">IOTiffError</span><span class="p">(</span>
+                    <span class="s1">&#39;Could not set TIFF subdirectory to </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">subDirectoryNum</span><span class="p">)</span>
+            <span class="n">subifd</span> <span class="o">=</span> <span class="n">subifds</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_subDirectoryNum</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="o">.</span><span class="n">SetSubDirectory</span><span class="p">(</span><span class="n">subifd</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+                <span class="k">raise</span> <span class="n">IOTiffError</span><span class="p">(</span>
+                    <span class="s1">&#39;Could not set TIFF subdirectory to </span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">subDirectoryNum</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># noqa</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validate that this TIFF file and directory are suitable for reading.</span>
+
+<span class="sd">        :raises: ValidationTiffError</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mustBeTiled</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mustBeTiled</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;istiled&#39;</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Expected a non-tiled TIFF file&#39;</span>
+                <span class="k">raise</span> <span class="n">ValidationTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="c1"># For any non-supported file, we probably can add a conversion task in</span>
+        <span class="c1"># the create_image.py script, such as flatten or colourspace.  These</span>
+        <span class="c1"># should only be done if necessary, which would require the conversion</span>
+        <span class="c1"># job to check output and perform subsequent processing as needed.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;samplesperpixel&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="ow">or</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;samplesperpixel&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Only RGB and greyscale TIFF files are supported&#39;</span>
+            <span class="k">raise</span> <span class="n">ValidationTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bitspersample&#39;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Only 8 and 16 bits-per-sample TIFF files are supported&#39;</span>
+            <span class="k">raise</span> <span class="n">ValidationTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sampleformat&#39;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span>
+                <span class="kc">None</span><span class="p">,</span>  <span class="c1"># default is still SAMPLEFORMAT_UINT</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">SAMPLEFORMAT_UINT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">SAMPLEFORMAT_INT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">SAMPLEFORMAT_IEEEFP</span><span class="p">}:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Only unsigned int sampled TIFF files are supported&#39;</span>
+            <span class="k">raise</span> <span class="n">ValidationTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;planarconfig&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">PLANARCONFIG_CONTIG</span> <span class="ow">and</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;photometric&#39;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span>
+                    <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">PHOTOMETRIC_MINISBLACK</span><span class="p">}):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Only contiguous planar configuration TIFF files are supported&#39;</span>
+            <span class="k">raise</span> <span class="n">ValidationTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;photometric&#39;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">PHOTOMETRIC_MINISBLACK</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">PHOTOMETRIC_RGB</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">PHOTOMETRIC_YCBCR</span><span class="p">}:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;Only greyscale (black is 0), RGB, and YCbCr photometric &#39;</span>
+                   <span class="s1">&#39;interpretation TIFF files are supported&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">ValidationTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;orientation&#39;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_TOPLEFT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_TOPRIGHT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_BOTRIGHT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_BOTLEFT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_LEFTTOP</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_RIGHTTOP</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_RIGHTBOT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_LEFTBOT</span><span class="p">,</span>
+                <span class="kc">None</span><span class="p">}:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Unsupported TIFF orientation&#39;</span>
+            <span class="k">raise</span> <span class="n">ValidationTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mustBeTiled</span> <span class="ow">and</span> <span class="p">(</span>
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;istiled&#39;</span><span class="p">)</span> <span class="ow">or</span>
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tilewidth&#39;</span><span class="p">)</span> <span class="ow">or</span>
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tilelength&#39;</span><span class="p">)):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;A tiled TIFF is required.&#39;</span>
+            <span class="k">raise</span> <span class="n">ValidationTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_mustBeTiled</span> <span class="ow">is</span> <span class="kc">False</span> <span class="ow">and</span> <span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;istiled&#39;</span><span class="p">)</span> <span class="ow">or</span>
+                <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rowsperstrip&#39;</span><span class="p">)):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;A non-tiled TIFF with strips is required.&#39;</span>
+            <span class="k">raise</span> <span class="n">ValidationTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;compression&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">COMPRESSION_JPEG</span> <span class="ow">and</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;jpegtablesmode&#39;</span><span class="p">)</span> <span class="o">!=</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">JPEGTABLESMODE_QUANT</span> <span class="o">|</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">JPEGTABLESMODE_HUFF</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Only TIFF files with separate Huffman and quantization tables are supported&#39;</span>
+            <span class="k">raise</span> <span class="n">ValidationTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;compression&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">COMPRESSION_JPEG</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_getJpegTables</span><span class="p">()</span>
+            <span class="k">except</span> <span class="n">IOTiffError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_completeJpeg</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_loadMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span>
+                  <span class="nb">dir</span><span class="p">(</span><span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">tiff_h</span><span class="p">)</span> <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;TIFFTAG_&#39;</span><span class="p">)]</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="o">.</span><span class="n">GetField</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">info</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="s1">&#39;Loading field &quot;</span><span class="si">%s</span><span class="s1">&quot; in directory number </span><span class="si">%d</span><span class="s1"> resulted in TypeError - &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span><span class="p">,</span>
+                    <span class="n">field</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_directoryNum</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">func</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">CoreFunctions</span><span class="p">[</span><span class="mi">3</span><span class="p">:]:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="p">,</span> <span class="n">func</span><span class="p">):</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="p">,</span> <span class="n">func</span><span class="p">)()</span>
+                <span class="k">if</span> <span class="n">value</span><span class="p">:</span>
+                    <span class="n">info</span><span class="p">[</span><span class="n">func</span><span class="o">.</span><span class="n">lower</span><span class="p">()]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span> <span class="o">=</span> <span class="n">info</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tileWidth</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tilewidth&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;imagewidth&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tileHeight</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tilelength&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;rowsperstrip&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_imageWidth</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;imagewidth&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_imageHeight</span> <span class="o">=</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;imagelength&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tilesAcross</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_imageWidth</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileWidth</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileWidth</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;tilelength&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stripsPerTile</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="mf">256.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileHeight</span><span class="p">)))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stripHeight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileHeight</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tileHeight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stripHeight</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stripsPerTile</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_stripCount</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_imageHeight</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stripHeight</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;orientation&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">{</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_LEFTTOP</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_RIGHTTOP</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_RIGHTBOT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_LEFTBOT</span><span class="p">}:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_imageWidth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imageHeight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imageHeight</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imageWidth</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tileWidth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileHeight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileHeight</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileWidth</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parse_image_description</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;imagedescription&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))</span>
+        <span class="c1"># From TIFF specification, tag 0x128, 2 is inches, 3 is centimeters.</span>
+        <span class="n">units</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2</span><span class="p">:</span> <span class="mf">25.4</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span> <span class="mi">10</span><span class="p">}</span>
+        <span class="c1"># If the resolution value is less than a threshold (100), don&#39;t use it,</span>
+        <span class="c1"># as it is probably just an inaccurate default.  Values like 72dpi and</span>
+        <span class="c1"># 96dpi are common defaults, but so are small metric values, too.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mm_x&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;xresolution&#39;</span><span class="p">)</span> <span class="ow">and</span>
+                <span class="n">units</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;resolutionunit&#39;</span><span class="p">))</span> <span class="ow">and</span>
+                <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;xresolution&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span><span class="p">[</span><span class="s1">&#39;mm_x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">units</span><span class="p">[</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;resolutionunit&#39;</span><span class="p">]]</span> <span class="o">/</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;xresolution&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mm_y&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;yresolution&#39;</span><span class="p">)</span> <span class="ow">and</span>
+                <span class="n">units</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;resolutionunit&#39;</span><span class="p">))</span> <span class="ow">and</span>
+                <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;yresolution&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span><span class="p">[</span><span class="s1">&#39;mm_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">units</span><span class="p">[</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;resolutionunit&#39;</span><span class="p">]]</span> <span class="o">/</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;yresolution&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;width&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imageWidth</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imageWidth</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;height&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imageHeight</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imageHeight</span>
+
+    <span class="nd">@methodcache</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">partial</span><span class="p">(</span><span class="n">strhash</span><span class="p">,</span> <span class="s1">&#39;_getJpegTables&#39;</span><span class="p">))</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getJpegTables</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the common JPEG Huffman-coding and quantization tables.</span>
+
+<span class="sd">        See http://www.awaresystems.be/imaging/tiff/tifftags/jpegtables.html</span>
+<span class="sd">        for more information.</span>
+
+<span class="sd">        :return: All Huffman and quantization tables, with JPEG table start</span>
+<span class="sd">        markers.</span>
+<span class="sd">        :rtype: bytes</span>
+<span class="sd">        :raises: Exception</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TIFFTAG_JPEGTABLES uses (uint32*, void**) output arguments</span>
+        <span class="c1"># http://www.remotesensing.org/libtiff/man/TIFFGetField.3tiff.html</span>
+
+        <span class="n">tableSize</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">()</span>
+        <span class="n">tableBuffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_voidp</span><span class="p">()</span>
+
+        <span class="c1"># Some versions of pylibtiff set an explicit list of argtypes for</span>
+        <span class="c1"># TIFFGetField.  When this is done, we need to adjust them to match</span>
+        <span class="c1"># what is needed for our specific call.  Other versions do not set</span>
+        <span class="c1"># argtypes, allowing any types to be passed without validation, in</span>
+        <span class="c1"># which case we do not need to alter the list.</span>
+        <span class="k">if</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">libtiff</span><span class="o">.</span><span class="n">TIFFGetField</span><span class="o">.</span><span class="n">argtypes</span><span class="p">:</span>
+            <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">libtiff</span><span class="o">.</span><span class="n">TIFFGetField</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> \
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">libtiff</span><span class="o">.</span><span class="n">TIFFGetField</span><span class="o">.</span><span class="n">argtypes</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> \
+                <span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint32</span><span class="p">),</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_void_p</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">libtiff</span><span class="o">.</span><span class="n">TIFFGetField</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">TIFFTAG_JPEGTABLES</span><span class="p">,</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">tableSize</span><span class="p">),</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">tableBuffer</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Could not get JPEG Huffman / quantization tables&#39;</span>
+            <span class="k">raise</span> <span class="n">IOTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">tableSize</span> <span class="o">=</span> <span class="n">tableSize</span><span class="o">.</span><span class="n">value</span>
+        <span class="n">tableBuffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">tableBuffer</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">tableBuffer</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xff\xd8</span><span class="s1">&#39;</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Missing JPEG Start Of Image marker in tables&#39;</span>
+            <span class="k">raise</span> <span class="n">IOTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tableBuffer</span><span class="p">[</span><span class="n">tableSize</span> <span class="o">-</span> <span class="mi">2</span><span class="p">:</span><span class="n">tableSize</span><span class="p">]</span> <span class="o">!=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xff\xd9</span><span class="s1">&#39;</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Missing JPEG End Of Image marker in tables&#39;</span>
+            <span class="k">raise</span> <span class="n">IOTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">tableBuffer</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xff\xc4</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xff\xdb</span><span class="s1">&#39;</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Missing JPEG Huffman or Quantization Table marker&#39;</span>
+            <span class="k">raise</span> <span class="n">IOTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># Strip the Start / End Of Image markers</span>
+        <span class="n">tableData</span> <span class="o">=</span> <span class="n">tableBuffer</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="n">tableSize</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">tableData</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_toTileNum</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">transpose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the internal tile number of a tile, from its row and column index.</span>
+
+<span class="sd">        :param x: The column index of the desired tile.</span>
+<span class="sd">        :type x: int</span>
+<span class="sd">        :param y: The row index of the desired tile.</span>
+<span class="sd">        :type y: int</span>
+<span class="sd">        :param transpose: If true, transpose width and height</span>
+<span class="sd">        :type transpose: boolean</span>
+<span class="sd">        :return: The internal tile number of the desired tile.</span>
+<span class="sd">        :rtype int</span>
+<span class="sd">        :raises: InvalidOperationTiffError</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TIFFCheckTile and TIFFComputeTile require pixel coordinates</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">transpose</span><span class="p">:</span>
+            <span class="n">pixelX</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileWidth</span><span class="p">)</span>
+            <span class="n">pixelY</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileHeight</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">pixelX</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imageWidth</span> <span class="ow">or</span> <span class="n">pixelY</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imageHeight</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">InvalidOperationTiffError</span><span class="p">(</span>
+                    <span class="s1">&#39;Tile x=</span><span class="si">%d</span><span class="s1">, y=</span><span class="si">%d</span><span class="s1"> does not exist&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">pixelX</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileHeight</span><span class="p">)</span>
+            <span class="n">pixelY</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileWidth</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">y</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">pixelX</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imageHeight</span> <span class="ow">or</span> <span class="n">pixelY</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imageWidth</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">InvalidOperationTiffError</span><span class="p">(</span>
+                    <span class="s1">&#39;Tile x=</span><span class="si">%d</span><span class="s1">, y=</span><span class="si">%d</span><span class="s1"> does not exist&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+        <span class="c1"># We had been using TIFFCheckTile, but with z=0 and sample=0, this is</span>
+        <span class="c1"># just a check that x, y is within the image</span>
+        <span class="c1"># if libtiff_ctypes.libtiff.TIFFCheckTile(</span>
+        <span class="c1">#         self._tiffFile, pixelX, pixelY, 0, 0) == 0:</span>
+        <span class="c1">#     raise InvalidOperationTiffError(</span>
+        <span class="c1">#         &#39;Tile x=%d, y=%d does not exist&#39; % (x, y))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;istiled&#39;</span><span class="p">):</span>
+            <span class="n">tileNum</span> <span class="o">=</span> <span class="n">pixelX</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileWidth</span> <span class="o">+</span> <span class="p">(</span><span class="n">pixelY</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileHeight</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tilesAcross</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># TIFFComputeStrip with sample=0 is just the row divided by the</span>
+            <span class="c1"># strip height</span>
+            <span class="n">tileNum</span> <span class="o">=</span> <span class="n">pixelY</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stripHeight</span>
+        <span class="k">return</span> <span class="n">tileNum</span>
+
+    <span class="nd">@methodcache</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">partial</span><span class="p">(</span><span class="n">strhash</span><span class="p">,</span> <span class="s1">&#39;_getTileByteCountsType&#39;</span><span class="p">))</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getTileByteCountsType</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get data type of the elements in the TIFFTAG_TILEBYTECOUNTS array.</span>
+
+<span class="sd">        :return: The element type in TIFFTAG_TILEBYTECOUNTS.</span>
+<span class="sd">        :rtype: ctypes.c_uint64 or ctypes.c_uint16</span>
+<span class="sd">        :raises: IOTiffError</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tileByteCountsFieldInfo</span> <span class="o">=</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">libtiff</span><span class="o">.</span><span class="n">TIFFFieldWithTag</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="p">,</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">TIFFTAG_TILEBYTECOUNTS</span><span class="p">)</span><span class="o">.</span><span class="n">contents</span>
+        <span class="n">tileByteCountsLibtiffType</span> <span class="o">=</span> <span class="n">tileByteCountsFieldInfo</span><span class="o">.</span><span class="n">field_type</span>
+
+        <span class="k">if</span> <span class="n">tileByteCountsLibtiffType</span> <span class="o">==</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">TIFFDataType</span><span class="o">.</span><span class="n">TIFF_LONG8</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint64</span>
+        <span class="k">if</span> <span class="n">tileByteCountsLibtiffType</span> <span class="o">==</span> \
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">TIFFDataType</span><span class="o">.</span><span class="n">TIFF_SHORT</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">c_uint16</span>
+        <span class="k">raise</span> <span class="n">IOTiffError</span><span class="p">(</span>
+            <span class="s1">&#39;Invalid type for TIFFTAG_TILEBYTECOUNTS: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">tileByteCountsLibtiffType</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getJpegFrameSize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tileNum</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the file size in bytes of the raw encoded JPEG frame for a tile.</span>
+
+<span class="sd">        :param tileNum: The internal tile number of the desired tile.</span>
+<span class="sd">        :type tileNum: int</span>
+<span class="sd">        :return: The size in bytes of the raw tile data for the desired tile.</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        :raises: InvalidOperationTiffError or IOTiffError</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: is it worth it to memoize this?</span>
+
+        <span class="c1"># TODO: remove this check, for additional speed</span>
+        <span class="n">totalTileCount</span> <span class="o">=</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">libtiff</span><span class="o">.</span><span class="n">TIFFNumberOfTiles</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">if</span> <span class="n">tileNum</span> <span class="o">&gt;=</span> <span class="n">totalTileCount</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Tile number out of range&#39;</span>
+            <span class="k">raise</span> <span class="n">InvalidOperationTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># pylibtiff treats the output of TIFFTAG_TILEBYTECOUNTS as a scalar</span>
+        <span class="c1"># uint32; libtiff&#39;s documentation specifies that the output will be an</span>
+        <span class="c1"># array of uint32; in reality and per the TIFF spec, the output is an</span>
+        <span class="c1"># array of either uint64 or unit16, so we need to call the ctypes</span>
+        <span class="c1"># interface directly to get this tag</span>
+        <span class="c1"># http://www.awaresystems.be/imaging/tiff/tifftags/tilebytecounts.html</span>
+
+        <span class="n">rawTileSizesType</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getTileByteCountsType</span><span class="p">()</span>
+        <span class="n">rawTileSizes</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">rawTileSizesType</span><span class="p">)()</span>
+
+        <span class="c1"># Some versions of pylibtiff set an explicit list of argtypes for</span>
+        <span class="c1"># TIFFGetField.  When this is done, we need to adjust them to match</span>
+        <span class="c1"># what is needed for our specific call.  Other versions do not set</span>
+        <span class="c1"># argtypes, allowing any types to be passed without validation, in</span>
+        <span class="c1"># which case we do not need to alter the list.</span>
+        <span class="k">if</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">libtiff</span><span class="o">.</span><span class="n">TIFFGetField</span><span class="o">.</span><span class="n">argtypes</span><span class="p">:</span>
+            <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">libtiff</span><span class="o">.</span><span class="n">TIFFGetField</span><span class="o">.</span><span class="n">argtypes</span> <span class="o">=</span> \
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">libtiff</span><span class="o">.</span><span class="n">TIFFGetField</span><span class="o">.</span><span class="n">argtypes</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> \
+                <span class="p">[</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">rawTileSizesType</span><span class="p">))]</span>
+        <span class="k">if</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">libtiff</span><span class="o">.</span><span class="n">TIFFGetField</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">TIFFTAG_TILEBYTECOUNTS</span><span class="p">,</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">rawTileSizes</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Could not get raw tile size&#39;</span>
+            <span class="k">raise</span> <span class="n">IOTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># In practice, this will never overflow, and it&#39;s simpler to convert the</span>
+        <span class="c1"># long to an int</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">rawTileSizes</span><span class="p">[</span><span class="n">tileNum</span><span class="p">])</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getJpegFrame</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tileNum</span><span class="p">,</span> <span class="n">entire</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>  <span class="c1"># noqa</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the raw encoded JPEG image frame from a tile.</span>
+
+<span class="sd">        :param tileNum: The internal tile number of the desired tile.</span>
+<span class="sd">        :type tileNum: int</span>
+<span class="sd">        :param entire: True to return the entire frame.  False to strip off</span>
+<span class="sd">            container information.</span>
+<span class="sd">        :return: The JPEG image frame, including a JPEG Start Of Frame marker.</span>
+<span class="sd">        :rtype: bytes</span>
+<span class="sd">        :raises: InvalidOperationTiffError or IOTiffError</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># This raises an InvalidOperationTiffError if the tile doesn&#39;t exist</span>
+        <span class="n">rawTileSize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getJpegFrameSize</span><span class="p">(</span><span class="n">tileNum</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">rawTileSize</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;No raw tile data&#39;</span>
+            <span class="k">raise</span> <span class="n">IOTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">frameBuffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">create_string_buffer</span><span class="p">(</span><span class="n">rawTileSize</span><span class="p">)</span>
+
+        <span class="n">bytesRead</span> <span class="o">=</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">libtiff</span><span class="o">.</span><span class="n">TIFFReadRawTile</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="p">,</span> <span class="n">tileNum</span><span class="p">,</span>
+            <span class="n">frameBuffer</span><span class="p">,</span> <span class="n">rawTileSize</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+        <span class="k">if</span> <span class="n">bytesRead</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Failed to read raw tile&#39;</span>
+            <span class="k">raise</span> <span class="n">IOTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">bytesRead</span> <span class="o">&lt;</span> <span class="n">rawTileSize</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Buffer underflow when reading tile&#39;</span>
+            <span class="k">raise</span> <span class="n">IOTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">bytesRead</span> <span class="o">&gt;</span> <span class="n">rawTileSize</span><span class="p">:</span>
+            <span class="c1"># It&#39;s unlikely that this will ever occur, but incomplete reads will</span>
+            <span class="c1"># be checked for by looking for the JPEG end marker</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Buffer overflow when reading tile&#39;</span>
+            <span class="k">raise</span> <span class="n">IOTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">entire</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">frameBuffer</span><span class="o">.</span><span class="n">raw</span><span class="p">[:]</span>
+
+        <span class="k">if</span> <span class="n">frameBuffer</span><span class="o">.</span><span class="n">raw</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xff\xd8</span><span class="s1">&#39;</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Missing JPEG Start Of Image marker in frame&#39;</span>
+            <span class="k">raise</span> <span class="n">IOTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">frameBuffer</span><span class="o">.</span><span class="n">raw</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:]</span> <span class="o">!=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xff\xd9</span><span class="s1">&#39;</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Missing JPEG End Of Image marker in frame&#39;</span>
+            <span class="k">raise</span> <span class="n">IOTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">frameBuffer</span><span class="o">.</span><span class="n">raw</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xff\xc0</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xff\xc2</span><span class="s1">&#39;</span><span class="p">):</span>
+            <span class="n">frameStartPos</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># VIPS may encode TIFFs with the quantization (but not Huffman)</span>
+            <span class="c1"># tables also at the start of every frame, so locate them for</span>
+            <span class="c1"># removal</span>
+            <span class="c1"># VIPS seems to prefer Baseline DCT, so search for that first</span>
+            <span class="n">frameStartPos</span> <span class="o">=</span> <span class="n">frameBuffer</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xff\xc0</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">frameStartPos</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">frameStartPos</span> <span class="o">=</span> <span class="n">frameBuffer</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xff\xc2</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">frameStartPos</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Missing JPEG Start Of Frame marker&#39;</span>
+                    <span class="k">raise</span> <span class="n">IOTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="c1"># If the photometric value is RGB and the JPEG component ids are just</span>
+        <span class="c1"># 0, 1, 2, change the component ids to R, G, B to ensure color space</span>
+        <span class="c1"># information is preserved.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;photometric&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">PHOTOMETRIC_RGB</span><span class="p">:</span>
+            <span class="n">sof</span> <span class="o">=</span> <span class="n">frameBuffer</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xff\xc0</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">sof</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+                <span class="n">sof</span> <span class="o">=</span> <span class="n">frameBuffer</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xff\xc2</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">sos</span> <span class="o">=</span> <span class="n">frameBuffer</span><span class="o">.</span><span class="n">raw</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xff\xda</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">sof</span> <span class="o">&gt;=</span> <span class="n">frameStartPos</span> <span class="ow">and</span> <span class="n">sos</span> <span class="o">&gt;=</span> <span class="n">frameStartPos</span> <span class="ow">and</span>
+                    <span class="n">frameBuffer</span><span class="p">[</span><span class="n">sof</span> <span class="o">+</span> <span class="mi">2</span><span class="p">:</span><span class="n">sof</span> <span class="o">+</span> <span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x00\x11</span><span class="s1">&#39;</span> <span class="ow">and</span>
+                    <span class="n">frameBuffer</span><span class="p">[</span><span class="n">sof</span> <span class="o">+</span> <span class="mi">10</span><span class="p">:</span><span class="n">sof</span> <span class="o">+</span> <span class="mi">19</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x00\x01\x02</span><span class="s1">&#39;</span> <span class="ow">and</span>
+                    <span class="n">frameBuffer</span><span class="p">[</span><span class="n">sos</span> <span class="o">+</span> <span class="mi">5</span><span class="p">:</span><span class="n">sos</span> <span class="o">+</span> <span class="mi">11</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x00\x01\x02</span><span class="s1">&#39;</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;RGB&#39;</span><span class="p">):</span>
+                    <span class="n">frameBuffer</span><span class="p">[</span><span class="n">sof</span> <span class="o">+</span> <span class="mi">10</span> <span class="o">+</span> <span class="n">idx</span> <span class="o">*</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+                    <span class="n">frameBuffer</span><span class="p">[</span><span class="n">sos</span> <span class="o">+</span> <span class="mi">5</span> <span class="o">+</span> <span class="n">idx</span> <span class="o">*</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+        <span class="c1"># Strip the Start / End Of Image markers</span>
+        <span class="n">tileData</span> <span class="o">=</span> <span class="n">frameBuffer</span><span class="o">.</span><span class="n">raw</span><span class="p">[</span><span class="n">frameStartPos</span><span class="p">:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">tileData</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getUncompressedTile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tileNum</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get an uncompressed tile or strip.</span>
+
+<span class="sd">        :param tileNum: The internal tile or strip number of the desired tile</span>
+<span class="sd">            or strip.</span>
+<span class="sd">        :type tileNum: int</span>
+<span class="sd">        :return: the tile as a PIL 8-bit-per-channel images.</span>
+<span class="sd">        :rtype: PIL.Image</span>
+<span class="sd">        :raises: IOTiffError</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;istiled&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_uncompressedTileSize&#39;</span><span class="p">):</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileLock</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_uncompressedTileSize</span> <span class="o">=</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">libtiff</span><span class="o">.</span><span class="n">TIFFTileSize</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">tileSize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_uncompressedTileSize</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileLock</span><span class="p">:</span>
+                <span class="n">stripSize</span> <span class="o">=</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">libtiff</span><span class="o">.</span><span class="n">TIFFStripSize</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+            <span class="n">stripsCount</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_stripsPerTile</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stripCount</span> <span class="o">-</span> <span class="n">tileNum</span><span class="p">)</span>
+            <span class="n">tileSize</span> <span class="o">=</span> <span class="n">stripSize</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_stripsPerTile</span>
+        <span class="n">tw</span><span class="p">,</span> <span class="n">th</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileWidth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileHeight</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;orientation&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">{</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_LEFTTOP</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_RIGHTTOP</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_RIGHTBOT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_LEFTBOT</span><span class="p">}:</span>
+            <span class="n">tw</span><span class="p">,</span> <span class="n">th</span> <span class="o">=</span> <span class="n">th</span><span class="p">,</span> <span class="n">tw</span>
+        <span class="nb">format</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bitspersample&#39;</span><span class="p">),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sampleformat&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="s1">&#39;sampleformat&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">SAMPLEFORMAT_UINT</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">th</span><span class="p">,</span> <span class="n">tw</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;samplesperpixel&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)),</span>
+                         <span class="n">dtype</span><span class="o">=</span><span class="n">_ctypesFormattbl</span><span class="p">[</span><span class="nb">format</span><span class="p">])</span>
+        <span class="n">imageBuffer</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">ctypes</span><span class="o">.</span><span class="n">data_as</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;istiled&#39;</span><span class="p">):</span>
+            <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileLock</span><span class="p">:</span>
+                <span class="n">readSize</span> <span class="o">=</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">libtiff</span><span class="o">.</span><span class="n">TIFFReadEncodedTile</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="p">,</span> <span class="n">tileNum</span><span class="p">,</span> <span class="n">imageBuffer</span><span class="p">,</span> <span class="n">tileSize</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">readSize</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">imageBuffer</span> <span class="o">=</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">cast</span><span class="p">(</span><span class="n">imageBuffer</span><span class="p">,</span> <span class="n">ctypes</span><span class="o">.</span><span class="n">POINTER</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">c_char</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">contents</span>
+            <span class="k">for</span> <span class="n">stripNum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">stripsCount</span><span class="p">):</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileLock</span><span class="p">:</span>
+                    <span class="n">chunkSize</span> <span class="o">=</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">libtiff</span><span class="o">.</span><span class="n">TIFFReadEncodedStrip</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="p">,</span>
+                        <span class="n">tileNum</span> <span class="o">+</span> <span class="n">stripNum</span><span class="p">,</span>
+                        <span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">imageBuffer</span><span class="p">,</span> <span class="n">stripSize</span> <span class="o">*</span> <span class="n">stripNum</span><span class="p">),</span>
+                        <span class="n">stripSize</span><span class="p">)</span><span class="o">.</span><span class="n">value</span>
+                <span class="k">if</span> <span class="n">chunkSize</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Read an unexpected number of bytes from an encoded strip&#39;</span>
+                    <span class="k">raise</span> <span class="n">IOTiffError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                <span class="n">readSize</span> <span class="o">+=</span> <span class="n">chunkSize</span>
+            <span class="k">if</span> <span class="n">readSize</span> <span class="o">&lt;</span> <span class="n">tileSize</span><span class="p">:</span>
+                <span class="n">ctypes</span><span class="o">.</span><span class="n">memset</span><span class="p">(</span><span class="n">ctypes</span><span class="o">.</span><span class="n">byref</span><span class="p">(</span><span class="n">imageBuffer</span><span class="p">,</span> <span class="n">readSize</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">tileSize</span> <span class="o">-</span> <span class="n">readSize</span><span class="p">)</span>
+                <span class="n">readSize</span> <span class="o">=</span> <span class="n">tileSize</span>
+        <span class="k">if</span> <span class="n">readSize</span> <span class="o">&lt;</span> <span class="n">tileSize</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">IOTiffError</span><span class="p">(</span>
+                <span class="s1">&#39;Read an unexpected number of bytes from an encoded tile&#39;</span> <span class="k">if</span> <span class="n">readSize</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="k">else</span>
+                <span class="s1">&#39;Failed to read from an encoded tile&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;samplesperpixel&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span> <span class="ow">and</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;photometric&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">PHOTOMETRIC_YCBCR</span><span class="p">):</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bitspersample&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="mi">16</span><span class="p">:</span>
+                <span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor_divide</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">fromarray</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="s1">&#39;YCbCr&#39;</span><span class="p">)</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">image</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getTileRotated</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a tile from a rotated TIF.  This composites uncompressed tiles as</span>
+<span class="sd">        necessary and then rotates the result.</span>
+
+<span class="sd">        :param x: The column index of the desired tile.</span>
+<span class="sd">        :param y: The row index of the desired tile.</span>
+<span class="sd">        :return: either a buffer with a JPEG or a PIL image.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x0</span> <span class="o">=</span> <span class="n">x</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileWidth</span>
+        <span class="n">x1</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileWidth</span>
+        <span class="n">y0</span> <span class="o">=</span> <span class="n">y</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileHeight</span>
+        <span class="n">y1</span> <span class="o">=</span> <span class="n">y0</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileHeight</span>
+        <span class="n">iw</span><span class="p">,</span> <span class="n">ih</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imageWidth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imageHeight</span>
+        <span class="n">tw</span><span class="p">,</span> <span class="n">th</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileWidth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileHeight</span>
+        <span class="n">transpose</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;orientation&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">{</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_LEFTTOP</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_RIGHTTOP</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_RIGHTBOT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_LEFTBOT</span><span class="p">}:</span>
+            <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">y0</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span>
+            <span class="n">iw</span><span class="p">,</span> <span class="n">ih</span> <span class="o">=</span> <span class="n">ih</span><span class="p">,</span> <span class="n">iw</span>
+            <span class="n">tw</span><span class="p">,</span> <span class="n">th</span> <span class="o">=</span> <span class="n">th</span><span class="p">,</span> <span class="n">tw</span>
+            <span class="n">transpose</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;orientation&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">{</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_TOPRIGHT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_BOTRIGHT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_RIGHTTOP</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_RIGHTBOT</span><span class="p">}:</span>
+            <span class="n">x0</span><span class="p">,</span> <span class="n">x1</span> <span class="o">=</span> <span class="n">iw</span> <span class="o">-</span> <span class="n">x1</span><span class="p">,</span> <span class="n">iw</span> <span class="o">-</span> <span class="n">x0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;orientation&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">{</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_BOTRIGHT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_BOTLEFT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_RIGHTBOT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_LEFTBOT</span><span class="p">}:</span>
+            <span class="n">y0</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">ih</span> <span class="o">-</span> <span class="n">y1</span><span class="p">,</span> <span class="n">ih</span> <span class="o">-</span> <span class="n">y0</span>
+        <span class="n">tx0</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">//</span> <span class="n">tw</span>
+        <span class="n">tx1</span> <span class="o">=</span> <span class="p">(</span><span class="n">x1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="n">tw</span>
+        <span class="n">ty0</span> <span class="o">=</span> <span class="n">y0</span> <span class="o">//</span> <span class="n">th</span>
+        <span class="n">ty1</span> <span class="o">=</span> <span class="p">(</span><span class="n">y1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">//</span> <span class="n">th</span>
+        <span class="n">tile</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">ty</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ty0</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ty1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">tx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tx0</span><span class="p">),</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tx1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)):</span>
+                <span class="n">subtile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getUncompressedTile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_toTileNum</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="n">ty</span><span class="p">,</span> <span class="n">transpose</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">tile</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">tile</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                        <span class="p">(</span><span class="n">th</span><span class="p">,</span> <span class="n">tw</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">subtile</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span>
+                        <span class="p">(</span><span class="n">th</span><span class="p">,</span> <span class="n">tw</span><span class="p">,</span> <span class="n">subtile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">subtile</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+                <span class="n">stx</span><span class="p">,</span> <span class="n">sty</span> <span class="o">=</span> <span class="n">tx</span> <span class="o">*</span> <span class="n">tw</span> <span class="o">-</span> <span class="n">x0</span><span class="p">,</span> <span class="n">ty</span> <span class="o">*</span> <span class="n">th</span> <span class="o">-</span> <span class="n">y0</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">stx</span> <span class="o">&gt;=</span> <span class="n">tw</span> <span class="ow">or</span> <span class="n">stx</span> <span class="o">+</span> <span class="n">subtile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span>
+                        <span class="n">sty</span> <span class="o">&gt;=</span> <span class="n">th</span> <span class="ow">or</span> <span class="n">sty</span> <span class="o">+</span> <span class="n">subtile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">stx</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">subtile</span> <span class="o">=</span> <span class="n">subtile</span><span class="p">[:,</span> <span class="o">-</span><span class="n">stx</span><span class="p">:]</span>
+                    <span class="n">stx</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">if</span> <span class="n">sty</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">subtile</span> <span class="o">=</span> <span class="n">subtile</span><span class="p">[</span><span class="o">-</span><span class="n">sty</span><span class="p">:,</span> <span class="p">:]</span>
+                    <span class="n">sty</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">subtile</span> <span class="o">=</span> <span class="n">subtile</span><span class="p">[:</span><span class="nb">min</span><span class="p">(</span><span class="n">subtile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">th</span> <span class="o">-</span> <span class="n">sty</span><span class="p">),</span>
+                                  <span class="p">:</span><span class="nb">min</span><span class="p">(</span><span class="n">subtile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">tw</span> <span class="o">-</span> <span class="n">stx</span><span class="p">)]</span>
+                <span class="n">tile</span><span class="p">[</span><span class="n">sty</span><span class="p">:</span><span class="n">sty</span> <span class="o">+</span> <span class="n">subtile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">stx</span><span class="p">:</span><span class="n">stx</span> <span class="o">+</span> <span class="n">subtile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">subtile</span>
+        <span class="k">if</span> <span class="n">tile</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">InvalidOperationTiffError</span><span class="p">(</span>
+                <span class="s1">&#39;Tile x=</span><span class="si">%d</span><span class="s1">, y=</span><span class="si">%d</span><span class="s1"> does not exist&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;orientation&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">{</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_BOTRIGHT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_BOTLEFT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_RIGHTBOT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_LEFTBOT</span><span class="p">}:</span>
+            <span class="n">tile</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;orientation&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">{</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_TOPRIGHT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_BOTRIGHT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_RIGHTTOP</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_RIGHTBOT</span><span class="p">}:</span>
+            <span class="n">tile</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[:,</span> <span class="p">::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;orientation&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">{</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_LEFTTOP</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_RIGHTTOP</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_RIGHTBOT</span><span class="p">,</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_LEFTBOT</span><span class="p">}:</span>
+            <span class="n">tile</span> <span class="o">=</span> <span class="n">tile</span><span class="o">.</span><span class="n">transpose</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">tile</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tileWidth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the pixel width of tiles.</span>
+
+<span class="sd">        :return: The tile width in pixels.</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileWidth</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tileHeight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the pixel height of tiles.</span>
+
+<span class="sd">        :return: The tile height in pixels.</span>
+<span class="sd">        :rtype: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tileHeight</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">imageWidth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imageWidth</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">imageHeight</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_imageHeight</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pixelInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span>
+
+<div class="viewcode-block" id="TiledTiffDirectory.getTile">
+<a class="viewcode-back" href="../../_build/large_image_source_tiff/large_image_source_tiff.html#large_image_source_tiff.tiff_reader.TiledTiffDirectory.getTile">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getTile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">asarray</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get the complete JPEG image from a tile.</span>
+
+<span class="sd">        :param x: The column index of the desired tile.</span>
+<span class="sd">        :type x: int</span>
+<span class="sd">        :param y: The row index of the desired tile.</span>
+<span class="sd">        :type y: int</span>
+<span class="sd">        :param asarray: If True, read jpeg compressed images as arrays.</span>
+<span class="sd">        :type asarray: boolean</span>
+<span class="sd">        :return: either a buffer with a JPEG or a PIL image.</span>
+<span class="sd">        :rtype: bytes</span>
+<span class="sd">        :raises: InvalidOperationTiffError or IOTiffError</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;orientation&#39;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span>
+                <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">ORIENTATION_TOPLEFT</span><span class="p">,</span>
+                <span class="kc">None</span><span class="p">}:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getTileRotated</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="c1"># This raises an InvalidOperationTiffError if the tile doesn&#39;t exist</span>
+        <span class="n">tileNum</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_toTileNum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;istiled&#39;</span><span class="p">)</span> <span class="ow">or</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;compression&#39;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span>
+                    <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">COMPRESSION_JPEG</span><span class="p">,</span> <span class="mi">33003</span><span class="p">,</span> <span class="mi">33004</span><span class="p">,</span> <span class="mi">33005</span><span class="p">,</span> <span class="mi">34712</span><span class="p">}</span> <span class="ow">or</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;bitspersample&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">8</span> <span class="ow">or</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;sampleformat&#39;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span>
+                    <span class="kc">None</span><span class="p">,</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">SAMPLEFORMAT_UINT</span><span class="p">}</span> <span class="ow">or</span>
+                <span class="p">(</span><span class="n">asarray</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;compression&#39;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span>
+                    <span class="mi">33003</span><span class="p">,</span> <span class="mi">33004</span><span class="p">,</span> <span class="mi">33005</span><span class="p">,</span> <span class="mi">34712</span><span class="p">,</span>
+                <span class="p">}</span> <span class="ow">and</span> <span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;compression&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">COMPRESSION_JPEG</span> <span class="ow">or</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;photometric&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">PHOTOMETRIC_YCBCR</span><span class="p">))):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getUncompressedTile</span><span class="p">(</span><span class="n">tileNum</span><span class="p">)</span>
+
+        <span class="n">imageBuffer</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;compression&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">libtiff_ctypes</span><span class="o">.</span><span class="n">COMPRESSION_JPEG</span> <span class="ow">and</span>
+                <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_completeJpeg&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)):</span>
+            <span class="c1"># Write JPEG Start Of Image marker</span>
+            <span class="n">imageBuffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xff\xd8</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="n">imageBuffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_getJpegTables</span><span class="p">())</span>
+            <span class="n">imageBuffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_getJpegFrame</span><span class="p">(</span><span class="n">tileNum</span><span class="p">))</span>
+            <span class="c1"># Write JPEG End Of Image marker</span>
+            <span class="n">imageBuffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\xff\xd9</span><span class="s1">&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">imageBuffer</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+        <span class="c1"># Get the whole frame, which is in a JPEG or JPEG 2000 format</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getJpegFrame</span><span class="p">(</span><span class="n">tileNum</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># For JP2K, see if we can convert it faster than PIL</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;compression&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">{</span><span class="mi">33003</span><span class="p">,</span> <span class="mi">33004</span><span class="p">,</span> <span class="mi">33005</span><span class="p">,</span> <span class="mi">34712</span><span class="p">}:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="kn">import</span><span class="w"> </span><span class="nn">openjpeg</span>
+
+                <span class="k">return</span> <span class="n">openjpeg</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="c1"># convert it to a PIL image</span>
+        <span class="n">imageBuffer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">PIL</span><span class="o">.</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">imageBuffer</span><span class="p">)</span>
+        <span class="c1"># Converting the image mode ensures that it gets loaded once and is in</span>
+        <span class="c1"># a form we expect.  If this isn&#39;t done, then PIL can load the image</span>
+        <span class="c1"># multiple times, which sometimes throws an exception in PIL&#39;s JPEG</span>
+        <span class="c1"># 2000 module.</span>
+        <span class="k">if</span> <span class="n">image</span><span class="o">.</span><span class="n">mode</span> <span class="o">!=</span> <span class="s1">&#39;L&#39;</span><span class="p">:</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">image</span></div>
+
+
+<div class="viewcode-block" id="TiledTiffDirectory.parse_image_description">
+<a class="viewcode-back" href="../../_build/large_image_source_tiff/large_image_source_tiff.html#large_image_source_tiff.tiff_reader.TiledTiffDirectory.parse_image_description">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">parse_image_description</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">meta</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>  <span class="c1"># noqa</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_embeddedImages</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">meta</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">meta</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">meta</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">errors</span><span class="o">=</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">parsed</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parsed</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_description_record</span> <span class="o">=</span> <span class="n">parsed</span>
+                <span class="k">return</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">xml</span> <span class="o">=</span> <span class="n">ElementTree</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;AppMag = &#39;</span> <span class="ow">in</span> <span class="n">meta</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s1">&#39;magnification&#39;</span><span class="p">:</span> <span class="nb">float</span><span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;AppMag = &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()),</span>
+                    <span class="p">}</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span><span class="p">[</span><span class="s1">&#39;mm_x&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span><span class="p">[</span><span class="s1">&#39;mm_y&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span>
+                        <span class="n">meta</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|MPP = &#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="o">*</span> <span class="mf">0.001</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="k">pass</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="n">xml</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
+                <span class="s2">&quot;.//DataObject[@ObjectType=&#39;DPScannedImage&#39;]&quot;</span><span class="p">)</span>
+            <span class="n">columns</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;.//*[@Name=&#39;PIM_DP_IMAGE_COLUMNS&#39;]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;.//*[@Name=&#39;PIM_DP_IMAGE_ROWS&#39;]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+            <span class="n">spacing</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">val</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">))</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">image</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
+                <span class="s2">&quot;.//*[@Name=&#39;DICOM_PIXEL_SPACING&#39;]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">()]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_pixelInfo</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="n">columns</span><span class="p">,</span>
+                <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">rows</span><span class="p">,</span>
+                <span class="s1">&#39;mm_x&#39;</span><span class="p">:</span> <span class="n">spacing</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="s1">&#39;mm_y&#39;</span><span class="p">:</span> <span class="n">spacing</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="p">}</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="c1"># Extract macro and label images</span>
+        <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">xml</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;.//*[@ObjectType=&#39;DPScannedImage&#39;]&quot;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">typestr</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;.//*[@Name=&#39;PIM_DP_IMAGE_TYPE&#39;]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+                <span class="n">datastr</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;.//*[@Name=&#39;PIM_DP_IMAGE_DATA&#39;]&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">typestr</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">datastr</span><span class="p">:</span>
+                <span class="k">continue</span>
+            <span class="n">typemap</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;LABELIMAGE&#39;</span><span class="p">:</span> <span class="s1">&#39;label&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;MACROIMAGE&#39;</span><span class="p">:</span> <span class="s1">&#39;macro&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;WSI&#39;</span><span class="p">:</span> <span class="s1">&#39;thumbnail&#39;</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_embeddedImages</span><span class="p">[</span><span class="n">typemap</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">typestr</span><span class="p">,</span> <span class="n">typestr</span><span class="o">.</span><span class="n">lower</span><span class="p">())]</span> <span class="o">=</span> <span class="n">datastr</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_description_record</span> <span class="o">=</span> <span class="n">etreeToDict</span><span class="p">(</span><span class="n">xml</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="TiledTiffDirectory.read_image">
+<a class="viewcode-back" href="../../_build/large_image_source_tiff/large_image_source_tiff.html#large_image_source_tiff.tiff_reader.TiledTiffDirectory.read_image">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_image</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use the underlying _tiffFile to read an image.  But, if it is in a jp2k</span>
+<span class="sd">        encoding, read the raw data and convert it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffInfo</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;compression&#39;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="mi">33003</span><span class="p">,</span> <span class="mi">33004</span><span class="p">,</span> <span class="mi">33005</span><span class="p">,</span> <span class="mi">34712</span><span class="p">}:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tiffFile</span><span class="o">.</span><span class="n">read_image</span><span class="p">()</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">yidx</span><span class="p">,</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">imageHeight</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileHeight</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">xidx</span><span class="p">,</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">imageWidth</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tileWidth</span><span class="p">)):</span>
+                <span class="n">tile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getTile</span><span class="p">(</span><span class="n">xidx</span><span class="p">,</span> <span class="n">yidx</span><span class="p">,</span> <span class="n">asarray</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tile</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">tile</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">output</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">output</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                        <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">imageHeight</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">imageWidth</span><span class="p">,</span> <span class="n">tile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">tile</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">imageHeight</span> <span class="o">-</span> <span class="n">y</span><span class="p">:</span>
+                    <span class="n">tile</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[:</span><span class="bp">self</span><span class="o">.</span><span class="n">imageHeight</span> <span class="o">-</span> <span class="n">y</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+                <span class="k">if</span> <span class="n">tile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">imageWidth</span> <span class="o">-</span> <span class="n">x</span><span class="p">:</span>
+                    <span class="n">tile</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[:,</span> <span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">imageWidth</span> <span class="o">-</span> <span class="n">x</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">output</span><span class="p">[</span><span class="n">y</span><span class="p">:</span><span class="n">y</span> <span class="o">+</span> <span class="n">tile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="o">+</span> <span class="n">tile</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">tile</span>
+        <span class="k">return</span> <span class="n">output</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

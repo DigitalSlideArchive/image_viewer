@@ -1,0 +1,405 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>girder_large_image.rest &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../girder_large_image.html">girder_large_image</a></li>
+      <li class="breadcrumb-item active">girder_large_image.rest</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for girder_large_image.rest</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">collections</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">access</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.api.describe</span><span class="w"> </span><span class="kn">import</span> <span class="n">Description</span><span class="p">,</span> <span class="n">autoDescribeRoute</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.api.rest</span><span class="w"> </span><span class="kn">import</span> <span class="n">boundHandler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">AccessType</span><span class="p">,</span> <span class="n">TokenScope</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.folder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Folder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.item</span><span class="w"> </span><span class="kn">import</span> <span class="n">Item</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="addSystemEndpoints">
+<a class="viewcode-back" href="../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.addSystemEndpoints">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">addSystemEndpoints</span><span class="p">(</span><span class="n">apiRoot</span><span class="p">):</span>  <span class="c1"># noqa</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This adds endpoints to routes that already exist in Girder.</span>
+
+<span class="sd">    :param apiRoot: Girder api root class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">apiRoot</span><span class="o">.</span><span class="n">folder</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;:id&#39;</span><span class="p">,</span> <span class="s1">&#39;yaml_config&#39;</span><span class="p">,</span> <span class="s1">&#39;:name&#39;</span><span class="p">),</span> <span class="n">getYAMLConfigFile</span><span class="p">)</span>
+    <span class="n">apiRoot</span><span class="o">.</span><span class="n">folder</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;:id&#39;</span><span class="p">,</span> <span class="s1">&#39;yaml_config&#39;</span><span class="p">,</span> <span class="s1">&#39;:name&#39;</span><span class="p">),</span> <span class="n">putYAMLConfigFile</span><span class="p">)</span>
+
+    <span class="n">origItemFind</span> <span class="o">=</span> <span class="n">apiRoot</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">_find</span>
+    <span class="n">origFolderFind</span> <span class="o">=</span> <span class="n">apiRoot</span><span class="o">.</span><span class="n">folder</span><span class="o">.</span><span class="n">_find</span>
+
+    <span class="nd">@boundHandler</span><span class="p">(</span><span class="n">apiRoot</span><span class="o">.</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">altItemFind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folderId</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">sort</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">sort</span> <span class="ow">and</span> <span class="n">sort</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;[&#39;</span><span class="p">:</span>
+            <span class="n">sort</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">sort</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">recurse</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="n">text</span> <span class="ow">and</span> <span class="n">text</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_recurse_:&#39;</span><span class="p">):</span>
+            <span class="n">recurse</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_recurse_:&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">group</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">text</span> <span class="ow">and</span> <span class="n">text</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_group_:&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">text</span> <span class="o">=</span> <span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filters</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">text</span> <span class="ow">and</span> <span class="n">text</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_filter_:&#39;</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">filters</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_filter_:&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+                <span class="n">text</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Failed to parse _filter_ from text field: </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filters</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Item find filters: </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">filters</span><span class="p">))</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">if</span> <span class="n">recurse</span> <span class="ow">or</span> <span class="n">group</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_itemFindRecursive</span><span class="p">(</span>
+                <span class="bp">self</span><span class="p">,</span> <span class="n">origItemFind</span><span class="p">,</span> <span class="n">folderId</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">sort</span><span class="p">,</span>
+                <span class="n">filters</span><span class="p">,</span> <span class="n">recurse</span><span class="p">,</span> <span class="n">group</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">origItemFind</span><span class="p">(</span><span class="n">folderId</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">sort</span><span class="p">,</span> <span class="n">filters</span><span class="p">)</span>
+
+    <span class="nd">@boundHandler</span><span class="p">(</span><span class="n">apiRoot</span><span class="o">.</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">altFolderFind</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parentType</span><span class="p">,</span> <span class="n">parentId</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">sort</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">sort</span> <span class="ow">and</span> <span class="n">sort</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;[&#39;</span><span class="p">:</span>
+            <span class="n">sort</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">sort</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">origFolderFind</span><span class="p">(</span><span class="n">parentType</span><span class="p">,</span> <span class="n">parentId</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">sort</span><span class="p">,</span> <span class="n">filters</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">origItemFind</span><span class="p">,</span> <span class="s1">&#39;_origFunc&#39;</span><span class="p">):</span>
+        <span class="n">apiRoot</span><span class="o">.</span><span class="n">item</span><span class="o">.</span><span class="n">_find</span> <span class="o">=</span> <span class="n">altItemFind</span>
+        <span class="n">altItemFind</span><span class="o">.</span><span class="n">_origFunc</span> <span class="o">=</span> <span class="n">origItemFind</span>
+        <span class="n">apiRoot</span><span class="o">.</span><span class="n">folder</span><span class="o">.</span><span class="n">_find</span> <span class="o">=</span> <span class="n">altFolderFind</span>
+        <span class="n">altFolderFind</span><span class="o">.</span><span class="n">_origFunc</span> <span class="o">=</span> <span class="n">origFolderFind</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_groupingPipeline</span><span class="p">(</span><span class="n">initialPipeline</span><span class="p">,</span> <span class="n">cbase</span><span class="p">,</span> <span class="n">grouping</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Modify the recursive pipeline to add grouping and counts.</span>
+
+<span class="sd">    :param initialPipeline: a pipeline to extend.</span>
+<span class="sd">    :param cbase: a unique value for each grouping set.</span>
+<span class="sd">    :param grouping: a dictionary where &#39;keys&#39; is a list of data to group by</span>
+<span class="sd">        and, optionally, &#39;counts&#39; is a dictionary of data to count as keys and</span>
+<span class="sd">        names where to add the results.  For instance, this could be</span>
+<span class="sd">        {&#39;keys&#39;: [&#39;meta.dicom.PatientID&#39;], &#39;counts&#39;: {</span>
+<span class="sd">        &#39;meta.dicom.StudyInstanceUID&#39;: &#39;meta._count.studycount&#39;,</span>
+<span class="sd">        &#39;meta.dicom.SeriesInstanceUID&#39;: &#39;meta._count.seriescount&#39;}}</span>
+<span class="sd">    :param sort: an optional list of (key, direction) tuples</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">gidx</span><span class="p">,</span> <span class="n">gr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">grouping</span><span class="p">[</span><span class="s1">&#39;keys&#39;</span><span class="p">]):</span>
+        <span class="n">grsort</span> <span class="o">=</span> <span class="p">[(</span><span class="n">gr</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span> <span class="o">+</span> <span class="p">(</span><span class="n">sort</span> <span class="ow">or</span> <span class="p">[])</span> <span class="o">+</span> <span class="p">[(</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span>
+        <span class="n">initialPipeline</span><span class="o">.</span><span class="n">extend</span><span class="p">([{</span>
+            <span class="s1">&#39;$match&#39;</span><span class="p">:</span> <span class="p">{</span><span class="n">gr</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;$exists&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}},</span>
+        <span class="p">},</span> <span class="p">{</span>
+            <span class="s1">&#39;$sort&#39;</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">(</span><span class="n">grsort</span><span class="p">),</span>
+        <span class="p">},</span> <span class="p">{</span>
+            <span class="s1">&#39;$group&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;$</span><span class="si">{</span><span class="n">gr</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;firstOrder&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;$first&#39;</span><span class="p">:</span> <span class="s1">&#39;$$ROOT&#39;</span><span class="p">},</span>
+            <span class="p">},</span>
+        <span class="p">}])</span>
+        <span class="n">groupStep</span> <span class="o">=</span> <span class="n">initialPipeline</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;$group&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">gidx</span> <span class="ow">and</span> <span class="n">grouping</span><span class="p">[</span><span class="s1">&#39;counts&#39;</span><span class="p">]:</span>
+            <span class="k">for</span> <span class="n">cidx</span><span class="p">,</span> <span class="p">(</span><span class="n">ckey</span><span class="p">,</span> <span class="n">cval</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">grouping</span><span class="p">[</span><span class="s1">&#39;counts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+                <span class="n">groupStep</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;count_</span><span class="si">{</span><span class="n">cbase</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">cidx</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;$addToSet&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;$</span><span class="si">{</span><span class="n">ckey</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">}</span>
+                <span class="n">cparts</span> <span class="o">=</span> <span class="n">cval</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
+                <span class="n">centry</span> <span class="o">=</span> <span class="p">{</span><span class="n">cparts</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span> <span class="p">{</span><span class="s1">&#39;$size&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;$count_</span><span class="si">{</span><span class="n">cbase</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">cidx</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">}}</span>
+                <span class="k">for</span> <span class="n">cidx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">cparts</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="n">centry</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="n">cparts</span><span class="p">[</span><span class="n">cidx</span><span class="p">]:</span> <span class="p">{</span>
+                            <span class="s1">&#39;$mergeObjects&#39;</span><span class="p">:</span> <span class="p">[</span>
+                                <span class="s1">&#39;$firstOrder.&#39;</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cparts</span><span class="p">[:</span><span class="n">cidx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]),</span>
+                                <span class="n">centry</span><span class="p">,</span>
+                            <span class="p">],</span>
+                        <span class="p">},</span>
+                    <span class="p">}</span>
+                <span class="n">initialPipeline</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;$set&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;firstOrder&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;$mergeObjects&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;$firstOrder&#39;</span><span class="p">,</span> <span class="n">centry</span><span class="p">]}}})</span>
+        <span class="n">initialPipeline</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;$replaceRoot&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;newRoot&#39;</span><span class="p">:</span> <span class="s1">&#39;$firstOrder&#39;</span><span class="p">}})</span>
+    <span class="n">initialPipeline</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;$set&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;meta._grouping&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;keys&#39;</span><span class="p">:</span> <span class="n">grouping</span><span class="p">[</span><span class="s1">&#39;keys&#39;</span><span class="p">],</span>
+        <span class="s1">&#39;values&#39;</span><span class="p">:</span> <span class="p">[</span><span class="sa">f</span><span class="s1">&#39;$</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">grouping</span><span class="p">[</span><span class="s1">&#39;keys&#39;</span><span class="p">]],</span>
+    <span class="p">}}})</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_itemFindRecursive</span><span class="p">(</span>  <span class="c1"># noqa</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">origItemFind</span><span class="p">,</span> <span class="n">folderId</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">sort</span><span class="p">,</span> <span class="n">filters</span><span class="p">,</span>
+        <span class="n">recurse</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    If a recursive search within a folderId is specified, use an aggregation to</span>
+<span class="sd">    find all folders that are descendants of the specified folder.  If there</span>
+<span class="sd">    are any, then perform a search that matches any of those folders rather</span>
+<span class="sd">    than just the parent.</span>
+
+<span class="sd">    :param self: A reference to the Item() resource record.</span>
+<span class="sd">    :param origItemFind: the original _find method, used as a fallback.</span>
+
+<span class="sd">    For the remaining parameters, see girder/api/v1/item._find</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">bson.objectid</span><span class="w"> </span><span class="kn">import</span> <span class="n">ObjectId</span>
+
+    <span class="k">if</span> <span class="n">folderId</span><span class="p">:</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getCurrentUser</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">recurse</span><span class="p">:</span>
+            <span class="n">pipeline</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s1">&#39;$match&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="n">ObjectId</span><span class="p">(</span><span class="n">folderId</span><span class="p">)}},</span>
+                <span class="p">{</span><span class="s1">&#39;$graphLookup&#39;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s1">&#39;from&#39;</span><span class="p">:</span> <span class="s1">&#39;folder&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;connectFromField&#39;</span><span class="p">:</span> <span class="s1">&#39;_id&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;connectToField&#39;</span><span class="p">:</span> <span class="s1">&#39;parentId&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;depthField&#39;</span><span class="p">:</span> <span class="s1">&#39;_depth&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;as&#39;</span><span class="p">:</span> <span class="s1">&#39;_folder&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;startWith&#39;</span><span class="p">:</span> <span class="s1">&#39;$_id&#39;</span><span class="p">,</span>
+                <span class="p">}},</span>
+                <span class="p">{</span><span class="s1">&#39;$match&#39;</span><span class="p">:</span> <span class="n">Folder</span><span class="p">()</span><span class="o">.</span><span class="n">permissionClauses</span><span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">AccessType</span><span class="o">.</span><span class="n">READ</span><span class="p">,</span> <span class="s1">&#39;_folder.&#39;</span><span class="p">)},</span>
+                <span class="p">{</span><span class="s1">&#39;$group&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="s1">&#39;$_folder._id&#39;</span><span class="p">}},</span>
+            <span class="p">]</span>
+            <span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="n">ObjectId</span><span class="p">(</span><span class="n">folderId</span><span class="p">)]</span> <span class="o">+</span> <span class="nb">next</span><span class="p">(</span><span class="n">Folder</span><span class="p">()</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline</span><span class="p">))[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="n">ObjectId</span><span class="p">(</span><span class="n">folderId</span><span class="p">)]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">children</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">group</span><span class="p">:</span>
+            <span class="n">filters</span> <span class="o">=</span> <span class="p">(</span><span class="n">filters</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">if</span> <span class="n">filters</span> <span class="k">else</span> <span class="p">{})</span>
+            <span class="k">if</span> <span class="n">text</span><span class="p">:</span>
+                <span class="n">filters</span><span class="p">[</span><span class="s1">&#39;$text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="s1">&#39;$search&#39;</span><span class="p">:</span> <span class="n">text</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="k">if</span> <span class="n">name</span><span class="p">:</span>
+                <span class="n">filters</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">name</span>
+            <span class="n">filters</span><span class="p">[</span><span class="s1">&#39;folderId&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;$in&#39;</span><span class="p">:</span> <span class="n">children</span><span class="p">}</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sort</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">sort</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="s1">&#39;parentId&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+            <span class="c1"># This is taken from girder.utility.acl_mixin.findWithPermissions,</span>
+            <span class="c1"># except it adds a grouping stage</span>
+            <span class="n">initialPipeline</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s1">&#39;$match&#39;</span><span class="p">:</span> <span class="n">filters</span><span class="p">},</span>
+            <span class="p">]</span>
+            <span class="k">if</span> <span class="n">group</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">group</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="n">group</span> <span class="o">=</span> <span class="p">[</span><span class="n">gr</span> <span class="k">for</span> <span class="n">gr</span> <span class="ow">in</span> <span class="n">group</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">gr</span><span class="p">]</span>
+                <span class="n">groups</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">idx</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">while</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">group</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;_count_&#39;</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">groups</span><span class="p">)</span> <span class="ow">or</span> <span class="n">groups</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;counts&#39;</span><span class="p">]:</span>
+                            <span class="n">groups</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;keys&#39;</span><span class="p">:</span> <span class="p">[],</span> <span class="s1">&#39;counts&#39;</span><span class="p">:</span> <span class="p">{}})</span>
+                        <span class="n">groups</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;keys&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>
+                        <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">idx</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
+                            <span class="n">groups</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;counts&#39;</span><span class="p">][</span><span class="n">group</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="mi">2</span><span class="p">]</span>
+                        <span class="n">idx</span> <span class="o">+=</span> <span class="mi">3</span>
+                <span class="k">for</span> <span class="n">gidx</span><span class="p">,</span> <span class="n">grouping</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">groups</span><span class="p">):</span>
+                    <span class="n">_groupingPipeline</span><span class="p">(</span><span class="n">initialPipeline</span><span class="p">,</span> <span class="n">gidx</span><span class="p">,</span> <span class="n">grouping</span><span class="p">,</span> <span class="n">sort</span><span class="p">)</span>
+            <span class="n">fullPipeline</span> <span class="o">=</span> <span class="n">initialPipeline</span>
+            <span class="n">countPipeline</span> <span class="o">=</span> <span class="n">initialPipeline</span> <span class="o">+</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s1">&#39;$count&#39;</span><span class="p">:</span> <span class="s1">&#39;count&#39;</span><span class="p">},</span>
+            <span class="p">]</span>
+            <span class="k">if</span> <span class="n">sort</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">fullPipeline</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;$sort&#39;</span><span class="p">:</span> <span class="n">collections</span><span class="o">.</span><span class="n">OrderedDict</span><span class="p">(</span><span class="n">sort</span><span class="p">)})</span>
+            <span class="k">if</span> <span class="n">limit</span><span class="p">:</span>
+                <span class="n">fullPipeline</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;$limit&#39;</span><span class="p">:</span> <span class="n">limit</span> <span class="o">+</span> <span class="p">(</span><span class="n">offset</span> <span class="ow">or</span> <span class="mi">0</span><span class="p">)})</span>
+            <span class="k">if</span> <span class="n">offset</span><span class="p">:</span>
+                <span class="n">fullPipeline</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;$skip&#39;</span><span class="p">:</span> <span class="n">offset</span><span class="p">})</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Find item pipeline </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">fullPipeline</span><span class="p">)</span>
+
+            <span class="n">options</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;allowDiskUse&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                <span class="s1">&#39;cursor&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;batchSize&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">},</span>
+            <span class="p">}</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">fullPipeline</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="nf">count</span><span class="p">():</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span>
+                        <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">countPipeline</span><span class="p">,</span> <span class="o">**</span><span class="n">options</span><span class="p">)))[</span><span class="s1">&#39;count&#39;</span><span class="p">]</span>
+                <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+                    <span class="c1"># If there are no values, this won&#39;t return the count, in</span>
+                    <span class="c1"># which case it is zero.</span>
+                    <span class="k">return</span> <span class="mi">0</span>
+
+            <span class="n">result</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="n">count</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">fromAggregate</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">return</span> <span class="n">result</span>
+    <span class="k">return</span> <span class="n">origItemFind</span><span class="p">(</span><span class="n">folderId</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">sort</span><span class="p">,</span> <span class="n">filters</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="getYAMLConfigFile">
+<a class="viewcode-back" href="../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.getYAMLConfigFile">[docs]</a>
+<span class="nd">@access</span><span class="o">.</span><span class="n">public</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">DATA_READ</span><span class="p">)</span>
+<span class="nd">@autoDescribeRoute</span><span class="p">(</span>
+    <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;Get a config file.&#39;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">notes</span><span class="p">(</span>
+        <span class="s1">&#39;This walks up the chain of parent folders until the file is found.  &#39;</span>
+        <span class="s1">&#39;If not found, the .config folder in the parent collection or user is &#39;</span>
+        <span class="s1">&#39;checked.</span><span class="se">\n\n</span><span class="s1">Any yaml file can be returned.  If the top-level is a &#39;</span>
+        <span class="s1">&#39;dictionary and contains keys &quot;access&quot; or &quot;groups&quot; where those are &#39;</span>
+        <span class="s1">&#39;dictionaries, the returned value will be modified based on the &#39;</span>
+        <span class="s1">&#39;current user.  The &quot;groups&quot; dictionary contains keys that are group &#39;</span>
+        <span class="s1">&#39;names and values that update the main dictionary.  All groups that &#39;</span>
+        <span class="s1">&#39;the user is a member of are merged in alphabetical order.  If a key &#39;</span>
+        <span class="s1">&#39;and value of &quot;</span><span class="se">\\</span><span class="s1">__all</span><span class="se">\\</span><span class="s1">__&quot;: True exists, the replacement is total; &#39;</span>
+        <span class="s1">&#39;otherwise it is a merge.  If the &quot;access&quot; dictionary exists, the &#39;</span>
+        <span class="s1">&#39;&quot;user&quot; and &quot;admin&quot; subdictionaries are merged if a calling user is &#39;</span>
+        <span class="s1">&#39;present and if the user is an admin, respectively (both get merged &#39;</span>
+        <span class="s1">&#39;for admins).&#39;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">modelParam</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">Folder</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">AccessType</span><span class="o">.</span><span class="n">READ</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;The name of the file.&#39;</span><span class="p">,</span> <span class="n">paramType</span><span class="o">=</span><span class="s1">&#39;path&#39;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">errorResponse</span><span class="p">(),</span>
+<span class="p">)</span>
+<span class="nd">@boundHandler</span><span class="p">()</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">getYAMLConfigFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">yamlConfigFile</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getCurrentUser</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">yamlConfigFile</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="putYAMLConfigFile">
+<a class="viewcode-back" href="../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.putYAMLConfigFile">[docs]</a>
+<span class="nd">@access</span><span class="o">.</span><span class="n">public</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">DATA_READ</span><span class="p">)</span>
+<span class="nd">@autoDescribeRoute</span><span class="p">(</span>
+    <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;Get a config file.&#39;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">notes</span><span class="p">(</span>
+        <span class="s1">&#39;This replaces or creates an item in the specified folder with the &#39;</span>
+        <span class="s1">&#39;specified name containing a single file also of the specified &#39;</span>
+        <span class="s1">&#39;name.  The file is added to the default assetstore, and any existing &#39;</span>
+        <span class="s1">&#39;file may be permanently deleted.&#39;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">modelParam</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">Folder</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">AccessType</span><span class="o">.</span><span class="n">READ</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;The name of the file.&#39;</span><span class="p">,</span> <span class="n">paramType</span><span class="o">=</span><span class="s1">&#39;path&#39;</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;user_context&#39;</span><span class="p">,</span> <span class="s1">&#39;Whether these settings should only apply to the &#39;</span>
+           <span class="s1">&#39;current user.&#39;</span><span class="p">,</span> <span class="n">paramType</span><span class="o">=</span><span class="s1">&#39;query&#39;</span><span class="p">,</span> <span class="n">dataType</span><span class="o">=</span><span class="s1">&#39;boolean&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;The contents of yaml config file to validate.&#39;</span><span class="p">,</span>
+           <span class="n">paramType</span><span class="o">=</span><span class="s1">&#39;body&#39;</span><span class="p">),</span>
+<span class="p">)</span>
+<span class="nd">@boundHandler</span><span class="p">()</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">putYAMLConfigFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">user_context</span><span class="p">):</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">yamlConfigFileWrite</span>
+
+    <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getCurrentUser</span><span class="p">()</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">user_context</span><span class="p">:</span>
+        <span class="n">Folder</span><span class="p">()</span><span class="o">.</span><span class="n">requireAccess</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">AccessType</span><span class="o">.</span><span class="n">WRITE</span><span class="p">)</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">yamlConfigFileWrite</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">user_context</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

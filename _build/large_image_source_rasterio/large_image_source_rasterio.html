@@ -1,0 +1,693 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_rasterio package &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="large_image_source_test" href="../large_image_source_test/modules.html" />
+    <link rel="prev" title="large_image_source_rasterio" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../api_index.html">API Documentation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../large_image/modules.html">large_image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_bioformats/modules.html">large_image_source_bioformats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_deepzoom/modules.html">large_image_source_deepzoom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_dicom/modules.html">large_image_source_dicom</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_dummy/modules.html">large_image_source_dummy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_gdal/modules.html">large_image_source_gdal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_mapnik/modules.html">large_image_source_mapnik</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_multi/modules.html">large_image_source_multi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_nd2/modules.html">large_image_source_nd2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_ometiff/modules.html">large_image_source_ometiff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_openjpeg/modules.html">large_image_source_openjpeg</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_openslide/modules.html">large_image_source_openslide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_pil/modules.html">large_image_source_pil</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">large_image_source_rasterio</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">large_image_source_rasterio package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-large_image_source_rasterio.girder_source">large_image_source_rasterio.girder_source module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-large_image_source_rasterio">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_test/modules.html">large_image_source_test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_tiff/modules.html">large_image_source_tiff</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_tifffile/modules.html">large_image_source_tifffile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_vips/modules.html">large_image_source_vips</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_source_zarr/modules.html">large_image_source_zarr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_converter/modules.html">large_image_converter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../large_image_tasks/modules.html">large_image_tasks</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../api_index.html">API Documentation</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">large_image_source_rasterio</a></li>
+      <li class="breadcrumb-item active">large_image_source_rasterio package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/_build/large_image_source_rasterio/large_image_source_rasterio.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="large-image-source-rasterio-package">
+<h1>large_image_source_rasterio package<a class="headerlink" href="#large-image-source-rasterio-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-large_image_source_rasterio.girder_source">
+<span id="large-image-source-rasterio-girder-source-module"></span><h2>large_image_source_rasterio.girder_source module<a class="headerlink" href="#module-large_image_source_rasterio.girder_source" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image_source_rasterio.girder_source.RasterioGirderTileSource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image_source_rasterio.girder_source.</span></span><span class="sig-name descname"><span class="pre">RasterioGirderTileSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio/girder_source.html#RasterioGirderTileSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.girder_source.RasterioGirderTileSource" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#large_image_source_rasterio.RasterioFileTileSource" title="large_image_source_rasterio.RasterioFileTileSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">RasterioFileTileSource</span></code></a>, <a class="reference internal" href="../girder_large_image/girder_large_image.html#girder_large_image.girder_tilesource.GirderTileSource" title="girder_large_image.girder_tilesource.GirderTileSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">GirderTileSource</span></code></a></p>
+<p>Provides tile access to Girder items for rasterio layers.</p>
+<p>Initialize the tile class.</p>
+<p>See the base class for other available parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – a filesystem path for the tile source.</p></li>
+<li><p><strong>projection</strong> – None to use pixel space, otherwise a crs compatible with rasterio’s CRS.</p></li>
+<li><p><strong>unitsPerPixel</strong> – The size of a pixel at the 0 tile size.
+Ignored if the projection is None.  For projections, None uses the default,
+which is the distance between (-180,0) and (180,0) in EPSG:4326 converted to the
+projection divided by the tile size. crs projections that are not latlong
+(is_geographic is False) must specify unitsPerPixel.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.girder_source.RasterioGirderTileSource.cacheName">
+<span class="sig-name descname"><span class="pre">cacheName</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'tilesource'</span></em><a class="headerlink" href="#large_image_source_rasterio.girder_source.RasterioGirderTileSource.cacheName" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_rasterio.girder_source.RasterioGirderTileSource.getLRUHash">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getLRUHash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio/girder_source.html#RasterioGirderTileSource.getLRUHash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.girder_source.RasterioGirderTileSource.getLRUHash" title="Link to this definition"></a></dt>
+<dd><p>Return a string hash used as a key in the recently-used cache for tile
+sources.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a string hash value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.girder_source.RasterioGirderTileSource.levels">
+<span class="sig-name descname"><span class="pre">levels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_rasterio.girder_source.RasterioGirderTileSource.levels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.girder_source.RasterioGirderTileSource.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'rasterio'</span></em><a class="headerlink" href="#large_image_source_rasterio.girder_source.RasterioGirderTileSource.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.girder_source.RasterioGirderTileSource.projection">
+<span class="sig-name descname"><span class="pre">projection</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span></em><a class="headerlink" href="#large_image_source_rasterio.girder_source.RasterioGirderTileSource.projection" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.girder_source.RasterioGirderTileSource.projectionOrigin">
+<span class="sig-name descname"><span class="pre">projectionOrigin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#large_image_source_rasterio.girder_source.RasterioGirderTileSource.projectionOrigin" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.girder_source.RasterioGirderTileSource.sizeX">
+<span class="sig-name descname"><span class="pre">sizeX</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_rasterio.girder_source.RasterioGirderTileSource.sizeX" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.girder_source.RasterioGirderTileSource.sizeY">
+<span class="sig-name descname"><span class="pre">sizeY</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_rasterio.girder_source.RasterioGirderTileSource.sizeY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.girder_source.RasterioGirderTileSource.sourceLevels">
+<span class="sig-name descname"><span class="pre">sourceLevels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_rasterio.girder_source.RasterioGirderTileSource.sourceLevels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.girder_source.RasterioGirderTileSource.sourceSizeX">
+<span class="sig-name descname"><span class="pre">sourceSizeX</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_rasterio.girder_source.RasterioGirderTileSource.sourceSizeX" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.girder_source.RasterioGirderTileSource.sourceSizeY">
+<span class="sig-name descname"><span class="pre">sourceSizeY</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_rasterio.girder_source.RasterioGirderTileSource.sourceSizeY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.girder_source.RasterioGirderTileSource.tileHeight">
+<span class="sig-name descname"><span class="pre">tileHeight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_rasterio.girder_source.RasterioGirderTileSource.tileHeight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.girder_source.RasterioGirderTileSource.tileWidth">
+<span class="sig-name descname"><span class="pre">tileWidth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_rasterio.girder_source.RasterioGirderTileSource.tileWidth" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.girder_source.RasterioGirderTileSource.unitsAcrossLevel0">
+<span class="sig-name descname"><span class="pre">unitsAcrossLevel0</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#large_image_source_rasterio.girder_source.RasterioGirderTileSource.unitsAcrossLevel0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-large_image_source_rasterio">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-large_image_source_rasterio" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">large_image_source_rasterio.</span></span><span class="sig-name descname"><span class="pre">RasterioFileTileSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#RasterioFileTileSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../large_image/large_image.tilesource.html#large_image.tilesource.geo.GDALBaseFileTileSource" title="large_image.tilesource.geo.GDALBaseFileTileSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">GDALBaseFileTileSource</span></code></a></p>
+<p>Provides tile access to geospatial files.</p>
+<p>Initialize the tile class.</p>
+<p>See the base class for other available parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path</strong> – a filesystem path for the tile source.</p></li>
+<li><p><strong>projection</strong> – None to use pixel space, otherwise a crs compatible with rasterio’s CRS.</p></li>
+<li><p><strong>unitsPerPixel</strong> – The size of a pixel at the 0 tile size.
+Ignored if the projection is None.  For projections, None uses the default,
+which is the distance between (-180,0) and (180,0) in EPSG:4326 converted to the
+projection divided by the tile size. crs projections that are not latlong
+(is_geographic is False) must specify unitsPerPixel.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.addKnownExtensions">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">addKnownExtensions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#RasterioFileTileSource.addKnownExtensions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.addKnownExtensions" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.cacheName">
+<span class="sig-name descname"><span class="pre">cacheName</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'tilesource'</span></em><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.cacheName" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.getBandInformation">
+<span class="sig-name descname"><span class="pre">getBandInformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">statistics</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dataset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#RasterioFileTileSource.getBandInformation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.getBandInformation" title="Link to this definition"></a></dt>
+<dd><p>Get information about each band in the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>statistics</strong> – if True, compute statistics if they don’t already exist.
+Ignored: always treated as True.</p></li>
+<li><p><strong>dataset</strong> – the dataset.  If None, use the main dataset.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a list of one dictionary per band.  Each dictionary contains
+known values such as interpretation, min, max, mean, stdev, nodata,
+scale, offset, units, categories, colortable, maskband.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.getBounds">
+<span class="sig-name descname"><span class="pre">getBounds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">crs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#RasterioFileTileSource.getBounds"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.getBounds" title="Link to this definition"></a></dt>
+<dd><p>Returns bounds of the image.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>crs</strong> – the projection for the bounds.  None for the default.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>an object with the four corners and the projection that was used.
+None if we don’t know the original projection.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.getCrs">
+<span class="sig-name descname"><span class="pre">getCrs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#RasterioFileTileSource.getCrs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.getCrs" title="Link to this definition"></a></dt>
+<dd><p>Returns crs object for the given dataset</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The crs or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.getInternalMetadata">
+<span class="sig-name descname"><span class="pre">getInternalMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#RasterioFileTileSource.getInternalMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.getInternalMetadata" title="Link to this definition"></a></dt>
+<dd><p>Return additional known metadata about the tile source.</p>
+<p>Data returned from this method is not guaranteed to be in
+any particular format or have specific values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a dictionary of data or None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.getLRUHash">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getLRUHash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#RasterioFileTileSource.getLRUHash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.getLRUHash" title="Link to this definition"></a></dt>
+<dd><p>Return a string hash used as a key in the recently-used cache for tile
+sources.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a string hash value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.getMetadata">
+<span class="sig-name descname"><span class="pre">getMetadata</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#RasterioFileTileSource.getMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.getMetadata" title="Link to this definition"></a></dt>
+<dd><p>Return metadata about this tile source.  This contains</p>
+<blockquote>
+<div><dl class="field-list simple">
+<dt class="field-odd">levels<span class="colon">:</span></dt>
+<dd class="field-odd"><p>number of tile levels in this image.</p>
+</dd>
+<dt class="field-even">sizeX<span class="colon">:</span></dt>
+<dd class="field-even"><p>width of the image in pixels.</p>
+</dd>
+<dt class="field-odd">sizeY<span class="colon">:</span></dt>
+<dd class="field-odd"><p>height of the image in pixels.</p>
+</dd>
+<dt class="field-even">tileWidth<span class="colon">:</span></dt>
+<dd class="field-even"><p>width of a tile in pixels.</p>
+</dd>
+<dt class="field-odd">tileHeight<span class="colon">:</span></dt>
+<dd class="field-odd"><p>height of a tile in pixels.</p>
+</dd>
+<dt class="field-even">magnification<span class="colon">:</span></dt>
+<dd class="field-even"><p>if known, the magnificaiton of the image.</p>
+</dd>
+<dt class="field-odd">mm_x<span class="colon">:</span></dt>
+<dd class="field-odd"><p>if known, the width of a pixel in millimeters.</p>
+</dd>
+<dt class="field-even">mm_y<span class="colon">:</span></dt>
+<dd class="field-even"><p>if known, the height of a pixel in millimeters.</p>
+</dd>
+<dt class="field-odd">dtype<span class="colon">:</span></dt>
+<dd class="field-odd"><p>if known, the type of values in this image.</p>
+</dd>
+</dl>
+<p>In addition to the keys that listed above, tile sources that expose
+multiple frames will also contain</p>
+<dl class="field-list simple">
+<dt class="field-odd">frames<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a list of frames.  Each frame entry is a dictionary with</p>
+<dl class="field-list simple">
+<dt class="field-odd">Frame<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a 0-values frame index (the location in the list)</p>
+</dd>
+<dt class="field-even">Channel<span class="colon">:</span></dt>
+<dd class="field-even"><p>optional.  The name of the channel, if known</p>
+</dd>
+<dt class="field-odd">IndexC<span class="colon">:</span></dt>
+<dd class="field-odd"><p>optional if unique.  A 0-based index into the channel
+list</p>
+</dd>
+<dt class="field-even">IndexT<span class="colon">:</span></dt>
+<dd class="field-even"><p>optional if unique.  A 0-based index for time values</p>
+</dd>
+<dt class="field-odd">IndexZ<span class="colon">:</span></dt>
+<dd class="field-odd"><p>optional if unique.  A 0-based index for z values</p>
+</dd>
+<dt class="field-even">IndexXY<span class="colon">:</span></dt>
+<dd class="field-even"><p>optional if unique.  A 0-based index for view (xy)
+values</p>
+</dd>
+<dt class="field-odd">Index&lt;axis&gt;<span class="colon">:</span></dt>
+<dd class="field-odd"><p>optional if unique.  A 0-based index for an
+arbitrary axis.</p>
+</dd>
+<dt class="field-even">Index<span class="colon">:</span></dt>
+<dd class="field-even"><p>a 0-based index of non-channel unique sets.  If the
+frames vary only by channel and are adjacent, they will
+have the same index.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">IndexRange<span class="colon">:</span></dt>
+<dd class="field-even"><p>a dictionary of the number of unique index values from
+frames if greater than 1 (e.g., if an entry like IndexXY is not
+present, then all frames either do not have that value or have
+a value of 0).</p>
+</dd>
+<dt class="field-odd">IndexStride<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a dictionary of the spacing between frames where
+unique axes values change.</p>
+</dd>
+<dt class="field-even">channels<span class="colon">:</span></dt>
+<dd class="field-even"><p>optional.  If known, a list of channel names</p>
+</dd>
+<dt class="field-odd">channelmap<span class="colon">:</span></dt>
+<dd class="field-odd"><p>optional.  If known, a dictionary of channel names
+with their offset into the channel list.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>Note that this does not include band information, though some tile
+sources may do so.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.getPixel">
+<span class="sig-name descname"><span class="pre">getPixel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#RasterioFileTileSource.getPixel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.getPixel" title="Link to this definition"></a></dt>
+<dd><p>Get a single pixel from the current tile source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>kwargs</strong> – optional arguments.  Some options are region, output, encoding,
+jpegQuality, jpegSubsampling, tiffCompression, fill.  See tileIterator.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>a dictionary with the value of the pixel for each channel on a
+scale of [0-255], including alpha, if available.  This may contain
+additional information.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.getRegion">
+<span class="sig-name descname"><span class="pre">getRegion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('image',)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#RasterioFileTileSource.getRegion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.getRegion" title="Link to this definition"></a></dt>
+<dd><p>Get region.</p>
+<p>Get a rectangular region from the current tile source.  Aspect ratio is preserved.
+If neither width nor height is given, the original size of the highest
+resolution level is used.  If both are given, the returned image will be
+no larger than either size.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>format</strong> – the desired format or a tuple of allowed formats. Formats
+are members of (TILE_FORMAT_PIL, TILE_FORMAT_NUMPY, TILE_FORMAT_IMAGE).
+If TILE_FORMAT_IMAGE, encoding may be specified.</p></li>
+<li><p><strong>kwargs</strong> – optional arguments.  Some options are region, output, encoding,
+jpegQuality, jpegSubsampling, tiffCompression, fill.  See tileIterator.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>regionData, formatOrRegionMime: the image data and either the
+mime type, if the format is TILE_FORMAT_IMAGE, or the format.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.getState">
+<span class="sig-name descname"><span class="pre">getState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#RasterioFileTileSource.getState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.getState" title="Link to this definition"></a></dt>
+<dd><p>Return a string reflecting the state of the tile source.  This is used
+as part of a cache key when hashing function return values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a string hash value of the source state.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.getTile">
+<span class="sig-name descname"><span class="pre">getTile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pilImageAllowed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numpyAllowed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#RasterioFileTileSource.getTile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.getTile" title="Link to this definition"></a></dt>
+<dd><p>Get a tile from a tile source, returning it as an binary image, a PIL
+image, or a numpy array.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – the 0-based x position of the tile on the specified z level.
+0 is left.</p></li>
+<li><p><strong>y</strong> – the 0-based y position of the tile on the specified z level.
+0 is top.</p></li>
+<li><p><strong>z</strong> – the z level of the tile.  May range from [0, self.levels],
+where 0 is the lowest resolution, single tile for the whole source.</p></li>
+<li><p><strong>pilImageAllowed</strong> – True if a PIL image may be returned.</p></li>
+<li><p><strong>numpyAllowed</strong> – True if a numpy image may be returned.  ‘always’
+to return a numpy array.</p></li>
+<li><p><strong>sparseFallback</strong> – if False and a tile doesn’t exist, raise an
+error.  If True, check if a lower resolution tile exists, and, if
+so, interpolate the needed data for this tile.</p></li>
+<li><p><strong>frame</strong> – the frame number within the tile source.  None is the
+same as 0 for multi-frame sources.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>either a numpy array, a PIL image, or a memory object with an
+image file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.isGeospatial">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">isGeospatial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#RasterioFileTileSource.isGeospatial"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.isGeospatial" title="Link to this definition"></a></dt>
+<dd><p>Check if a path is likely to be a geospatial file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> – The path to the file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if geospatial.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.levels">
+<span class="sig-name descname"><span class="pre">levels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.levels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'rasterio'</span></em><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.name" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.pixelToProjection">
+<span class="sig-name descname"><span class="pre">pixelToProjection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#RasterioFileTileSource.pixelToProjection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.pixelToProjection" title="Link to this definition"></a></dt>
+<dd><p>Convert from pixels back to projection coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y</strong> (<em>x</em><em>,</em>) – base pixel coordinates.</p></li>
+<li><p><strong>level</strong> – the level of the pixel.  None for maximum level.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>px, py in projection coordinates.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.projection">
+<span class="sig-name descname"><span class="pre">projection</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bytes</span></em><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.projection" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.projectionOrigin">
+<span class="sig-name descname"><span class="pre">projectionOrigin</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.projectionOrigin" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.sizeX">
+<span class="sig-name descname"><span class="pre">sizeX</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.sizeX" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.sizeY">
+<span class="sig-name descname"><span class="pre">sizeY</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.sizeY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.sourceLevels">
+<span class="sig-name descname"><span class="pre">sourceLevels</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.sourceLevels" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.sourceSizeX">
+<span class="sig-name descname"><span class="pre">sourceSizeX</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.sourceSizeX" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.sourceSizeY">
+<span class="sig-name descname"><span class="pre">sourceSizeY</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.sourceSizeY" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.tileHeight">
+<span class="sig-name descname"><span class="pre">tileHeight</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.tileHeight" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.tileWidth">
+<span class="sig-name descname"><span class="pre">tileWidth</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.tileWidth" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.toNativePixelCoordinates">
+<span class="sig-name descname"><span class="pre">toNativePixelCoordinates</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">crs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">roundResults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#RasterioFileTileSource.toNativePixelCoordinates"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.toNativePixelCoordinates" title="Link to this definition"></a></dt>
+<dd><p>Convert a coordinate in the native projection to pixel coordinates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – the x coordinate it the native projection.</p></li>
+<li><p><strong>y</strong> – the y coordinate it the native projection.</p></li>
+<li><p><strong>crs</strong> – input projection.  None to use the sources’s projection.</p></li>
+<li><p><strong>roundResults</strong> – if True, round the results to the nearest pixel.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>(x, y) the pixel coordinate.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.unitsAcrossLevel0">
+<span class="sig-name descname"><span class="pre">unitsAcrossLevel0</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.unitsAcrossLevel0" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="large_image_source_rasterio.RasterioFileTileSource.validateCOG">
+<span class="sig-name descname"><span class="pre">validateCOG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">strict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">warn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#RasterioFileTileSource.validateCOG"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.RasterioFileTileSource.validateCOG" title="Link to this definition"></a></dt>
+<dd><p>Check if this image is a valid Cloud Optimized GeoTiff.</p>
+<p>This will raise a <a class="reference internal" href="../large_image/large_image.html#large_image.exceptions.TileSourceInefficientError" title="large_image.exceptions.TileSourceInefficientError"><code class="xref py py-class docutils literal notranslate"><span class="pre">large_image.exceptions.TileSourceInefficientError</span></code></a>
+if not a valid Cloud Optimized GeoTiff. Otherwise, returns True. Requires
+the <code class="docutils literal notranslate"><span class="pre">rio-cogeo</span></code> lib.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>strict</strong> – Enforce warnings as exceptions. Set to False to only warn
+and not raise exceptions.</p></li>
+<li><p><strong>warn</strong> – Log any warnings</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the validity of the cogtiff</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_source_rasterio.canRead">
+<span class="sig-prename descclassname"><span class="pre">large_image_source_rasterio.</span></span><span class="sig-name descname"><span class="pre">canRead</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#canRead"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.canRead" title="Link to this definition"></a></dt>
+<dd><p>Check if an input can be read by the module class.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_source_rasterio.make_crs">
+<span class="sig-prename descclassname"><span class="pre">large_image_source_rasterio.</span></span><span class="sig-name descname"><span class="pre">make_crs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">projection</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#make_crs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.make_crs" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="large_image_source_rasterio.open">
+<span class="sig-prename descclassname"><span class="pre">large_image_source_rasterio.</span></span><span class="sig-name descname"><span class="pre">open</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/large_image_source_rasterio.html#open"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#large_image_source_rasterio.open" title="Link to this definition"></a></dt>
+<dd><p>Create an instance of the module class.</p>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="large_image_source_rasterio" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../large_image_source_test/modules.html" class="btn btn-neutral float-right" title="large_image_source_test" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,7 @@
+large_image_source_gdal
+=======================
+
+.. toctree::
+   :maxdepth: 4
+
+   large_image_source_gdal

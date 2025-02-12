@@ -1,0 +1,29 @@
+girder\_large\_image\_annotation.models package
+===============================================
+
+Submodules
+----------
+
+girder\_large\_image\_annotation.models.annotation module
+---------------------------------------------------------
+
+.. automodule:: girder_large_image_annotation.models.annotation
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+girder\_large\_image\_annotation.models.annotationelement module
+----------------------------------------------------------------
+
+.. automodule:: girder_large_image_annotation.models.annotationelement
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: girder_large_image_annotation.models
+   :members:
+   :undoc-members:
+   :show-inheritance:

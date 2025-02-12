@@ -1,0 +1,21 @@
+large\_image\_source\_ometiff package
+=====================================
+
+Submodules
+----------
+
+large\_image\_source\_ometiff.girder\_source module
+---------------------------------------------------
+
+.. automodule:: large_image_source_ometiff.girder_source
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: large_image_source_ometiff
+   :members:
+   :undoc-members:
+   :show-inheritance:

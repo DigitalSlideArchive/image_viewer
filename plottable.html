@@ -1,0 +1,221 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plottable Data &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="_static/K.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Upgrading from Previous Versions" href="upgrade.html" />
+    <link rel="prev" title="DICOMweb Assetstore" href="dicomweb_assetstore.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="girder_index.html">Girder Integration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="girder_config_options.html">Girder Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="girder_annotation_config_options.html">Girder Annotation Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="girder_caching.html">Caching Large Image in Girder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dicomweb_assetstore.html">DICOMweb Assetstore</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Plottable Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html">Upgrading from Previous Versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/girder_large_image/modules.html">girder_large_image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/girder_large_image_annotation/modules.html">girder_large_image_annotation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="girder_index.html">Girder Integration</a></li>
+      <li class="breadcrumb-item active">Plottable Data</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/plottable.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="plottable-data">
+<h1>Plottable Data<a class="headerlink" href="#plottable-data" title="Link to this heading"></a></h1>
+<p>There is a python utility class and some REST endpoints to obtain plottable data related to a large image item optionally along with other items in the same <a class="reference external" href="https://girder.readthedocs.io/en/latest/">Girder</a> folder.  This plottable data can be drawn from item metadata, folder metadata, annotation attributes, and annotation element user properties, plus a few core properties of items, annotations, and annotation elements.</p>
+<p>See the <a class="reference external" href="_build/girder_large_image_annotation/girder_large_image_annotation.utils.html#girder_large_image_annotation.utils.PlottableItemData">PlottableItemData</a> for the Python API, or <code class="docutils literal notranslate"><span class="pre">POST</span></code> <code class="docutils literal notranslate"><span class="pre">annotation/item/{id}/plot/list</span></code> and <code class="docutils literal notranslate"><span class="pre">POST</span></code> <code class="docutils literal notranslate"><span class="pre">annotation/item/{id}/plot/data</span></code> for the endpoints.</p>
+<p>In general, data is parsed from the <code class="docutils literal notranslate"><span class="pre">meta</span></code> dictionary of items and folders, from the <code class="docutils literal notranslate"><span class="pre">attributes</span></code> dictionary of annotations, and the <code class="docutils literal notranslate"><span class="pre">user</span></code> dictionary of annotation elements.  For any of these locations, any data that has a data type of a string, number (floating point or integer), or boolean can be used.  Data must be referenced by a dictionary key, and can be in nested dictionaries and arrays, but not recursively.</p>
+<p>Structurally, data can be referenced within the primary dictionary of each resource via any of the following access patterns (where <code class="docutils literal notranslate"><span class="pre">data</span></code> is the primary dictionary: <code class="docutils literal notranslate"><span class="pre">meta</span></code>, <code class="docutils literal notranslate"><span class="pre">attributes</span></code>, or <code class="docutils literal notranslate"><span class="pre">user</span></code>):</p>
+<p>For instance, each of the following has two separate keys with plottable data (some with one value and some with an array of three values):</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Data Arrangement</p></th>
+<th class="head"><p>Example</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>key - value</p></td>
+<td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;nucleus_radius&quot;</span><span class="p">:</span> <span class="mf">4.5</span><span class="p">,</span>
+  <span class="s2">&quot;nucleus_circularity&quot;</span><span class="p">:</span> <span class="mf">0.9</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>key - value list</p></td>
+<td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;nucleus_radius&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">,</span> <span class="mf">5.1</span><span class="p">],</span>
+  <span class="s2">&quot;nucleus_circularity&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.86</span><span class="p">,</span> <span class="mf">0.92</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>nested key - value</p></td>
+<td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;nucleus&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;radius&quot;</span><span class="p">:</span> <span class="mf">4.5</span><span class="p">,</span>
+    <span class="s2">&quot;circularity&quot;</span><span class="p">:</span> <span class="mf">0.9</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-odd"><td><p>nested key - value list</p></td>
+<td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;nucleus&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;radius&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">,</span> <span class="mf">5.1</span><span class="p">],</span>
+    <span class="s2">&quot;circularity&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.86</span><span class="p">,</span> <span class="mf">0.92</span><span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+<tr class="row-even"><td><p>key - list of key - value</p></td>
+<td><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;meta&quot;</span><span class="p">:</span> <span class="p">{</span>
+  <span class="s2">&quot;nucleus&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;radius&quot;</span><span class="p">:</span> <span class="mf">4.5</span><span class="p">,</span>
+      <span class="s2">&quot;circularity&quot;</span><span class="p">:</span> <span class="mf">0.9</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;radius&quot;</span><span class="p">:</span> <span class="mf">5.5</span><span class="p">,</span>
+      <span class="s2">&quot;circularity&quot;</span><span class="p">:</span> <span class="mf">0.86</span>
+    <span class="p">},</span>
+    <span class="p">{</span>
+      <span class="s2">&quot;radius&quot;</span><span class="p">:</span> <span class="mf">5.1</span><span class="p">,</span>
+      <span class="s2">&quot;circularity&quot;</span><span class="p">:</span> <span class="mf">0.92</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+<p>For plottable data in the <code class="docutils literal notranslate"><span class="pre">meta</span></code> key of a folder, (a) if the name of the most nested key matches the Python regular expression <code class="docutils literal notranslate"><span class="pre">r'(?i)(item|image)_(id|name)$'</span></code>, then the value of that key will attempt to be resolved to the name or Girder _id of a item within the folder.  This will only match items that are included (the <code class="docutils literal notranslate"><span class="pre">adjacentItems</span></code> flag affects the results).  If a matching item is found, the item’s canonical <code class="docutils literal notranslate"><span class="pre">name</span></code> and <code class="docutils literal notranslate"><span class="pre">_id</span></code> are used rather than the specified value.  (b) if the name of the key matches the Python regular expression <code class="docutils literal notranslate"><span class="pre">r'(?i)((low|min|high|max)(_|)(x|y)|(^(x|y)(1|2)$))'</span></code>, the value is assumed to be a coordinate of an image bounding box.  This can be used by clients to show a portion of the image associated with the plottable record.</p>
+<p>After plottable data is gathered, columns of available data are summarized.  Each column contains:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">title</span></code>: a display-friendly title for the column.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">key</span></code>: the name of column for internal purposes and requests.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">type</span></code>: either <code class="docutils literal notranslate"><span class="pre">'number'</span></code> if all of the examined values for the data are None or can be cast to a <code class="docutils literal notranslate"><span class="pre">float</span></code> or <code class="docutils literal notranslate"><span class="pre">'string'</span></code> otherwise.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">count</span></code>: the number of rows where the value of this column is not None.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">distinct</span></code>: a list of distinct values if there are less than some maximum number of distinct values.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">distinctcount</span></code>: if <code class="docutils literal notranslate"><span class="pre">distinct</span></code> is present, the number of values in that list.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min</span></code>: for number data columns, the lowest value present.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max</span></code>: for number data columns, the highest value present.</p></li>
+</ul>
+<p>Data rows are populated with more general data when possible.  For example, if data is selected from annotations, metadata from the parent item is present in each row.</p>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="dicomweb_assetstore.html" class="btn btn-neutral float-left" title="DICOMweb Assetstore" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="upgrade.html" class="btn btn-neutral float-right" title="Upgrading from Previous Versions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,476 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Using the Zarr Tile Sink &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../_static/K.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Developer Guide" href="../development.html" />
+    <link rel="prev" title="Using Large Image in Jupyter" href="large_image_examples.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../notebooks.html">Jupyter Notebook Examples</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="large_image_examples.html">Using Large Image in Jupyter</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Using the Zarr Tile Sink</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Installation">Installation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Sample-Data-Download">Sample Data Download</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Writing-Processed-Data-to-a-New-File">Writing Processed Data to a New File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Edit-Attributes-and-Write-Result-File">Edit Attributes and Write Result File</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#View-Results">View Results</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../notebooks.html">Jupyter Notebook Examples</a></li>
+      <li class="breadcrumb-item active">Using the Zarr Tile Sink</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/notebooks/zarr_sink_example.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="Using-the-Zarr-Tile-Sink">
+<h1>Using the Zarr Tile Sink<a class="headerlink" href="#Using-the-Zarr-Tile-Sink" title="Link to this heading"></a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">ZarrFileTileSource</span></code> class has file-writing capabilities; an empty image can be created, image data can be added as tiles or arbitrary regions, and the image can be saved to a file in any of several formats.</p>
+<p>Typically, this class is called a “source” when reading from a file and a “sink” when writing to a file. This is just a naming convention, but the read mode and write mode are not mutually exclusive.</p>
+<section id="Installation">
+<h2>Installation<a class="headerlink" href="#Installation" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This will install large_image with the zarr source</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>large_image<span class="o">[</span>tiff,zarr,converter<span class="o">]</span><span class="w"> </span>--find-links<span class="w"> </span>https://girder.github.io/large_image_wheels
+
+<span class="c1"># For maximum capabilities in Jupyter, also install ipyleaflet so you can</span>
+<span class="c1"># view zoomable images in the notebook</span>
+<span class="o">!</span>pip<span class="w"> </span>install<span class="w"> </span>ipyleaflet
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Ask JupyterLab to locally proxy an internal tile server</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">importlib.util</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+
+<span class="k">if</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s1">&#39;google&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">importlib</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">find_spec</span><span class="p">(</span><span class="s1">&#39;google.colab&#39;</span><span class="p">):</span>
+    <span class="c1"># colab intercepts localhost</span>
+    <span class="n">large_image</span><span class="o">.</span><span class="n">tilesource</span><span class="o">.</span><span class="n">jupyter</span><span class="o">.</span><span class="n">IPyLeafletMixin</span><span class="o">.</span><span class="n">JUPYTER_PROXY</span> <span class="o">=</span> <span class="s1">&#39;https://localhost&#39;</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">large_image</span><span class="o">.</span><span class="n">tilesource</span><span class="o">.</span><span class="n">jupyter</span><span class="o">.</span><span class="n">IPyLeafletMixin</span><span class="o">.</span><span class="n">JUPYTER_PROXY</span> <span class="o">=</span> <span class="kc">True</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Sample-Data-Download">
+<h2>Sample Data Download<a class="headerlink" href="#Sample-Data-Download" title="Link to this heading"></a></h2>
+<p>For this example, we will use data from a sample file. We will copy and modify tiles from this image, writing the modified data to a new file.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>curl<span class="w"> </span>-L<span class="w"> </span>-C<span class="w"> </span>-<span class="w"> </span>-o<span class="w"> </span>example.tiff<span class="w"> </span>https://demo.kitware.com/histomicstk/api/v1/item/58b480ba92ca9a000b08c899/download
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 12.3M  100 12.3M    0     0  2952k      0  0:00:04  0:00:04 --:--:-- 2952k
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">original_image_path</span> <span class="o">=</span> <span class="s1">&#39;example.tiff&#39;</span>
+<span class="n">processed_image_path</span> <span class="o">=</span> <span class="s1">&#39;processed_example_1.tiff&#39;</span>
+
+<span class="n">source</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">original_image_path</span><span class="p">)</span>
+
+<span class="c1"># view the metadata</span>
+<span class="n">source_metadata</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">()</span>
+<span class="n">source_metadata</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;levels&#39;: 7,
+ &#39;sizeX&#39;: 9216,
+ &#39;sizeY&#39;: 11264,
+ &#39;tileWidth&#39;: 256,
+ &#39;tileHeight&#39;: 256,
+ &#39;magnification&#39;: 40.0,
+ &#39;mm_x&#39;: 0.00025,
+ &#39;mm_y&#39;: 0.00025,
+ &#39;dtype&#39;: &#39;uint8&#39;,
+ &#39;bandCount&#39;: 3}
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show source as a static thumbnail</span>
+<span class="n">source</span><span class="o">.</span><span class="n">getThumbnail</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_zarr_sink_example_7_0.jpg" src="../_images/notebooks_zarr_sink_example_7_0.jpg" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show the source image in an interactive viewer</span>
+<span class="n">source</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "97c6787b148c4b4f9639d623f32f8a3a", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+<section id="Writing-Processed-Data-to-a-New-File">
+<h2>Writing Processed Data to a New File<a class="headerlink" href="#Writing-Processed-Data-to-a-New-File" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">skimage.color.adapt_rgb</span><span class="w"> </span><span class="kn">import</span> <span class="n">adapt_rgb</span><span class="p">,</span> <span class="n">hsv_value</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">skimage</span><span class="w"> </span><span class="kn">import</span> <span class="n">filters</span>
+
+<span class="c1"># define some image processing function</span>
+
+<span class="nd">@adapt_rgb</span><span class="p">(</span><span class="n">hsv_value</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">process_tile</span><span class="p">(</span><span class="n">tile</span><span class="p">,</span> <span class="n">footprint_size</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">filters</span><span class="o">.</span><span class="n">unsharp_mask</span><span class="p">(</span>
+        <span class="n">tile</span><span class="p">,</span> <span class="n">radius</span><span class="o">=</span><span class="n">footprint_size</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a sink, which is an instance of ZarrFileTileSource and has no data</span>
+<span class="n">sink</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">new</span><span class="p">()</span>
+
+<span class="c1"># compare three different footprint sizes for processing algorithm</span>
+<span class="c1"># computing the processed image takes about 1 minute for each value</span>
+<span class="n">footprint_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">50</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Processing image for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">footprint_sizes</span><span class="p">)</span><span class="si">}</span><span class="s1"> frames.&#39;</span><span class="p">)</span>
+
+<span class="c1"># create a frame for each processed result</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">footprint_size</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">footprint_sizes</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Processing image with footprint_size = &#39;</span><span class="p">,</span> <span class="n">footprint_size</span><span class="p">)</span>
+    <span class="c1"># iterate through tiles, getting numpy arrays for each tile</span>
+    <span class="k">for</span> <span class="n">tile</span> <span class="ow">in</span> <span class="n">source</span><span class="o">.</span><span class="n">tileIterator</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;numpy&#39;</span><span class="p">):</span>
+        <span class="c1"># for each tile, run some processing algorithm</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">tile</span><span class="p">[</span><span class="s1">&#39;tile&#39;</span><span class="p">]</span>
+        <span class="n">processed_tile</span> <span class="o">=</span> <span class="n">process_tile</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">footprint_size</span><span class="p">)</span> <span class="o">*</span> <span class="mi">255</span>
+
+        <span class="c1"># add modified tile to sink</span>
+        <span class="c1"># specify tile x, tile y, and any arbitrary frame parameters</span>
+        <span class="n">sink</span><span class="o">.</span><span class="n">addTile</span><span class="p">(</span><span class="n">processed_tile</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">tile</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">tile</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">footprint</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">footprint_value</span><span class="o">=</span><span class="n">footprint_size</span><span class="p">)</span>
+<span class="c1"># view metadata</span>
+<span class="n">sink</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Processing image for 3 frames.
+Processing image with footprint_size =  1
+Processing image with footprint_size =  10
+Processing image with footprint_size =  50
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;levels&#39;: 6,
+ &#39;sizeX&#39;: 9216,
+ &#39;sizeY&#39;: 11264,
+ &#39;tileWidth&#39;: 512,
+ &#39;tileHeight&#39;: 512,
+ &#39;magnification&#39;: None,
+ &#39;mm_x&#39;: 0,
+ &#39;mm_y&#39;: 0,
+ &#39;dtype&#39;: &#39;float64&#39;,
+ &#39;bandCount&#39;: 3,
+ &#39;frames&#39;: [{&#39;Frame&#39;: 0,
+   &#39;IndexFOOTPRINT&#39;: 0,
+   &#39;ValueFOOTPRINT&#39;: 1,
+   &#39;Index&#39;: 0,
+   &#39;Channel&#39;: &#39;Band 1&#39;},
+  {&#39;Frame&#39;: 1,
+   &#39;IndexFOOTPRINT&#39;: 1,
+   &#39;ValueFOOTPRINT&#39;: 10,
+   &#39;Index&#39;: 1,
+   &#39;Channel&#39;: &#39;Band 1&#39;},
+  {&#39;Frame&#39;: 2,
+   &#39;IndexFOOTPRINT&#39;: 2,
+   &#39;ValueFOOTPRINT&#39;: 50,
+   &#39;Index&#39;: 2,
+   &#39;Channel&#39;: &#39;Band 1&#39;}],
+ &#39;ValueFOOTPRINT&#39;: {&#39;values&#39;: [1, 10, 50],
+  &#39;uniform&#39;: True,
+  &#39;units&#39;: None,
+  &#39;min&#39;: 1,
+  &#39;max&#39;: 50,
+  &#39;datatype&#39;: &#39;int64&#39;},
+ &#39;IndexRange&#39;: {&#39;IndexFOOTPRINT&#39;: 3},
+ &#39;IndexStride&#39;: {&#39;IndexFOOTPRINT&#39;: 1},
+ &#39;channels&#39;: [&#39;Band 1&#39;],
+ &#39;channelmap&#39;: {&#39;Band 1&#39;: 0}}
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show the result image in an interactive viewer</span>
+<span class="c1"># the viewer includes a slider for this multiframe image</span>
+<span class="c1"># switch between frames to view the differences between the values passed to footprint_size</span>
+<span class="n">sink</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "fb60c2b967274a99a632f32f99389705", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+<section id="Edit-Attributes-and-Write-Result-File">
+<h2>Edit Attributes and Write Result File<a class="headerlink" href="#Edit-Attributes-and-Write-Result-File" title="Link to this heading"></a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># set crop bounds</span>
+<span class="n">sink</span><span class="o">.</span><span class="n">crop</span> <span class="o">=</span> <span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="mi">5000</span><span class="p">,</span> <span class="mi">2048</span><span class="p">,</span> <span class="mi">2048</span><span class="p">)</span>
+
+<span class="c1"># set mm_x and mm_y from source metadata</span>
+<span class="n">sink</span><span class="o">.</span><span class="n">mm_x</span> <span class="o">=</span> <span class="n">source_metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mm_x&#39;</span><span class="p">)</span>
+<span class="n">sink</span><span class="o">.</span><span class="n">mm_y</span> <span class="o">=</span> <span class="n">source_metadata</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mm_y&#39;</span><span class="p">)</span>
+
+<span class="c1"># set image description</span>
+<span class="n">sink</span><span class="o">.</span><span class="n">imageDescription</span> <span class="o">=</span> <span class="s1">&#39;processed with scikit-image&#39;</span>
+
+<span class="c1"># add original thumbnail as an associated image</span>
+<span class="n">sink</span><span class="o">.</span><span class="n">addAssociatedImage</span><span class="p">(</span><span class="n">source</span><span class="o">.</span><span class="n">getThumbnail</span><span class="p">()[</span><span class="mi">0</span><span class="p">],</span> <span class="n">imageKey</span><span class="o">=</span><span class="s1">&#39;original&#39;</span><span class="p">)</span>
+
+<span class="c1"># write new image as tiff (other format options include .zip, .zarr, .db, .sqlite, .svs, etc.)</span>
+<span class="n">sink</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">processed_image_path</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="View-Results">
+<h2>View Results<a class="headerlink" href="#View-Results" title="Link to this heading"></a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># open written file as a new source</span>
+<span class="c1"># this will be opened as a TiffFileTileSource</span>
+<span class="n">source_2</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">processed_image_path</span><span class="p">)</span>
+
+<span class="c1"># view metadata</span>
+<span class="n">source_2</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+{&#39;levels&#39;: 4,
+ &#39;sizeX&#39;: 2048,
+ &#39;sizeY&#39;: 2048,
+ &#39;tileWidth&#39;: 256,
+ &#39;tileHeight&#39;: 256,
+ &#39;magnification&#39;: None,
+ &#39;mm_x&#39;: None,
+ &#39;mm_y&#39;: None,
+ &#39;dtype&#39;: &#39;uint16&#39;,
+ &#39;bandCount&#39;: 3,
+ &#39;frames&#39;: [{&#39;Channel&#39;: &#39;Band 1&#39;, &#39;Frame&#39;: 0, &#39;Index&#39;: 0, &#39;IndexFOOTPRINT&#39;: 0},
+  {&#39;Channel&#39;: &#39;Band 1&#39;, &#39;Frame&#39;: 1, &#39;Index&#39;: 1, &#39;IndexFOOTPRINT&#39;: 1},
+  {&#39;Channel&#39;: &#39;Band 1&#39;, &#39;Frame&#39;: 2, &#39;Index&#39;: 2, &#39;IndexFOOTPRINT&#39;: 2}],
+ &#39;IndexRange&#39;: {&#39;IndexFOOTPRINT&#39;: 3},
+ &#39;IndexStride&#39;: {&#39;IndexFOOTPRINT&#39;: 1},
+ &#39;channels&#39;: [&#39;Band 1&#39;],
+ &#39;channelmap&#39;: {&#39;Band 1&#39;: 0}}
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show source_2 as a static thumbnail</span>
+<span class="n">source_2</span><span class="o">.</span><span class="n">getThumbnail</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<img alt="../_images/notebooks_zarr_sink_example_17_0.jpg" src="../_images/notebooks_zarr_sink_example_17_0.jpg" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># show source_2 in an interactive viewer</span>
+<span class="n">source_2</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<script type="application/vnd.jupyter.widget-view+json">{"model_id": "a2d3df88fbd44079877b8f314ed97e6f", "version_major": 2, "version_minor": 0}</script></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="large_image_examples.html" class="btn btn-neutral float-left" title="Using Large Image in Jupyter" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../development.html" class="btn btn-neutral float-right" title="Developer Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

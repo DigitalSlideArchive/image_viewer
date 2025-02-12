@@ -1,0 +1,531 @@
+---
+version: 2.1
+executors:
+  toxandnode:
+    working_directory: ~/project
+    docker:
+      - image: girder/tox-and-node
+commands:
+  tox:
+    description: "Run tox"
+    parameters:
+      toxenv:
+        type: string
+      environ:
+        type: string
+        default: ""
+    steps:
+      - run:
+          name: Upgrade virtualenv and tox
+          command: pip install -U virtualenv tox
+      # - run:
+      #     name: Preinstall phantomjs to work around an npm permission issue
+      #     command: npm install -g phantomjs-prebuilt --unsafe-perm
+      - run:
+          name: Run tests via tox
+          # Piping through cat does less buffering of the output but can
+          # consume the exit code
+          # command: PYTEST_ADDOPTS=--forked tox -e << parameters.toxenv >> | cat; test ${PIPESTATUS[0]} -eq 0
+          # command: PYTEST_ADDOPTS="--reruns=3 --numprocesses=0" tox -e << parameters.toxenv >> | cat; test ${PIPESTATUS[0]} -eq 0
+          command: COVERAGE_CORE=sysmon PYTEST_NUMPROCESSES=3 PYTEST_ADDOPTS="--reruns=3" << parameters.environ >> tox -e << parameters.toxenv >> | cat; test ${PIPESTATUS[0]} -eq 0
+  switchpython:
+    description: "Upgrade python"
+    parameters:
+      version:
+        type: string
+    steps:
+      - run:
+          name: Upgrade pyenv
+          command: |
+            sudo rm -rf /opt/circleci/.pyenv
+            sudo bash -c 'curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | PYENV_ROOT=/opt/circleci/.pyenv bash'
+            sudo chmod -R 777 /opt/circleci/.pyenv/
+            pyenv install --list list
+      - run:
+          name: Use pyenv to install python
+          command: |
+            pyenv install -s << parameters.version >>
+      - run:
+          name: Use pyenv to set python version
+          command: |
+            pyenv versions
+            pyenv global << parameters.version >>
+  allservices:
+    description: "Switch to a python version and start other services"
+    parameters:
+      version:
+        type: string
+      node:
+        type: string
+        default: v20
+    steps:
+      - switchpython:
+          version: << parameters.version >>
+      - run:
+          name: start mongo
+          # This had been
+          # docker run --rm -d -p 27017:27017 circleci/mongo:5.0-ram
+          # but circleci has deprecated their mongo images.  Running as ram
+          # just turned off journalling and run with the db on a memory mapped
+          # location.  --bind_ip_all is required.
+          command: |
+            # docker run --rm -d -p 127.0.0.1:27017:27017 mongo:5.0 bash -c "mkdir /dev/shm/mongo && mongod --nojournal --dbpath=/dev/shm/mongo --noauth --bind_ip_all"
+            docker run --rm -d -p 127.0.0.1:27017:27017 mongo:latest bash -c "mongod --noauth --bind_ip_all"
+      - run:
+          name: start dcm4chee and upload example data (for DICOMweb tests)
+          command: |
+            docker-compose -f ./.circleci/dcm4chee/auth-docker-compose.yml up -d
+            export DICOMWEB_TEST_URL=http://localhost:8008/dcm4chee-arc/aets/DCM4CHEE/rs
+            echo "export DICOMWEB_TEST_URL=$DICOMWEB_TEST_URL" >> $BASH_ENV
+            pip install dicomweb_client tenacity 'python-keycloak<4.1'
+
+            # Wait up to 60 seconds for keycloak to be ready
+            echo 'Waiting for keycloak to start...'
+            KEYCLOAK_URL=https://localhost:8843
+            curl -k --retry 60 -f --retry-all-errors --retry-delay 1 -s -o /dev/null $KEYCLOAK_URL
+            echo 'Updating keycloak token lifespan...'
+            python -W ignore ./.circleci/dcm4chee/update_access_token_lifespan.py
+            echo 'Creating keycloak access token...'
+            # Now create the token
+            export DICOMWEB_TEST_TOKEN=$(python -W ignore ./.circleci/dcm4chee/create_keycloak_token.py)
+            echo "export DICOMWEB_TEST_TOKEN=$DICOMWEB_TEST_TOKEN" >> $BASH_ENV
+
+            # Wait up to 30 seconds for the server if it isn't ready
+            echo 'Waiting for dcm4chee to start...'
+            curl --header "Authorization: Bearer $DICOMWEB_TEST_TOKEN" --retry 30 -f --retry-all-errors --retry-delay 1 -s -o /dev/null $DICOMWEB_TEST_URL/studies
+
+            # Upload the example data
+            echo 'Uploading example data...'
+            python ./.circleci/dcm4chee/upload_example_data.py
+      - run:
+          name: start rabbitmq
+          command: |
+            docker run --rm -d -p 5672:5672 rabbitmq
+      - run:
+          name: start memcached
+          command: |
+            docker run --rm -d -p 11211:11211 memcached -m 64
+      - run:
+          name: start redis
+          command: |
+            docker run --rm -d -p 6379:6379 redis
+            echo "export REDIS_TEST_URL=127.0.01:6379" >> $BASH_ENV
+      - run:
+          name: Use nvm
+          # see https://discuss.circleci.com/t/nvm-does-not-change-node-version-on-machine/28973/14
+          command: |
+            echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - restore_cache:
+          name: Restore nvm cache
+          key: v1-nvm-cache-<< parameters.node >>
+      - run:
+          name: Switch node versions
+          command: |
+            nvm install << parameters.node >>
+            nvm alias default << parameters.node >>
+            NODE_DIR=$(dirname $(which node))
+            echo "export PATH=$NODE_DIR:\$PATH" >> $BASH_ENV
+      - run:
+          name: Install and build large_image plugin
+          command: |
+            npm ci
+            npm run build
+          working_directory: girder/girder_large_image/web_client
+      - save_cache:
+          name: Save nvm cache
+          key: v1-nvm-cache-<< parameters.node >>
+          paths:
+            - /opt/circleci/.nvm/.cache
+      - run:
+          name: Check node versions
+          command: |
+            node --version
+            npm --version
+  coverage:
+    description: "Upload coverage"
+    steps:
+      - run:
+          name: Install Codecov client
+          command: |
+            curl -Os https://uploader.codecov.io/latest/linux/codecov
+            chmod +x codecov
+      - run:
+          name: Upload coverage
+          command: |
+            ./codecov --disable search pycov gcov --file build/test/coverage/py_coverage.xml,build/test/coverage/cobertura-coverage.xml
+jobs:
+  testdocker:
+    machine:
+      image: ubuntu-2204:current
+    steps:
+      - checkout
+      - run:
+          name: Build the test docker
+          command: docker build --progress=plain --force-rm -t girder/tox-and-node -f test.Dockerfile .
+      - run:
+          name: Publish the images to Docker Hub
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            docker push girder/tox-and-node:latest
+  py38:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large
+    steps:
+      - checkout
+      - allservices:
+          version: "3.8"
+      - tox:
+          toxenv: test-py38
+      - coverage
+      - store_artifacts:
+          path: build/test/artifacts
+  py39:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large
+    steps:
+      - checkout
+      - allservices:
+          version: "3.9"
+      - tox:
+          toxenv: test-py39
+      - coverage
+      - store_artifacts:
+          path: build/test/artifacts
+  py310:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large
+    steps:
+      - checkout
+      - allservices:
+          version: "3.10"
+      - tox:
+          toxenv: test-py310
+      - coverage
+      - store_artifacts:
+          path: build/test/artifacts
+  py311:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large
+    steps:
+      - checkout
+      - allservices:
+          version: "3.11"
+      - tox:
+          toxenv: test-py311
+      - coverage
+      - store_artifacts:
+          path: build/test/artifacts
+  py312:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large
+    steps:
+      - checkout
+      - allservices:
+          version: "3.12"
+      - tox:
+          toxenv: test-py312
+      - coverage
+      - store_artifacts:
+          path: build/test/artifacts
+  py313:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large
+    steps:
+      - checkout
+      - allservices:
+          version: "3.13"
+      - tox:
+          toxenv: test-py313
+          environ: TOX_VERBOSE=4 TOX_PREFER_BINARY=1
+      - coverage
+      - store_artifacts:
+          path: build/test/artifacts
+  lint_and_docs:
+    executor: toxandnode
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: apt-get update -yq && apt-get install -yq pandoc && pandoc --version
+      - run:
+          name: Permissions for link checker
+          command: find /root -type d -exec chmod 755 {} \+
+      - tox:
+          toxenv: docs,lint,lintclient,notebook
+      - store_artifacts:
+          path: build/docs
+      - persist_to_workspace:
+          root: build
+          paths: docs
+  compare:
+    executor: toxandnode
+    resource_class: large
+    steps:
+      - checkout
+      - tox:
+          toxenv: compare-py311
+      - store_artifacts:
+          path: build/tox/compare.txt
+      - store_artifacts:
+          path: build/tox/compare.yaml
+  type:
+    executor: toxandnode
+    resource_class: large
+    steps:
+      - checkout
+      - tox:
+          toxenv: type
+  check_release:
+    executor: toxandnode
+    parameters:
+      node:
+        type: string
+        default: v20
+    steps:
+      - checkout
+      - run:
+          name: Setup virtual environment
+          command: |
+            if [ ! -d env ]; then python -m virtualenv env || python -m venv env; fi
+            echo ". $CIRCLE_WORKING_DIRECTORY/env/bin/activate" >> $BASH_ENV
+      - run:
+          name: Install python packages
+          command: pip install setuptools_scm twine
+      - run:
+          name: Use nvm
+          # see https://discuss.circleci.com/t/nvm-does-not-change-node-version-on-machine/28973/14
+          command: |
+            echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - restore_cache:
+          name: Restore nvm cache
+          key: v1-nvm-cache-<< parameters.node >>
+      - run:
+          name: Switch node versions
+          command: |
+            . ~/.bashrc
+            nvm install << parameters.node >>
+            nvm alias default << parameters.node >>
+            NODE_DIR=$(dirname $(which node))
+            echo "export PATH=$NODE_DIR:\$PATH" >> $BASH_ENV
+      - run:
+          name: Check node versions
+          command: |
+            node --version
+            npm --version
+      - run:
+          name: Check release to PyPi
+          command: ./.circleci/release_pypi.sh check
+      - run:
+          name: Make index file
+          command: python ./.circleci/make_index.py ~/wheels
+      - store_artifacts:
+          path: ~/wheels
+  release:
+    executor: toxandnode
+    parameters:
+      node:
+        type: string
+        default: v20
+    steps:
+      - checkout
+      - run:
+          name: Setup virtual environment
+          command: |
+            if [ ! -d env ]; then python -m virtualenv env || python -m venv env; fi
+            echo ". $CIRCLE_WORKING_DIRECTORY/env/bin/activate" >> $BASH_ENV
+      - run:
+          name: Install python packages
+          command: pip install setuptools_scm twine
+      - run:
+          name: Use nvm
+          # see https://discuss.circleci.com/t/nvm-does-not-change-node-version-on-machine/28973/14
+          command: |
+            echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - restore_cache:
+          name: Restore nvm cache
+          key: v1-nvm-cache-<< parameters.node >>
+      - run:
+          name: Switch node versions
+          command: |
+            . ~/.bashrc
+            nvm install << parameters.node >>
+            nvm alias default << parameters.node >>
+            NODE_DIR=$(dirname $(which node))
+            echo "export PATH=$NODE_DIR:\$PATH" >> $BASH_ENV
+      - run:
+          name: Check node versions
+          command: |
+            node --version
+            npm --version
+      - run:
+          name: Release to PyPi
+          command: ./.circleci/release_pypi.sh upload
+  docs-deploy:
+    working_directory: ~/project
+    docker:
+      - image: node
+    steps:
+      - checkout
+      - attach_workspace:
+          at: build
+      - run:
+          name: Disable jekyll builds
+          command: touch build/docs/.nojekyll
+      - run:
+          name: Install and configure dependencies
+          command: |
+            npm install -g --silent 'gh-pages@<3.2.1||>3.2.1'
+            git config user.email "ci-build@kitware.com"
+            git config user.name "ci-build"
+      - add_ssh_keys:
+          fingerprints:
+            - "a4:7a:f8:e9:19:61:88:9b:d8:af:50:b8:32:9f:03:29"
+      - run:
+          name: Deploy docs to gh-pages branch
+          command: |
+            touch package.json
+            gh-pages --dotfiles --message "Update documentation" --dist build/docs --no-history
+workflows:
+  version: 2
+  ci:
+    jobs:
+      - testdocker:
+          filters:
+            branches:
+              only:
+                - master
+                # Create a branch of this name to push to docker hub
+                - testdocker
+      - py38:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore:
+                - gh-pages
+      - py39:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore:
+                - gh-pages
+      - py310:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore:
+                - gh-pages
+      - py311:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore:
+                - gh-pages
+      - py312:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore:
+                - gh-pages
+      - py313:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore:
+                - gh-pages
+      - lint_and_docs:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore:
+                - gh-pages
+      - type:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore:
+                - gh-pages
+      - compare:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore:
+                - gh-pages
+      - check_release:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore:
+                - gh-pages
+      - release:
+          requires:
+            - check_release
+            - py38
+            - py39
+            - py310
+            - py311
+            - py312
+            - py313
+            - lint_and_docs
+            - type
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              only: master
+      - docs-deploy:
+          requires:
+            - py38
+            - py39
+            - py310
+            - py311
+            - py312
+            - py313
+            - lint_and_docs
+            - type
+            - check_release
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              only:
+                - master
+                - sphinx
+  periodic:
+    triggers:
+      - schedule:
+          # Run every Monday morning at 3 a.m.
+          cron: "0 3 * * 1"
+          filters:
+            branches:
+              only:
+                - master
+    jobs:
+      - py38
+      - py39
+      - py310
+      - py311
+      - py312
+      - py313
+      - lint_and_docs
+      - type
+      - compare
+      - check_release

@@ -1,0 +1,881 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>girder_large_image.models.image_item &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/K.png"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../girder_large_image.html">girder_large_image</a></li>
+      <li class="breadcrumb-item active">girder_large_image.models.image_item</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for girder_large_image.models.image_item</h1><div class="highlight"><pre>
+<span></span><span class="c1">#############################################################################</span>
+<span class="c1">#  Copyright Kitware Inc.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed under the Apache License, Version 2.0 ( the &quot;License&quot; );</span>
+<span class="c1">#  you may not use this file except in compliance with the License.</span>
+<span class="c1">#  You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#    http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#  See the License for the specific language governing permissions and</span>
+<span class="c1">#  limitations under the License.</span>
+<span class="c1">#############################################################################</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pymongo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder_jobs.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder_jobs.models.job</span><span class="w"> </span><span class="kn">import</span> <span class="n">Job</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">SortDir</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">FilePathException</span><span class="p">,</span> <span class="n">GirderException</span><span class="p">,</span> <span class="n">ValidationException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.assetstore</span><span class="w"> </span><span class="kn">import</span> <span class="n">Assetstore</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.file</span><span class="w"> </span><span class="kn">import</span> <span class="n">File</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.item</span><span class="w"> </span><span class="kn">import</span> <span class="n">Item</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.setting</span><span class="w"> </span><span class="kn">import</span> <span class="n">Setting</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.upload</span><span class="w"> </span><span class="kn">import</span> <span class="n">Upload</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.cache_util</span><span class="w"> </span><span class="kn">import</span> <span class="n">getTileCache</span><span class="p">,</span> <span class="n">strhash</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">TileOutputMimeTypes</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TileGeneralError</span><span class="p">,</span> <span class="n">TileSourceError</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">constants</span><span class="p">,</span> <span class="n">girder_tilesource</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="ImageItem">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ImageItem</span><span class="p">(</span><span class="n">Item</span><span class="p">):</span>
+    <span class="c1"># We try these sources in this order.  The first entry is the fallback for</span>
+    <span class="c1"># items that antedate there being multiple options.</span>
+<div class="viewcode-block" id="ImageItem.initialize">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.initialize">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ensureIndices</span><span class="p">([</span><span class="s1">&#39;largeImage.fileId&#39;</span><span class="p">])</span>
+        <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">ensureIndices</span><span class="p">([</span>
+            <span class="p">([</span>
+                <span class="p">(</span><span class="s1">&#39;isLargeImageThumbnail&#39;</span><span class="p">,</span> <span class="n">pymongo</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;attachedToType&#39;</span><span class="p">,</span> <span class="n">pymongo</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;attachedToId&#39;</span><span class="p">,</span> <span class="n">pymongo</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+            <span class="p">],</span> <span class="p">{}),</span>
+            <span class="p">([</span>
+                <span class="p">(</span><span class="s1">&#39;isLargeImageData&#39;</span><span class="p">,</span> <span class="n">pymongo</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;attachedToType&#39;</span><span class="p">,</span> <span class="n">pymongo</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;attachedToId&#39;</span><span class="p">,</span> <span class="n">pymongo</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">),</span>
+            <span class="p">],</span> <span class="p">{}),</span>
+        <span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="ImageItem.createImageItem">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.createImageItem">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">createImageItem</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">fileObj</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">createJob</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">notify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">localJob</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;createImageItem called on item </span><span class="si">%s</span><span class="s1"> (</span><span class="si">%s</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+        <span class="c1"># Using setdefault ensures that &#39;largeImage&#39; is in the item</span>
+        <span class="k">if</span> <span class="s1">&#39;fileId&#39;</span> <span class="ow">in</span> <span class="n">item</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;largeImage&#39;</span><span class="p">,</span> <span class="p">{}):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Item already has largeImage set.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileGeneralError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;itemId&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;The provided file must be in the provided item.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileGeneralError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;expected&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span> <span class="ow">and</span>
+                <span class="s1">&#39;jobId&#39;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Item is scheduled to generate a largeImage.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileGeneralError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;expected&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;sourceName&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;fileId&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+            <span class="s1">&#39;createImageItem checking if item </span><span class="si">%s</span><span class="s1"> (</span><span class="si">%s</span><span class="s1">) can be used directly&#39;</span><span class="p">,</span>
+            <span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+        <span class="n">sourceName</span> <span class="o">=</span> <span class="n">girder_tilesource</span><span class="o">.</span><span class="n">getGirderTileSourceName</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">fileObj</span><span class="p">,</span> <span class="n">noCache</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">sourceName</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="s1">&#39;createImageItem using source </span><span class="si">%s</span><span class="s1"> for item </span><span class="si">%s</span><span class="s1"> (</span><span class="si">%s</span><span class="s1">)&#39;</span><span class="p">,</span>
+                <span class="n">sourceName</span><span class="p">,</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+            <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;sourceName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sourceName</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">sourceName</span> <span class="ow">or</span> <span class="n">createJob</span> <span class="o">==</span> <span class="s1">&#39;always&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">createJob</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="s1">&#39;createImageItem will not use item </span><span class="si">%s</span><span class="s1"> (</span><span class="si">%s</span><span class="s1">) as a largeImage&#39;</span><span class="p">,</span>
+                    <span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;A job must be used to generate a largeImage.&#39;</span>
+                <span class="k">raise</span> <span class="n">TileGeneralError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s1">&#39;createImageItem creating a job to generate a largeImage for item </span><span class="si">%s</span><span class="s1"> (</span><span class="si">%s</span><span class="s1">)&#39;</span><span class="p">,</span>
+                <span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+            <span class="c1"># No source was successful</span>
+            <span class="k">del</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;fileId&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">localJob</span><span class="p">:</span>
+                <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_createLargeImageJob</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">fileObj</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">job</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_createLargeImageLocalJob</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">fileObj</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;expected&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;notify&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">notify</span>
+            <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;originalId&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span>
+            <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;jobId&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                <span class="s1">&#39;createImageItem created a job to generate a largeImage for item </span><span class="si">%s</span><span class="s1"> (</span><span class="si">%s</span><span class="s1">)&#39;</span><span class="p">,</span>
+                <span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">job</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_createLargeImageJob</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">fileObj</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">toFolder</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">folderId</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">large_image_tasks.tasks</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">girder_worker_utils.transforms.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">TemporaryDirectory</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">girder_worker_utils.transforms.contrib.girder_io</span><span class="w"> </span><span class="kn">import</span> <span class="n">GirderFileIdAllowDirect</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">girder_worker_utils.transforms.girder_io</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span><span class="n">GirderUploadToFolder</span><span class="p">,</span>
+                                                              <span class="n">GirderUploadToItem</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">localPath</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">getLocalFilePath</span><span class="p">(</span><span class="n">fileObj</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">FilePathException</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+            <span class="n">localPath</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="n">large_image_tasks</span><span class="o">.</span><span class="n">tasks</span><span class="o">.</span><span class="n">create_tiff</span><span class="o">.</span><span class="n">apply_async</span><span class="p">(</span><span class="n">kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+            <span class="n">girder_job_title</span><span class="o">=</span><span class="s1">&#39;Large Image Conversion: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+            <span class="n">girder_job_other_fields</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;meta&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;creator&#39;</span><span class="p">:</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;itemId&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]),</span>
+                <span class="s1">&#39;task&#39;</span><span class="p">:</span> <span class="s1">&#39;createImageItem&#39;</span><span class="p">,</span>
+            <span class="p">}},</span>
+            <span class="n">inputFile</span><span class="o">=</span><span class="n">GirderFileIdAllowDirect</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]),</span> <span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span> <span class="n">localPath</span><span class="p">),</span>
+            <span class="n">inputName</span><span class="o">=</span><span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+            <span class="n">outputDir</span><span class="o">=</span><span class="n">TemporaryDirectory</span><span class="p">(),</span>
+            <span class="n">girder_result_hooks</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">GirderUploadToItem</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]),</span> <span class="kc">False</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">toFolder</span> <span class="k">else</span>
+                <span class="n">GirderUploadToFolder</span><span class="p">(</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="n">folderId</span> <span class="ow">or</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;folderId&#39;</span><span class="p">]),</span>
+                    <span class="n">upload_kwargs</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">name</span><span class="p">),</span>
+                <span class="p">),</span>
+            <span class="p">],</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">),</span> <span class="n">countdown</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;countdown&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;countdown&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">job</span><span class="o">.</span><span class="n">job</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_createLargeImageLocalJob</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">fileObj</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">toFolder</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">folderId</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># TODO convert this job to celery</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">createLocalJob</span><span class="p">(</span>
+            <span class="n">module</span><span class="o">=</span><span class="s1">&#39;large_image_tasks.tasks&#39;</span><span class="p">,</span>
+            <span class="n">function</span><span class="o">=</span><span class="s1">&#39;convert_image_job&#39;</span><span class="p">,</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;itemId&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]),</span>
+                <span class="s1">&#39;fileId&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]),</span>
+                <span class="s1">&#39;userId&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">])</span> <span class="k">if</span> <span class="n">user</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                <span class="s1">&#39;toFolder&#39;</span><span class="p">:</span> <span class="n">toFolder</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Large Image Conversion: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">],</span>
+            <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;large_image_tiff&#39;</span><span class="p">,</span>
+            <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+            <span class="n">public</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># For consistency with the non-local job</span>
+        <span class="n">job</span><span class="p">[</span><span class="s1">&#39;meta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;creator&#39;</span><span class="p">:</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;itemId&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]),</span>
+            <span class="s1">&#39;task&#39;</span><span class="p">:</span> <span class="s1">&#39;createImageItem&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">scheduleJob</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">job</span>
+
+<div class="viewcode-block" id="ImageItem.convertImage">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.convertImage">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">convertImage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">fileObj</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">localJob</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;itemId&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;The provided file must be in the provided item.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileGeneralError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">localJob</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_createLargeImageJob</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">fileObj</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">toFolder</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_createLargeImageLocalJob</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">fileObj</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">toFolder</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_tileFromHash</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">mayRedirect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">tileCache</span><span class="p">,</span> <span class="n">tileCacheLock</span> <span class="o">=</span> <span class="n">getTileCache</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">tileCache</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="s1">&#39;largeImage&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;expected&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="n">sourceName</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;sourceName&#39;</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sourceClass</span> <span class="o">=</span> <span class="n">girder_tilesource</span><span class="o">.</span><span class="n">AvailableGirderTileSources</span><span class="p">[</span><span class="n">sourceName</span><span class="p">]</span>
+        <span class="k">except</span> <span class="n">TileSourceError</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="s1">&#39;_&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span> <span class="ow">or</span> <span class="s1">&#39;style&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">classHash</span> <span class="o">=</span> <span class="n">sourceClass</span><span class="o">.</span><span class="n">getLRUHash</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># style isn&#39;t part of the tile hash strhash parameters</span>
+        <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;style&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">tileHash</span> <span class="o">=</span> <span class="n">sourceClass</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">classHash</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">strhash</span><span class="p">(</span>
+            <span class="n">sourceClass</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">classHash</span><span class="p">)</span> <span class="o">+</span> <span class="n">strhash</span><span class="p">(</span>
+            <span class="o">*</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">),</span> <span class="n">mayRedirect</span><span class="o">=</span><span class="n">mayRedirect</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">tileCacheLock</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">tileData</span> <span class="o">=</span> <span class="n">tileCache</span><span class="p">[</span><span class="n">tileHash</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># It would be nice if we could test if tileHash was in</span>
+                <span class="c1"># tileCache, but memcached doesn&#39;t expose that functionality</span>
+                <span class="k">with</span> <span class="n">tileCacheLock</span><span class="p">:</span>
+                    <span class="n">tileData</span> <span class="o">=</span> <span class="n">tileCache</span><span class="p">[</span><span class="n">tileHash</span><span class="p">]</span>
+            <span class="n">tileMime</span> <span class="o">=</span> <span class="n">TileOutputMimeTypes</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;encoding&#39;</span><span class="p">),</span> <span class="s1">&#39;image/jpeg&#39;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">tileData</span><span class="p">,</span> <span class="n">tileMime</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">KeyError</span><span class="p">,</span> <span class="ne">ValueError</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_loadTileSource</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="s1">&#39;largeImage&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;No large image file in this item.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;expected&#39;</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;The large image file for this item is still pending creation.&#39;</span>
+            <span class="k">raise</span> <span class="n">TileSourceError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">sourceName</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;sourceName&#39;</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># First try to use the tilesource we recorded as the preferred one.</span>
+            <span class="c1"># This is faster than trying to find the best source each time.</span>
+            <span class="n">tileSource</span> <span class="o">=</span> <span class="n">girder_tilesource</span><span class="o">.</span><span class="n">AvailableGirderTileSources</span><span class="p">[</span><span class="n">sourceName</span><span class="p">](</span><span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">TileSourceError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="c1"># We could try any source</span>
+            <span class="c1"># tileSource = girder_tilesource.getGirderTileSource(item, **kwargs)</span>
+            <span class="c1"># but, instead, log that the original source no longer works are</span>
+            <span class="c1"># reraise the exception</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                <span class="s1">&#39;The original tile source (</span><span class="si">%s</span><span class="s1">) for item </span><span class="si">%s</span><span class="s1"> is not working&#39;</span><span class="p">,</span>
+                <span class="n">sourceName</span><span class="p">,</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">])</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">file</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;fileId&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">localPath</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">getLocalFilePath</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+                <span class="nb">open</span><span class="p">(</span><span class="n">localPath</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="s1">&#39;Is the original data reachable and readable (it fails via </span><span class="si">%r</span><span class="s1">)?&#39;</span><span class="p">,</span> <span class="n">localPath</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">localPath</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="k">raise</span> <span class="n">exc</span>
+        <span class="k">return</span> <span class="n">tileSource</span>
+
+<div class="viewcode-block" id="ImageItem.getMetadata">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getMetadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">tileSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loadTileSource</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tileSource</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ImageItem.getInternalMetadata">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getInternalMetadata">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getInternalMetadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">tileSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loadTileSource</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">tileSource</span><span class="o">.</span><span class="n">getInternalMetadata</span><span class="p">()</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="n">tileSource</span><span class="o">.</span><span class="n">getICCProfiles</span><span class="p">(</span><span class="n">onlyInfo</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;iccprofiles&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tileSource</span><span class="o">.</span><span class="n">getICCProfiles</span><span class="p">(</span><span class="n">onlyInfo</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;tilesource&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tileSource</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">tileSource</span><span class="p">,</span> <span class="s1">&#39;_populatedLevels&#39;</span><span class="p">):</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;populatedLevels&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tileSource</span><span class="o">.</span><span class="n">_populatedLevels</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="ImageItem.getTile">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getTile">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getTile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">mayRedirect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">tileSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loadTileSource</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">imageParams</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="s1">&#39;frame&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">imageParams</span><span class="p">[</span><span class="s1">&#39;frame&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;frame&#39;</span><span class="p">])</span>
+        <span class="n">tileData</span> <span class="o">=</span> <span class="n">tileSource</span><span class="o">.</span><span class="n">getTile</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">mayRedirect</span><span class="o">=</span><span class="n">mayRedirect</span><span class="p">,</span> <span class="o">**</span><span class="n">imageParams</span><span class="p">)</span>
+        <span class="n">tileMimeType</span> <span class="o">=</span> <span class="n">tileSource</span><span class="o">.</span><span class="n">getTileMimeType</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">tileData</span><span class="p">,</span> <span class="n">tileMimeType</span></div>
+
+
+<div class="viewcode-block" id="ImageItem.delete">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.delete">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">skipFileIds</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="n">deleted</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="s1">&#39;largeImage&#39;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="s1">&#39;jobId&#39;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;jobId&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">ValidationException</span><span class="p">:</span>
+                    <span class="c1"># The job has been deleted, but we still need to clean up</span>
+                    <span class="c1"># the rest of the tile information</span>
+                    <span class="k">pass</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;expected&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">job</span> <span class="ow">and</span>
+                    <span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;status&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span>
+                    <span class="n">JobStatus</span><span class="o">.</span><span class="n">QUEUED</span><span class="p">,</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">)):</span>
+                <span class="c1"># cannot cleanly remove the large image, since a conversion</span>
+                <span class="c1"># job is currently in progress</span>
+                <span class="c1"># TODO: cancel the job</span>
+                <span class="c1"># TODO: return a failure error code</span>
+                <span class="k">return</span> <span class="kc">False</span>
+
+            <span class="c1"># If this file was created by the worker job, delete it</span>
+            <span class="k">if</span> <span class="s1">&#39;jobId&#39;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]:</span>
+                <span class="c1"># To eliminate all traces of the job, add</span>
+                <span class="c1"># if job:</span>
+                <span class="c1">#     Job().remove(job)</span>
+                <span class="k">del</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;jobId&#39;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="s1">&#39;originalId&#39;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]:</span>
+                <span class="c1"># The large image file should not be the original file</span>
+                <span class="k">assert</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;originalId&#39;</span><span class="p">]</span> <span class="o">!=</span> \
+                    <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fileId&#39;</span><span class="p">)</span>
+
+                <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;fileId&#39;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="p">(</span>
+                        <span class="ow">not</span> <span class="n">skipFileIds</span> <span class="ow">or</span>
+                        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;fileId&#39;</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">skipFileIds</span><span class="p">)):</span>
+                    <span class="n">file</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;fileId&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">file</span><span class="p">:</span>
+                        <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+                <span class="k">del</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;originalId&#39;</span><span class="p">]</span>
+
+            <span class="k">del</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]</span>
+
+            <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="n">deleted</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">removeThumbnailFiles</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">deleted</span></div>
+
+
+<div class="viewcode-block" id="ImageItem.getThumbnail">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getThumbnail">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getThumbnail</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">checkAndCreate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Using a tile source, get a basic thumbnail.  Aspect ratio is</span>
+<span class="sd">        preserved.  If neither width nor height is given, a default value is</span>
+<span class="sd">        used.  If both are given, the thumbnail will be no larger than either</span>
+<span class="sd">        size.</span>
+
+<span class="sd">        :param item: the item with the tile source.</span>
+<span class="sd">        :param checkAndCreate: if the thumbnail is already cached, just return</span>
+<span class="sd">            True.  If it does not, create, cache, and return it.  If &#39;nosave&#39;,</span>
+<span class="sd">            return values from the cache, but do not store new results in the</span>
+<span class="sd">            cache.</span>
+<span class="sd">        :param width: maximum width in pixels.</span>
+<span class="sd">        :param height: maximum height in pixels.</span>
+<span class="sd">        :param kwargs: optional arguments.  Some options are encoding,</span>
+<span class="sd">            jpegQuality, jpegSubsampling, tiffCompression, fill.  This is also</span>
+<span class="sd">            passed to the tile source.</span>
+<span class="sd">        :returns: thumbData, thumbMime: the image data and the mime type OR</span>
+<span class="sd">            a generator which will yield a file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># check if a thumbnail file exists with a particular key</span>
+        <span class="n">keydict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAndCacheImageOrData</span><span class="p">(</span>
+            <span class="n">item</span><span class="p">,</span> <span class="s1">&#39;getThumbnail&#39;</span><span class="p">,</span> <span class="n">checkAndCreate</span><span class="p">,</span> <span class="n">keydict</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_getAndCacheImageOrData</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">imageFunc</span><span class="p">,</span> <span class="n">checkAndCreate</span><span class="p">,</span> <span class="n">keydict</span><span class="p">,</span> <span class="n">pickleCache</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a file associated with an image that can be generated by a</span>
+<span class="sd">        function.</span>
+
+<span class="sd">        :param item: the idem to process.</span>
+<span class="sd">        :param imageFunc: the function to call to generate a file.</span>
+<span class="sd">        :param checkAndCreate: False to return the data, creating and caching</span>
+<span class="sd">            it if needed.  True to return True if the data is already in cache,</span>
+<span class="sd">            or to create the data, cache, and return it if not.  &#39;nosave&#39; to</span>
+<span class="sd">            return data from the cache if present, or generate the data but do</span>
+<span class="sd">            not return it if not in the cache.  &#39;check&#39; to just return True or</span>
+<span class="sd">            False to report if it is in the cache.</span>
+<span class="sd">        :param keydict: a dictionary of values to use for the cache key.</span>
+<span class="sd">        :param pickleCache: if True, the results of the function are pickled to</span>
+<span class="sd">            preserve them.  If False, the results can be saved as a file</span>
+<span class="sd">            directly.</span>
+<span class="sd">        :params **kwargs: passed to the tile source and to the imageFunc.  May</span>
+<span class="sd">            contain contentDisposition to determine how results are returned.</span>
+<span class="sd">        :returns:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="s1">&#39;fill&#39;</span> <span class="ow">in</span> <span class="n">keydict</span> <span class="ow">and</span> <span class="p">(</span><span class="n">keydict</span><span class="p">[</span><span class="s1">&#39;fill&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;none&#39;</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">keydict</span><span class="p">[</span><span class="s1">&#39;fill&#39;</span><span class="p">]</span>
+        <span class="n">keydict</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">keydict</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)}</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">keydict</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">))</span>
+        <span class="n">lockkey</span> <span class="o">=</span> <span class="p">(</span><span class="n">imageFunc</span><span class="p">,</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span> <span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;_getAndCacheImageOrDataLock&#39;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_getAndCacheImageOrDataLock</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;keys&#39;</span><span class="p">:</span> <span class="p">{},</span>
+                <span class="s1">&#39;lock&#39;</span><span class="p">:</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">(),</span>
+            <span class="p">}</span>
+        <span class="n">keylock</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAndCacheImageOrDataLock</span><span class="p">[</span><span class="s1">&#39;lock&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">lockkey</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAndCacheImageOrDataLock</span><span class="p">[</span><span class="s1">&#39;keys&#39;</span><span class="p">]:</span>
+                <span class="n">keylock</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAndCacheImageOrDataLock</span><span class="p">[</span><span class="s1">&#39;keys&#39;</span><span class="p">][</span><span class="n">lockkey</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">checkAndCreate</span> <span class="o">!=</span> <span class="s1">&#39;nosave&#39;</span> <span class="ow">and</span> <span class="n">keylock</span> <span class="ow">and</span> <span class="n">keylock</span><span class="o">.</span><span class="n">locked</span><span class="p">():</span>
+            <span class="c1"># This is intended to guard against calling expensive but cached</span>
+            <span class="c1"># functions multiple times.  There is still a possibility of that,</span>
+            <span class="c1"># as if two calls are made close enough to concurrently, they could</span>
+            <span class="c1"># both pass this guard and then run sequentially (which is still</span>
+            <span class="c1"># preferable to concurrently).  Guarding against such a race</span>
+            <span class="c1"># condition creates a bottleneck as the database checks would then</span>
+            <span class="c1"># be in the guarded code section; this is considered a reasonable</span>
+            <span class="c1"># compromise.</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Waiting for </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">lockkey</span><span class="p">,</span> <span class="p">))</span>
+            <span class="k">with</span> <span class="n">keylock</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="n">existing</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">findOne</span><span class="p">({</span>
+            <span class="s1">&#39;attachedToType&#39;</span><span class="p">:</span> <span class="s1">&#39;item&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;attachedToId&#39;</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;isLargeImageThumbnail&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">pickleCache</span> <span class="k">else</span> <span class="s1">&#39;isLargeImageData&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;thumbnailKey&#39;</span><span class="p">:</span> <span class="n">key</span><span class="p">,</span>
+        <span class="p">})</span>
+        <span class="k">if</span> <span class="n">existing</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">checkAndCreate</span> <span class="ow">and</span> <span class="n">checkAndCreate</span> <span class="o">!=</span> <span class="s1">&#39;nosave&#39;</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">True</span>
+            <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;contentDisposition&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;attachment&#39;</span><span class="p">:</span>
+                <span class="n">contentDisposition</span> <span class="o">=</span> <span class="s1">&#39;inline&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">contentDisposition</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;contentDisposition&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">pickleCache</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">existing</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="k">return</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="s1">&#39;application/octet-stream&#39;</span>
+            <span class="k">return</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">existing</span><span class="p">,</span> <span class="n">contentDisposition</span><span class="o">=</span><span class="n">contentDisposition</span><span class="p">,</span>
+                                   <span class="n">headers</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;headers&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">checkAndCreate</span> <span class="o">==</span> <span class="s1">&#39;check&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getAndCacheImageOrDataRun</span><span class="p">(</span>
+            <span class="n">checkAndCreate</span><span class="p">,</span> <span class="n">imageFunc</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">keydict</span><span class="p">,</span> <span class="n">pickleCache</span><span class="p">,</span> <span class="n">lockkey</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ImageItem.getAndCacheImageOrDataRun">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getAndCacheImageOrDataRun">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getAndCacheImageOrDataRun</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">checkAndCreate</span><span class="p">,</span> <span class="n">imageFunc</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">keydict</span><span class="p">,</span> <span class="n">pickleCache</span><span class="p">,</span> <span class="n">lockkey</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Actually execute a cached function.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAndCacheImageOrDataLock</span><span class="p">[</span><span class="s1">&#39;lock&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">lockkey</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAndCacheImageOrDataLock</span><span class="p">[</span><span class="s1">&#39;keys&#39;</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_getAndCacheImageOrDataLock</span><span class="p">[</span><span class="s1">&#39;keys&#39;</span><span class="p">][</span><span class="n">lockkey</span><span class="p">]</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+            <span class="n">keylock</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAndCacheImageOrDataLock</span><span class="p">[</span><span class="s1">&#39;keys&#39;</span><span class="p">][</span><span class="n">lockkey</span><span class="p">]</span>
+        <span class="k">with</span> <span class="n">keylock</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Computing </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">lockkey</span><span class="p">,</span> <span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">tileSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loadTileSource</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">tileSource</span><span class="p">,</span> <span class="n">imageFunc</span><span class="p">)(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">imageData</span><span class="p">,</span> <span class="n">imageMime</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;application/octet-stream&#39;</span>
+                <span class="k">elif</span> <span class="n">pickleCache</span><span class="p">:</span>
+                    <span class="n">imageData</span><span class="p">,</span> <span class="n">imageMime</span> <span class="o">=</span> <span class="n">result</span><span class="p">,</span> <span class="s1">&#39;application/octet-stream&#39;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">imageData</span><span class="p">,</span> <span class="n">imageMime</span> <span class="o">=</span> <span class="n">result</span>
+                <span class="n">saveFile</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">pickleCache</span><span class="p">:</span>
+                    <span class="c1"># The logic on which files to save could be more sophisticated.</span>
+                    <span class="n">maxThumbnailFiles</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">Setting</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                        <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_MAX_THUMBNAIL_FILES</span><span class="p">))</span>
+                    <span class="n">saveFile</span> <span class="o">=</span> <span class="n">maxThumbnailFiles</span> <span class="o">&gt;</span> <span class="mi">0</span>
+                    <span class="c1"># Make sure we don&#39;t exceed the desired number of thumbnails</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">removeThumbnailFiles</span><span class="p">(</span>
+                        <span class="n">item</span><span class="p">,</span> <span class="n">maxThumbnailFiles</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">imageKey</span><span class="o">=</span><span class="n">keydict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;imageKey&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="s1">&#39;none&#39;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">saveFile</span> <span class="ow">and</span> <span class="n">checkAndCreate</span> <span class="o">!=</span> <span class="s1">&#39;nosave&#39;</span> <span class="ow">and</span> <span class="p">(</span>
+                        <span class="n">pickleCache</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">imageData</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">))):</span>
+                    <span class="n">dataStored</span> <span class="o">=</span> <span class="n">imageData</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">pickleCache</span> <span class="k">else</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span>
+                        <span class="n">imageData</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+                    <span class="c1"># Save the data as a file</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">datafile</span> <span class="o">=</span> <span class="n">Upload</span><span class="p">()</span><span class="o">.</span><span class="n">uploadFromFile</span><span class="p">(</span>
+                            <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">dataStored</span><span class="p">),</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">dataStored</span><span class="p">),</span>
+                            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;_largeImageThumbnail&#39;</span><span class="p">,</span> <span class="n">parentType</span><span class="o">=</span><span class="s1">&#39;item&#39;</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">item</span><span class="p">,</span>
+                            <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mimeType</span><span class="o">=</span><span class="n">imageMime</span><span class="p">,</span> <span class="n">attachParent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataStored</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;received&#39;</span> <span class="ow">in</span> <span class="n">datafile</span><span class="p">:</span>
+                            <span class="n">datafile</span> <span class="o">=</span> <span class="n">Upload</span><span class="p">()</span><span class="o">.</span><span class="n">finalizeUpload</span><span class="p">(</span>
+                                <span class="n">datafile</span><span class="p">,</span> <span class="n">Assetstore</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">datafile</span><span class="p">[</span><span class="s1">&#39;assetstoreId&#39;</span><span class="p">]))</span>
+                        <span class="n">datafile</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+                            <span class="s1">&#39;isLargeImageThumbnail&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">pickleCache</span> <span class="k">else</span>
+                            <span class="s1">&#39;isLargeImageData&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                            <span class="s1">&#39;thumbnailKey&#39;</span><span class="p">:</span> <span class="n">key</span><span class="p">,</span>
+                        <span class="p">})</span>
+                        <span class="c1"># Ideally, we would check that the file is still wanted before</span>
+                        <span class="c1"># we save it.  This is probably impossible without true</span>
+                        <span class="c1"># transactions in Mongo.</span>
+                        <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">datafile</span><span class="p">)</span>
+                    <span class="k">except</span> <span class="p">(</span><span class="n">GirderException</span><span class="p">,</span> <span class="ne">PermissionError</span><span class="p">):</span>
+                        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Could not cache data for large image&#39;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">imageData</span><span class="p">,</span> <span class="n">imageMime</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAndCacheImageOrDataLock</span><span class="p">[</span><span class="s1">&#39;lock&#39;</span><span class="p">]:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_getAndCacheImageOrDataLock</span><span class="p">[</span><span class="s1">&#39;keys&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">lockkey</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ImageItem.removeThumbnailFiles">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.removeThumbnailFiles">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">removeThumbnailFiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">imageKey</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                             <span class="n">onlyList</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Remove all large image thumbnails from an item.</span>
+
+<span class="sd">        :param item: the item that owns the thumbnails.</span>
+<span class="sd">        :param keep: keep this many entries.</span>
+<span class="sd">        :param sort: the sort method used.  The first (keep) records in this</span>
+<span class="sd">            sort order are kept.</span>
+<span class="sd">        :param imageKey: None for the basic thumbnail, otherwise an associated</span>
+<span class="sd">            imageKey.</span>
+<span class="sd">        :param onlyList: if True, return a list of known thumbnails or data</span>
+<span class="sd">            files that would be removed, but don&#39;t remove them.</span>
+<span class="sd">        :param kwargs: additional parameters to determine which files to</span>
+<span class="sd">            remove.</span>
+<span class="sd">        :returns: a tuple of (the number of files before removal, the number of</span>
+<span class="sd">            files removed).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;isLargeImageThumbnail&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">keep</span><span class="p">:</span>
+            <span class="n">keys</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;isLargeImageData&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">sort</span><span class="p">:</span>
+            <span class="n">sort</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">DESCENDING</span><span class="p">)]</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">present</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">removed</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s1">&#39;attachedToType&#39;</span><span class="p">:</span> <span class="s1">&#39;item&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;attachedToId&#39;</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span>
+                <span class="n">key</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="k">if</span> <span class="n">imageKey</span> <span class="ow">and</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;isLargeImageThumbnail&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">imageKey</span> <span class="o">==</span> <span class="s1">&#39;none&#39;</span><span class="p">:</span>
+                    <span class="n">query</span><span class="p">[</span><span class="s1">&#39;thumbnailKey&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;$not&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;$regex&#39;</span><span class="p">:</span> <span class="s1">&#39;&quot;imageKey&quot;:&#39;</span><span class="p">}}</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">query</span><span class="p">[</span><span class="s1">&#39;thumbnailKey&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;$regex&#39;</span><span class="p">:</span> <span class="s1">&#39;&quot;imageKey&quot;:&quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">imageKey</span><span class="p">}</span>
+            <span class="n">query</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="n">sort</span><span class="p">):</span>
+                <span class="n">present</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">if</span> <span class="n">keep</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">keep</span> <span class="o">-=</span> <span class="mi">1</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">onlyList</span><span class="p">:</span>
+                    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+                <span class="n">removed</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">onlyList</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">results</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">present</span><span class="p">,</span> <span class="n">removed</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ImageItem.getRegion">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getRegion">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getRegion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Using a tile source, get an arbitrary region of the image, optionally</span>
+<span class="sd">        scaling the results.  Aspect ratio is preserved.</span>
+
+<span class="sd">        :param item: the item with the tile source.</span>
+<span class="sd">        :param kwargs: optional arguments.  Some options are left, top,</span>
+<span class="sd">            right, bottom, regionWidth, regionHeight, units, width, height,</span>
+<span class="sd">            encoding, jpegQuality, jpegSubsampling, and tiffCompression.  This</span>
+<span class="sd">            is also passed to the tile source.</span>
+<span class="sd">        :returns: regionData, regionMime: the image data and the mime type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tileSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loadTileSource</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">regionData</span><span class="p">,</span> <span class="n">regionMime</span> <span class="o">=</span> <span class="n">tileSource</span><span class="o">.</span><span class="n">getRegion</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">regionData</span><span class="p">,</span> <span class="n">regionMime</span></div>
+
+
+<div class="viewcode-block" id="ImageItem.tileFrames">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.tileFrames">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tileFrames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">checkAndCreate</span><span class="o">=</span><span class="s1">&#39;nosave&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Given the parameters for getRegion, plus a list of frames and the</span>
+<span class="sd">        number of frames across, make a larger image composed of a region from</span>
+<span class="sd">        each listed frame composited together.</span>
+
+<span class="sd">        :param item: the item with the tile source.</span>
+<span class="sd">        :param checkAndCreate: if False, use the cache.  If True and the result</span>
+<span class="sd">            is already cached, just return True.  If is not, create, cache, and</span>
+<span class="sd">            return it.  If &#39;nosave&#39;, return values from the cache, but do not</span>
+<span class="sd">            store new results in the cache.</span>
+<span class="sd">        :param kwargs: optional arguments.  Some options are left, top,</span>
+<span class="sd">            right, bottom, regionWidth, regionHeight, units, width, height,</span>
+<span class="sd">            encoding, jpegQuality, jpegSubsampling, and tiffCompression.  This</span>
+<span class="sd">            is also passed to the tile source.  These also include frameList</span>
+<span class="sd">            and framesAcross.</span>
+<span class="sd">        :returns: regionData, regionMime: the image data and the mime type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">imageKey</span> <span class="o">=</span> <span class="s1">&#39;tileFrames&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAndCacheImageOrData</span><span class="p">(</span>
+            <span class="n">item</span><span class="p">,</span> <span class="s1">&#39;tileFrames&#39;</span><span class="p">,</span> <span class="n">checkAndCreate</span><span class="p">,</span>
+            <span class="nb">dict</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">imageKey</span><span class="o">=</span><span class="n">imageKey</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ImageItem.getPixel">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getPixel">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getPixel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Using a tile source, get a single pixel from the image.</span>
+
+<span class="sd">        :param item: the item with the tile source.</span>
+<span class="sd">        :param kwargs: optional arguments.  Some options are left, top.</span>
+<span class="sd">        :returns: a dictionary of the color channel values, possibly with</span>
+<span class="sd">            additional information</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tileSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loadTileSource</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tileSource</span><span class="o">.</span><span class="n">getPixel</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ImageItem.histogram">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.histogram">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">histogram</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">checkAndCreate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Using a tile source, get a histogram of the image.</span>
+
+<span class="sd">        :param item: the item with the tile source.</span>
+<span class="sd">        :param kwargs: optional arguments.  See the tilesource histogram</span>
+<span class="sd">            method.</span>
+<span class="sd">        :returns: histogram object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;range&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;range&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;round&#39;</span><span class="p">:</span>
+            <span class="n">tileSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loadTileSource</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">tileSource</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">imageKey</span> <span class="o">=</span> <span class="s1">&#39;histogram&#39;</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAndCacheImageOrData</span><span class="p">(</span>
+                <span class="n">item</span><span class="p">,</span> <span class="s1">&#39;histogram&#39;</span><span class="p">,</span> <span class="n">checkAndCreate</span><span class="p">,</span>
+                <span class="nb">dict</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">imageKey</span><span class="o">=</span><span class="n">imageKey</span><span class="p">),</span> <span class="n">pickleCache</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="ImageItem.getBandInformation">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getBandInformation">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getBandInformation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">statistics</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Using a tile source, get band information of the image.</span>
+
+<span class="sd">        :param item: the item with the tile source.</span>
+<span class="sd">        :param kwargs: optional arguments.  See the tilesource</span>
+<span class="sd">            getBandInformation method.</span>
+<span class="sd">        :returns: band information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tileSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loadTileSource</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">tileSource</span><span class="o">.</span><span class="n">getBandInformation</span><span class="p">(</span><span class="n">statistics</span><span class="o">=</span><span class="n">statistics</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="ImageItem.tileSource">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.tileSource">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tileSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Get a tile source for an item.</span>
+
+<span class="sd">        :param item: the item with the tile source.</span>
+<span class="sd">        :return: magnification, width of a pixel in mm, height of a pixel in mm.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loadTileSource</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ImageItem.getAssociatedImagesList">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getAssociatedImagesList">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getAssociatedImagesList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return a list of associated images.</span>
+
+<span class="sd">        :param item: the item with the tile source.</span>
+<span class="sd">        :return: a list of keys of associated images.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">tileSource</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loadTileSource</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">tileSource</span><span class="o">.</span><span class="n">getAssociatedImagesList</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ImageItem.getAssociatedImage">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getAssociatedImage">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getAssociatedImage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">imageKey</span><span class="p">,</span> <span class="n">checkAndCreate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return an associated image.</span>
+
+<span class="sd">        :param item: the item with the tile source.</span>
+<span class="sd">        :param imageKey: the key of the associated image to retrieve.</span>
+<span class="sd">        :param kwargs: optional arguments.  Some options are width, height,</span>
+<span class="sd">            encoding, jpegQuality, jpegSubsampling, and tiffCompression.</span>
+<span class="sd">        :returns: imageData, imageMime: the image data and the mime type, or</span>
+<span class="sd">            None if the associated image doesn&#39;t exist.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">keydict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">imageKey</span><span class="o">=</span><span class="n">imageKey</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_getAndCacheImageOrData</span><span class="p">(</span>
+            <span class="n">item</span><span class="p">,</span> <span class="s1">&#39;getAssociatedImage&#39;</span><span class="p">,</span> <span class="n">checkAndCreate</span><span class="p">,</span> <span class="n">keydict</span><span class="p">,</span> <span class="n">imageKey</span><span class="o">=</span><span class="n">imageKey</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_scheduleTileFrames</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">tileFramesList</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Schedule generating tile frames in a local job.</span>
+
+<span class="sd">        :param item: the item.</span>
+<span class="sd">        :param tileFramesList: a list of dictionary of parameters to pass to</span>
+<span class="sd">            the tileFrames method.</span>
+<span class="sd">        :param user: the user owning the job.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO convert this job to celery</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">createLocalJob</span><span class="p">(</span>
+            <span class="n">module</span><span class="o">=</span><span class="s1">&#39;large_image_tasks.tasks&#39;</span><span class="p">,</span>
+            <span class="n">function</span><span class="o">=</span><span class="s1">&#39;cache_tile_frames_job&#39;</span><span class="p">,</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;itemId&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]),</span>
+                <span class="s1">&#39;tileFramesList&#39;</span><span class="p">:</span> <span class="n">tileFramesList</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Cache tileFrames&#39;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;large_image_cache_tile_frames&#39;</span><span class="p">,</span>
+            <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+            <span class="n">public</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">scheduleJob</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">job</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_scheduleHistograms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">histogramList</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Schedule generating histograms in a local job.</span>
+
+<span class="sd">        :param item: the item.</span>
+<span class="sd">        :param histogramList: a list of dictionary of parameters to pass to</span>
+<span class="sd">            the histogram method.</span>
+<span class="sd">        :param user: the user owning the job.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO convert this job to celery</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">createLocalJob</span><span class="p">(</span>
+            <span class="n">module</span><span class="o">=</span><span class="s1">&#39;large_image_tasks.tasks&#39;</span><span class="p">,</span>
+            <span class="n">function</span><span class="o">=</span><span class="s1">&#39;cache_histograms_job&#39;</span><span class="p">,</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;itemId&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]),</span>
+                <span class="s1">&#39;histogramList&#39;</span><span class="p">:</span> <span class="n">histogramList</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Cache Histograms&#39;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;large_image_cache_histograms&#39;</span><span class="p">,</span>
+            <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
+            <span class="n">public</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">scheduleJob</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">job</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

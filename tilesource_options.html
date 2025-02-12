@@ -1,0 +1,273 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tile Source Options &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="_static/K.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Configuration Options" href="config_options.html" />
+    <link rel="prev" title="Getting Started" href="getting_started.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Tile Source Options</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#format">Format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#encoding">Encoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#edges">Edges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#style">Style</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#swap-the-red-and-green-channels-of-a-three-color-image">Swap the red and green channels of a three color image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#apply-a-gamma-correction-to-the-image">Apply a gamma correction to the image</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#composite-several-frames-with-framedelta">Composite several frames with framedelta</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#fill-missing-data-and-apply-categorical-colormap">Fill missing data and apply categorical colormap</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Tile Source Options</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/tilesource_options.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tile-source-options">
+<h1>Tile Source Options<a class="headerlink" href="#tile-source-options" title="Link to this heading"></a></h1>
+<p>Each tile source can have custom options that affect how tiles are generated from that tile source.  All tile sources have a basic set of options:</p>
+<section id="format">
+<h2>Format<a class="headerlink" href="#format" title="Link to this heading"></a></h2>
+<p>Python tile functions can return tile data as images, numpy arrays, or PIL Image objects.  The <code class="docutils literal notranslate"><span class="pre">format</span></code> parameter is one of the <code class="docutils literal notranslate"><span class="pre">TILE_FORMAT_*</span></code> constants. Refer to <a class="reference external" href="https://github.com/girder/large_image/blob/master/large_image/constants.py#L35">constants.py</a> to view the format options.</p>
+</section>
+<section id="encoding">
+<h2>Encoding<a class="headerlink" href="#encoding" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">encoding</span></code> parameter only affects output when <code class="docutils literal notranslate"><span class="pre">format</span></code> is <code class="docutils literal notranslate"><span class="pre">TILE_FORMAT_IMAGE</span></code>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">encoding</span></code> parameter can be one of <code class="docutils literal notranslate"><span class="pre">JPEG</span></code>, <code class="docutils literal notranslate"><span class="pre">PNG</span></code>, <code class="docutils literal notranslate"><span class="pre">TIFF</span></code>, <code class="docutils literal notranslate"><span class="pre">JFIF</span></code>, or <code class="docutils literal notranslate"><span class="pre">TILED</span></code>.  When the tile is output as an image, this is the preferred format.  Note that <code class="docutils literal notranslate"><span class="pre">JFIF</span></code> is a specific variant of <code class="docutils literal notranslate"><span class="pre">JPEG</span></code> that will always use either the Y or YCbCr color space as well as constraining other options.  <code class="docutils literal notranslate"><span class="pre">TILED</span></code> will output a tiled tiff file; this is slower than <code class="docutils literal notranslate"><span class="pre">TIFF</span></code> but can support images of arbitrary size.</p>
+<p>Additional encoding options are available based on the PIL.Image registered encoders. Refer to the <a class="reference external" href="https://pillow.readthedocs.io/en/latest/handbook/image-file-formats.html">PIL documentation</a> for supported formats.</p>
+<p>Associated with <code class="docutils literal notranslate"><span class="pre">encoding</span></code>, some image formats have additional parameters.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">JPEG</span></code> and <code class="docutils literal notranslate"><span class="pre">JFIF</span></code> can specify <code class="docutils literal notranslate"><span class="pre">jpegQuality</span></code>, a number from 0 to 100 where 0 is small and 100 is higher-quality, and <code class="docutils literal notranslate"><span class="pre">jpegSubsampling</span></code>, where 0 is full chrominance data, 1 is half-resolution chrominance, and 2 is quarter-resolution chrominance.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TIFF</span></code> can specify <code class="docutils literal notranslate"><span class="pre">tiffCompression</span></code>, which is one of the <code class="docutils literal notranslate"><span class="pre">libtiff_ctypes.COMPRESSION*</span></code> options found <a class="reference external" href="https://github.com/pearu/pylibtiff/blob/master/libtiff/tiff_h_4_2_0.py#L19">here</a>.</p></li>
+</ul>
+</section>
+<section id="edges">
+<h2>Edges<a class="headerlink" href="#edges" title="Link to this heading"></a></h2>
+<p>When a tile is requested at the right or bottom edge of the image, the tile could extend past the boundary of the image.  If the image is not an even multiple of the tile size, the <code class="docutils literal notranslate"><span class="pre">edge</span></code> parameter determines how the tile is generated.  A value of <code class="docutils literal notranslate"><span class="pre">None</span></code> (default) or <code class="docutils literal notranslate"><span class="pre">False</span></code> will generate a standard sized tile where the area outside of the image space could have pixels of any color.  An <code class="docutils literal notranslate"><span class="pre">edge</span></code> value of <code class="docutils literal notranslate"><span class="pre">'crop'</span></code> or <code class="docutils literal notranslate"><span class="pre">True</span></code> will return a tile that is smaller than the standard size.  An <code class="docutils literal notranslate"><span class="pre">edge</span></code> value in the form of a hexadecimal encoded 8-bit-per-channel color (e.g., <code class="docutils literal notranslate"><span class="pre">#rrggbb</span></code>) will ensure that the area outside of the image space is all that color.</p>
+</section>
+<section id="style">
+<h2>Style<a class="headerlink" href="#style" title="Link to this heading"></a></h2>
+<p>Often tiles are desired as 8-bit-per-sample images.  However, if the tile source is more than 8 bits per sample or has more than 3 channels, some data will be lost.  Similarly, if the data is returned as a numpy array, the range of values returned can vary by tile source.  The <code class="docutils literal notranslate"><span class="pre">style</span></code> parameter can remap samples values and determine how channels are composited.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">style</span></code> is <code class="docutils literal notranslate"><span class="pre">{}</span></code>, the default style for the file is used.  If it is not specified or None, it will be the default style for non-geospatial tile sources and a default style consisting of the visible bands for geospatial sources.  Otherwise, this is a json-encoded string that contains an object with a key of <code class="docutils literal notranslate"><span class="pre">bands</span></code> consisting of an array of band definitions.  If only one band is needed, a json-encoded string of just the band definition can be used.</p>
+<p>A band definition is an object which can contain the following keys:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">band</span></code>: if -1 or None, the greyscale value is used.  Otherwise, a 1-based numerical index into the channels of the image or a string that matches the interpretation of the band (‘red’, ‘green’, ‘blue’, ‘gray’, ‘alpha’).  Note that ‘gray’ on an RGB or RGBA image will use the green band.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">frame</span></code>: if specified, override the frame parameter used in the tile query for this band.  Note that it is more efficient to have at least one band not specify a frame parameter or use the same value as the basic query.  Defaults to the frame value of the core query.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">framedelta</span></code>: if specified, and <code class="docutils literal notranslate"><span class="pre">frame</span></code> is not specified, override the frame parameter used in the tile query for this band by adding the value to the current frame number.  If many different frames are being requested, all with the same <code class="docutils literal notranslate"><span class="pre">framedelta</span></code>, this is more efficient than varying the <code class="docutils literal notranslate"><span class="pre">frame</span></code> within the style.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min</span></code>: the value to map to the first palette value.  Defaults to 0.  ‘auto’ to use 0 if the reported minimum and maximum of the band are between [0, 255] or use the reported minimum otherwise.  ‘min’ or ‘max’ to always uses the reported minimum or maximum.  ‘min:&lt;threshold&gt;’ and ‘max:&lt;threshold&gt;’ pick a value that excludes a threshold amount from the histogram; for instance, ‘min:0.02’ would exclude at most the dimmest 2% of values by using an appropriate value for the minimum based on a computed histogram with some default binning options.  ‘auto:&lt;threshold&gt;’ works like auto, though it applies the threshold if the reported minimum would otherwise be used.  ‘full’ is the same as specifying 0.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">max</span></code>: the value to map to the last palette value.  Defaults to 255.  ‘auto’ to use 255 if the reported minimum and maximum of the band are between [0, 255] or use the reported maximum otherwise.  ‘min’ or ‘max’ to always uses the reported minimum or maximum.  ‘min:&lt;threshold&gt;’ and ‘max:&lt;threshold&gt;’ pick a value that excludes a threshold amount from the histogram; for instance, ‘max:0.02’ would exclude at most the brightest 2% of values by using an appropriate value for the maximum based on a computed histogram with some default binning options.  ‘auto:&lt;threshold&gt;’ works like auto, though it applies the threshold if the reported maximum would otherwise be used.  ‘full’ uses a value based on the data type of the band.  This will be 1 for a float data type, 255 for a uint8 data type, and 65535 for a uint16 data type.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">palette</span></code>: This is a single color string, a palette name, or a list of two or more colors. The values between min and max are interpolated using a piecewise linear algorithm or a nearest value algorithm (depending on the <code class="docutils literal notranslate"><span class="pre">scheme</span></code>) to map to the specified palette values.  It can be specified in a variety of ways:</p>
+<ul class="simple">
+<li><p>a list of two or more color values, where the color values are css-style strings (e.g., of the form #RRGGBB, #RRGGBBAA, #RGB, #RGBA, or a css <code class="docutils literal notranslate"><span class="pre">rgb</span></code>, <code class="docutils literal notranslate"><span class="pre">rgba</span></code>, <code class="docutils literal notranslate"><span class="pre">hsl</span></code>, or <code class="docutils literal notranslate"><span class="pre">hsv</span></code> string, or a css color name), or, if matplotlib is available, a matplotlib color name, or a list or tuple of RGB(A) values on a scale of [0-1].</p></li>
+<li><p>a single string that is a color string as above.  This is functionally a two-color palette with the first color as solid black (<code class="docutils literal notranslate"><span class="pre">#000</span></code>), and the second color the specified value</p></li>
+<li><p>a named color palette from the palettable library (e.g., <code class="docutils literal notranslate"><span class="pre">matplotlib.Plasma_6</span></code>) or, if available, from the matplotlib library or one of its plugins (e.g., <code class="docutils literal notranslate"><span class="pre">viridis</span></code>).</p></li>
+</ul>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scheme</span></code>: This is either <code class="docutils literal notranslate"><span class="pre">linear</span></code> (the default) or <code class="docutils literal notranslate"><span class="pre">discrete</span></code>.  If a palette is specified, <code class="docutils literal notranslate"><span class="pre">linear</span></code> uses a piecewise linear interpolation, and <code class="docutils literal notranslate"><span class="pre">discrete</span></code> uses exact colors from the palette with the range of the data mapped into the specified number of colors (e.g., a palette with two colors will split exactly halfway between the min and max values).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nodata</span></code>: the value to use for missing data.  null or unset to not use a nodata value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">composite</span></code>: either ‘lighten’ or ‘multiply’.  Defaults to ‘lighten’ for all except the alpha band. Read more about blend modes and see examples <a class="reference external" href="https://developer.mozilla.org/en-US/docs/Web/CSS/blend-mode">here</a>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clamp</span></code>: either True to clamp (also called clip or crop) values outside of the [min, max] to the ends of the palette or False to make outside values transparent.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dtype</span></code>: if specified, cast the intermediate results to this data type.  Only the first such value is used, and this can be specified as a base key if <code class="docutils literal notranslate"><span class="pre">bands</span></code> is specified.  Normally, if a style is applied, the intermediate data is a numpy float array with values from [0,255].  If this is <code class="docutils literal notranslate"><span class="pre">uint16</span></code>, the results are multiplied by 65535 / 255 and cast to that dtype.  If <code class="docutils literal notranslate"><span class="pre">float</span></code>, the results are divided by 255.  If <code class="docutils literal notranslate"><span class="pre">source</span></code>, this uses the dtype of the source image.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">axis</span></code>: if specified, keep on the specified axis (channel) of the intermediate numpy array.  This is typically between 0 and 3 for the red, green, blue, and alpha channels.  Only the first such value is used, and this can be specified as a base key if <code class="docutils literal notranslate"><span class="pre">bands</span></code> is specified.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">icc</span></code>: by default, sources that expose ICC color profiles (PIL, OpenJPEG, OpenSlide, OMETiff, TIFF, TiffFile) will apply those profiles to the image data, converting the results to the sRGB profile.  To use the raw image data without ICC profile adjustments, specify an <code class="docutils literal notranslate"><span class="pre">icc</span></code> value of <code class="docutils literal notranslate"><span class="pre">false</span></code>.  If the entire style is <code class="docutils literal notranslate"><span class="pre">{&quot;icc&quot;:</span> <span class="pre">false}</span></code>, the results will be the same as the default bands with only the adjustment being skipped.  Similarly, if the entire style is <code class="docutils literal notranslate"><span class="pre">{&quot;icc&quot;:</span> <span class="pre">true}</span></code>, this is the same as the default style with where the adjustment is applied.  Besides a boolean, this may also be a string with one of the intents defined by the PIL.ImageCms.Intents enum.  <code class="docutils literal notranslate"><span class="pre">true</span></code> is the same as <code class="docutils literal notranslate"><span class="pre">perceptual</span></code>.   Note that not all tile sources expose ICC color profile information, even if the base file format contains it.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">function</span></code>: if specified, call a function to modify the resulting image.  This can be specified as a base key and as a band key.  Style functions can be called at multiple stages in the styling pipeline:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pre</span></code> stage: this passes the original tile image to the function before any band data is applied.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">preband</span></code> stage: this passes the band image (often the original tile image if a different frame is not specified) to the function before any scaling.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">band</span></code> stage: this passes the band image after scaling (via <code class="docutils literal notranslate"><span class="pre">min</span></code> and <code class="docutils literal notranslate"><span class="pre">max</span></code>) and generating a <code class="docutils literal notranslate"><span class="pre">nodata</span></code> mask.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">postband</span></code> stage: this passes the in-progress output image after the band has been applied to it.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">main</span></code> stage: this passes the in-progress output image after all bands have been applied but before it is adjusted for <code class="docutils literal notranslate"><span class="pre">dtype</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">post</span></code> stage: this passes the output image just before the style function returns.</p></li>
+</ul>
+<p>The function parameter can be a single function or a list of functions.  Items in a list of functions can, themselves, be lists of functions.  A single function can be an object or a string.  If a string, this is shorthand for <code class="docutils literal notranslate"><span class="pre">{&quot;name&quot;:</span> <span class="pre">&lt;function&gt;}</span></code>.  The function object contains (all but <code class="docutils literal notranslate"><span class="pre">name</span></code> are optional):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">name</span></code>: The name of a Python module and function that is installed in the same environment as large_image.  For instance, <code class="docutils literal notranslate"><span class="pre">large_image.tilesource.stylefuncs.maskPixelValues</span></code> will use the function <code class="docutils literal notranslate"><span class="pre">maskPixelValues</span></code> in the <code class="docutils literal notranslate"><span class="pre">large_image.tilesource.stylefuncs</span></code> module.  The function must be a Python function that takes a numpy array as the first parameter (the image) and has named parameters or kwargs for any passed parameters and possibly the style context.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">parameters</span></code>: A dictionary of parameters to pass to the function.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stage</span></code>: A string for a single matching stage or a list of stages that this function should be applied to.  This defaults to <code class="docutils literal notranslate"><span class="pre">[&quot;band&quot;,</span> <span class="pre">&quot;main&quot;]</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">context</span></code>: If this is present and not falsy, pass the style context to the function.  If this is <code class="docutils literal notranslate"><span class="pre">true</span></code>, the style context is passed as the <code class="docutils literal notranslate"><span class="pre">context</span></code> parameter.  Otherwise, this is the name of the parameter that is passed to the function.  The style context is a namespace that contains (depending on stage), a variety of information:</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">image</span></code>: the source image as a numpy array.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">originalStyle</span></code>: the style object from the tile source.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">style</span></code>: the normalized style object (always an object with a <code class="docutils literal notranslate"><span class="pre">bands</span></code> key containing a list of bands).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code>, <code class="docutils literal notranslate"><span class="pre">y</span></code>, <code class="docutils literal notranslate"><span class="pre">z</span></code>, and <code class="docutils literal notranslate"><span class="pre">frame</span></code>: the tile position in the source.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">dtype</span></code>, <code class="docutils literal notranslate"><span class="pre">axis</span></code>: the value specified from the style for these parameters.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">output</span></code>: the output image as a numpy array.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stage</span></code>: the current stage of style processing.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">styleIndex</span></code>: if in a band stage, the 0-based index within the style bands.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">band</span></code>: the band numpy image in a band stage.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mask</span></code>: a mask numpy image to use when applying the band.  None for no mask (this is the equivalent of the mask being all True).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">palette</span></code>: the normalized palette for a band.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">palettebase</span></code>: a numpy linear interpolation array for non-discrete palettes.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">discrete</span></code>: True if the scheme is discrete.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">nodata</span></code>: the nodata value for the band or None.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">min</span></code>, <code class="docutils literal notranslate"><span class="pre">max</span></code>: the resolved numerical minimum and maximum value for the band.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">clamp</span></code>: the clamp value for the band.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Note that some tile sources add additional options to the <code class="docutils literal notranslate"><span class="pre">style</span></code> parameter.</p>
+<section id="examples">
+<h3>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h3>
+<section id="swap-the-red-and-green-channels-of-a-three-color-image">
+<h4>Swap the red and green channels of a three color image<a class="headerlink" href="#swap-the-red-and-green-channels-of-a-three-color-image" title="Link to this heading"></a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">style</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;bands&quot;</span><span class="p">:</span> <span class="p">[</span>
+  <span class="p">{</span><span class="s2">&quot;band&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;palette&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;#000&quot;</span><span class="p">,</span> <span class="s2">&quot;#0f0&quot;</span><span class="p">]},</span>
+  <span class="p">{</span><span class="s2">&quot;band&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;palette&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;#000&quot;</span><span class="p">,</span> <span class="s2">&quot;#f00&quot;</span><span class="p">]},</span>
+  <span class="p">{</span><span class="s2">&quot;band&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s2">&quot;palette&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;#000&quot;</span><span class="p">,</span> <span class="s2">&quot;#00f&quot;</span><span class="p">]}</span>
+<span class="p">]}</span>
+</pre></div>
+</div>
+</section>
+<section id="apply-a-gamma-correction-to-the-image">
+<h4>Apply a gamma correction to the image<a class="headerlink" href="#apply-a-gamma-correction-to-the-image" title="Link to this heading"></a></h4>
+<p>This used a precomputed sixteen entry greyscale palette, computed as <code class="docutils literal notranslate"><span class="pre">(value</span> <span class="pre">/</span> <span class="pre">255)</span> <span class="pre">**</span> <span class="pre">gamma</span> <span class="pre">*</span> <span class="pre">255</span></code>, where <code class="docutils literal notranslate"><span class="pre">value</span></code> is one of [0, 17, 34, 51, 68, 85, 102, 119, 136, 153, 170, 187, 204, 221, 238, 255] and gamma is <code class="docutils literal notranslate"><span class="pre">0.5</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">style</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;palette&quot;</span><span class="p">:</span> <span class="p">[</span>
+  <span class="s2">&quot;#000000&quot;</span><span class="p">,</span> <span class="s2">&quot;#414141&quot;</span><span class="p">,</span> <span class="s2">&quot;#5D5D5D&quot;</span><span class="p">,</span> <span class="s2">&quot;#727272&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;#838383&quot;</span><span class="p">,</span> <span class="s2">&quot;#939393&quot;</span><span class="p">,</span> <span class="s2">&quot;#A1A1A1&quot;</span><span class="p">,</span> <span class="s2">&quot;#AEAEAE&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;#BABABA&quot;</span><span class="p">,</span> <span class="s2">&quot;#C5C5C5&quot;</span><span class="p">,</span> <span class="s2">&quot;#D0D0D0&quot;</span><span class="p">,</span> <span class="s2">&quot;#DADADA&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;#E4E4E4&quot;</span><span class="p">,</span> <span class="s2">&quot;#EDEDED&quot;</span><span class="p">,</span> <span class="s2">&quot;#F6F6F6&quot;</span><span class="p">,</span> <span class="s2">&quot;#FFFFFF&quot;</span>
+<span class="p">]}</span>
+</pre></div>
+</div>
+</section>
+<section id="composite-several-frames-with-framedelta">
+<h4>Composite several frames with framedelta<a class="headerlink" href="#composite-several-frames-with-framedelta" title="Link to this heading"></a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">style</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s2">&quot;bands&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;framedelta&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;palette&quot;</span><span class="p">:</span> <span class="s2">&quot;#0000FF&quot;</span><span class="p">}</span>
+    <span class="p">{</span><span class="s2">&quot;framedelta&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;palette&quot;</span><span class="p">:</span> <span class="s2">&quot;#00FF00&quot;</span><span class="p">}</span>
+    <span class="p">{</span><span class="s2">&quot;framedelta&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;palette&quot;</span><span class="p">:</span> <span class="s2">&quot;#FF0000&quot;</span><span class="p">}</span>
+  <span class="p">],</span>
+  <span class="s2">&quot;composite&quot;</span><span class="p">:</span> <span class="s2">&quot;multiply&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="fill-missing-data-and-apply-categorical-colormap">
+<h4>Fill missing data and apply categorical colormap<a class="headerlink" href="#fill-missing-data-and-apply-categorical-colormap" title="Link to this heading"></a></h4>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">style</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="s2">&quot;nodata&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s2">&quot;min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s2">&quot;max&quot;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span>
+  <span class="s2">&quot;clamp&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;dtype&quot;</span><span class="p">:</span> <span class="s2">&quot;uint8&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;scheme&quot;</span><span class="p">:</span> <span class="s2">&quot;discrete&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;palette&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;#000000&quot;</span><span class="p">,</span> <span class="s2">&quot;#FF0000&quot;</span><span class="p">,</span> <span class="s2">&quot;#00FF00&quot;</span><span class="p">,</span> <span class="s2">&quot;#0000FF&quot;</span><span class="p">,</span> <span class="s2">&quot;#FFFF00&quot;</span><span class="p">,</span> <span class="s2">&quot;#FF00FF&quot;</span><span class="p">,</span> <span class="s2">&quot;#00FFFF&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="getting_started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="config_options.html" class="btn btn-neutral float-right" title="Configuration Options" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

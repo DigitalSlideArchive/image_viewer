@@ -1,0 +1,233 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>large_image_source_dicom.dicom_metadata &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../large_image_source_dicom.html">large_image_source_dicom</a></li>
+      <li class="breadcrumb-item active">large_image_source_dicom.dicom_metadata</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for large_image_source_dicom.dicom_metadata</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="extract_dicom_metadata">
+<a class="viewcode-back" href="../../_build/large_image_source_dicom/large_image_source_dicom.html#large_image_source_dicom.dicom_metadata.extract_dicom_metadata">[docs]</a>
+<span></span><span class="k">def</span><span class="w"> </span><span class="nf">extract_dicom_metadata</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
+    <span class="c1"># Extract any metadata we want to display from the dataset</span>
+
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">TOP_LEVEL_METADATA_FIELDS</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>
+            <span class="c1"># This field is missing</span>
+            <span class="k">continue</span>
+
+        <span class="n">element</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">value</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
+            <span class="c1"># This field is blank</span>
+            <span class="k">continue</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="n">metadata</span><span class="p">[</span><span class="n">element</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+    <span class="c1"># The specimens are complex and many layers deep</span>
+    <span class="n">specimens</span> <span class="o">=</span> <span class="n">extract_specimen_metadata</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">specimens</span><span class="p">:</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;Specimens&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">specimens</span>
+
+    <span class="k">return</span> <span class="n">metadata</span></div>
+
+
+
+<span class="c1"># These are the top-level metadata fields we will look for</span>
+<span class="c1"># (if available on the DICOM object)</span>
+<span class="n">TOP_LEVEL_METADATA_FIELDS</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;PatientID&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;PatientName&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;PatientSex&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;PatientBirthDate&#39;</span><span class="p">,</span>
+
+    <span class="s1">&#39;AccessionNumber&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;StudyID&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;StudyDate&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;StudyTime&#39;</span><span class="p">,</span>
+
+    <span class="s1">&#39;ClinicalTrialSponsorName&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ClinicalTrialProtocolID&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ClinicalTrialProtocolName&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ClinicalTrialSiteName&#39;</span><span class="p">,</span>
+
+    <span class="s1">&#39;Manufacturer&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ManufacturerModelName&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;DeviceSerialNumber&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;SoftwareVersions&#39;</span><span class="p">,</span>
+
+    <span class="s1">&#39;ReferringPhysicianName&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;ModalitiesInStudy&#39;</span><span class="p">,</span>
+<span class="p">]</span>
+
+
+<div class="viewcode-block" id="extract_specimen_metadata">
+<a class="viewcode-back" href="../../_build/large_image_source_dicom/large_image_source_dicom.html#large_image_source_dicom.dicom_metadata.extract_specimen_metadata">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">extract_specimen_metadata</span><span class="p">(</span><span class="n">dataset</span><span class="p">):</span>
+    <span class="c1"># Specimens are complex and many layers deep.</span>
+    <span class="c1"># This function tries to extract what we need from the specimens.</span>
+
+    <span class="n">output</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">specimen</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="s1">&#39;SpecimenDescriptionSequence&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+        <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="s1">&#39;SpecimenIdentifier&#39;</span> <span class="ow">in</span> <span class="n">specimen</span><span class="p">:</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;Identifier&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">specimen</span><span class="o">.</span><span class="n">SpecimenIdentifier</span>
+
+        <span class="k">if</span> <span class="s1">&#39;SpecimenShortDescription&#39;</span> <span class="ow">in</span> <span class="n">specimen</span><span class="p">:</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;Description&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">specimen</span><span class="o">.</span><span class="n">SpecimenShortDescription</span>
+
+        <span class="n">structures</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">.</span><span class="n">CodeMeaning</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">specimen</span><span class="p">,</span> <span class="s1">&#39;PrimaryAnatomicStructureSequence&#39;</span><span class="p">,</span> <span class="p">[])</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">structures</span><span class="p">:</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;Anatomical Structure&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">structures</span>
+
+        <span class="n">preps</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">prep</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">specimen</span><span class="p">,</span> <span class="s1">&#39;SpecimenPreparationSequence&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="n">steps</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">prep</span><span class="p">,</span> <span class="s1">&#39;SpecimenPreparationStepContentItemSequence&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+                <span class="c1"># Only extract entries that have both a name and a value</span>
+                <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="s1">&#39;ConceptCodeSequence&#39;</span><span class="p">,</span> <span class="p">[]))</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span>
+                        <span class="nb">len</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">step</span><span class="p">,</span> <span class="s1">&#39;ConceptNameCodeSequence&#39;</span><span class="p">,</span> <span class="p">[]))</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="n">name</span> <span class="o">=</span> <span class="n">step</span><span class="o">.</span><span class="n">ConceptNameCodeSequence</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">CodeMeaning</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="n">step</span><span class="o">.</span><span class="n">ConceptCodeSequence</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">CodeMeaning</span>
+                    <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">steps</span><span class="p">:</span>
+                        <span class="c1"># There must be several values for this name.</span>
+                        <span class="c1"># Turn it into a list instead.</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">steps</span><span class="p">[</span><span class="n">name</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+                            <span class="n">steps</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">steps</span><span class="p">[</span><span class="n">name</span><span class="p">]]</span>
+                        <span class="n">steps</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">steps</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+            <span class="k">if</span> <span class="n">steps</span><span class="p">:</span>
+                <span class="n">preps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">steps</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">preps</span><span class="p">:</span>
+            <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;Specimen Preparation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">preps</span>
+
+        <span class="k">if</span> <span class="n">metadata</span><span class="p">:</span>
+            <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">metadata</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">output</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

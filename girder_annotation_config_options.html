@@ -1,0 +1,203 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Girder Annotation Configuration Options &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="_static/K.png"/>
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Caching Large Image in Girder" href="girder_caching.html" />
+    <link rel="prev" title="Girder Configuration Options" href="girder_config_options.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="development.html">Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="girder_index.html">Girder Integration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="girder_config_options.html">Girder Configuration Options</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Girder Annotation Configuration Options</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#general-plugin-settings">General Plugin Settings</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#store-annotation-history">Store annotation history</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#large-image-config-yaml">.large_image_config.yaml</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="girder_caching.html">Caching Large Image in Girder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dicomweb_assetstore.html">DICOMweb Assetstore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plottable.html">Plottable Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="upgrade.html">Upgrading from Previous Versions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/girder_large_image/modules.html">girder_large_image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_build/girder_large_image_annotation/modules.html">girder_large_image_annotation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="girder_index.html">Girder Integration</a></li>
+      <li class="breadcrumb-item active">Girder Annotation Configuration Options</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/girder_annotation_config_options.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="girder-annotation-configuration-options">
+<h1>Girder Annotation Configuration Options<a class="headerlink" href="#girder-annotation-configuration-options" title="Link to this heading"></a></h1>
+<p>The <code class="docutils literal notranslate"><span class="pre">large_image</span></code> annotation plugin adds models to the Girder database for supporting annotating large images.  These annotations can be rendered on images.
+Annotations can include polygons, points, image overlays, and other types (see <a class="reference internal" href="annotations.html"><span class="doc">Annotation Schema</span></a>). Each annotation can have a label and metadata.
+Additional user interface libraries allow other libraries (like HistomicsUI) to let a user interactively add and modify annotations.</p>
+<section id="general-plugin-settings">
+<h2>General Plugin Settings<a class="headerlink" href="#general-plugin-settings" title="Link to this heading"></a></h2>
+<p>There are some general plugin settings that affect large_image annotation as a Girder plugin.  These settings can be accessed by an Admin user through the <code class="docutils literal notranslate"><span class="pre">Admin</span> <span class="pre">Console</span></code> / <code class="docutils literal notranslate"><span class="pre">Plugins</span></code> and selecting the gear icon next to <code class="docutils literal notranslate"><span class="pre">Large</span> <span class="pre">image</span> <span class="pre">annotation</span></code>.</p>
+<section id="store-annotation-history">
+<h3>Store annotation history<a class="headerlink" href="#store-annotation-history" title="Link to this heading"></a></h3>
+<p>If <code class="docutils literal notranslate"><span class="pre">Record</span> <span class="pre">annotation</span> <span class="pre">history</span></code> is selected, whenever annotations are saved, previous versions are kept in the database.  This can greatly increase the size of the database.  The old versions of the annotations allow the API to be used to revent to previous versions or to audit changes over time.</p>
+</section>
+<section id="large-image-config-yaml">
+<h3>.large_image_config.yaml<a class="headerlink" href="#large-image-config-yaml" title="Link to this heading"></a></h3>
+<p>This can be used to specify how annotations are listed on the item page.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">---</span>
+<span class="c1"># If present, show a table with column headers in annotation lists</span>
+<span class="n">annotationList</span><span class="p">:</span>
+  <span class="c1"># show these columns in order from left to right.  Each column has a</span>
+  <span class="c1"># &quot;type&quot; and &quot;value&quot;.  It optionally has a &quot;title&quot; used for the column</span>
+  <span class="c1"># header, and a &quot;format&quot; used for searching and filtering.  There are</span>
+  <span class="c1"># always control columns at the left and right.</span>
+  <span class="n">columns</span><span class="p">:</span>
+    <span class="o">-</span>
+      <span class="c1"># The &quot;record&quot; type is from the default annotation record.  The value</span>
+      <span class="c1"># is one of &quot;name&quot;, &quot;creator&quot;, &quot;created&quot;, &quot;updatedId&quot;, &quot;updated&quot;.</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">record</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">name</span>
+    <span class="o">-</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">record</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">creator</span>
+      <span class="c1"># A format of user will print the user name instead of the id</span>
+      <span class="nb">format</span><span class="p">:</span> <span class="n">user</span>
+    <span class="o">-</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">record</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">created</span>
+      <span class="c1"># A format of datetime, date, or time will use the browser&#39;s default</span>
+      <span class="c1"># date and/or time format</span>
+      <span class="nb">format</span><span class="p">:</span> <span class="n">datetime</span>
+    <span class="o">-</span>
+      <span class="c1"># The &quot;metadata&quot; type is taken from the annotations&#39;s</span>
+      <span class="c1"># &quot;annotation.attributes&quot; contents.  It can be a nested key by using</span>
+      <span class="c1"># dots in its name.</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">metadata</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">Stain</span>
+      <span class="c1"># &quot;format&quot; can be &quot;text&quot;, &quot;number&quot;, &quot;category&quot;.  Other values may be</span>
+      <span class="c1"># specified later.</span>
+      <span class="nb">format</span><span class="p">:</span> <span class="n">text</span>
+  <span class="n">defaultSort</span><span class="p">:</span>
+    <span class="c1"># The default lists a sort order for sortable columns.  This must have</span>
+    <span class="c1"># type, value, and dir for each entry, where dir is either &quot;up&quot; or</span>
+    <span class="c1"># &quot;down&quot;.</span>
+    <span class="o">-</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">metadata</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">Stain</span>
+      <span class="nb">dir</span><span class="p">:</span> <span class="n">up</span>
+    <span class="o">-</span>
+      <span class="nb">type</span><span class="p">:</span> <span class="n">record</span>
+      <span class="n">value</span><span class="p">:</span> <span class="n">name</span>
+      <span class="nb">dir</span><span class="p">:</span> <span class="n">down</span>
+</pre></div>
+</div>
+<p>These values can be combined with values from the base large_image plugin.</p>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="girder_config_options.html" class="btn btn-neutral float-left" title="Girder Configuration Options" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="girder_caching.html" class="btn btn-neutral float-right" title="Caching Large Image in Girder" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

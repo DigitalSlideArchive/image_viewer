@@ -1,0 +1,1052 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>girder_large_image &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../_static/K.png"/>
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">girder_large_image</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for girder_large_image</h1><div class="highlight"><pre>
+<span></span><span class="c1">#############################################################################</span>
+<span class="c1">#  Copyright Kitware Inc.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed under the Apache License, Version 2.0 ( the &quot;License&quot; );</span>
+<span class="c1">#  you may not use this file except in compliance with the License.</span>
+<span class="c1">#  You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#    http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#  See the License for the specific language governing permissions and</span>
+<span class="c1">#  limitations under the License.</span>
+<span class="c1">#############################################################################</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">hashlib</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">PackageNotFoundError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">_importlib_version</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">yaml</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder_jobs.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder_jobs.models.job</span><span class="w"> </span><span class="kn">import</span> <span class="n">Job</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">girder</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder</span><span class="w"> </span><span class="kn">import</span> <span class="n">events</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">filter_logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">AccessType</span><span class="p">,</span> <span class="n">SortDir</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">RestException</span><span class="p">,</span> <span class="n">ValidationException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.file</span><span class="w"> </span><span class="kn">import</span> <span class="n">File</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.folder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Folder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.group</span><span class="w"> </span><span class="kn">import</span> <span class="n">Group</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.item</span><span class="w"> </span><span class="kn">import</span> <span class="n">Item</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.notification</span><span class="w"> </span><span class="kn">import</span> <span class="n">Notification</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.setting</span><span class="w"> </span><span class="kn">import</span> <span class="n">Setting</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.upload</span><span class="w"> </span><span class="kn">import</span> <span class="n">Upload</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.plugin</span><span class="w"> </span><span class="kn">import</span> <span class="n">GirderPlugin</span><span class="p">,</span> <span class="n">getPlugin</span><span class="p">,</span> <span class="n">registerPluginStaticContent</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.settings</span><span class="w"> </span><span class="kn">import</span> <span class="n">SettingDefault</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.utility</span><span class="w"> </span><span class="kn">import</span> <span class="n">config</span><span class="p">,</span> <span class="n">search</span><span class="p">,</span> <span class="n">setting_utilities</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.utility.model_importer</span><span class="w"> </span><span class="kn">import</span> <span class="n">ModelImporter</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">constants</span><span class="p">,</span> <span class="n">girder_tilesource</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.girder_tilesource</span><span class="w"> </span><span class="kn">import</span> <span class="n">getGirderTileSource</span>  <span class="c1"># noqa</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.loadmodelcache</span><span class="w"> </span><span class="kn">import</span> <span class="n">invalidateLoadModelCache</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.models.image_item</span><span class="w"> </span><span class="kn">import</span> <span class="n">ImageItem</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.rest</span><span class="w"> </span><span class="kn">import</span> <span class="n">addSystemEndpoints</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.rest.item_meta</span><span class="w"> </span><span class="kn">import</span> <span class="n">InternalMetadataItemResource</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.rest.large_image_resource</span><span class="w"> </span><span class="kn">import</span> <span class="n">LargeImageResource</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.rest.tiles</span><span class="w"> </span><span class="kn">import</span> <span class="n">TilesItemResource</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">__version__</span> <span class="o">=</span> <span class="n">_importlib_version</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="k">except</span> <span class="n">PackageNotFoundError</span><span class="p">:</span>
+    <span class="c1"># package is not installed</span>
+    <span class="k">pass</span>
+
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">mimetypes</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">_configWriteLock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">RLock</span><span class="p">()</span>
+
+
+<span class="c1"># Girder 3 is pinned to use pymongo &lt; 4; its warnings aren&#39;t relevant until</span>
+<span class="c1"># that changes.</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">UserWarning</span><span class="p">,</span> <span class="n">module</span><span class="o">=</span><span class="s1">&#39;pymongo&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_postUpload</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Called when a file is uploaded. We check the parent item to see if it is</span>
+<span class="sd">    expecting a large image upload, and if so we register this file as the</span>
+<span class="sd">    result image.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fileObj</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]</span>
+    <span class="c1"># There may not be an itemId (on thumbnails, for instance)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">fileObj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;itemId&#39;</span><span class="p">):</span>
+        <span class="k">return</span>
+
+    <span class="n">item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;itemId&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;largeImage&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;expected&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.tiff&#39;</span><span class="p">)</span> <span class="ow">or</span>
+            <span class="n">fileObj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mimeType&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;image/tiff&#39;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">fileObj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mimeType&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;image/tiff&#39;</span><span class="p">:</span>
+            <span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;mimeType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;image/tiff&#39;</span>
+            <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">fileObj</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;expected&#39;</span><span class="p">]</span>
+        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;fileId&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span>
+        <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;sourceName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;tiff&#39;</span>
+        <span class="k">if</span> <span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.geo.tiff&#39;</span><span class="p">):</span>
+            <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;sourceName&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;gdal&#39;</span>
+        <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="c1"># If the job looks finished, update it once more to force notifications</span>
+        <span class="k">if</span> <span class="s1">&#39;jobId&#39;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;notify&#39;</span><span class="p">):</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;jobId&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">job</span> <span class="ow">and</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
+                <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;s3FinalizeRequest&#39;</span> <span class="ow">in</span> <span class="n">fileObj</span> <span class="ow">and</span> <span class="s1">&#39;itemId&#39;</span> <span class="ow">in</span> <span class="n">fileObj</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Checking if S3 upload of </span><span class="si">{</span><span class="n">fileObj</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1"> is a large image&#39;</span><span class="p">)</span>
+
+            <span class="n">localPath</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">getLocalFilePath</span><span class="p">(</span><span class="n">fileObj</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">300</span><span class="p">):</span>
+                <span class="n">size</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">getsize</span><span class="p">(</span><span class="n">localPath</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">size</span> <span class="o">==</span> <span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span>
+                        <span class="nb">open</span><span class="p">(</span><span class="n">localPath</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">500</span><span class="p">))</span> <span class="o">==</span> <span class="nb">min</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="mi">500</span><span class="p">):</span>
+                    <span class="k">break</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s1">&#39;S3 upload not fully present (</span><span class="si">{</span><span class="n">size</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">fileObj</span><span class="p">[</span><span class="s2">&quot;size&quot;</span><span class="p">]</span><span class="si">}</span><span class="s1"> bytes reported)&#39;</span><span class="p">)</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="n">checkForLargeImageFiles</span><span class="p">(</span><span class="n">girder</span><span class="o">.</span><span class="n">events</span><span class="o">.</span><span class="n">Event</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">fileObj</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_updateJob</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Called when a job is saved, updated, or removed.  If this is a large image</span>
+<span class="sd">    job and it is ended, clean up after it.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">job</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;job&#39;</span><span class="p">]</span> <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;jobs.job.update.after&#39;</span> <span class="k">else</span> <span class="n">event</span><span class="o">.</span><span class="n">info</span>
+    <span class="n">meta</span> <span class="o">=</span> <span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;meta&#39;</span><span class="p">,</span> <span class="p">{})</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;creator&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;large_image&#39;</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;itemId&#39;</span><span class="p">)</span> <span class="ow">or</span>
+            <span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;task&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;createImageItem&#39;</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s1">&#39;model.job.remove&#39;</span> <span class="ow">and</span> <span class="n">status</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span>
+            <span class="n">JobStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">CANCELED</span><span class="p">,</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">):</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">CANCELED</span>
+    <span class="k">if</span> <span class="n">status</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="n">JobStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">CANCELED</span><span class="p">,</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;itemId&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">item</span> <span class="ow">or</span> <span class="s1">&#39;largeImage&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">item</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;largeImage&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;expected&#39;</span><span class="p">):</span>
+        <span class="c1"># We can get a SUCCESS message before we get the upload message, so</span>
+        <span class="c1"># don&#39;t clear the expected status on success.</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
+            <span class="k">del</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;expected&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span>
+    <span class="n">notify</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;largeImage&#39;</span><span class="p">,</span> <span class="p">{})</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;notify&#39;</span><span class="p">)</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">notify</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;notify&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">status</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Large image created&#39;</span>
+        <span class="k">elif</span> <span class="n">status</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">CANCELED</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Large image creation canceled&#39;</span>
+        <span class="k">else</span><span class="p">:</span>  <span class="c1"># ERROR</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;FAILED: Large image creation failed&#39;</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s1">&#39; for item </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">status</span> <span class="ow">in</span> <span class="p">(</span><span class="n">JobStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="p">,</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">CANCELED</span><span class="p">)</span> <span class="ow">and</span>
+            <span class="s1">&#39;largeImage&#39;</span> <span class="ow">in</span> <span class="n">item</span><span class="p">):</span>
+        <span class="k">del</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]</span>
+    <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">msg</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;model.job.remove&#39;</span><span class="p">:</span>
+        <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">updateJob</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">progressMessage</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">notify</span><span class="p">:</span>
+        <span class="n">Notification</span><span class="p">()</span><span class="o">.</span><span class="n">createNotification</span><span class="p">(</span>
+            <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;large_image.finished_image_item&#39;</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+                <span class="s1">&#39;job_id&#39;</span><span class="p">:</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;item_id&#39;</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span>
+                <span class="s1">&#39;success&#39;</span><span class="p">:</span> <span class="n">status</span> <span class="o">==</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">,</span>
+                <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="n">status</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="n">user</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;userId&#39;</span><span class="p">)},</span>
+            <span class="n">expires</span><span class="o">=</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span> <span class="o">+</span>
+                     <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">30</span><span class="p">)))</span>
+
+
+<div class="viewcode-block" id="checkForLargeImageFiles">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.checkForLargeImageFiles">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">checkForLargeImageFiles</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>  <span class="c1"># noqa</span>
+    <span class="n">file</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">info</span>
+    <span class="k">if</span> <span class="s1">&#39;file.save&#39;</span> <span class="ow">in</span> <span class="n">event</span><span class="o">.</span><span class="n">name</span> <span class="ow">and</span> <span class="s1">&#39;s3FinalizeRequest&#39;</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Handling file </span><span class="si">%s</span><span class="s1"> (</span><span class="si">%s</span><span class="s1">)&#39;</span><span class="p">,</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+    <span class="n">possible</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">mimeType</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mimeType&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">mimeType</span> <span class="ow">in</span> <span class="n">girder_tilesource</span><span class="o">.</span><span class="n">KnownMimeTypes</span><span class="p">:</span>
+        <span class="n">possible</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">exts</span> <span class="o">=</span> <span class="p">[</span><span class="n">ext</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">ext</span> <span class="ow">in</span> <span class="n">file</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;exts&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">ext</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">exts</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">:])</span><span class="o">.</span><span class="n">intersection</span><span class="p">(</span><span class="n">girder_tilesource</span><span class="o">.</span><span class="n">KnownExtensions</span><span class="p">):</span>
+        <span class="n">possible</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">file</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;itemId&#39;</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="n">autoset</span> <span class="o">=</span> <span class="n">Setting</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_AUTO_SET</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">autoset</span> <span class="ow">or</span> <span class="p">(</span><span class="ow">not</span> <span class="n">possible</span> <span class="ow">and</span> <span class="n">autoset</span> <span class="o">!=</span> <span class="s1">&#39;all&#39;</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file</span><span class="p">[</span><span class="s1">&#39;itemId&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">item</span> <span class="ow">or</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;largeImage&#39;</span><span class="p">):</span>
+        <span class="k">return</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">createImageItem</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">createJob</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="c1"># Check for files that are from folder/image style images.  This is custom</span>
+    <span class="c1"># per folder/image format</span>
+    <span class="n">imageFolderRecords</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;mrxs&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;match&#39;</span><span class="p">:</span> <span class="sa">r</span><span class="s1">&#39;^Slidedat.ini$&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s1">&#39;folder&#39;</span><span class="p">:</span> <span class="sa">r</span><span class="s1">&#39;^(.*)$&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">1.mrxs&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+        <span class="s1">&#39;vsi&#39;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s1">&#39;match&#39;</span><span class="p">:</span> <span class="sa">r</span><span class="s1">&#39;^.*\.ets$&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+            <span class="s1">&#39;folder&#39;</span><span class="p">:</span> <span class="sa">r</span><span class="s1">&#39;^_(\.*)_$&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;</span><span class="se">\\</span><span class="s1">1.vsi&#39;</span><span class="p">,</span>
+        <span class="p">},</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">check</span> <span class="ow">in</span> <span class="n">imageFolderRecords</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">check</span><span class="p">[</span><span class="s1">&#39;match&#39;</span><span class="p">],</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">folderId</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;folderId&#39;</span><span class="p">]</span>
+                <span class="n">folder</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">check</span><span class="p">[</span><span class="s1">&#39;up&#39;</span><span class="p">]):</span>
+                    <span class="n">folder</span> <span class="o">=</span> <span class="n">Folder</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">folderId</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">folder</span><span class="p">:</span>
+                        <span class="k">break</span>
+                    <span class="n">folderId</span> <span class="o">=</span> <span class="n">folder</span><span class="p">[</span><span class="s1">&#39;parentId&#39;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">folder</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">check</span><span class="p">[</span><span class="s1">&#39;folder&#39;</span><span class="p">],</span> <span class="n">folder</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]):</span>
+                    <span class="k">continue</span>
+                <span class="n">imageName</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">check</span><span class="p">[</span><span class="s1">&#39;folder&#39;</span><span class="p">],</span> <span class="n">check</span><span class="p">[</span><span class="s1">&#39;image&#39;</span><span class="p">],</span> <span class="n">folder</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+                <span class="n">parentItem</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">findOne</span><span class="p">({</span><span class="s1">&#39;folderId&#39;</span><span class="p">:</span> <span class="n">folder</span><span class="p">[</span><span class="s1">&#39;parentId&#39;</span><span class="p">],</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">imageName</span><span class="p">})</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">parentItem</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">childFiles</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">parentItem</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">parentFile</span> <span class="o">=</span> <span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">createImageItem</span><span class="p">(</span><span class="n">parentItem</span><span class="p">,</span> <span class="n">parentFile</span><span class="p">,</span> <span class="n">createJob</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                    <span class="k">return</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+    <span class="c1"># We couldn&#39;t automatically set this as a large image</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+        <span class="s1">&#39;Saved file </span><span class="si">%s</span><span class="s1"> cannot be automatically used as a largeImage&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">file</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]))</span></div>
+
+
+
+<div class="viewcode-block" id="removeThumbnails">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.removeThumbnails">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">removeThumbnails</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">removeThumbnailFiles</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">info</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="prepareCopyItem">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.prepareCopyItem">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">prepareCopyItem</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    When copying an item, adjust the largeImage fileId reference so it can be</span>
+<span class="sd">    matched to the to-be-copied file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">srcItem</span><span class="p">,</span> <span class="n">newItem</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">info</span>
+    <span class="k">if</span> <span class="s1">&#39;largeImage&#39;</span> <span class="ow">in</span> <span class="n">newItem</span><span class="p">:</span>
+        <span class="n">li</span> <span class="o">=</span> <span class="n">newItem</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">pos</span><span class="p">,</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">childFiles</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">srcItem</span><span class="p">)):</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;fileId&#39;</span><span class="p">,</span> <span class="s1">&#39;originalId&#39;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">li</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">==</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]:</span>
+                    <span class="n">li</span><span class="p">[</span><span class="s1">&#39;_index_&#39;</span> <span class="o">+</span> <span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">pos</span>
+        <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">newItem</span><span class="p">,</span> <span class="n">triggerEvents</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="handleCopyItem">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.handleCopyItem">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">handleCopyItem</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    When copying an item, finish adjusting the largeImage fileId reference to</span>
+<span class="sd">    the copied file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">newItem</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">info</span>
+    <span class="k">if</span> <span class="s1">&#39;largeImage&#39;</span> <span class="ow">in</span> <span class="n">newItem</span><span class="p">:</span>
+        <span class="n">li</span> <span class="o">=</span> <span class="n">newItem</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">childFiles</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">newItem</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;fileId&#39;</span><span class="p">,</span> <span class="s1">&#39;originalId&#39;</span><span class="p">):</span>
+            <span class="n">pos</span> <span class="o">=</span> <span class="n">li</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;_index_&#39;</span> <span class="o">+</span> <span class="n">key</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">pos</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">pos</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+                <span class="n">li</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">files</span><span class="p">[</span><span class="n">pos</span><span class="p">][</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span>
+        <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">newItem</span><span class="p">,</span> <span class="n">triggerEvents</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="handleRemoveFile">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.handleRemoveFile">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">handleRemoveFile</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    When a file is removed, check if it is a largeImage fileId.  If so, delete</span>
+<span class="sd">    the largeImage record.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fileObj</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">info</span>
+    <span class="k">if</span> <span class="n">fileObj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;itemId&#39;</span><span class="p">):</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;itemId&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="ow">and</span> <span class="s1">&#39;largeImage&#39;</span> <span class="ow">in</span> <span class="n">item</span> <span class="ow">and</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;fileId&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]:</span>
+            <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="p">[</span><span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]])</span></div>
+
+
+
+<div class="viewcode-block" id="handleFileSave">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.handleFileSave">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">handleFileSave</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    When a file is first saved, mark its mime type based on its extension if we</span>
+<span class="sd">    would otherwise just mark it as generic application/octet-stream.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">fileObj</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">info</span>
+    <span class="k">if</span> <span class="n">fileObj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mimeType&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">in</span> <span class="p">{</span><span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">}</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="s1">&#39;_id&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">fileObj</span> <span class="ow">and</span>
+            <span class="n">fileObj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;mimeType&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;application/octet-stream&#39;</span><span class="p">}):</span>
+        <span class="k">global</span> <span class="n">mimetypes</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">mimetypes</span><span class="p">:</span>
+            <span class="kn">import</span><span class="w"> </span><span class="nn">mimetypes</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">mimetypes</span><span class="o">.</span><span class="n">inited</span><span class="p">:</span>
+                <span class="n">mimetypes</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+            <span class="c1"># Augment the standard mimetypes with some additional values</span>
+            <span class="k">for</span> <span class="n">mimeType</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">std</span> <span class="ow">in</span> <span class="p">[</span>
+                <span class="p">(</span><span class="s1">&#39;text/yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;.yaml&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;text/yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;.yml&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;application/yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;.yaml&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;application/yaml&#39;</span><span class="p">,</span> <span class="s1">&#39;.yml&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+                <span class="p">(</span><span class="s1">&#39;application/vnd.geo+json&#39;</span><span class="p">,</span> <span class="s1">&#39;.geojson&#39;</span><span class="p">,</span> <span class="kc">True</span><span class="p">),</span>
+            <span class="p">]:</span>
+                <span class="k">if</span> <span class="n">ext</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mimetypes</span><span class="o">.</span><span class="n">types_map</span><span class="p">:</span>
+                    <span class="n">mimetypes</span><span class="o">.</span><span class="n">add_type</span><span class="p">(</span><span class="n">mimeType</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">std</span><span class="p">)</span>
+
+        <span class="n">alt</span> <span class="o">=</span> <span class="n">mimetypes</span><span class="o">.</span><span class="n">guess_type</span><span class="p">(</span><span class="n">fileObj</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">alt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fileObj</span><span class="p">[</span><span class="s1">&#39;mimeType&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">alt</span></div>
+
+
+
+<div class="viewcode-block" id="handleSettingSave">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.handleSettingSave">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">handleSettingSave</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    When certain settings are changed, clear the caches.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;key&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_ICC_CORRECTION</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">Setting</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_ICC_CORRECTION</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">gc</span>
+
+        <span class="kn">from</span><span class="w"> </span><span class="nn">girder.api.rest</span><span class="w"> </span><span class="kn">import</span> <span class="n">setResponseHeader</span>
+
+        <span class="n">large_image</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">setConfig</span><span class="p">(</span><span class="s1">&#39;icc_correction&#39;</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">])</span>
+        <span class="n">large_image</span><span class="o">.</span><span class="n">cache_util</span><span class="o">.</span><span class="n">cachesClear</span><span class="p">()</span>
+        <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># ask the browser to clear the cache; it probably won&#39;t be honored</span>
+            <span class="n">setResponseHeader</span><span class="p">(</span><span class="s1">&#39;Clear-Site-Data&#39;</span><span class="p">,</span> <span class="s1">&#39;&quot;cache&quot;&#39;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="metadataSearchHandler">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.metadataSearchHandler">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">metadataSearchHandler</span><span class="p">(</span>  <span class="c1"># noqa</span>
+        <span class="n">query</span><span class="p">,</span> <span class="n">types</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">offset</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">models</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">searchModels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">metakey</span><span class="o">=</span><span class="s1">&#39;meta&#39;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Provide a substring search on metadata.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">models</span> <span class="o">=</span> <span class="n">models</span> <span class="ow">or</span> <span class="p">{</span><span class="s1">&#39;item&#39;</span><span class="p">,</span> <span class="s1">&#39;folder&#39;</span><span class="p">}</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">typ</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">models</span> <span class="k">for</span> <span class="n">typ</span> <span class="ow">in</span> <span class="n">types</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">RestException</span><span class="p">(</span><span class="s1">&#39;The metadata search is only able to search in </span><span class="si">%r</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="n">models</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;The search query must be a string.&#39;</span>
+        <span class="k">raise</span> <span class="n">RestException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="c1"># If we have the beginning of the field specifier, don&#39;t do a search</span>
+    <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^(k|ke|key|key:)$&#39;</span><span class="p">,</span> <span class="n">query</span><span class="o">.</span><span class="n">strip</span><span class="p">()):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">types</span><span class="p">}</span>
+    <span class="n">phrases</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;&quot;[^&quot;]*&quot;|</span><span class="se">\&#39;</span><span class="s1">[^</span><span class="se">\&#39;</span><span class="s1">]*</span><span class="se">\&#39;</span><span class="s1">|\S+&#39;</span><span class="p">,</span> <span class="n">query</span><span class="p">)</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="n">phrase</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;key:&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">phrase</span> <span class="ow">in</span> <span class="n">phrases</span>
+              <span class="k">if</span> <span class="n">phrase</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;key:&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">phrase</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;key:&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">])}</span>
+    <span class="n">phrases</span> <span class="o">=</span> <span class="p">[</span><span class="n">phrase</span> <span class="k">for</span> <span class="n">phrase</span> <span class="ow">in</span> <span class="n">phrases</span>
+               <span class="k">if</span> <span class="ow">not</span> <span class="n">phrase</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;key:&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">phrase</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;key:&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">])]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">):</span>
+        <span class="n">pipeline</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">{</span><span class="s1">&#39;$project&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;arrayofkeyvalue&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;$objectToArray&#39;</span><span class="p">:</span> <span class="s1">&#39;$$ROOT.</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">metakey</span><span class="p">}}},</span>
+            <span class="p">{</span><span class="s1">&#39;$unwind&#39;</span><span class="p">:</span> <span class="s1">&#39;$arrayofkeyvalue&#39;</span><span class="p">},</span>
+            <span class="p">{</span><span class="s1">&#39;$group&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s1">&#39;allkeys&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;$addToSet&#39;</span><span class="p">:</span> <span class="s1">&#39;$arrayofkeyvalue.k&#39;</span><span class="p">}}},</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="p">(</span><span class="n">searchModels</span> <span class="ow">or</span> <span class="n">types</span><span class="p">):</span>
+            <span class="n">modelInst</span> <span class="o">=</span> <span class="n">ModelImporter</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="o">*</span><span class="n">model</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">model</span><span class="p">])</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">modelInst</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">(</span><span class="n">pipeline</span><span class="p">,</span> <span class="n">allowDiskUse</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">):</span>
+                <span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">result</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;allkeys&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">types</span><span class="p">}</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Will search the following fields: </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span>
+    <span class="n">usedPhrases</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="nb">filter</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">phrase</span> <span class="ow">in</span> <span class="n">phrases</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">phrase</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">phrase</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="ow">and</span> <span class="n">phrase</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="s1">&#39;&quot;</span><span class="se">\&#39;</span><span class="s1">&#39;</span><span class="p">:</span>
+            <span class="n">phrase</span> <span class="o">=</span> <span class="n">phrase</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">phrase</span><span class="p">)</span> <span class="ow">or</span> <span class="n">phrase</span> <span class="ow">in</span> <span class="n">usedPhrases</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">usedPhrases</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">phrase</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">numval</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">phrase</span><span class="p">)</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[1-9]&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span>
+                <span class="sa">r</span><span class="s1">&#39;\d(?=.*[1-9](0*\.|)0*$)&#39;</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">numval</span><span class="p">)))))</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">numval</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">phrase</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="n">phrase</span><span class="p">)</span>
+        <span class="n">clause</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">.</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">metakey</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
+            <span class="n">clause</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;$regex&#39;</span><span class="p">:</span> <span class="n">phrase</span><span class="p">,</span> <span class="s1">&#39;$options&#39;</span><span class="p">:</span> <span class="s1">&#39;i&#39;</span><span class="p">}})</span>
+            <span class="k">if</span> <span class="n">numval</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">clause</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;$eq&#39;</span><span class="p">:</span> <span class="n">numval</span><span class="p">}})</span>
+                <span class="k">if</span> <span class="n">numval</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">delta</span><span class="p">:</span>
+                    <span class="n">clause</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;$gte&#39;</span><span class="p">:</span> <span class="n">numval</span><span class="p">,</span> <span class="s1">&#39;$lt&#39;</span><span class="p">:</span> <span class="n">numval</span> <span class="o">+</span> <span class="n">delta</span><span class="p">}})</span>
+                <span class="k">elif</span> <span class="n">numval</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">delta</span><span class="p">:</span>
+                    <span class="n">clause</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="n">key</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;$lte&#39;</span><span class="p">:</span> <span class="n">numval</span><span class="p">,</span> <span class="s1">&#39;$gt&#39;</span><span class="p">:</span> <span class="n">numval</span> <span class="o">+</span> <span class="n">delta</span><span class="p">}})</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">clause</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="nb">filter</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;$or&#39;</span><span class="p">:</span> <span class="n">clause</span><span class="p">})</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">filter</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">clause</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="nb">filter</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">[]</span>
+    <span class="nb">filter</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;$and&#39;</span><span class="p">:</span> <span class="nb">filter</span><span class="p">}</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="nb">filter</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="nb">filter</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Metadata search uses filter: </span><span class="si">%r</span><span class="s1">&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">searchModels</span> <span class="ow">or</span> <span class="n">types</span><span class="p">:</span>
+        <span class="n">modelInst</span> <span class="o">=</span> <span class="n">ModelImporter</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="o">*</span><span class="n">model</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="p">[</span><span class="n">model</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">searchModels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">model</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">modelInst</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">modelInst</span><span class="o">.</span><span class="n">filterResultsByPermission</span><span class="p">(</span>
+                    <span class="n">modelInst</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">filter</span><span class="p">),</span> <span class="n">user</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">limit</span><span class="p">,</span> <span class="n">offset</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">resultModelInst</span> <span class="o">=</span> <span class="n">ModelImporter</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">searchModels</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;model&#39;</span><span class="p">])</span>
+            <span class="n">result</span><span class="p">[</span><span class="n">searchModels</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;model&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">foundIds</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">modelInst</span><span class="o">.</span><span class="n">filterResultsByPermission</span><span class="p">(</span><span class="n">modelInst</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="nb">filter</span><span class="p">),</span> <span class="n">user</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+                <span class="nb">id</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="n">searchModels</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;reference&#39;</span><span class="p">]]</span>
+                <span class="k">if</span> <span class="nb">id</span> <span class="ow">in</span> <span class="n">foundIds</span><span class="p">:</span>
+                    <span class="k">continue</span>
+                <span class="n">foundIds</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">entry</span> <span class="o">=</span> <span class="n">resultModelInst</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span> <span class="n">exc</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="c1"># We might have permission to view an annotation but not</span>
+                    <span class="c1"># the item</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">offset</span><span class="p">:</span>
+                    <span class="n">offset</span> <span class="o">-=</span> <span class="mi">1</span>
+                    <span class="k">continue</span>
+                <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">result</span><span class="p">[</span><span class="n">searchModels</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;model&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">resultModelInst</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="n">user</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">limit</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="n">searchModels</span><span class="p">[</span><span class="n">model</span><span class="p">][</span><span class="s1">&#39;model&#39;</span><span class="p">]])</span> <span class="o">==</span> <span class="n">limit</span><span class="p">:</span>
+                        <span class="k">break</span>
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_mergeDictionaries</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Merge two dictionaries recursively.  If the second dictionary (or any</span>
+<span class="sd">    sub-dictionary) has a special key, value of &#39;__all__&#39;: True, the updated</span>
+<span class="sd">    dictionary only contains values from the second dictionary and excludes</span>
+<span class="sd">    the __all__ key.</span>
+
+<span class="sd">    :param a: the first dictionary.  Modified.</span>
+<span class="sd">    :param b: the second dictionary that gets added to the first.</span>
+<span class="sd">    :returns: the modified first dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__all__&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">a</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">b</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">),</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">_mergeDictionaries</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">key</span> <span class="o">!=</span> <span class="s1">&#39;__all__&#39;</span> <span class="ow">or</span> <span class="n">b</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">a</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">a</span>
+
+
+<div class="viewcode-block" id="adjustConfigForUser">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.adjustConfigForUser">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">adjustConfigForUser</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given the current user, adjust the config so that only relevant and</span>
+<span class="sd">    combined values are used.  If the root of the config dictionary contains</span>
+<span class="sd">    &quot;access&quot;: {&quot;user&quot;: &lt;dict&gt;, &quot;admin&quot;: &lt;dict&gt;}, the base values are updated</span>
+<span class="sd">    based on the user&#39;s access level.  If the root of the config contains</span>
+<span class="sd">    &quot;group&quot;: {&lt;group-name&gt;: &lt;dict&gt;, ...}, the base values are updated for</span>
+<span class="sd">    every group the user is a part of.</span>
+
+<span class="sd">    The order of update is groups in C-sort alphabetical order followed by</span>
+<span class="sd">    access/user and then access/admin as they apply.</span>
+
+<span class="sd">    :param config: a config dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">config</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;groups&#39;</span><span class="p">),</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">groups</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;groups&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">user</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">Group</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
+                    <span class="p">{</span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;$in&#39;</span><span class="p">:</span> <span class="n">user</span><span class="p">[</span><span class="s1">&#39;groups&#39;</span><span class="p">]}},</span> <span class="n">sort</span><span class="o">=</span><span class="p">[(</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">)]):</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">groups</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">group</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]),</span> <span class="nb">dict</span><span class="p">):</span>
+                    <span class="n">config</span> <span class="o">=</span> <span class="n">_mergeDictionaries</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">groups</span><span class="p">[</span><span class="n">group</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]])</span>
+    <span class="c1"># Do this after merging groups, because the group access-level values can</span>
+    <span class="c1"># override the base access-level options.  For instance, if the base has</span>
+    <span class="c1"># an admin option, and the group has a user option, then doing this before</span>
+    <span class="c1"># group application can end up with user options for an admin.</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;access&#39;</span><span class="p">),</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">accessList</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;access&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">user</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">accessList</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;user&#39;</span><span class="p">),</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">_mergeDictionaries</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">accessList</span><span class="p">[</span><span class="s1">&#39;user&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">user</span> <span class="ow">and</span> <span class="n">user</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;admin&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">accessList</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;admin&#39;</span><span class="p">),</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">_mergeDictionaries</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">accessList</span><span class="p">[</span><span class="s1">&#39;admin&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">),</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="n">users</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">user</span> <span class="ow">and</span> <span class="n">user</span><span class="p">[</span><span class="s1">&#39;login&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="n">users</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="n">_mergeDictionaries</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">users</span><span class="p">[</span><span class="n">user</span><span class="p">[</span><span class="s1">&#39;login&#39;</span><span class="p">]])</span>
+    <span class="k">return</span> <span class="n">config</span></div>
+
+
+
+<div class="viewcode-block" id="addSettingsToConfig">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.addSettingsToConfig">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">addSettingsToConfig</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Add the settings for showing thumbnails and images in item lists to a</span>
+<span class="sd">    config file if the itemList or itemListDialog options are not set.</span>
+
+<span class="sd">    :param config: the config dictionary to modify.</span>
+<span class="sd">    :param user: the current user.</span>
+<span class="sd">    :param name: the name of the config file.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">name</span> <span class="ow">and</span> <span class="n">name</span> <span class="o">!=</span> <span class="s1">&#39;.large_image_config.yaml&#39;</span><span class="p">:</span>
+        <span class="k">return</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="n">showThumbnails</span> <span class="o">=</span> <span class="n">Setting</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_SHOW_THUMBNAILS</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">showThumbnails</span><span class="p">:</span>
+        <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;thumbnail&#39;</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Thumbnail&#39;</span><span class="p">})</span>
+
+    <span class="n">extraSetting</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_SHOW_EXTRA_PUBLIC</span>
+    <span class="k">if</span> <span class="n">user</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">user</span><span class="p">[</span><span class="s1">&#39;admin&#39;</span><span class="p">]:</span>
+            <span class="n">extraSetting</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_SHOW_EXTRA_ADMIN</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">extraSetting</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_SHOW_EXTRA</span>
+
+    <span class="n">showExtra</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">showExtra</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">Setting</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">extraSetting</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">pass</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">showExtra</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="s1">&#39;images&#39;</span> <span class="ow">in</span> <span class="n">showExtra</span> <span class="ow">and</span>
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">showExtra</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">],</span> <span class="nb">list</span><span class="p">)):</span>
+        <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">showExtra</span><span class="p">[</span><span class="s1">&#39;images&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">value</span> <span class="o">!=</span> <span class="s1">&#39;*&#39;</span><span class="p">:</span>
+                <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;image&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="n">value</span><span class="o">.</span><span class="n">title</span><span class="p">()})</span>
+
+    <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;record&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Name&#39;</span><span class="p">})</span>
+    <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;record&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;controls&#39;</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Controls&#39;</span><span class="p">})</span>
+    <span class="n">columns</span><span class="o">.</span><span class="n">append</span><span class="p">({</span><span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;record&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="s1">&#39;size&#39;</span><span class="p">,</span> <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s1">&#39;Size&#39;</span><span class="p">})</span>
+
+    <span class="k">if</span> <span class="s1">&#39;itemList&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;itemList&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;columns&#39;</span><span class="p">:</span> <span class="n">columns</span><span class="p">}</span>
+    <span class="k">if</span> <span class="s1">&#39;itemListDialog&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">config</span><span class="p">[</span><span class="s1">&#39;itemListDialog&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;columns&#39;</span><span class="p">:</span> <span class="n">columns</span><span class="p">}</span></div>
+
+
+
+<div class="viewcode-block" id="yamlConfigFile">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.yamlConfigFile">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">yamlConfigFile</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">user</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get a resolved named config file based on a folder and user.</span>
+
+<span class="sd">    :param folder: a Girder folder model.</span>
+<span class="sd">    :param name: the name of the config file.</span>
+<span class="sd">    :param user: the user that the response if adjusted for.</span>
+<span class="sd">    :returns: either None if no config file, or a yaml record.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">addConfig</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">last</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">while</span> <span class="n">folder</span><span class="p">:</span>
+        <span class="n">item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">findOne</span><span class="p">({</span><span class="s1">&#39;folderId&#39;</span><span class="p">:</span> <span class="n">folder</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span> <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">})</span>
+        <span class="k">if</span> <span class="n">item</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">childFiles</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;size&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">10</span> <span class="o">*</span> <span class="mi">1024</span> <span class="o">**</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Not loading </span><span class="si">%s</span><span class="s1"> -- too large&#39;</span><span class="p">,</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">])</span>
+                    <span class="k">continue</span>
+                <span class="k">with</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file</span><span class="p">)</span> <span class="k">as</span> <span class="n">fptr</span><span class="p">:</span>
+                    <span class="n">config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">fptr</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">config</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="c1"># combine and adjust config values based on current user</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+                            <span class="s1">&#39;access&#39;</span> <span class="ow">in</span> <span class="n">config</span> <span class="ow">or</span> <span class="s1">&#39;groups&#39;</span> <span class="ow">in</span> <span class="n">config</span> <span class="ow">or</span> <span class="s1">&#39;users&#39;</span> <span class="ow">in</span> <span class="n">config</span><span class="p">):</span>
+                        <span class="n">config</span> <span class="o">=</span> <span class="n">adjustConfigForUser</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">user</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">addConfig</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                        <span class="n">config</span> <span class="o">=</span> <span class="n">_mergeDictionaries</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="n">addConfig</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">or</span> <span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;__inherit__&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">True</span><span class="p">:</span>
+                        <span class="n">addConfig</span> <span class="o">=</span> <span class="n">config</span>
+                        <span class="n">last</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">break</span>
+                    <span class="n">config</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;__inherit__&#39;</span><span class="p">)</span>
+                    <span class="n">addConfig</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="k">if</span> <span class="n">last</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="k">if</span> <span class="n">folder</span><span class="p">[</span><span class="s1">&#39;parentCollection&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;folder&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">folder</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;.config&#39;</span><span class="p">:</span>
+                <span class="n">folder</span> <span class="o">=</span> <span class="n">Folder</span><span class="p">()</span><span class="o">.</span><span class="n">findOne</span><span class="p">({</span>
+                    <span class="s1">&#39;parentId&#39;</span><span class="p">:</span> <span class="n">folder</span><span class="p">[</span><span class="s1">&#39;parentId&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;parentCollection&#39;</span><span class="p">:</span> <span class="n">folder</span><span class="p">[</span><span class="s1">&#39;parentCollection&#39;</span><span class="p">],</span>
+                    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;.config&#39;</span><span class="p">})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="s1">&#39;setting&#39;</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">folder</span> <span class="ow">or</span> <span class="n">last</span> <span class="o">==</span> <span class="s1">&#39;setting&#39;</span><span class="p">:</span>
+                <span class="n">folderId</span> <span class="o">=</span> <span class="n">Setting</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_CONFIG_FOLDER</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">folderId</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="n">folder</span> <span class="o">=</span> <span class="n">Folder</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">folderId</span><span class="p">,</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">folder</span> <span class="o">=</span> <span class="n">Folder</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">folder</span><span class="p">[</span><span class="s1">&#39;parentId&#39;</span><span class="p">],</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">AccessType</span><span class="o">.</span><span class="n">READ</span><span class="p">)</span>
+
+    <span class="n">addConfig</span> <span class="o">=</span> <span class="p">{}</span> <span class="k">if</span> <span class="n">addConfig</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">addConfig</span>
+    <span class="n">addSettingsToConfig</span><span class="p">(</span><span class="n">addConfig</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">addConfig</span></div>
+
+
+
+<div class="viewcode-block" id="yamlConfigFileWrite">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.yamlConfigFileWrite">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">yamlConfigFileWrite</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">yaml_config</span><span class="p">,</span> <span class="n">user_context</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    If the user has appropriate permissions, create or modify an item in the</span>
+<span class="sd">    specified folder with the specified name, storing the config value as a</span>
+<span class="sd">    file.</span>
+
+<span class="sd">    :param folder: a Girder folder model.</span>
+<span class="sd">    :param name: the name of the config file.</span>
+<span class="sd">    :param user: the user that the response if adjusted for.</span>
+<span class="sd">    :param yaml_config: a yaml config string.</span>
+<span class="sd">    :param user_context: whether these settings should only apply to the current user.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">yaml_parsed</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">yaml_config</span><span class="p">)</span>
+    <span class="n">item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">createItem</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">reuseExisting</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">existingFiles</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">childFiles</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">existingFiles</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span>
+            <span class="n">existingFiles</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;mimeType&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;application/yaml&#39;</span> <span class="ow">and</span>
+            <span class="n">existingFiles</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">name</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">user_context</span><span class="p">:</span>
+            <span class="n">file</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">existingFiles</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+            <span class="n">file</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;users&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="n">file</span><span class="p">[</span><span class="s1">&#39;users&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">user</span><span class="p">[</span><span class="s1">&#39;login&#39;</span><span class="p">],</span> <span class="p">{})</span>
+            <span class="n">file</span><span class="p">[</span><span class="s1">&#39;users&#39;</span><span class="p">][</span><span class="n">user</span><span class="p">[</span><span class="s1">&#39;login&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">yaml_parsed</span><span class="p">)</span>
+            <span class="n">yaml_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_dump</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+        <span class="n">upload</span> <span class="o">=</span> <span class="n">Upload</span><span class="p">()</span><span class="o">.</span><span class="n">createUploadToFile</span><span class="p">(</span>
+            <span class="n">existingFiles</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">user</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">yaml_config</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">user_context</span><span class="p">:</span>
+            <span class="n">yaml_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_dump</span><span class="p">({</span><span class="s1">&#39;users&#39;</span><span class="p">:</span> <span class="p">{</span><span class="n">user</span><span class="p">[</span><span class="s1">&#39;login&#39;</span><span class="p">]:</span> <span class="n">yaml_parsed</span><span class="p">}})</span>
+        <span class="n">upload</span> <span class="o">=</span> <span class="n">Upload</span><span class="p">()</span><span class="o">.</span><span class="n">createUpload</span><span class="p">(</span>
+            <span class="n">user</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s1">&#39;item&#39;</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">yaml_config</span><span class="p">),</span>
+            <span class="n">mimeType</span><span class="o">=</span><span class="s1">&#39;application/yaml&#39;</span><span class="p">,</span> <span class="n">save</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">newfile</span> <span class="o">=</span> <span class="n">Upload</span><span class="p">()</span><span class="o">.</span><span class="n">handleChunk</span><span class="p">(</span><span class="n">upload</span><span class="p">,</span> <span class="n">yaml_config</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">_configWriteLock</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">childFiles</span><span class="p">(</span><span class="n">item</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">entry</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">newfile</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">childFiles</span><span class="p">(</span><span class="n">item</span><span class="p">)))</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># Validators</span>
+
+<div class="viewcode-block" id="validateBoolean">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.validateBoolean">[docs]</a>
+<span class="nd">@setting_utilities</span><span class="o">.</span><span class="n">validator</span><span class="p">({</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_SHOW_THUMBNAILS</span><span class="p">,</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_SHOW_VIEWER</span><span class="p">,</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_NOTIFICATION_STREAM_FALLBACK</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">validateBoolean</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;false&#39;</span><span class="p">,</span> <span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">ValidationException</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> must be a boolean.&#39;</span> <span class="o">%</span> <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">],</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>
+    <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;false&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="validateBooleanOrICCIntent">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.validateBooleanOrICCIntent">[docs]</a>
+<span class="nd">@setting_utilities</span><span class="o">.</span><span class="n">validator</span><span class="p">({</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_ICC_CORRECTION</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">validateBooleanOrICCIntent</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">PIL.ImageCms</span>
+
+    <span class="n">val</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="p">((</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">PIL</span><span class="o">.</span><span class="n">ImageCms</span><span class="p">,</span> <span class="s1">&#39;Intent&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">PIL</span><span class="o">.</span><span class="n">ImageCms</span><span class="o">.</span><span class="n">Intent</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()))</span> <span class="ow">or</span>
+            <span class="nb">hasattr</span><span class="p">(</span><span class="n">PIL</span><span class="o">.</span><span class="n">ImageCms</span><span class="p">,</span> <span class="s1">&#39;INTENT_&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">())):</span>
+        <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;false&#39;</span><span class="p">,</span> <span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">ValidationException</span><span class="p">(</span>
+                <span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> must be a boolean or a named intent.&#39;</span> <span class="o">%</span> <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">],</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>
+        <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;false&#39;</span></div>
+
+
+
+<div class="viewcode-block" id="validateBooleanOrAll">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.validateBooleanOrAll">[docs]</a>
+<span class="nd">@setting_utilities</span><span class="o">.</span><span class="n">validator</span><span class="p">({</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_AUTO_SET</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">validateBooleanOrAll</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;false&#39;</span><span class="p">,</span> <span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="s1">&#39;all&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">ValidationException</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> must be a boolean or &quot;all&quot;.&#39;</span> <span class="o">%</span> <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">],</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>
+    <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span> <span class="k">if</span> <span class="n">val</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;all&#39;</span><span class="p">}</span> <span class="k">else</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;false&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="validateDictOrJSON">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.validateDictOrJSON">[docs]</a>
+<span class="nd">@setting_utilities</span><span class="o">.</span><span class="n">validator</span><span class="p">({</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_SHOW_EXTRA_PUBLIC</span><span class="p">,</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_SHOW_EXTRA</span><span class="p">,</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_SHOW_EXTRA_ADMIN</span><span class="p">,</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_SHOW_ITEM_EXTRA_PUBLIC</span><span class="p">,</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_SHOW_ITEM_EXTRA</span><span class="p">,</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_SHOW_ITEM_EXTRA_ADMIN</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">validateDictOrJSON</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">val</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">val</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">parsed</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">parsed</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="n">ValidationException</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> must be a JSON object.&#39;</span> <span class="o">%</span> <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">],</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>
+            <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="n">ValidationException</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> must be a JSON object.&#39;</span> <span class="o">%</span> <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">],</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="validateNonnegativeInteger">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.validateNonnegativeInteger">[docs]</a>
+<span class="nd">@setting_utilities</span><span class="o">.</span><span class="n">validator</span><span class="p">({</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_MAX_THUMBNAIL_FILES</span><span class="p">,</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_MAX_SMALL_IMAGE_SIZE</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">validateNonnegativeInteger</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">val</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span>
+    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">ValidationException</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> must be a non-negative integer.&#39;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;key&#39;</span><span class="p">],</span> <span class="p">),</span> <span class="s1">&#39;value&#39;</span><span class="p">)</span>
+    <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span></div>
+
+
+
+<div class="viewcode-block" id="validateDefaultViewer">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.validateDefaultViewer">[docs]</a>
+<span class="nd">@setting_utilities</span><span class="o">.</span><span class="n">validator</span><span class="p">({</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_DEFAULT_VIEWER</span><span class="p">,</span>
+<span class="p">})</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">validateDefaultViewer</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
+    <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="validateFolder">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.validateFolder">[docs]</a>
+<span class="nd">@setting_utilities</span><span class="o">.</span><span class="n">validator</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_CONFIG_FOLDER</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">validateFolder</span><span class="p">(</span><span class="n">doc</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">doc</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="n">doc</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">Folder</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">doc</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exc</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+
+<span class="c1"># Defaults</span>
+
+<span class="c1"># Defaults that have fixed values can just be added to the system defaults</span>
+<span class="c1"># dictionary.</span>
+<span class="n">SettingDefault</span><span class="o">.</span><span class="n">defaults</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_SHOW_THUMBNAILS</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_SHOW_VIEWER</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_AUTO_SET</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_MAX_THUMBNAIL_FILES</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_MAX_SMALL_IMAGE_SIZE</span><span class="p">:</span> <span class="mi">4096</span><span class="p">,</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_NOTIFICATION_STREAM_FALLBACK</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_ICC_CORRECTION</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="p">})</span>
+
+
+<div class="viewcode-block" id="unbindGirderEventsByHandlerName">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.unbindGirderEventsByHandlerName">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">unbindGirderEventsByHandlerName</span><span class="p">(</span><span class="n">handlerName</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">eventName</span> <span class="ow">in</span> <span class="n">events</span><span class="o">.</span><span class="n">_mapping</span><span class="p">:</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">unbind</span><span class="p">(</span><span class="n">eventName</span><span class="p">,</span> <span class="n">handlerName</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="patchMount">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.patchMount">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">patchMount</span><span class="p">():</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">girder.cli.mount</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">_flatItemFile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">next</span><span class="p">(</span><span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">collection</span><span class="o">.</span><span class="n">aggregate</span><span class="p">([</span>
+                <span class="p">{</span><span class="s1">&#39;$match&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;itemId&#39;</span><span class="p">:</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]}},</span>
+            <span class="p">]</span> <span class="o">+</span> <span class="p">([</span>
+                <span class="p">{</span><span class="s1">&#39;$addFields&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;matchLI&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;$eq&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;$_id&#39;</span><span class="p">,</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;fileId&#39;</span><span class="p">]]}}},</span>
+            <span class="p">]</span> <span class="k">if</span> <span class="s1">&#39;largeImage&#39;</span> <span class="ow">in</span> <span class="n">item</span> <span class="ow">and</span> <span class="s1">&#39;expected&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]</span> <span class="k">else</span> <span class="p">[])</span> <span class="o">+</span> <span class="p">[</span>
+                <span class="p">{</span><span class="s1">&#39;$addFields&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;matchName&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;$eq&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;$name&#39;</span><span class="p">,</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]]}}},</span>
+                <span class="p">{</span><span class="s1">&#39;$sort&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;matchLI&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;matchName&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">}},</span>
+                <span class="p">{</span><span class="s1">&#39;$limit&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">},</span>
+            <span class="p">]),</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="n">girder</span><span class="o">.</span><span class="n">cli</span><span class="o">.</span><span class="n">mount</span><span class="o">.</span><span class="n">ServerFuse</span><span class="o">.</span><span class="n">_flatItemFile</span> <span class="o">=</span> <span class="n">_flatItemFile</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="LargeImagePlugin">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.LargeImagePlugin">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LargeImagePlugin</span><span class="p">(</span><span class="n">GirderPlugin</span><span class="p">):</span>
+    <span class="n">DISPLAY_NAME</span> <span class="o">=</span> <span class="s1">&#39;Large Image&#39;</span>
+
+<div class="viewcode-block" id="LargeImagePlugin.load">
+<a class="viewcode-back" href="../_build/girder_large_image/girder_large_image.html#girder_large_image.LargeImagePlugin.load">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">getPlugin</span><span class="p">(</span><span class="s1">&#39;worker&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;worker plugin is unavailable&#39;</span><span class="p">)</span>
+
+        <span class="n">unbindGirderEventsByHandlerName</span><span class="p">(</span><span class="s1">&#39;large_image&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Chrome doesn&#39;t respect cache headers when it comes to JavaScript, and in particular</span>
+        <span class="c1"># the geojs bundle is cached over-aggressively. We manually bust it using the file checksum.</span>
+        <span class="n">static_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s1">&#39;web_client&#39;</span> <span class="o">/</span> <span class="s1">&#39;dist&#39;</span>
+        <span class="n">checksum</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">((</span><span class="n">static_dir</span> <span class="o">/</span> <span class="s1">&#39;extra&#39;</span> <span class="o">/</span> <span class="s1">&#39;geojs.js&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">read_bytes</span><span class="p">())</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+        <span class="n">registerPluginStaticContent</span><span class="p">(</span>
+            <span class="n">plugin</span><span class="o">=</span><span class="s1">&#39;large_image&#39;</span><span class="p">,</span>
+            <span class="n">css</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;/style.css&#39;</span><span class="p">],</span>
+            <span class="n">js</span><span class="o">=</span><span class="p">[</span>
+                <span class="s1">&#39;/girder-plugin-large-image.umd.cjs&#39;</span><span class="p">,</span>
+                <span class="c1"># geojs must be loaded after the plugin JS</span>
+                <span class="sa">f</span><span class="s1">&#39;/extra/geojs.js?h=</span><span class="si">{</span><span class="n">checksum</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="p">],</span>
+            <span class="n">staticDir</span><span class="o">=</span><span class="n">static_dir</span><span class="p">,</span>
+            <span class="n">tree</span><span class="o">=</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;serverRoot&#39;</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="n">ModelImporter</span><span class="o">.</span><span class="n">registerModel</span><span class="p">(</span><span class="s1">&#39;image_item&#39;</span><span class="p">,</span> <span class="n">ImageItem</span><span class="p">,</span> <span class="s1">&#39;large_image&#39;</span><span class="p">)</span>
+        <span class="n">large_image</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">setConfig</span><span class="p">(</span><span class="s1">&#39;logger&#39;</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span>
+        <span class="n">large_image</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">setConfig</span><span class="p">(</span><span class="s1">&#39;logprint&#39;</span><span class="p">,</span> <span class="n">logger</span><span class="p">)</span>
+        <span class="c1"># Load girder&#39;s large_image config</span>
+        <span class="n">curConfig</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">getConfig</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;large_image&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="p">(</span><span class="n">curConfig</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">large_image</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">setConfig</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="n">large_image</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">setConfig</span><span class="p">(</span><span class="s1">&#39;icc_correction&#39;</span><span class="p">,</span> <span class="n">Setting</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_ICC_CORRECTION</span><span class="p">))</span>
+        <span class="n">addSystemEndpoints</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;apiRoot&#39;</span><span class="p">])</span>
+
+        <span class="n">girder_tilesource</span><span class="o">.</span><span class="n">loadGirderTileSources</span><span class="p">()</span>
+        <span class="n">TilesItemResource</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;apiRoot&#39;</span><span class="p">])</span>
+        <span class="n">InternalMetadataItemResource</span><span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;apiRoot&#39;</span><span class="p">])</span>
+        <span class="n">info</span><span class="p">[</span><span class="s1">&#39;apiRoot&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">large_image</span> <span class="o">=</span> <span class="n">LargeImageResource</span><span class="p">()</span>
+
+        <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">exposeFields</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">AccessType</span><span class="o">.</span><span class="n">READ</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="s1">&#39;largeImage&#39;</span><span class="p">)</span>
+
+        <span class="n">events</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;data.process&#39;</span><span class="p">,</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span> <span class="n">_postUpload</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;jobs.job.update.after&#39;</span><span class="p">,</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span> <span class="n">_updateJob</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;model.job.save&#39;</span><span class="p">,</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span> <span class="n">_updateJob</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;model.job.remove&#39;</span><span class="p">,</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span> <span class="n">_updateJob</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;model.folder.save.after&#39;</span><span class="p">,</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span> <span class="n">invalidateLoadModelCache</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;model.group.save.after&#39;</span><span class="p">,</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span> <span class="n">invalidateLoadModelCache</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;model.user.save.after&#39;</span><span class="p">,</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span> <span class="n">invalidateLoadModelCache</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;model.collection.save.after&#39;</span><span class="p">,</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span> <span class="n">invalidateLoadModelCache</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;model.item.remove&#39;</span><span class="p">,</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span> <span class="n">invalidateLoadModelCache</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;model.item.copy.prepare&#39;</span><span class="p">,</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span> <span class="n">prepareCopyItem</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;model.item.copy.after&#39;</span><span class="p">,</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span> <span class="n">handleCopyItem</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;model.item.save.after&#39;</span><span class="p">,</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span> <span class="n">invalidateLoadModelCache</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;model.file.save.after&#39;</span><span class="p">,</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span> <span class="n">checkForLargeImageFiles</span><span class="p">)</span>
+        <span class="n">filter_logging</span><span class="o">.</span><span class="n">addLoggingFilter</span><span class="p">(</span>
+            <span class="sa">r</span><span class="s1">&#39;Handling file ([0-9a-f]</span><span class="si">{24}</span><span class="s1">) \(&#39;</span><span class="p">,</span>
+            <span class="n">frequency</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;model.item.remove&#39;</span><span class="p">,</span> <span class="s1">&#39;large_image.removeThumbnails&#39;</span><span class="p">,</span> <span class="n">removeThumbnails</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;server_fuse.unmount&#39;</span><span class="p">,</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span> <span class="n">large_image</span><span class="o">.</span><span class="n">cache_util</span><span class="o">.</span><span class="n">cachesClear</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;model.file.remove&#39;</span><span class="p">,</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span> <span class="n">handleRemoveFile</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;model.file.save&#39;</span><span class="p">,</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span> <span class="n">handleFileSave</span><span class="p">)</span>
+        <span class="n">events</span><span class="o">.</span><span class="n">bind</span><span class="p">(</span><span class="s1">&#39;model.setting.save&#39;</span><span class="p">,</span> <span class="s1">&#39;large_image&#39;</span><span class="p">,</span> <span class="n">handleSettingSave</span><span class="p">)</span>
+
+        <span class="n">search</span><span class="o">.</span><span class="n">_allowedSearchMode</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;li_metadata&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="n">search</span><span class="o">.</span><span class="n">addSearchMode</span><span class="p">(</span><span class="s1">&#39;li_metadata&#39;</span><span class="p">,</span> <span class="n">metadataSearchHandler</span><span class="p">)</span>
+
+        <span class="n">patchMount</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

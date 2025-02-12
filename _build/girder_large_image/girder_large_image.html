@@ -1,0 +1,675 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>girder_large_image package &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../_static/K.png"/>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="girder_large_image.models package" href="girder_large_image.models.html" />
+    <link rel="prev" title="girder_large_image" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../development.html">Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../girder_index.html">Girder Integration</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../girder_config_options.html">Girder Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../girder_annotation_config_options.html">Girder Annotation Configuration Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../girder_caching.html">Caching Large Image in Girder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dicomweb_assetstore.html">DICOMweb Assetstore</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../plottable.html">Plottable Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../upgrade.html">Upgrading from Previous Versions</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html">girder_large_image</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">girder_large_image package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-girder_large_image.constants">girder_large_image.constants module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-girder_large_image.girder_tilesource">girder_large_image.girder_tilesource module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-girder_large_image.loadmodelcache">girder_large_image.loadmodelcache module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-girder_large_image">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../girder_large_image_annotation/modules.html">girder_large_image_annotation</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../girder_index.html">Girder Integration</a></li>
+          <li class="breadcrumb-item"><a href="modules.html">girder_large_image</a></li>
+      <li class="breadcrumb-item active">girder_large_image package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/_build/girder_large_image/girder_large_image.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="girder-large-image-package">
+<h1>girder_large_image package<a class="headerlink" href="#girder-large-image-package" title="Link to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Link to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="girder_large_image.models.html">girder_large_image.models package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image.models.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image.models.html#module-girder_large_image.models.image_item">girder_large_image.models.image_item module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem"><code class="docutils literal notranslate"><span class="pre">ImageItem</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.convertImage"><code class="docutils literal notranslate"><span class="pre">ImageItem.convertImage()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.createImageItem"><code class="docutils literal notranslate"><span class="pre">ImageItem.createImageItem()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.delete"><code class="docutils literal notranslate"><span class="pre">ImageItem.delete()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getAndCacheImageOrDataRun"><code class="docutils literal notranslate"><span class="pre">ImageItem.getAndCacheImageOrDataRun()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getAssociatedImage"><code class="docutils literal notranslate"><span class="pre">ImageItem.getAssociatedImage()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getAssociatedImagesList"><code class="docutils literal notranslate"><span class="pre">ImageItem.getAssociatedImagesList()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getBandInformation"><code class="docutils literal notranslate"><span class="pre">ImageItem.getBandInformation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getInternalMetadata"><code class="docutils literal notranslate"><span class="pre">ImageItem.getInternalMetadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getMetadata"><code class="docutils literal notranslate"><span class="pre">ImageItem.getMetadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getPixel"><code class="docutils literal notranslate"><span class="pre">ImageItem.getPixel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getRegion"><code class="docutils literal notranslate"><span class="pre">ImageItem.getRegion()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getThumbnail"><code class="docutils literal notranslate"><span class="pre">ImageItem.getThumbnail()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.getTile"><code class="docutils literal notranslate"><span class="pre">ImageItem.getTile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.histogram"><code class="docutils literal notranslate"><span class="pre">ImageItem.histogram()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.initialize"><code class="docutils literal notranslate"><span class="pre">ImageItem.initialize()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.removeThumbnailFiles"><code class="docutils literal notranslate"><span class="pre">ImageItem.removeThumbnailFiles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.tileFrames"><code class="docutils literal notranslate"><span class="pre">ImageItem.tileFrames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.models.html#girder_large_image.models.image_item.ImageItem.tileSource"><code class="docutils literal notranslate"><span class="pre">ImageItem.tileSource()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image.models.html#module-girder_large_image.models">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="girder_large_image.rest.html">girder_large_image.rest package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image.rest.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image.rest.html#module-girder_large_image.rest.item_meta">girder_large_image.rest.item_meta module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.item_meta.InternalMetadataItemResource"><code class="docutils literal notranslate"><span class="pre">InternalMetadataItemResource</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.item_meta.InternalMetadataItemResource.deleteMetadataKey"><code class="docutils literal notranslate"><span class="pre">InternalMetadataItemResource.deleteMetadataKey()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.item_meta.InternalMetadataItemResource.getMetadataKey"><code class="docutils literal notranslate"><span class="pre">InternalMetadataItemResource.getMetadataKey()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.item_meta.InternalMetadataItemResource.updateMetadataKey"><code class="docutils literal notranslate"><span class="pre">InternalMetadataItemResource.updateMetadataKey()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image.rest.html#module-girder_large_image.rest.large_image_resource">girder_large_image.rest.large_image_resource module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource"><code class="docutils literal notranslate"><span class="pre">LargeImageResource</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.cacheClear"><code class="docutils literal notranslate"><span class="pre">LargeImageResource.cacheClear()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.cacheInfo"><code class="docutils literal notranslate"><span class="pre">LargeImageResource.cacheInfo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.configFormat"><code class="docutils literal notranslate"><span class="pre">LargeImageResource.configFormat()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.configReplace"><code class="docutils literal notranslate"><span class="pre">LargeImageResource.configReplace()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.configValidate"><code class="docutils literal notranslate"><span class="pre">LargeImageResource.configValidate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.countAssociatedImages"><code class="docutils literal notranslate"><span class="pre">LargeImageResource.countAssociatedImages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.countHistograms"><code class="docutils literal notranslate"><span class="pre">LargeImageResource.countHistograms()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.countThumbnails"><code class="docutils literal notranslate"><span class="pre">LargeImageResource.countThumbnails()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.createLargeImages"><code class="docutils literal notranslate"><span class="pre">LargeImageResource.createLargeImages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.createThumbnails"><code class="docutils literal notranslate"><span class="pre">LargeImageResource.createThumbnails()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.deleteAssociatedImages"><code class="docutils literal notranslate"><span class="pre">LargeImageResource.deleteAssociatedImages()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.deleteHistograms"><code class="docutils literal notranslate"><span class="pre">LargeImageResource.deleteHistograms()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.deleteIncompleteTiles"><code class="docutils literal notranslate"><span class="pre">LargeImageResource.deleteIncompleteTiles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.deleteThumbnails"><code class="docutils literal notranslate"><span class="pre">LargeImageResource.deleteThumbnails()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.getPublicSettings"><code class="docutils literal notranslate"><span class="pre">LargeImageResource.getPublicSettings()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.listSources"><code class="docutils literal notranslate"><span class="pre">LargeImageResource.listSources()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.createThumbnailsJob"><code class="docutils literal notranslate"><span class="pre">createThumbnailsJob()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.createThumbnailsJobLog"><code class="docutils literal notranslate"><span class="pre">createThumbnailsJobLog()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.createThumbnailsJobTask"><code class="docutils literal notranslate"><span class="pre">createThumbnailsJobTask()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.createThumbnailsJobThread"><code class="docutils literal notranslate"><span class="pre">createThumbnailsJobThread()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.large_image_resource.cursorNextOrNone"><code class="docutils literal notranslate"><span class="pre">cursorNextOrNone()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image.rest.html#module-girder_large_image.rest.tiles">girder_large_image.rest.tiles module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource"><code class="docutils literal notranslate"><span class="pre">TilesItemResource</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.addTilesThumbnails"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.addTilesThumbnails()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.convertImage"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.convertImage()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.createTiles"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.createTiles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.deleteTiles"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.deleteTiles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.deleteTilesThumbnails"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.deleteTilesThumbnails()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.getAssociatedImage"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.getAssociatedImage()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.getAssociatedImageMetadata"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.getAssociatedImageMetadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.getAssociatedImagesList"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.getAssociatedImagesList()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.getBandInformation"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.getBandInformation()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.getDZIInfo"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.getDZIInfo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.getDZITile"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.getDZITile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.getHistogram"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.getHistogram()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.getInternalMetadata"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.getInternalMetadata()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.getTestTile"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.getTestTile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.getTestTilesInfo"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.getTestTilesInfo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.getTile"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.getTile()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.getTileWithFrame"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.getTileWithFrame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.getTilesInfo"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.getTilesInfo()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.getTilesPixel"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.getTilesPixel()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.getTilesRegion"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.getTilesRegion()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.getTilesThumbnail"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.getTilesThumbnail()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.listTilesThumbnails"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.listTilesThumbnails()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.tileFrames"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.tileFrames()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.tiles.TilesItemResource.tileFramesQuadInfo"><code class="docutils literal notranslate"><span class="pre">TilesItemResource.tileFramesQuadInfo()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="girder_large_image.rest.html#module-girder_large_image.rest">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.addSystemEndpoints"><code class="docutils literal notranslate"><span class="pre">addSystemEndpoints()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.getYAMLConfigFile"><code class="docutils literal notranslate"><span class="pre">getYAMLConfigFile()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="girder_large_image.rest.html#girder_large_image.rest.putYAMLConfigFile"><code class="docutils literal notranslate"><span class="pre">putYAMLConfigFile()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-girder_large_image.constants">
+<span id="girder-large-image-constants-module"></span><h2>girder_large_image.constants module<a class="headerlink" href="#module-girder_large_image.constants" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="girder_large_image.constants.PluginSettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">girder_large_image.constants.</span></span><span class="sig-name descname"><span class="pre">PluginSettings</span></span><a class="reference internal" href="../../_modules/girder_large_image/constants.html#PluginSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.constants.PluginSettings" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.constants.PluginSettings.LARGE_IMAGE_AUTO_SET">
+<span class="sig-name descname"><span class="pre">LARGE_IMAGE_AUTO_SET</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'large_image.auto_set'</span></em><a class="headerlink" href="#girder_large_image.constants.PluginSettings.LARGE_IMAGE_AUTO_SET" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.constants.PluginSettings.LARGE_IMAGE_AUTO_USE_ALL_FILES">
+<span class="sig-name descname"><span class="pre">LARGE_IMAGE_AUTO_USE_ALL_FILES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'large_image.auto_use_all_files'</span></em><a class="headerlink" href="#girder_large_image.constants.PluginSettings.LARGE_IMAGE_AUTO_USE_ALL_FILES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.constants.PluginSettings.LARGE_IMAGE_CONFIG_FOLDER">
+<span class="sig-name descname"><span class="pre">LARGE_IMAGE_CONFIG_FOLDER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'large_image.config_folder'</span></em><a class="headerlink" href="#girder_large_image.constants.PluginSettings.LARGE_IMAGE_CONFIG_FOLDER" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.constants.PluginSettings.LARGE_IMAGE_DEFAULT_VIEWER">
+<span class="sig-name descname"><span class="pre">LARGE_IMAGE_DEFAULT_VIEWER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'large_image.default_viewer'</span></em><a class="headerlink" href="#girder_large_image.constants.PluginSettings.LARGE_IMAGE_DEFAULT_VIEWER" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.constants.PluginSettings.LARGE_IMAGE_ICC_CORRECTION">
+<span class="sig-name descname"><span class="pre">LARGE_IMAGE_ICC_CORRECTION</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'large_image.icc_correction'</span></em><a class="headerlink" href="#girder_large_image.constants.PluginSettings.LARGE_IMAGE_ICC_CORRECTION" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.constants.PluginSettings.LARGE_IMAGE_MAX_SMALL_IMAGE_SIZE">
+<span class="sig-name descname"><span class="pre">LARGE_IMAGE_MAX_SMALL_IMAGE_SIZE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'large_image.max_small_image_size'</span></em><a class="headerlink" href="#girder_large_image.constants.PluginSettings.LARGE_IMAGE_MAX_SMALL_IMAGE_SIZE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.constants.PluginSettings.LARGE_IMAGE_MAX_THUMBNAIL_FILES">
+<span class="sig-name descname"><span class="pre">LARGE_IMAGE_MAX_THUMBNAIL_FILES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'large_image.max_thumbnail_files'</span></em><a class="headerlink" href="#girder_large_image.constants.PluginSettings.LARGE_IMAGE_MAX_THUMBNAIL_FILES" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.constants.PluginSettings.LARGE_IMAGE_NOTIFICATION_STREAM_FALLBACK">
+<span class="sig-name descname"><span class="pre">LARGE_IMAGE_NOTIFICATION_STREAM_FALLBACK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'large_image.notification_stream_fallback'</span></em><a class="headerlink" href="#girder_large_image.constants.PluginSettings.LARGE_IMAGE_NOTIFICATION_STREAM_FALLBACK" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_EXTRA">
+<span class="sig-name descname"><span class="pre">LARGE_IMAGE_SHOW_EXTRA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'large_image.show_extra'</span></em><a class="headerlink" href="#girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_EXTRA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_EXTRA_ADMIN">
+<span class="sig-name descname"><span class="pre">LARGE_IMAGE_SHOW_EXTRA_ADMIN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'large_image.show_extra_admin'</span></em><a class="headerlink" href="#girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_EXTRA_ADMIN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_EXTRA_PUBLIC">
+<span class="sig-name descname"><span class="pre">LARGE_IMAGE_SHOW_EXTRA_PUBLIC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'large_image.show_extra_public'</span></em><a class="headerlink" href="#girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_EXTRA_PUBLIC" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_ITEM_EXTRA">
+<span class="sig-name descname"><span class="pre">LARGE_IMAGE_SHOW_ITEM_EXTRA</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'large_image.show_item_extra'</span></em><a class="headerlink" href="#girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_ITEM_EXTRA" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_ITEM_EXTRA_ADMIN">
+<span class="sig-name descname"><span class="pre">LARGE_IMAGE_SHOW_ITEM_EXTRA_ADMIN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'large_image.show_item_extra_admin'</span></em><a class="headerlink" href="#girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_ITEM_EXTRA_ADMIN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_ITEM_EXTRA_PUBLIC">
+<span class="sig-name descname"><span class="pre">LARGE_IMAGE_SHOW_ITEM_EXTRA_PUBLIC</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'large_image.show_item_extra_public'</span></em><a class="headerlink" href="#girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_ITEM_EXTRA_PUBLIC" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_THUMBNAILS">
+<span class="sig-name descname"><span class="pre">LARGE_IMAGE_SHOW_THUMBNAILS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'large_image.show_thumbnails'</span></em><a class="headerlink" href="#girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_THUMBNAILS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_VIEWER">
+<span class="sig-name descname"><span class="pre">LARGE_IMAGE_SHOW_VIEWER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'large_image.show_viewer'</span></em><a class="headerlink" href="#girder_large_image.constants.PluginSettings.LARGE_IMAGE_SHOW_VIEWER" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-girder_large_image.girder_tilesource">
+<span id="girder-large-image-girder-tilesource-module"></span><h2>girder_large_image.girder_tilesource module<a class="headerlink" href="#module-girder_large_image.girder_tilesource" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="girder_large_image.girder_tilesource.GirderTileSource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">girder_large_image.girder_tilesource.</span></span><span class="sig-name descname"><span class="pre">GirderTileSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/girder_tilesource.html#GirderTileSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.girder_tilesource.GirderTileSource" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="../large_image/large_image.tilesource.html#large_image.tilesource.base.FileTileSource" title="large_image.tilesource.base.FileTileSource"><code class="xref py py-class docutils literal notranslate"><span class="pre">FileTileSource</span></code></a></p>
+<p>Initialize the tile class.  See the base class for other available
+parameters.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>item</strong> – a Girder item document which contains
+[‘largeImage’][‘fileId’] identifying the Girder file to be used
+for the tile source.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.girder_tilesource.GirderTileSource.extensionsWithAdjacentFiles">
+<span class="sig-name descname"><span class="pre">extensionsWithAdjacentFiles</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#girder_large_image.girder_tilesource.GirderTileSource.extensionsWithAdjacentFiles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.girder_tilesource.GirderTileSource.getLRUHash">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">getLRUHash</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/girder_tilesource.html#GirderTileSource.getLRUHash"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.girder_tilesource.GirderTileSource.getLRUHash" title="Link to this definition"></a></dt>
+<dd><p>Return a string hash used as a key in the recently-used cache for tile
+sources.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a string hash value.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.girder_tilesource.GirderTileSource.getState">
+<span class="sig-name descname"><span class="pre">getState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/girder_tilesource.html#GirderTileSource.getState"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.girder_tilesource.GirderTileSource.getState" title="Link to this definition"></a></dt>
+<dd><p>Return a string reflecting the state of the tile source.  This is used
+as part of a cache key when hashing function return values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>a string hash value of the source state.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.girder_tilesource.GirderTileSource.girderSource">
+<span class="sig-name descname"><span class="pre">girderSource</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#girder_large_image.girder_tilesource.GirderTileSource.girderSource" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.girder_tilesource.GirderTileSource.mayHaveAdjacentFiles">
+<span class="sig-name descname"><span class="pre">mayHaveAdjacentFiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">largeImageFile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/girder_tilesource.html#GirderTileSource.mayHaveAdjacentFiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.girder_tilesource.GirderTileSource.mayHaveAdjacentFiles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.girder_tilesource.GirderTileSource.mimeTypesWithAdjacentFiles">
+<span class="sig-name descname"><span class="pre">mimeTypesWithAdjacentFiles</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#girder_large_image.girder_tilesource.GirderTileSource.mimeTypesWithAdjacentFiles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.girder_tilesource.getGirderTileSource">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.girder_tilesource.</span></span><span class="sig-name descname"><span class="pre">getGirderTileSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/girder_tilesource.html#getGirderTileSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.girder_tilesource.getGirderTileSource" title="Link to this definition"></a></dt>
+<dd><p>Get a Girder tilesource using the known sources.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> – a Girder item or an item id.</p></li>
+<li><p><strong>file</strong> – if specified, the Girder file object to use as the large image
+file; used here only to check extensions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A girder tilesource for the item.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.girder_tilesource.getGirderTileSourceName">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.girder_tilesource.</span></span><span class="sig-name descname"><span class="pre">getGirderTileSourceName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">item</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/girder_tilesource.html#getGirderTileSourceName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.girder_tilesource.getGirderTileSourceName" title="Link to this definition"></a></dt>
+<dd><p>Get a Girder tilesource name using the known sources.  If tile sources have
+not yet been loaded, load them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>item</strong> – a Girder item.</p></li>
+<li><p><strong>file</strong> – if specified, the Girder file object to use as the large image
+file; used here only to check extensions.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The name of a tilesource that can read the Girder item.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.girder_tilesource.loadGirderTileSources">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.girder_tilesource.</span></span><span class="sig-name descname"><span class="pre">loadGirderTileSources</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/girder_tilesource.html#loadGirderTileSources"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.girder_tilesource.loadGirderTileSources" title="Link to this definition"></a></dt>
+<dd><p>Load all Girder tilesources from entrypoints and add them to the
+AvailableGiderTileSources dictionary.</p>
+</dd></dl>
+
+</section>
+<section id="module-girder_large_image.loadmodelcache">
+<span id="girder-large-image-loadmodelcache-module"></span><h2>girder_large_image.loadmodelcache module<a class="headerlink" href="#module-girder_large_image.loadmodelcache" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.loadmodelcache.invalidateLoadModelCache">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.loadmodelcache.</span></span><span class="sig-name descname"><span class="pre">invalidateLoadModelCache</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/loadmodelcache.html#invalidateLoadModelCache"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.loadmodelcache.invalidateLoadModelCache" title="Link to this definition"></a></dt>
+<dd><p>Empty the LoadModelCache.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.loadmodelcache.loadModel">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.loadmodelcache.</span></span><span class="sig-name descname"><span class="pre">loadModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">plugin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'_core'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">allowCookie</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image/loadmodelcache.html#loadModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.loadmodelcache.loadModel" title="Link to this definition"></a></dt>
+<dd><p>Load a model based on id using the current cherrypy token parameter for
+authentication, caching the results.  This must be called in a cherrypy
+context.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>resource</strong> – the resource class instance calling the function.  Used
+for access to the current user and model importer.</p></li>
+<li><p><strong>model</strong> – the model name, e.g., ‘item’.</p></li>
+<li><p><strong>plugin</strong> – the plugin name when loading a plugin model.</p></li>
+<li><p><strong>id</strong> – a string id of the model to load.</p></li>
+<li><p><strong>allowCookie</strong> – true if the cookie authentication method is allowed.</p></li>
+<li><p><strong>level</strong> – access level desired.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the loaded model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-girder_large_image">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-girder_large_image" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="girder_large_image.LargeImagePlugin">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">LargeImagePlugin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entrypoint</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#LargeImagePlugin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.LargeImagePlugin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">GirderPlugin</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="girder_large_image.LargeImagePlugin.DISPLAY_NAME">
+<span class="sig-name descname"><span class="pre">DISPLAY_NAME</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Large</span> <span class="pre">Image'</span></em><a class="headerlink" href="#girder_large_image.LargeImagePlugin.DISPLAY_NAME" title="Link to this definition"></a></dt>
+<dd><p>This is the named displayed to users on the plugin page.  Unlike the entrypoint name
+used internally, this name can be an arbitrary string.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="girder_large_image.LargeImagePlugin.load">
+<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#LargeImagePlugin.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.LargeImagePlugin.load" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.addSettingsToConfig">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">addSettingsToConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#addSettingsToConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.addSettingsToConfig" title="Link to this definition"></a></dt>
+<dd><p>Add the settings for showing thumbnails and images in item lists to a
+config file if the itemList or itemListDialog options are not set.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>config</strong> – the config dictionary to modify.</p></li>
+<li><p><strong>user</strong> – the current user.</p></li>
+<li><p><strong>name</strong> – the name of the config file.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.adjustConfigForUser">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">adjustConfigForUser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#adjustConfigForUser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.adjustConfigForUser" title="Link to this definition"></a></dt>
+<dd><p>Given the current user, adjust the config so that only relevant and
+combined values are used.  If the root of the config dictionary contains
+“access”: {“user”: &lt;dict&gt;, “admin”: &lt;dict&gt;}, the base values are updated
+based on the user’s access level.  If the root of the config contains
+“group”: {&lt;group-name&gt;: &lt;dict&gt;, …}, the base values are updated for
+every group the user is a part of.</p>
+<p>The order of update is groups in C-sort alphabetical order followed by
+access/user and then access/admin as they apply.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>config</strong> – a config dictionary.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.checkForLargeImageFiles">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">checkForLargeImageFiles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#checkForLargeImageFiles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.checkForLargeImageFiles" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.handleCopyItem">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">handleCopyItem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#handleCopyItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.handleCopyItem" title="Link to this definition"></a></dt>
+<dd><p>When copying an item, finish adjusting the largeImage fileId reference to
+the copied file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.handleFileSave">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">handleFileSave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#handleFileSave"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.handleFileSave" title="Link to this definition"></a></dt>
+<dd><p>When a file is first saved, mark its mime type based on its extension if we
+would otherwise just mark it as generic application/octet-stream.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.handleRemoveFile">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">handleRemoveFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#handleRemoveFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.handleRemoveFile" title="Link to this definition"></a></dt>
+<dd><p>When a file is removed, check if it is a largeImage fileId.  If so, delete
+the largeImage record.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.handleSettingSave">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">handleSettingSave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#handleSettingSave"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.handleSettingSave" title="Link to this definition"></a></dt>
+<dd><p>When certain settings are changed, clear the caches.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.metadataSearchHandler">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">metadataSearchHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">query</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">types</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">models</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">searchModels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metakey</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'meta'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#metadataSearchHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.metadataSearchHandler" title="Link to this definition"></a></dt>
+<dd><p>Provide a substring search on metadata.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.patchMount">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">patchMount</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#patchMount"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.patchMount" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.prepareCopyItem">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">prepareCopyItem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#prepareCopyItem"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.prepareCopyItem" title="Link to this definition"></a></dt>
+<dd><p>When copying an item, adjust the largeImage fileId reference so it can be
+matched to the to-be-copied file.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.removeThumbnails">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">removeThumbnails</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#removeThumbnails"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.removeThumbnails" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.unbindGirderEventsByHandlerName">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">unbindGirderEventsByHandlerName</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handlerName</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#unbindGirderEventsByHandlerName"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.unbindGirderEventsByHandlerName" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.validateBoolean">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">validateBoolean</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#validateBoolean"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.validateBoolean" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.validateBooleanOrAll">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">validateBooleanOrAll</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#validateBooleanOrAll"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.validateBooleanOrAll" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.validateBooleanOrICCIntent">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">validateBooleanOrICCIntent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#validateBooleanOrICCIntent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.validateBooleanOrICCIntent" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.validateDefaultViewer">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">validateDefaultViewer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#validateDefaultViewer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.validateDefaultViewer" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.validateDictOrJSON">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">validateDictOrJSON</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#validateDictOrJSON"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.validateDictOrJSON" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.validateFolder">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">validateFolder</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#validateFolder"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.validateFolder" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.validateNonnegativeInteger">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">validateNonnegativeInteger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">doc</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#validateNonnegativeInteger"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.validateNonnegativeInteger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.yamlConfigFile">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">yamlConfigFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#yamlConfigFile"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.yamlConfigFile" title="Link to this definition"></a></dt>
+<dd><p>Get a resolved named config file based on a folder and user.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folder</strong> – a Girder folder model.</p></li>
+<li><p><strong>name</strong> – the name of the config file.</p></li>
+<li><p><strong>user</strong> – the user that the response if adjusted for.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>either None if no config file, or a yaml record.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="girder_large_image.yamlConfigFileWrite">
+<span class="sig-prename descclassname"><span class="pre">girder_large_image.</span></span><span class="sig-name descname"><span class="pre">yamlConfigFileWrite</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">folder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yaml_config</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_context</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/girder_large_image.html#yamlConfigFileWrite"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#girder_large_image.yamlConfigFileWrite" title="Link to this definition"></a></dt>
+<dd><p>If the user has appropriate permissions, create or modify an item in the
+specified folder with the specified name, storing the config value as a
+file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folder</strong> – a Girder folder model.</p></li>
+<li><p><strong>name</strong> – the name of the config file.</p></li>
+<li><p><strong>user</strong> – the user that the response if adjusted for.</p></li>
+<li><p><strong>yaml_config</strong> – a yaml config string.</p></li>
+<li><p><strong>user_context</strong> – whether these settings should only apply to the current user.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="girder_large_image" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="girder_large_image.models.html" class="btn btn-neutral float-right" title="girder_large_image.models package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

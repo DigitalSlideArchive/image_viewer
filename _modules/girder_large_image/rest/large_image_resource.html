@@ -1,0 +1,976 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>girder_large_image.rest.large_image_resource &mdash; large_image  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=e9af8ede" />
+
+  
+    <link rel="shortcut icon" href="../../../_static/K.png"/>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs"></script>
+      <script type="module" src="https://cdn.jsdelivr.net/npm/@mermaid-js/layout-elk@0.1.4/dist/mermaid-layout-elk.esm.min.mjs"></script>
+      <script type="module">mermaid.initialize({startOnLoad:true});</script>
+      <script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+      <script type="module">
+import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@10.6.0/dist/mermaid.esm.min.mjs";
+window.addEventListener("load", () => mermaid.run());
+</script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            large_image
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tilesource_options.html">Tile Source Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../config_options.html">Configuration Options</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../image_conversion.html">Image Conversion</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../formats.html">Image Formats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../multi_source_specification.html">Multi Source Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../annotations.html">Annotation Schema</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../caching.html">Caching in Large Image</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../notebooks.html">Jupyter Notebook Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../development.html">Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../girder_index.html">Girder Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../api_index.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">large_image</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../../girder_large_image.html">girder_large_image</a></li>
+          <li class="breadcrumb-item"><a href="../rest.html">girder_large_image.rest</a></li>
+      <li class="breadcrumb-item active">girder_large_image.rest.large_image_resource</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for girder_large_image.rest.large_image_resource</h1><div class="highlight"><pre>
+<span></span><span class="c1">##############################################################################</span>
+<span class="c1">#  Copyright Kitware Inc.</span>
+<span class="c1">#</span>
+<span class="c1">#  Licensed under the Apache License, Version 2.0 ( the &quot;License&quot; );</span>
+<span class="c1">#  you may not use this file except in compliance with the License.</span>
+<span class="c1">#  You may obtain a copy of the License at</span>
+<span class="c1">#</span>
+<span class="c1">#    http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="c1">#</span>
+<span class="c1">#  Unless required by applicable law or agreed to in writing, software</span>
+<span class="c1">#  distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="c1">#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="c1">#  See the License for the specific language governing permissions and</span>
+<span class="c1">#  limitations under the License.</span>
+<span class="c1">##############################################################################</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">concurrent.futures</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pprint</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">shutil</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">threading</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cherrypy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pymongo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder_jobs.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">JobStatus</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder_jobs.models.job</span><span class="w"> </span><span class="kn">import</span> <span class="n">Job</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">large_image</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.api</span><span class="w"> </span><span class="kn">import</span> <span class="n">access</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.api.describe</span><span class="w"> </span><span class="kn">import</span> <span class="n">Description</span><span class="p">,</span> <span class="n">autoDescribeRoute</span><span class="p">,</span> <span class="n">describeRoute</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.api.rest</span><span class="w"> </span><span class="kn">import</span> <span class="n">Resource</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">AccessType</span><span class="p">,</span> <span class="n">SortDir</span><span class="p">,</span> <span class="n">TokenScope</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">RestException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.file</span><span class="w"> </span><span class="kn">import</span> <span class="n">File</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.folder</span><span class="w"> </span><span class="kn">import</span> <span class="n">Folder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.item</span><span class="w"> </span><span class="kn">import</span> <span class="n">Item</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.models.setting</span><span class="w"> </span><span class="kn">import</span> <span class="n">Setting</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">girder.utility</span><span class="w"> </span><span class="kn">import</span> <span class="n">toBool</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image</span><span class="w"> </span><span class="kn">import</span> <span class="n">cache_util</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">large_image.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">TileGeneralError</span><span class="p">,</span> <span class="n">TileSourceError</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">..</span><span class="w"> </span><span class="kn">import</span> <span class="n">constants</span><span class="p">,</span> <span class="n">girder_tilesource</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..models.image_item</span><span class="w"> </span><span class="kn">import</span> <span class="n">ImageItem</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="createThumbnailsJobTask">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.createThumbnailsJobTask">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">createThumbnailsJobTask</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">spec</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    For an individual item, check or create all of the appropriate thumbnails.</span>
+
+<span class="sd">    :param item: the image item.</span>
+<span class="sd">    :param spec: a list of thumbnail specifications.</span>
+<span class="sd">    :returns: a dictionary with the total status of the thumbnail job.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;checked&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;created&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;failed&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;imageKey&#39;</span><span class="p">):</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">getAssociatedImage</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">checkAndCreate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">entry</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">getThumbnail</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="n">checkAndCreate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">entry</span><span class="p">)</span>
+            <span class="n">status</span><span class="p">[</span><span class="s1">&#39;checked&#39;</span> <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">True</span> <span class="k">else</span> <span class="s1">&#39;created&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">except</span> <span class="n">TileGeneralError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="n">status</span><span class="p">[</span><span class="s1">&#39;failed&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">status</span><span class="p">[</span><span class="s1">&#39;lastFailed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">])</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Failed to get thumbnail for item </span><span class="si">%s</span><span class="s1">: </span><span class="si">%r</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span> <span class="n">exc</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="k">raise</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="n">status</span><span class="p">[</span><span class="s1">&#39;failed&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">status</span><span class="p">[</span><span class="s1">&#39;lastFailed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">])</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span>
+                <span class="s1">&#39;Unexpected exception when trying to create a thumbnail for item </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span>
+                <span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">status</span></div>
+
+
+
+<div class="viewcode-block" id="createThumbnailsJobLog">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.createThumbnailsJobLog">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">createThumbnailsJobLog</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Log information about the create thumbnails job.</span>
+
+<span class="sd">    :param job: the job object.</span>
+<span class="sd">    :param info: a dictionary with the number of thumbnails checked, created,</span>
+<span class="sd">        and failed.</span>
+<span class="sd">    :param prefix: a string to place in front of the log message.</span>
+<span class="sd">    :param status: if not None, a new status for the job.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">msg</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="s1">&#39;Checked </span><span class="si">%d</span><span class="s1">, created </span><span class="si">%d</span><span class="s1"> thumbnail files&#39;</span> <span class="o">%</span> <span class="p">(</span>
+        <span class="n">info</span><span class="p">[</span><span class="s1">&#39;checked&#39;</span><span class="p">],</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;created&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">prefix</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span> <span class="ow">and</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;items&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="n">info</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;specs&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;checked&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;created&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;failed&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">done</span> <span class="o">&lt;</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;items&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;specs&#39;</span><span class="p">]:</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="s1">&#39; (estimated </span><span class="si">%4.2f%%</span><span class="s1"> done)&#39;</span> <span class="o">%</span> <span class="p">(</span>
+                <span class="mf">100.0</span> <span class="o">*</span> <span class="n">done</span> <span class="o">/</span> <span class="p">(</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;items&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;specs&#39;</span><span class="p">]))</span>
+    <span class="n">msg</span> <span class="o">+=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span>
+    <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;failed&#39;</span><span class="p">]:</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s1">&#39;Failed on </span><span class="si">%d</span><span class="s1"> thumbnail file</span><span class="si">%s</span><span class="s1"> (last failure on item </span><span class="si">%s</span><span class="s1">)</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">info</span><span class="p">[</span><span class="s1">&#39;failed&#39;</span><span class="p">],</span>
+            <span class="s1">&#39;s&#39;</span> <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;failed&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">1</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">info</span><span class="p">[</span><span class="s1">&#39;lastFailed&#39;</span><span class="p">])</span>
+    <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">updateJob</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="n">msg</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">job</span><span class="p">,</span> <span class="n">msg</span></div>
+
+
+
+<div class="viewcode-block" id="cursorNextOrNone">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.cursorNextOrNone">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">cursorNextOrNone</span><span class="p">(</span><span class="n">cursor</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a Mongo cursor, return the next value if there is one.  If not,</span>
+<span class="sd">    return None.</span>
+
+<span class="sd">    :param cursor: a cursor to get a value from.</span>
+<span class="sd">    :returns: the next value or None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">cursor</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="createThumbnailsJob">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.createThumbnailsJob">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">createThumbnailsJob</span><span class="p">(</span><span class="n">job</span><span class="p">):</span>
+    <span class="n">thread</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">createThumbnailsJobThread</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="p">),</span> <span class="n">daemon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">thread</span><span class="o">.</span><span class="n">start</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="createThumbnailsJobThread">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.createThumbnailsJobThread">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">createThumbnailsJobThread</span><span class="p">(</span><span class="n">job</span><span class="p">):</span>  <span class="c1"># noqa</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create thumbnails for all of the large image items.</span>
+
+<span class="sd">    The job object contains::</span>
+
+<span class="sd">      - spec: an array, each entry of which is the parameter dictionary</span>
+<span class="sd">        for the model getThumbnail function.</span>
+<span class="sd">      - logInterval: the time in seconds between log messages.  This</span>
+<span class="sd">        also controls the granularity of cancelling the job.</span>
+<span class="sd">      - concurrent: the number of threads to use.  0 for the number of</span>
+<span class="sd">        cpus.</span>
+
+<span class="sd">    :param job: the job object including kwargs.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">updateJob</span><span class="p">(</span>
+        <span class="n">job</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="s1">&#39;Started creating large image thumbnails</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="n">status</span><span class="o">=</span><span class="n">JobStatus</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">)</span>
+    <span class="n">concurrency</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">job</span><span class="p">[</span><span class="s1">&#39;kwargs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;concurrent&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+    <span class="n">concurrency</span> <span class="o">=</span> <span class="n">large_image</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(</span>
+        <span class="n">logical</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">if</span> <span class="n">concurrency</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">concurrency</span>
+    <span class="n">status</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;checked&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s1">&#39;created&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s1">&#39;failed&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="n">spec</span> <span class="o">=</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;kwargs&#39;</span><span class="p">][</span><span class="s1">&#39;spec&#39;</span><span class="p">]</span>
+    <span class="n">logInterval</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">job</span><span class="p">[</span><span class="s1">&#39;kwargs&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logInterval&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
+    <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">updateJob</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="s1">&#39;Creating thumbnails (</span><span class="si">%d</span><span class="s1"> concurrent)</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">concurrency</span><span class="p">)</span>
+    <span class="n">nextLogTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="n">logInterval</span>
+    <span class="n">tasks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># This could be switched from ThreadPoolExecutor to ProcessPoolExecutor</span>
+    <span class="c1"># without any other changes.  Doing so would probably improve parallel</span>
+    <span class="c1"># performance, but may not work reliably under Python 2.x.</span>
+    <span class="n">pool</span> <span class="o">=</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">ThreadPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">concurrency</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Get a cursor with the list of images</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;largeImage.fileId&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;$exists&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}}</span>
+        <span class="n">sort</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;_id&#39;</span><span class="p">,</span> <span class="n">SortDir</span><span class="o">.</span><span class="n">ASCENDING</span><span class="p">)]</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="n">sort</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="s1">&#39;count&#39;</span><span class="p">):</span>
+            <span class="n">status</span><span class="p">[</span><span class="s1">&#39;items&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">items</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="n">status</span><span class="p">[</span><span class="s1">&#39;specs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+        <span class="n">nextitem</span> <span class="o">=</span> <span class="n">cursorNextOrNone</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span> <span class="ow">or</span> <span class="n">nextitem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Create more tasks than we strictly need so if one finishes before</span>
+            <span class="c1"># we check another will be ready.  This is balanced with not</span>
+            <span class="c1"># creating too many to avoid excessive memory use.  As such, we</span>
+            <span class="c1"># can&#39;t do a simple iteration over the database cursor, as it will</span>
+            <span class="c1"># be exhausted before we are done.</span>
+            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">concurrency</span> <span class="o">*</span> <span class="mi">4</span> <span class="ow">and</span> <span class="n">nextitem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">tasks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pool</span><span class="o">.</span><span class="n">submit</span><span class="p">(</span><span class="n">createThumbnailsJobTask</span><span class="p">,</span> <span class="n">nextitem</span><span class="p">,</span> <span class="n">spec</span><span class="p">))</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">nextitem</span> <span class="o">=</span> <span class="n">cursorNextOrNone</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">pymongo</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">CursorNotFound</span><span class="p">:</span>
+                    <span class="c1"># If the process takes long enough, the cursor is removed.</span>
+                    <span class="c1"># In this case, redo the query and keep going.</span>
+                    <span class="n">items</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="n">sort</span><span class="p">)</span>
+                    <span class="n">nextitem</span> <span class="o">=</span> <span class="n">cursorNextOrNone</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">nextitem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">query</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;$gt&#39;</span><span class="p">:</span> <span class="n">nextitem</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">]}</span>
+            <span class="c1"># Wait a short time or until the oldest task is complete</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">tasks</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">result</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">concurrent</span><span class="o">.</span><span class="n">futures</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">:</span>
+                <span class="k">pass</span>
+            <span class="c1"># Remove completed tasks from our list, adding their results to the</span>
+            <span class="c1"># status.</span>
+            <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">tasks</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">.</span><span class="n">done</span><span class="p">():</span>
+                    <span class="n">r</span> <span class="o">=</span> <span class="n">tasks</span><span class="p">[</span><span class="n">pos</span><span class="p">]</span><span class="o">.</span><span class="n">result</span><span class="p">()</span>
+                    <span class="n">status</span><span class="p">[</span><span class="s1">&#39;created&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;created&#39;</span><span class="p">]</span>
+                    <span class="n">status</span><span class="p">[</span><span class="s1">&#39;checked&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;checked&#39;</span><span class="p">]</span>
+                    <span class="n">status</span><span class="p">[</span><span class="s1">&#39;failed&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="n">r</span><span class="p">[</span><span class="s1">&#39;failed&#39;</span><span class="p">]</span>
+                    <span class="n">status</span><span class="p">[</span><span class="s1">&#39;lastFailed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lastFailed&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;lastFailed&#39;</span><span class="p">))</span>
+                    <span class="n">tasks</span><span class="p">[</span><span class="n">pos</span><span class="p">:</span><span class="n">pos</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># Periodically, log the state of the job and check if it was</span>
+            <span class="c1"># deleted or canceled.</span>
+            <span class="k">if</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">nextLogTime</span><span class="p">:</span>
+                <span class="n">job</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">createThumbnailsJobLog</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">status</span><span class="p">)</span>
+                <span class="c1"># Check if the job was deleted or canceled; if so, quit</span>
+                <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">job</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">job</span> <span class="ow">or</span> <span class="n">job</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="ow">in</span> <span class="p">(</span><span class="n">JobStatus</span><span class="o">.</span><span class="n">CANCELED</span><span class="p">,</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="p">):</span>
+                    <span class="n">cause</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="kc">None</span><span class="p">:</span> <span class="s1">&#39;deleted&#39;</span><span class="p">,</span>
+                        <span class="n">JobStatus</span><span class="o">.</span><span class="n">CANCELED</span><span class="p">:</span> <span class="s1">&#39;canceled&#39;</span><span class="p">,</span>
+                        <span class="n">JobStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="p">:</span> <span class="s1">&#39;stopped due to error&#39;</span><span class="p">,</span>
+                    <span class="p">}[</span><span class="kc">None</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">job</span> <span class="k">else</span> <span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;status&#39;</span><span class="p">)]</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Large image thumbnails job </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">cause</span>
+                    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+                    <span class="c1"># Cancel any outstanding tasks.  If they haven&#39;t started,</span>
+                    <span class="c1"># they are discarded.  Those that have started will still</span>
+                    <span class="c1"># run, though.</span>
+                    <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">:</span>
+                        <span class="n">task</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+                    <span class="k">return</span>
+                <span class="n">nextLogTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="n">logInterval</span>
+    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s1">&#39;Error with large image create thumbnails job&#39;</span><span class="p">)</span>
+        <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">updateJob</span><span class="p">(</span>
+            <span class="n">job</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="s1">&#39;Error creating large image thumbnails</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="n">status</span><span class="o">=</span><span class="n">JobStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="c1"># Clean up the task pool asynchronously</span>
+        <span class="n">pool</span><span class="o">.</span><span class="n">shutdown</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">job</span><span class="p">,</span> <span class="n">msg</span> <span class="o">=</span> <span class="n">createThumbnailsJobLog</span><span class="p">(</span><span class="n">job</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="s1">&#39;Finished: &#39;</span><span class="p">,</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">SUCCESS</span><span class="p">)</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="LargeImageResource">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LargeImageResource</span><span class="p">(</span><span class="n">Resource</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">resourceName</span> <span class="o">=</span> <span class="s1">&#39;large_image&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;cache&#39;</span><span class="p">,</span> <span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">cacheInfo</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;cache&#39;</span><span class="p">,</span> <span class="s1">&#39;clear&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">cacheClear</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;format&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">configFormat</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;validate&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">configValidate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;POST&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;replace&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">configReplace</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;settings&#39;</span><span class="p">,),</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPublicSettings</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;sources&#39;</span><span class="p">,),</span> <span class="bp">self</span><span class="o">.</span><span class="n">listSources</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;thumbnails&#39;</span><span class="p">,),</span> <span class="bp">self</span><span class="o">.</span><span class="n">countThumbnails</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;thumbnails&#39;</span><span class="p">,),</span> <span class="bp">self</span><span class="o">.</span><span class="n">createThumbnails</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;thumbnails&#39;</span><span class="p">,),</span> <span class="bp">self</span><span class="o">.</span><span class="n">deleteThumbnails</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;associated_images&#39;</span><span class="p">,),</span> <span class="bp">self</span><span class="o">.</span><span class="n">countAssociatedImages</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;associated_images&#39;</span><span class="p">,),</span> <span class="bp">self</span><span class="o">.</span><span class="n">deleteAssociatedImages</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;histograms&#39;</span><span class="p">,),</span> <span class="bp">self</span><span class="o">.</span><span class="n">countHistograms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;histograms&#39;</span><span class="p">,),</span> <span class="bp">self</span><span class="o">.</span><span class="n">deleteHistograms</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;DELETE&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;tiles&#39;</span><span class="p">,</span> <span class="s1">&#39;incomplete&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">deleteIncompleteTiles</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;PUT&#39;</span><span class="p">,</span> <span class="p">(</span><span class="s1">&#39;folder&#39;</span><span class="p">,</span> <span class="s1">&#39;:id&#39;</span><span class="p">,</span> <span class="s1">&#39;tiles&#39;</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">createLargeImages</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LargeImageResource.cacheClear">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.cacheClear">[docs]</a>
+    <span class="nd">@describeRoute</span><span class="p">(</span>
+        <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;Clear tile source caches to release resources and file handles.&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nd">@access</span><span class="o">.</span><span class="n">admin</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">DATA_WRITE</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cacheClear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">gc</span>
+
+        <span class="n">before</span> <span class="o">=</span> <span class="n">cache_util</span><span class="o">.</span><span class="n">cachesInfo</span><span class="p">()</span>
+        <span class="n">cache_util</span><span class="o">.</span><span class="n">cachesClear</span><span class="p">()</span>
+        <span class="n">after</span> <span class="o">=</span> <span class="n">cache_util</span><span class="o">.</span><span class="n">cachesInfo</span><span class="p">()</span>
+        <span class="c1"># Add a small delay to give the memcached time to clear</span>
+        <span class="n">stoptime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">+</span> <span class="mi">5</span>
+        <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">stoptime</span> <span class="ow">and</span> <span class="nb">any</span><span class="p">(</span><span class="n">after</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s1">&#39;used&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">after</span><span class="p">):</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+            <span class="n">after</span> <span class="o">=</span> <span class="n">cache_util</span><span class="o">.</span><span class="n">cachesInfo</span><span class="p">()</span>
+        <span class="n">gc</span><span class="o">.</span><span class="n">collect</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;cacheCleared&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">),</span>
+            <span class="s1">&#39;before&#39;</span><span class="p">:</span> <span class="n">before</span><span class="p">,</span>
+            <span class="s1">&#39;after&#39;</span><span class="p">:</span> <span class="n">after</span><span class="p">,</span>
+        <span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="LargeImageResource.cacheInfo">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.cacheInfo">[docs]</a>
+    <span class="nd">@describeRoute</span><span class="p">(</span>
+        <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;Get information on caches.&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nd">@access</span><span class="o">.</span><span class="n">admin</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">DATA_READ</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cacheInfo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">cache_util</span><span class="o">.</span><span class="n">cachesInfo</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="LargeImageResource.getPublicSettings">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.getPublicSettings">[docs]</a>
+    <span class="nd">@describeRoute</span><span class="p">(</span>
+        <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;Get public settings for large image display.&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nd">@access</span><span class="o">.</span><span class="n">public</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">DATA_READ</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">getPublicSettings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="nb">getattr</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;LARGE_IMAGE_&#39;</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">Setting</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="LargeImageResource.countThumbnails">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.countThumbnails">[docs]</a>
+    <span class="nd">@describeRoute</span><span class="p">(</span>
+        <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;Count the number of cached thumbnail files for &#39;</span>
+                    <span class="s1">&#39;large_image items.&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;spec&#39;</span><span class="p">,</span> <span class="s1">&#39;A JSON list of thumbnail specifications to count.  &#39;</span>
+               <span class="s1">&#39;If empty, all cached thumbnails are counted.  The &#39;</span>
+               <span class="s1">&#39;specifications typically include width, height, encoding, and &#39;</span>
+               <span class="s1">&#39;encoding options.&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nd">@access</span><span class="o">.</span><span class="n">admin</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">DATA_READ</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">countThumbnails</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_countCachedImages</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;spec&#39;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="LargeImageResource.countAssociatedImages">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.countAssociatedImages">[docs]</a>
+    <span class="nd">@describeRoute</span><span class="p">(</span>
+        <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;Count the number of cached associated image files for &#39;</span>
+                    <span class="s1">&#39;large_image items.&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;imageKey&#39;</span><span class="p">,</span> <span class="s1">&#39;If specific, only include images with the &#39;</span>
+               <span class="s1">&#39;specified key&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">notes</span><span class="p">(</span><span class="s1">&#39;The imageKey can also be &quot;tileFrames&quot;.&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nd">@access</span><span class="o">.</span><span class="n">admin</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">DATA_READ</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">countAssociatedImages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_countCachedImages</span><span class="p">(</span>
+            <span class="kc">None</span><span class="p">,</span> <span class="n">associatedImages</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">imageKey</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;imageKey&#39;</span><span class="p">))</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_countCachedImages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">associatedImages</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">imageKey</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">spec</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;The spec parameter must be a JSON list.&#39;</span>
+                <span class="k">raise</span> <span class="n">RestException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="n">spec</span> <span class="o">=</span> <span class="p">[</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">))</span>
+                    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">spec</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;isLargeImageThumbnail&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;attachedToType&#39;</span><span class="p">:</span> <span class="s1">&#39;item&#39;</span><span class="p">}</span>
+            <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">query</span><span class="p">[</span><span class="s1">&#39;thumbnailKey&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span>
+            <span class="k">elif</span> <span class="n">associatedImages</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">imageKey</span> <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[0-9A-Za-z].*$&#39;</span><span class="p">,</span> <span class="n">imageKey</span><span class="p">):</span>
+                    <span class="n">query</span><span class="p">[</span><span class="s1">&#39;thumbnailKey&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;$regex&#39;</span><span class="p">:</span> <span class="s1">&#39;&quot;imageKey&quot;:&quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">imageKey</span><span class="p">}</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">query</span><span class="p">[</span><span class="s1">&#39;thumbnailKey&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;$regex&#39;</span><span class="p">:</span> <span class="s1">&#39;&quot;imageKey&quot;:&#39;</span><span class="p">}</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">count</span>
+
+<div class="viewcode-block" id="LargeImageResource.createThumbnails">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.createThumbnails">[docs]</a>
+    <span class="nd">@describeRoute</span><span class="p">(</span>
+        <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;Create cached thumbnail files from large_image items.&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">notes</span><span class="p">(</span><span class="s1">&#39;This creates a local job that processes all large_image &#39;</span>
+               <span class="s1">&#39;items.  A common spec for the Girder API is: [{&quot;width&quot;: 160, &#39;</span>
+               <span class="s1">&#39;&quot;height&quot;: 100}, {&quot;width&quot;: 160, &quot;height&quot;: 100, &quot;imageKey&quot;: &#39;</span>
+               <span class="s1">&#39;&quot;macro&quot;}, {&quot;width&quot;: 160, &quot;height&quot;: 100, &quot;imageKey&quot;: &quot;label&quot;}]&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;spec&#39;</span><span class="p">,</span> <span class="s1">&#39;A JSON list of thumbnail specifications to create.  &#39;</span>
+               <span class="s1">&#39;The specifications typically include width, height, encoding, &#39;</span>
+               <span class="s1">&#39;and encoding options.&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;logInterval&#39;</span><span class="p">,</span> <span class="s1">&#39;The number of seconds between log messages.  &#39;</span>
+               <span class="s1">&#39;This also determines how often the creation job is checked if &#39;</span>
+               <span class="s1">&#39;it has been canceled or deleted.  A value of 0 will log after &#39;</span>
+               <span class="s1">&#39;each thumbnail is checked or created.&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+               <span class="n">dataType</span><span class="o">=</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;concurrent&#39;</span><span class="p">,</span> <span class="s1">&#39;The number of concurrent threads to use when &#39;</span>
+               <span class="s1">&#39;making thumbnails.  0 or unspecified to base this on the &#39;</span>
+               <span class="s1">&#39;number of reported cpus.&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dataType</span><span class="o">=</span><span class="s1">&#39;int&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nd">@access</span><span class="o">.</span><span class="n">admin</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">DATA_WRITE</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">createThumbnails</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">requireParams</span><span class="p">([</span><span class="s1">&#39;spec&#39;</span><span class="p">],</span> <span class="n">params</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">spec</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;spec&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;The spec parameter must be a JSON list.&#39;</span>
+            <span class="k">raise</span> <span class="n">RestException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">maxThumbnailFiles</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">Setting</span><span class="p">()</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">constants</span><span class="o">.</span><span class="n">PluginSettings</span><span class="o">.</span><span class="n">LARGE_IMAGE_MAX_THUMBNAIL_FILES</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">maxThumbnailFiles</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Thumbnail files are not enabled.&#39;</span>
+            <span class="k">raise</span> <span class="n">RestException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">jobKwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;spec&#39;</span><span class="p">:</span> <span class="n">spec</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;logInterval&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">jobKwargs</span><span class="p">[</span><span class="s1">&#39;logInterval&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;logInterval&#39;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;concurrent&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">jobKwargs</span><span class="p">[</span><span class="s1">&#39;concurrent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;concurrent&#39;</span><span class="p">])</span>
+        <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">createLocalJob</span><span class="p">(</span>
+            <span class="n">module</span><span class="o">=</span><span class="s1">&#39;girder_large_image.rest.large_image_resource&#39;</span><span class="p">,</span>
+            <span class="n">function</span><span class="o">=</span><span class="s1">&#39;createThumbnailsJob&#39;</span><span class="p">,</span>
+            <span class="n">kwargs</span><span class="o">=</span><span class="n">jobKwargs</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Create large image thumbnail files.&#39;</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="s1">&#39;large_image_create_thumbnails&#39;</span><span class="p">,</span>
+            <span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">getCurrentUser</span><span class="p">(),</span>
+            <span class="n">public</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">scheduleJob</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">job</span></div>
+
+
+<div class="viewcode-block" id="LargeImageResource.deleteThumbnails">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.deleteThumbnails">[docs]</a>
+    <span class="nd">@describeRoute</span><span class="p">(</span>
+        <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;Delete cached thumbnail files from large_image items.&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;spec&#39;</span><span class="p">,</span> <span class="s1">&#39;A JSON list of thumbnail specifications to delete.  &#39;</span>
+               <span class="s1">&#39;If empty, all cached thumbnails are deleted.  The &#39;</span>
+               <span class="s1">&#39;specifications typically include width, height, encoding, and &#39;</span>
+               <span class="s1">&#39;encoding options.&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nd">@access</span><span class="o">.</span><span class="n">admin</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">DATA_WRITE</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deleteThumbnails</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deleteCachedImages</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;spec&#39;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="LargeImageResource.deleteAssociatedImages">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.deleteAssociatedImages">[docs]</a>
+    <span class="nd">@describeRoute</span><span class="p">(</span>
+        <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;Delete cached associated image files from large_image items.&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;imageKey&#39;</span><span class="p">,</span> <span class="s1">&#39;If specific, only include images with the &#39;</span>
+               <span class="s1">&#39;specified key&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nd">@access</span><span class="o">.</span><span class="n">admin</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">DATA_WRITE</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deleteAssociatedImages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_deleteCachedImages</span><span class="p">(</span>
+            <span class="kc">None</span><span class="p">,</span> <span class="n">associatedImages</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">imageKey</span><span class="o">=</span><span class="n">params</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;imageKey&#39;</span><span class="p">))</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_deleteCachedImages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">associatedImages</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">imageKey</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">spec</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">spec</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;The spec parameter must be a JSON list.&#39;</span>
+                <span class="k">raise</span> <span class="n">RestException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="n">spec</span> <span class="o">=</span> <span class="p">[</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">entry</span><span class="p">,</span> <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">separators</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="s1">&#39;:&#39;</span><span class="p">))</span>
+                    <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">spec</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
+        <span class="n">removed</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">spec</span><span class="p">:</span>
+            <span class="n">query</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;isLargeImageThumbnail&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span> <span class="s1">&#39;attachedToType&#39;</span><span class="p">:</span> <span class="s1">&#39;item&#39;</span><span class="p">}</span>
+            <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">query</span><span class="p">[</span><span class="s1">&#39;thumbnailKey&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entry</span>
+            <span class="k">elif</span> <span class="n">associatedImages</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">imageKey</span> <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;^[0-9A-Za-z].*$&#39;</span><span class="p">,</span> <span class="n">imageKey</span><span class="p">):</span>
+                    <span class="n">query</span><span class="p">[</span><span class="s1">&#39;thumbnailKey&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;$regex&#39;</span><span class="p">:</span> <span class="s1">&#39;&quot;imageKey&quot;:&quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">imageKey</span><span class="p">}</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">query</span><span class="p">[</span><span class="s1">&#39;thumbnailKey&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;$regex&#39;</span><span class="p">:</span> <span class="s1">&#39;&quot;imageKey&quot;:&#39;</span><span class="p">}</span>
+            <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
+                <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+                <span class="n">removed</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">removed</span>
+
+<div class="viewcode-block" id="LargeImageResource.createLargeImages">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.createLargeImages">[docs]</a>
+    <span class="nd">@access</span><span class="o">.</span><span class="n">user</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">DATA_WRITE</span><span class="p">)</span>
+    <span class="nd">@autoDescribeRoute</span><span class="p">(</span>
+        <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;Create large images for all items within a folder.&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">notes</span><span class="p">(</span><span class="s1">&#39;Does not work for new items with multiple files.&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">modelParam</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="s1">&#39;The ID of the folder.&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">=</span><span class="n">Folder</span><span class="p">,</span>
+                    <span class="n">level</span><span class="o">=</span><span class="n">AccessType</span><span class="o">.</span><span class="n">WRITE</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;createJobs&#39;</span><span class="p">,</span> <span class="s1">&#39;If true, a job will be used to create the image &#39;</span>
+               <span class="s1">&#39;when needed; if always, a job will always be used; if false, &#39;</span>
+               <span class="s1">&#39;a job will never be used, creating a version of the image in &#39;</span>
+               <span class="s1">&#39;a preferred format.&#39;</span><span class="p">,</span> <span class="n">dataType</span><span class="o">=</span><span class="s1">&#39;string&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;false&#39;</span><span class="p">,</span>
+               <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">enum</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;true&#39;</span><span class="p">,</span> <span class="s1">&#39;false&#39;</span><span class="p">,</span> <span class="s1">&#39;always&#39;</span><span class="p">])</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;localJobs&#39;</span><span class="p">,</span> <span class="s1">&#39;If true, run each creation job locally; if false, &#39;</span>
+               <span class="s1">&#39;run via the remote worker.&#39;</span><span class="p">,</span> <span class="n">dataType</span><span class="o">=</span><span class="s1">&#39;boolean&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s1">&#39;false&#39;</span><span class="p">,</span>
+               <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;recurse&#39;</span><span class="p">,</span> <span class="s1">&#39;If true, items in child folders will also be checked.&#39;</span><span class="p">,</span>
+               <span class="n">dataType</span><span class="o">=</span><span class="s1">&#39;boolean&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;cancelJobs&#39;</span><span class="p">,</span> <span class="s1">&#39;If true, unfinished large image job(s) associated &#39;</span>
+               <span class="s1">&#39;with items in the folder will be canceled, then a new large &#39;</span>
+               <span class="s1">&#39;image created; if false, items with an unfinished large image &#39;</span>
+               <span class="s1">&#39;will be skipped.&#39;</span><span class="p">,</span> <span class="n">dataType</span><span class="o">=</span><span class="s1">&#39;boolean&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;redoExisting&#39;</span><span class="p">,</span> <span class="s1">&#39;If true, existing large images should be removed and &#39;</span>
+               <span class="s1">&#39;recreated. Otherwise they will be skipped.&#39;</span><span class="p">,</span> <span class="n">dataType</span><span class="o">=</span><span class="s1">&#39;boolean&#39;</span><span class="p">,</span>
+               <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">errorResponse</span><span class="p">(</span><span class="s1">&#39;ID was invalid.&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">errorResponse</span><span class="p">(</span><span class="s1">&#39;Write access was denied for the folder.&#39;</span><span class="p">,</span> <span class="mi">403</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">createLargeImages</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">createJobs</span><span class="p">,</span> <span class="n">localJobs</span><span class="p">,</span> <span class="n">recurse</span><span class="p">,</span> <span class="n">cancelJobs</span><span class="p">,</span> <span class="n">redoExisting</span><span class="p">):</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getCurrentUser</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">createJobs</span> <span class="o">!=</span> <span class="s1">&#39;always&#39;</span><span class="p">:</span>
+            <span class="n">createJobs</span> <span class="o">=</span> <span class="n">toBool</span><span class="p">(</span><span class="n">createJobs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_createLargeImagesRecurse</span><span class="p">(</span>
+            <span class="n">folder</span><span class="o">=</span><span class="n">folder</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="n">recurse</span><span class="o">=</span><span class="n">recurse</span><span class="p">,</span> <span class="n">createJobs</span><span class="o">=</span><span class="n">createJobs</span><span class="p">,</span>
+            <span class="n">localJobs</span><span class="o">=</span><span class="n">localJobs</span><span class="p">,</span> <span class="n">cancelJobs</span><span class="o">=</span><span class="n">cancelJobs</span><span class="p">,</span> <span class="n">redo</span><span class="o">=</span><span class="n">redoExisting</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_createLargeImagesRecurse</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">folder</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">recurse</span><span class="p">,</span> <span class="n">createJobs</span><span class="p">,</span> <span class="n">localJobs</span><span class="p">,</span> <span class="n">cancelJobs</span><span class="p">,</span>
+            <span class="n">redo</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;childFoldersRecursed&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                      <span class="s1">&#39;itemsSkipped&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                      <span class="s1">&#39;jobsCanceled&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                      <span class="s1">&#39;jobsFailedToCancel&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                      <span class="s1">&#39;largeImagesCreated&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                      <span class="s1">&#39;largeImagesNotCreated&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                      <span class="s1">&#39;largeImagesRemovedAndRecreated&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                      <span class="s1">&#39;largeImagesRemovedAndNotRecreated&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                      <span class="s1">&#39;totalItems&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">recurse</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">childFolder</span> <span class="ow">in</span> <span class="n">Folder</span><span class="p">()</span><span class="o">.</span><span class="n">childFolders</span><span class="p">(</span><span class="n">parent</span><span class="o">=</span><span class="n">folder</span><span class="p">,</span> <span class="n">parentType</span><span class="o">=</span><span class="s1">&#39;folder&#39;</span><span class="p">):</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;childFoldersRecursed&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">createLargeImagesRecurse</span><span class="p">(</span>
+                    <span class="n">childFolder</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">recurse</span><span class="p">,</span> <span class="n">createJobs</span><span class="p">,</span> <span class="n">localJobs</span><span class="p">,</span>
+                    <span class="n">cancelJobs</span><span class="p">,</span> <span class="n">redo</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">Folder</span><span class="p">()</span><span class="o">.</span><span class="n">childItems</span><span class="p">(</span><span class="n">folder</span><span class="o">=</span><span class="n">folder</span><span class="p">):</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;totalItems&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_createLargeImagesItem</span><span class="p">(</span>
+                <span class="n">item</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">createJobs</span><span class="p">,</span> <span class="n">localJobs</span><span class="p">,</span> <span class="n">cancelJobs</span><span class="p">,</span> <span class="n">redo</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">result</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_createLargeImagesItem</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">createJobs</span><span class="p">,</span> <span class="n">localJobs</span><span class="p">,</span> <span class="n">cancelJobs</span><span class="p">,</span> <span class="n">redo</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;largeImage&#39;</span><span class="p">):</span>
+            <span class="n">previousFileId</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;originalId&#39;</span><span class="p">,</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;fileId&#39;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;expected&#39;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">cancelJobs</span><span class="p">:</span>
+                    <span class="n">result</span><span class="p">[</span><span class="s1">&#39;itemsSkipped&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">return</span>
+                <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;jobId&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">job</span> <span class="ow">and</span> <span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;status&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">{</span>
+                        <span class="n">JobStatus</span><span class="o">.</span><span class="n">QUEUED</span><span class="p">,</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">,</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">INACTIVE</span><span class="p">}:</span>
+                    <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">cancelJob</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">job</span> <span class="ow">and</span> <span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;status&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">{</span>
+                        <span class="n">JobStatus</span><span class="o">.</span><span class="n">QUEUED</span><span class="p">,</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">,</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">INACTIVE</span><span class="p">}:</span>
+                    <span class="n">result</span><span class="p">[</span><span class="s1">&#39;jobsFailedToCancel&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">result</span><span class="p">[</span><span class="s1">&#39;itemsSkipped&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">return</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;jobsCanceled&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">getMetadata</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">redo</span><span class="p">:</span>
+                        <span class="n">result</span><span class="p">[</span><span class="s1">&#39;itemsSkipped&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">return</span>
+                <span class="k">except</span> <span class="p">(</span><span class="n">TileSourceError</span><span class="p">,</span> <span class="ne">KeyError</span><span class="p">):</span>
+                    <span class="k">pass</span>
+            <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">createImageItem</span><span class="p">(</span>
+                    <span class="n">item</span><span class="p">,</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">user</span><span class="p">,</span> <span class="nb">id</span><span class="o">=</span><span class="n">previousFileId</span><span class="p">),</span>
+                    <span class="n">createJob</span><span class="o">=</span><span class="n">createJobs</span><span class="p">,</span> <span class="n">localJob</span><span class="o">=</span><span class="n">localJobs</span><span class="p">)</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;largeImagesRemovedAndRecreated&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;largeImagesRemovedAndNotRecreated&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">childFiles</span><span class="p">(</span><span class="n">item</span><span class="o">=</span><span class="n">item</span><span class="p">,</span> <span class="n">limit</span><span class="o">=</span><span class="mi">2</span><span class="p">))</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">createImageItem</span><span class="p">(</span>
+                        <span class="n">item</span><span class="p">,</span> <span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">createJob</span><span class="o">=</span><span class="n">createJobs</span><span class="p">,</span> <span class="n">localJob</span><span class="o">=</span><span class="n">localJobs</span><span class="p">)</span>
+                    <span class="n">result</span><span class="p">[</span><span class="s1">&#39;largeImagesCreated&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+                <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                    <span class="n">result</span><span class="p">[</span><span class="s1">&#39;largeImagesNotCreated&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;itemsSkipped&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+
+<div class="viewcode-block" id="LargeImageResource.deleteIncompleteTiles">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.deleteIncompleteTiles">[docs]</a>
+    <span class="nd">@describeRoute</span><span class="p">(</span>
+        <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;Remove large images from items where the large image job &#39;</span>
+                    <span class="s1">&#39;incomplete.&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">notes</span><span class="p">(</span><span class="s1">&#39;This is used to clean up all large image conversion jobs that &#39;</span>
+               <span class="s1">&#39;have failed to complete.  If a job is in progress, it will be &#39;</span>
+               <span class="s1">&#39;cancelled.  The return value is the number of items that were &#39;</span>
+               <span class="s1">&#39;adjusted.&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nd">@access</span><span class="o">.</span><span class="n">admin</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">DATA_WRITE</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deleteIncompleteTiles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;removed&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">item</span> <span class="o">=</span> <span class="n">Item</span><span class="p">()</span><span class="o">.</span><span class="n">findOne</span><span class="p">({</span><span class="s1">&#39;largeImage.expected&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">item</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;largeImage&#39;</span><span class="p">][</span><span class="s1">&#39;jobId&#39;</span><span class="p">],</span> <span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">job</span> <span class="ow">and</span> <span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;status&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span>
+                    <span class="n">JobStatus</span><span class="o">.</span><span class="n">QUEUED</span><span class="p">,</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">):</span>
+                <span class="n">job</span> <span class="o">=</span> <span class="n">Job</span><span class="p">()</span><span class="o">.</span><span class="n">cancelJob</span><span class="p">(</span><span class="n">job</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">job</span> <span class="ow">and</span> <span class="n">job</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;status&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="p">(</span>
+                    <span class="n">JobStatus</span><span class="o">.</span><span class="n">QUEUED</span><span class="p">,</span> <span class="n">JobStatus</span><span class="o">.</span><span class="n">RUNNING</span><span class="p">):</span>
+                <span class="n">result</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;The job for item </span><span class="si">%s</span><span class="s1"> could not be &#39;</span>
+                                     <span class="s1">&#39;canceled&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s1">&#39;_id&#39;</span><span class="p">])))</span>
+                <span class="k">break</span>
+            <span class="n">ImageItem</span><span class="p">()</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="n">result</span><span class="p">[</span><span class="s1">&#39;removed&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="LargeImageResource.listSources">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.listSources">[docs]</a>
+    <span class="nd">@describeRoute</span><span class="p">(</span>
+        <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;List all Girder tile sources with associated extensions, &#39;</span>
+                    <span class="s1">&#39;mime types, and versions.  Lower values indicate a &#39;</span>
+                    <span class="s1">&#39;higher priority for an extension or mime type with that &#39;</span>
+                    <span class="s1">&#39;source.&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nd">@access</span><span class="o">.</span><span class="n">public</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">DATA_READ</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">listSources</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">large_image</span><span class="o">.</span><span class="n">tilesource</span><span class="o">.</span><span class="n">listSources</span><span class="p">(</span>
+            <span class="n">girder_tilesource</span><span class="o">.</span><span class="n">AvailableGirderTileSources</span><span class="p">)[</span><span class="s1">&#39;sources&#39;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="LargeImageResource.countHistograms">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.countHistograms">[docs]</a>
+    <span class="nd">@describeRoute</span><span class="p">(</span>
+        <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;Count the number of cached histograms for large_image items.&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nd">@access</span><span class="o">.</span><span class="n">admin</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">DATA_READ</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">countHistograms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;isLargeImageData&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;attachedToType&#39;</span><span class="p">:</span> <span class="s1">&#39;item&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;thumbnailKey&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;$regex&#39;</span><span class="p">:</span> <span class="s1">&#39;&quot;imageKey&quot;:&quot;histogram&quot;&#39;</span><span class="p">},</span>
+        <span class="p">}</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">count</span></div>
+
+
+<div class="viewcode-block" id="LargeImageResource.deleteHistograms">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.deleteHistograms">[docs]</a>
+    <span class="nd">@describeRoute</span><span class="p">(</span>
+        <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;Delete cached histograms from large_image items.&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nd">@access</span><span class="o">.</span><span class="n">admin</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">DATA_WRITE</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">deleteHistograms</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
+        <span class="n">query</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;isLargeImageData&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s1">&#39;attachedToType&#39;</span><span class="p">:</span> <span class="s1">&#39;item&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;thumbnailKey&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;$regex&#39;</span><span class="p">:</span> <span class="s1">&#39;&quot;imageKey&quot;:&quot;histogram&quot;&#39;</span><span class="p">},</span>
+        <span class="p">}</span>
+        <span class="n">removed</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">query</span><span class="p">):</span>
+            <span class="n">File</span><span class="p">()</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="n">removed</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">removed</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_configValidateException</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">lineno</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Report a config validation exception with a line number.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+            <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;line: (\d+)&#39;</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">matches</span><span class="p">:</span>
+                <span class="n">matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\[line[ ]*(\d+)\]&#39;</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">matches</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">matches</span><span class="o">.</span><span class="n">groups</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="ow">or</span> <span class="s1">&#39;General error&#39;</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">msg</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;: &#39;&lt;string&gt;&#39;&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s2">&quot;&#39;&lt;string&gt;&#39;&quot;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="k">return</span> <span class="p">[{</span><span class="s1">&#39;line&#39;</span><span class="p">:</span> <span class="n">line</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="n">msg</span><span class="p">}]</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">if</span> <span class="n">lineno</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[{</span><span class="s1">&#39;line&#39;</span><span class="p">:</span> <span class="n">lineno</span><span class="p">,</span> <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">)}]</span>
+        <span class="k">return</span> <span class="p">[{</span><span class="s1">&#39;line&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;General error&#39;</span><span class="p">}]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_configValidate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Check if a Girder config file will validate.  If not, return an</span>
+<span class="sd">        array of lines where it fails to validate.</span>
+
+<span class="sd">        :param config: The string representation of the config file to</span>
+<span class="sd">            validate.</span>
+<span class="sd">        :returns: a list of errors, though usually only the first one.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">cherrypy</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">reprconf</span><span class="o">.</span><span class="n">Parser</span><span class="p">()</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">parser</span><span class="o">.</span><span class="n">read_string</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configValidateException</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+        <span class="n">err</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">parser</span><span class="o">.</span><span class="n">as_dict</span><span class="p">()</span>
+            <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="n">exc</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">parser</span><span class="o">.</span><span class="n">as_dict</span><span class="p">(</span><span class="n">raw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configValidateException</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">config</span><span class="p">)</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lines</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">parser</span> <span class="o">=</span> <span class="n">cherrypy</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">reprconf</span><span class="o">.</span><span class="n">Parser</span><span class="p">()</span>
+                <span class="n">parser</span><span class="o">.</span><span class="n">read_string</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[:</span><span class="n">pos</span><span class="p">]))</span>
+                <span class="n">parser</span><span class="o">.</span><span class="n">as_dict</span><span class="p">()</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configValidateException</span><span class="p">(</span><span class="s1">&#39;Config values must be valid Python.&#39;</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configValidateException</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+
+<div class="viewcode-block" id="LargeImageResource.configValidate">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.configValidate">[docs]</a>
+    <span class="nd">@autoDescribeRoute</span><span class="p">(</span>
+        <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;Validate a Girder config file&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">notes</span><span class="p">(</span><span class="s1">&#39;Returns a list of errors found.&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;The contents of config file to validate.&#39;</span><span class="p">,</span>
+               <span class="n">paramType</span><span class="o">=</span><span class="s1">&#39;body&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nd">@access</span><span class="o">.</span><span class="n">admin</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">DATA_WRITE</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">configValidate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_configValidate</span><span class="p">(</span><span class="n">config</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LargeImageResource.configFormat">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.configFormat">[docs]</a>
+    <span class="nd">@autoDescribeRoute</span><span class="p">(</span>
+        <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;Reformat a Girder config file&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;The contents of config file to format.&#39;</span><span class="p">,</span>
+               <span class="n">paramType</span><span class="o">=</span><span class="s1">&#39;body&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nd">@access</span><span class="o">.</span><span class="n">admin</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">DATA_WRITE</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">configFormat</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">):</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_configValidate</span><span class="p">(</span><span class="n">config</span><span class="p">)):</span>
+            <span class="k">return</span> <span class="n">config</span>
+        <span class="c1"># reformat here</span>
+        <span class="c1"># collect comments</span>
+        <span class="n">comments</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;[__comment__]</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">io</span><span class="o">.</span><span class="n">StringIO</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()[:</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;#&#39;</span><span class="p">,</span> <span class="s1">&#39;;&#39;</span><span class="p">}:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="s1">&#39;__comment__</span><span class="si">%d</span><span class="s1"> = </span><span class="si">%r</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">comments</span><span class="p">),</span> <span class="n">line</span><span class="p">)</span>
+                <span class="c1"># If a comment is in the middle of a value, hoist it up</span>
+                <span class="k">for</span> <span class="n">pos</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">comments</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">parser</span> <span class="o">=</span> <span class="n">cherrypy</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">reprconf</span><span class="o">.</span><span class="n">Parser</span><span class="p">()</span>
+                        <span class="n">parser</span><span class="o">.</span><span class="n">read_string</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">comments</span><span class="p">[:</span><span class="n">pos</span><span class="p">]))</span>
+                        <span class="n">parser</span><span class="o">.</span><span class="n">as_dict</span><span class="p">(</span><span class="n">raw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="n">comments</span><span class="p">[</span><span class="n">pos</span><span class="p">:</span><span class="n">pos</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">line</span><span class="p">]</span>
+                        <span class="k">break</span>
+                    <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                        <span class="k">pass</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">comments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">cherrypy</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">reprconf</span><span class="o">.</span><span class="n">Parser</span><span class="p">()</span>
+        <span class="n">parser</span><span class="o">.</span><span class="n">read_string</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">comments</span><span class="p">))</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">as_dict</span><span class="p">(</span><span class="n">raw</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="c1"># Build results</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">section</span> <span class="ow">in</span> <span class="n">results</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">section</span> <span class="o">!=</span> <span class="s1">&#39;__comment__&#39;</span><span class="p">:</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;[</span><span class="si">%s</span><span class="s1">]</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">section</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">results</span><span class="p">[</span><span class="n">section</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;__comment__&#39;</span><span class="p">):</span>
+                    <span class="n">valstr</span> <span class="o">=</span> <span class="nb">repr</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">valstr</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">key</span><span class="p">)</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">&gt;=</span> <span class="mi">79</span><span class="p">:</span>
+                        <span class="n">valstr</span> <span class="o">=</span> <span class="n">pprint</span><span class="o">.</span><span class="n">pformat</span><span class="p">(</span>
+                            <span class="n">val</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">79</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">compact</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sort_dicts</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> = </span><span class="si">%s</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">valstr</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">section</span> <span class="o">!=</span> <span class="s1">&#39;__comment__&#39;</span><span class="p">:</span>
+                <span class="n">out</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LargeImageResource.configReplace">
+<a class="viewcode-back" href="../../../_build/girder_large_image/girder_large_image.rest.html#girder_large_image.rest.large_image_resource.LargeImageResource.configReplace">[docs]</a>
+    <span class="nd">@autoDescribeRoute</span><span class="p">(</span>
+        <span class="n">Description</span><span class="p">(</span><span class="s1">&#39;Replace the existing Girder config file&#39;</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;restart&#39;</span><span class="p">,</span> <span class="s1">&#39;Whether to restart the server after updating the &#39;</span>
+               <span class="s1">&#39;config file&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dataType</span><span class="o">=</span><span class="s1">&#39;boolean&#39;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="o">.</span><span class="n">param</span><span class="p">(</span><span class="s1">&#39;config&#39;</span><span class="p">,</span> <span class="s1">&#39;The new contents of config file.&#39;</span><span class="p">,</span>
+               <span class="n">paramType</span><span class="o">=</span><span class="s1">&#39;body&#39;</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="nd">@access</span><span class="o">.</span><span class="n">admin</span><span class="p">(</span><span class="n">scope</span><span class="o">=</span><span class="n">TokenScope</span><span class="o">.</span><span class="n">USER_AUTH</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">configReplace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">config</span><span class="p">,</span> <span class="n">restart</span><span class="p">):</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_configValidate</span><span class="p">(</span><span class="n">config</span><span class="p">)):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Invalid config file&#39;</span>
+            <span class="k">raise</span> <span class="n">RestException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">),</span> <span class="s1">&#39;.girder&#39;</span><span class="p">,</span> <span class="s1">&#39;girder.cfg&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;GIRDER_CONFIG&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;GIRDER_CONFIG&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">contents</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">contents</span> <span class="o">==</span> <span class="n">config</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;no change&#39;</span><span class="p">}</span>
+            <span class="n">newpath</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;.&#39;</span> <span class="o">+</span> <span class="n">time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
+                <span class="s1">&#39;%Y%m</span><span class="si">%d</span><span class="s1">-%H%M%S&#39;</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">localtime</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">stat</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">st_mtime</span><span class="p">))</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s1">&#39;Copying existing config file from </span><span class="si">%s</span><span class="s1"> to </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">newpath</span><span class="p">)</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">copy2</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">newpath</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s1">&#39;Replacing config file </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+        <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
+
+        <span class="k">class</span><span class="w"> </span><span class="nc">Restart</span><span class="p">(</span><span class="n">cherrypy</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">Monitor</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bus</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+                <span class="n">cherrypy</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">Monitor</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="p">,</span> <span class="n">bus</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="n">frequency</span><span class="p">)</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="n">cherrypy</span><span class="o">.</span><span class="n">process</span><span class="o">.</span><span class="n">plugins</span><span class="o">.</span><span class="n">Monitor</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+            <span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bus</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s1">&#39;Restarting.&#39;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">thread</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">bus</span><span class="o">.</span><span class="n">restart</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">restart</span><span class="p">:</span>
+            <span class="n">restart</span> <span class="o">=</span> <span class="n">Restart</span><span class="p">(</span><span class="n">cherrypy</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span>
+            <span class="n">restart</span><span class="o">.</span><span class="n">subscribe</span><span class="p">()</span>
+            <span class="n">restart</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+            <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;restarted&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)}</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;updated&#39;</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)}</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright Kitware, Inc..</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

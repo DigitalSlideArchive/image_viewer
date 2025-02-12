@@ -1,0 +1,21 @@
+large\_image\_converter package
+===============================
+
+Submodules
+----------
+
+large\_image\_converter.format\_aperio module
+---------------------------------------------
+
+.. automodule:: large_image_converter.format_aperio
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: large_image_converter
+   :members:
+   :undoc-members:
+   :show-inheritance:
