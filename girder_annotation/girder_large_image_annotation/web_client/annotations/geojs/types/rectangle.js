@@ -1,7 +1,6 @@
-import _ from 'underscore';
-
 import common from '../common';
 
+const _ = girder._;
 /**
  * Convert a geojs rectangle annotation to the large_image
  * annotation schema.

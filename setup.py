@@ -15,7 +15,7 @@ def prerelease_local_scheme(version):
     """
     from setuptools_scm.version import get_local_node_and_date
 
-    if os.getenv('CIRCLE_BRANCH') in ('master', ):
+    if os.getenv('CIRCLE_BRANCH') in ('master', 'girder-5'):
         return ''
     return get_local_node_and_date(version)
 

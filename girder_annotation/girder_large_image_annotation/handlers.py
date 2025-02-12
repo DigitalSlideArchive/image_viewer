@@ -1,4 +1,5 @@
 import json
+import logging
 import time
 import uuid
 
@@ -6,7 +7,6 @@ import cachetools
 import orjson
 
 import large_image.config
-from girder import logger
 from girder.constants import AccessType
 from girder.models.file import File
 from girder.models.item import Item
@@ -16,6 +16,7 @@ from .models.annotation import Annotation
 from .utils import isGeoJSON
 
 _recentIdentifiers = cachetools.TTLCache(maxsize=100, ttl=86400)
+logger = logging.getLogger(__name__)
 
 
 def _itemFromEvent(event, identifierEnding, itemAccessLevel=AccessType.READ):
@@ -106,6 +107,7 @@ def resolveAnnotationGirderIds(event, results, data, possibleGirderIds):
 
 
 def process_annotations(event):  # noqa: C901
+    # TODO this should become a celery task
     """Add annotations to an image on a ``data.process`` event"""
     results = _itemFromEvent(event, 'LargeImageAnnotationUpload')
     if not results:

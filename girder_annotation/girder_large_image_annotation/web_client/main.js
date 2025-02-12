@@ -1,12 +1,13 @@
-import {registerPluginNamespace} from '@girder/core/pluginUtils';
-import SearchFieldWidget from '@girder/core/views/widgets/SearchFieldWidget';
-
 // import modules for side effects
 import './routes';
 import './views/imageViewerSelectWidget';
 
 // expose symbols under girder.plugins
 import * as largeImageAnnotation from './index';
+
+const SearchFieldWidget = girder.views.widgets.SearchFieldWidget;
+const {registerPluginNamespace} = girder.pluginUtils;
+
 registerPluginNamespace('large_image_annotation', largeImageAnnotation);
 
 SearchFieldWidget.addMode(

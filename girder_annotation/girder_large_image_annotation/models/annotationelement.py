@@ -17,6 +17,7 @@
 import concurrent.futures
 import datetime
 import io
+import logging
 import math
 import pickle
 import threading
@@ -26,7 +27,6 @@ import pymongo
 from girder_large_image.models.image_item import ImageItem
 
 import large_image
-from girder import logger
 from girder.constants import AccessType, SortDir
 from girder.models.file import File
 from girder.models.item import Item
@@ -39,6 +39,8 @@ from girder.models.upload import Upload
 MAX_ELEMENT_CHECK = 100
 MAX_ELEMENT_DOCUMENT = 10000
 MAX_ELEMENT_USER_DOCUMENT = 1000000
+
+logger = logging.getLogger(__name__)
 
 
 class Annotationelement(Model):

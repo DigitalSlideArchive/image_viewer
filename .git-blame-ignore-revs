@@ -17,5 +17,9 @@ dcda95e659a4eaa73cae85ab02f1b89059e63c32
 f517ecb2b7d8c454d1374156452be42b87ca3fd1
 # PR 1604: Handle ruff linting rule changes
 e62083dab9a190d94841b3f4089850f43e2c9932
+# PR 1728: Format client and python code
+c1ba777b9fb2c927ffc98302197766cdc3c705db
+3bff2771141b2d77821e29f96ac9de0428856e3d
+
 # PR 1757: Severval small code readability changes
 21989961c1f3dcd9630ca434f7664143dc4c4015

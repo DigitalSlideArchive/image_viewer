@@ -1,6 +1,6 @@
-import _ from 'underscore';
-
 import * as defaults from '../defaults';
+
+const _ = girder._;
 
 /**
  * Convert properties from geojs options to annotation

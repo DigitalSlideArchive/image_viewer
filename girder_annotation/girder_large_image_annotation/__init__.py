@@ -16,11 +16,12 @@
 
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as _importlib_version
+from pathlib import Path
 
 from girder import events
 from girder.constants import registerAccessFlag
 from girder.exceptions import ValidationException
-from girder.plugin import GirderPlugin, getPlugin
+from girder.plugin import GirderPlugin, getPlugin, registerPluginStaticContent
 from girder.settings import SettingDefault
 from girder.utility import search, setting_utilities
 from girder.utility.model_importer import ModelImporter
@@ -74,10 +75,17 @@ registerAccessFlag(constants.ANNOTATION_ACCESS_FLAG, 'Create annotations',
 
 class LargeImageAnnotationPlugin(GirderPlugin):
     DISPLAY_NAME = 'Large Image Annotation'
-    CLIENT_SOURCE_PATH = 'web_client'
 
     def load(self, info):
         getPlugin('large_image').load(info)
+
+        registerPluginStaticContent(
+            plugin='large_image_annotation',
+            css=['/style.css'],
+            js=['/girder-plugin-large-image-annotation.umd.cjs'],
+            staticDir=Path(__file__).parent / 'web_client' / 'dist',
+            tree=info['serverRoot'],
+        )
 
         ModelImporter.registerModel('annotation', Annotation, 'large_image')
         info['apiRoot'].annotation = AnnotationResource()

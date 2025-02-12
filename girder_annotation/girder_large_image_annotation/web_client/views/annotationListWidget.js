@@ -1,23 +1,21 @@
-import $ from 'jquery';
-import _ from 'underscore';
-
-import {AccessType} from '@girder/core/constants';
-import eventStream from '@girder/core/utilities/EventStream';
-import {getCurrentUser} from '@girder/core/auth';
-import {confirm} from '@girder/core/dialog';
-import {getApiRoot, restRequest} from '@girder/core/rest';
-import AccessWidget from '@girder/core/views/widgets/AccessWidget';
-import events from '@girder/core/events';
-import UserCollection from '@girder/core/collections/UserCollection';
-import UploadWidget from '@girder/core/views/widgets/UploadWidget';
-import View from '@girder/core/views/View';
-import largeImageConfig from '@girder/large_image/views/configView';
-
 import AnnotationCollection from '../collections/AnnotationCollection';
 
 import annotationList from '../templates/annotationListWidget.pug';
 
 import '../stylesheets/annotationListWidget.styl';
+
+const $ = girder.$;
+const _ = girder._;
+const {AccessType} = girder.constants;
+const eventStream = girder.utilities.EventStream;
+const {getCurrentUser} = girder.auth;
+const {confirm} = girder.dialog;
+const {getApiRoot, restRequest} = girder.rest;
+const AccessWidget = girder.views.widgets.AccessWidget;
+const events = girder.events;
+const UserCollection = girder.collections.UserCollection;
+const UploadWidget = girder.views.widgets.UploadWidget;
+const View = girder.views.View;
 
 const AnnotationListWidget = View.extend({
     events: {
@@ -58,7 +56,7 @@ const AnnotationListWidget = View.extend({
             error: null
         }).done((createResp) => {
             this.createResp = createResp;
-            largeImageConfig.getConfigFile(this.model.get('folderId')).done((val) => {
+            girder.plugins.large_image.views.ConfigView.getConfigFile(this.model.get('folderId')).done((val) => {
                 this._liconfig = val || {};
                 this._confList = this._liconfig.annotationList || {
                     columns: [{

@@ -1,7 +1,6 @@
-import $ from 'jquery';
-
-import {getApiRoot, restRequest} from '@girder/core/rest';
-import View from '@girder/core/views/View';
+const $ = girder.$;
+const View = girder.views.View;
+const {getApiRoot, restRequest} = girder.rest;
 
 var ImageViewerWidget = View.extend({
     initialize: function (settings) {

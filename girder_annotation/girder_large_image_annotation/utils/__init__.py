@@ -1,5 +1,6 @@
 import functools
 import json
+import logging
 import math
 import os
 import re
@@ -8,11 +9,12 @@ import weakref
 
 from bson.objectid import ObjectId
 
-from girder import logger
 from girder.constants import AccessType, SortDir
 from girder.models.file import File
 from girder.models.folder import Folder
 from girder.models.item import Item
+
+logger = logging.getLogger(__name__)
 
 dataFileExtReaders = {
     '.csv': 'read_csv',

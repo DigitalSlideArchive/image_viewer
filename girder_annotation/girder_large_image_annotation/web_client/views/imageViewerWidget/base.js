@@ -1,4 +1,4 @@
-import _ from 'underscore';
+const _ = girder._;
 
 var ImageViewerWidgetAnnotationExtension = {
     /**

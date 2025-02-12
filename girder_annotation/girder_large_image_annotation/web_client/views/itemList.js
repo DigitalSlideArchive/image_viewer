@@ -1,13 +1,12 @@
-import $ from 'jquery';
-import _ from 'underscore';
-
-import {restRequest} from '@girder/core/rest';
-import {wrap} from '@girder/core/utilities/PluginUtils';
-import ItemListWidget from '@girder/core/views/widgets/ItemListWidget';
-
 import largeImageAnnotationConfig from './configView';
 
 import '../stylesheets/itemList.styl';
+
+const $ = girder.$;
+const _ = girder._;
+const {restRequest} = girder.rest;
+const {wrap} = girder.utilities.PluginUtils;
+const ItemListWidget = girder.views.widgets.ItemListWidget;
 
 wrap(ItemListWidget, 'render', function (render) {
     render.apply(this, _.rest(arguments));

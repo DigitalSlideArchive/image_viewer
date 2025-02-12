@@ -1,5 +1,5 @@
 <script>
-module.exports = {
+export default {
     name: 'CompositeLayers',
     props: [
         'itemId',

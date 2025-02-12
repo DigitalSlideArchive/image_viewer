@@ -1,6 +1,6 @@
-import _ from 'underscore';
-
 import * as types from './types';
+
+const _ = girder._;
 
 /**
  * Convert a geojs annotation object into an annotation

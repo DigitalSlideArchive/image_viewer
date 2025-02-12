@@ -14,16 +14,18 @@
 #  limitations under the License.
 #############################################################################
 
+import logging
 import re
 
 import packaging.version
 from girder_large_image.girder_tilesource import GirderTileSource
 from osgeo import gdal
 
-from girder import logger
 from girder.models.file import File
 
 from . import GDALFileTileSource
+
+logger = logging.getLogger(__name__)
 
 
 class GDALGirderTileSource(GDALFileTileSource, GirderTileSource):

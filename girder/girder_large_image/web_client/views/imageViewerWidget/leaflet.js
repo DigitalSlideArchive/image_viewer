@@ -1,6 +1,6 @@
-import $ from 'jquery';
-
 import ImageViewerWidget from './base';
+
+const $ = girder.$;
 
 var LeafletImageViewerWidget = ImageViewerWidget.extend({
     initialize: function (settings) {

@@ -8,6 +8,8 @@ import time
 from girder_worker.app import app
 from girder_worker.utils import girder_job
 
+logger = logging.getLogger(__name__)
+
 
 @girder_job(title='Create a pyramidal tiff using vips', type='large_image_tiff')
 @app.task(bind=True)
@@ -176,8 +178,6 @@ def cache_tile_frames_job(job):
     from girder_jobs.models.job import Job
     from girder_large_image.models.image_item import ImageItem
 
-    from girder import logger
-
     kwargs = job['kwargs']
     item = ImageItem().load(kwargs.pop('itemId'), force=True)
     job = Job().updateJob(
@@ -201,8 +201,6 @@ def cache_histograms_job(job):
     from girder_jobs.constants import JobStatus
     from girder_jobs.models.job import Job
     from girder_large_image.models.image_item import ImageItem
-
-    from girder import logger
 
     kwargs = job['kwargs']
     item = ImageItem().load(kwargs.pop('itemId'), force=True)

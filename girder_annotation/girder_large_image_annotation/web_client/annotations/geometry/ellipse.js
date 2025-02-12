@@ -1,6 +1,6 @@
-import _ from 'underscore';
-
 import rotate from '../rotate';
+
+const _ = girder._;
 
 export default function ellipse(json) {
     const center = json.center;

@@ -17,6 +17,7 @@
 import copy
 import datetime
 import enum
+import logging
 import re
 import threading
 import time
@@ -28,7 +29,7 @@ from bson import ObjectId
 from girder_large_image import constants
 from girder_large_image.models.image_item import ImageItem
 
-from girder import events, logger
+from girder import events
 from girder.constants import AccessType, SortDir
 from girder.exceptions import AccessException, ValidationException
 from girder.models.folder import Folder
@@ -43,6 +44,7 @@ from .annotationelement import Annotationelement
 
 # Some arrays longer than this are validated using numpy rather than jsonschema
 VALIDATE_ARRAY_LENGTH = 1000
+logger = logging.getLogger(__name__)
 
 
 def extendSchema(base, add):
@@ -993,7 +995,7 @@ class Annotation(AccessControlledModel):
                 len(annotation['annotation']['elements']))
         events.trigger('large_image.annotations.save_history', {
             'annotation': annotation,
-        }, asynchronous=True)
+        })
         return result
 
     def updateAnnotation(self, annotation, updateUser=None):

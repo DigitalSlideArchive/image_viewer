@@ -1,11 +1,10 @@
-import $ from 'jquery';
-
-import {wrap} from '@girder/core/utilities/PluginUtils';
-import {restRequest} from '@girder/core/rest';
-import AccessWidget from '@girder/core/views/widgets/AccessWidget';
-import HierarchyWidget from '@girder/core/views/widgets/HierarchyWidget';
-
 import AnnotationModel from '../models/AnnotationModel';
+
+const $ = girder.$;
+const {wrap} = girder.utilities.PluginUtils;
+const HierarchyWidget = girder.views.widgets.HierarchyWidget;
+const {restRequest} = girder.rest;
+const AccessWidget = girder.views.widgets.AccessWidget;
 
 wrap(HierarchyWidget, 'render', function (render) {
     render.call(this);

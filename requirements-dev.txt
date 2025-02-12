@@ -1,6 +1,4 @@
 # Top level dependencies
-girder>=3.1.18
-girder-jobs>=3.0.3
 -e sources/bioformats
 -e sources/deepzoom
 -e sources/dicom

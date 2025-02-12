@@ -15,6 +15,7 @@
 ##############################################################################
 
 import json
+import logging
 import struct
 import time
 
@@ -23,7 +24,6 @@ import orjson
 from bson.objectid import ObjectId
 from girder_large_image.rest.tiles import _handleETag
 
-from girder import logger
 from girder.api import access
 from girder.api.describe import Description, autoDescribeRoute, describeRoute
 from girder.api.rest import Resource, filtermodel, loadmodel, setResponseHeader
@@ -38,6 +38,8 @@ from girder.utility.progress import setResponseTimeLimit
 from .. import constants, utils
 from ..models.annotation import Annotation, AnnotationSchema
 from ..models.annotationelement import Annotationelement
+
+logger = logging.getLogger(__name__)
 
 
 class AnnotationResource(Resource):

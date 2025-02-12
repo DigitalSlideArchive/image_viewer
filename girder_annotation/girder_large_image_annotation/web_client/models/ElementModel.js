@@ -1,4 +1,4 @@
-import Backbone from 'backbone';
+const Backbone = girder.Backbone;
 
 /**
  * Define a "view model" representing an annotation element

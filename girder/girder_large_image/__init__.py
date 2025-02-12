@@ -15,7 +15,9 @@
 #############################################################################
 
 import datetime
+import hashlib
 import json
+import logging
 import os
 import re
 import threading
@@ -23,6 +25,7 @@ import time
 import warnings
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as _importlib_version
+from pathlib import Path
 
 import yaml
 from girder_jobs.constants import JobStatus
@@ -30,7 +33,7 @@ from girder_jobs.models.job import Job
 
 import girder
 import large_image
-from girder import events, logger
+from girder import events
 from girder.api import filter_logging
 from girder.constants import AccessType, SortDir
 from girder.exceptions import RestException, ValidationException
@@ -41,7 +44,7 @@ from girder.models.item import Item
 from girder.models.notification import Notification
 from girder.models.setting import Setting
 from girder.models.upload import Upload
-from girder.plugin import GirderPlugin, getPlugin
+from girder.plugin import GirderPlugin, getPlugin, registerPluginStaticContent
 from girder.settings import SettingDefault
 from girder.utility import config, search, setting_utilities
 from girder.utility.model_importer import ModelImporter
@@ -62,6 +65,7 @@ except PackageNotFoundError:
     pass
 
 
+logger = logging.getLogger(__name__)
 mimetypes = None
 _configWriteLock = threading.RLock()
 
@@ -239,8 +243,8 @@ def checkForLargeImageFiles(event):  # noqa
             except Exception:
                 pass
     # We couldn't automatically set this as a large image
-    girder.logger.info(
-        'Saved file %s cannot be automatically used as a largeImage', str(file['_id']))
+    logger.info(
+        'Saved file %s cannot be automatically used as a largeImage' % str(file['_id']))
 
 
 def removeThumbnails(event):
@@ -785,7 +789,6 @@ def patchMount():
 
 class LargeImagePlugin(GirderPlugin):
     DISPLAY_NAME = 'Large Image'
-    CLIENT_SOURCE_PATH = 'web_client'
 
     def load(self, info):
         try:
@@ -795,9 +798,26 @@ class LargeImagePlugin(GirderPlugin):
 
         unbindGirderEventsByHandlerName('large_image')
 
+        # Chrome doesn't respect cache headers when it comes to JavaScript, and in particular
+        # the geojs bundle is cached over-aggressively. We manually bust it using the file checksum.
+        static_dir = Path(__file__).parent / 'web_client' / 'dist'
+        checksum = hashlib.md5((static_dir / 'extra' / 'geojs.js').read_bytes()).hexdigest()
+
+        registerPluginStaticContent(
+            plugin='large_image',
+            css=['/style.css'],
+            js=[
+                '/girder-plugin-large-image.umd.cjs',
+                # geojs must be loaded after the plugin JS
+                f'/extra/geojs.js?h={checksum[:10]}',
+            ],
+            staticDir=static_dir,
+            tree=info['serverRoot'],
+        )
+
         ModelImporter.registerModel('image_item', ImageItem, 'large_image')
-        large_image.config.setConfig('logger', girder.logger)
-        large_image.config.setConfig('logprint', girder.logprint)
+        large_image.config.setConfig('logger', logger)
+        large_image.config.setConfig('logprint', logger)
         # Load girder's large_image config
         curConfig = config.getConfig().get('large_image')
         for key, value in (curConfig or {}).items():

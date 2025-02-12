@@ -1,14 +1,14 @@
-import _ from 'underscore';
-import AccessControlledModel from '@girder/core/models/AccessControlledModel';
-import {getCurrentUser} from '@girder/core/auth';
-import {restRequest} from '@girder/core/rest';
-import MetadataMixin from '@girder/core/models/MetadataMixin';
-
 import ElementCollection from '../collections/ElementCollection';
 import convert from '../annotations/convert';
 import {convertFeatures} from '../annotations/convertFeatures';
 
 import style from '../annotations/style.js';
+
+const _ = girder._;
+const AccessControlledModel = girder.models.AccessControlledModel;
+const {getCurrentUser} = girder.auth;
+const {restRequest} = girder.rest;
+const MetadataMixin = girder.models.MetadataMixin;
 
 /**
  * Define a backbone model representing an annotation.

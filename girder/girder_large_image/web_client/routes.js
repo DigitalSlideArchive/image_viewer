@@ -1,12 +1,11 @@
-import $ from 'jquery';
-import Backbone from 'backbone';
-
-import events from '@girder/core/events';
-import {parseQueryString, splitRoute} from '@girder/core/misc';
-import router from '@girder/core/router';
-import {exposePluginConfig} from '@girder/core/utilities/PluginUtils';
-
 import ConfigView from './views/configView';
+
+const $ = girder.$;
+const Backbone = girder.Backbone;
+const events = girder.events;
+const router = girder.router;
+const {exposePluginConfig} = girder.utilities.PluginUtils;
+const {parseQueryString, splitRoute} = girder.misc;
 
 exposePluginConfig('large_image', 'plugins/large_image/config');
 

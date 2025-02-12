@@ -1,8 +1,8 @@
-import _ from 'underscore';
-
 import * as geometry from './geometry';
 import * as defaults from './defaults';
 import style from './style';
+
+const _ = girder._;
 
 function convertOne(properties) {
     return function (annotation, key) {

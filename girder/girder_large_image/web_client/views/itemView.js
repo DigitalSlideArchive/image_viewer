@@ -1,12 +1,12 @@
-import $ from 'jquery';
-import {AccessType} from '@girder/core/constants';
-import {restRequest} from '@girder/core/rest';
-import {wrap} from '@girder/core/utilities/PluginUtils';
-import ItemView from '@girder/core/views/body/ItemView';
-
 import largeImageConfig from './configView';
 import ItemViewWidget from './itemViewWidget';
 import '../stylesheets/itemView.styl';
+
+const $ = girder.$;
+const {AccessType} = girder.constants;
+const {restRequest} = girder.rest;
+const {wrap} = girder.utilities.PluginUtils;
+const ItemView = girder.views.body.ItemView;
 
 wrap(ItemView, 'render', function (render) {
     // ItemView is a special case in which rendering is done asynchronously,

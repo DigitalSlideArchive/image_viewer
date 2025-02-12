@@ -1,4 +1,4 @@
-import _ from 'underscore';
+const _ = girder._;
 
 export default function point(json) {
     return {

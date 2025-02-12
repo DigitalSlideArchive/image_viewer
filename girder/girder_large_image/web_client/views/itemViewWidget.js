@@ -1,8 +1,9 @@
 import yaml from 'js-yaml';
-import {getApiRoot} from '@girder/core/rest';
-import View from '@girder/core/views/View';
 
 import itemViewWidgetTemplate from '../templates/itemView.pug';
+
+const {getApiRoot} = girder.rest;
+const View = girder.views.View;
 
 var ItemViewWidget = View.extend({
     initialize: function (settings) {

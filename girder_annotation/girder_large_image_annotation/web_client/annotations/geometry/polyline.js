@@ -1,4 +1,4 @@
-import _ from 'underscore';
+const _ = girder._;
 
 export default function polyline(json) {
     const points = _.map(json.points, (p) => _.first(p, 2));

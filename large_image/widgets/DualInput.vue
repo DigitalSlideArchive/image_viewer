@@ -1,5 +1,5 @@
 <script>
-module.exports = {
+export default {
     name: 'DualInput',
     props: ['label', 'currentValue', 'valueMax', 'sliderLabels', 'maxMerge'],
     emits: ['updateValue', 'updateMaxMerge'],

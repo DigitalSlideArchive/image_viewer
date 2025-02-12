@@ -1,6 +1,6 @@
-import _ from 'underscore';
-
 import point from './point';
+
+const _ = girder._;
 
 /**
  * Convert an array of point objects to an array of

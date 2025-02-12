@@ -1,14 +1,13 @@
-import $ from 'jquery';
-import View from '@girder/core/views/View';
-
-import {AccessType} from '@girder/core/constants';
-import events from '@girder/core/events';
-import {restRequest} from '@girder/core/rest';
-import BrowserWidget from '@girder/core/views/widgets/BrowserWidget';
-import PluginConfigBreadcrumbWidget from '@girder/core/views/widgets/PluginConfigBreadcrumbWidget';
-
 import ConfigViewTemplate from '../templates/largeImageConfig.pug';
 import '../stylesheets/largeImageConfig.styl';
+
+const $ = girder.$;
+const View = girder.views.View;
+const events = girder.events;
+const restRequest = girder.rest.restRequest;
+const BrowserWidget = girder.views.widgets.BrowserWidget;
+const PluginConfigBreadcrumbWidget = girder.views.widgets.PluginConfigBreadcrumbWidget;
+const {AccessType} = girder.constants;
 
 /**
  * Show the default quota settings for users and collections.

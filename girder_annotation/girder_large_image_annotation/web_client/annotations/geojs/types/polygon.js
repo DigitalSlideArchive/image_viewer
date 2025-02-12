@@ -1,7 +1,7 @@
-import _ from 'underscore';
-
 import common from '../common';
 import array from '../coordinates/array';
+
+const _ = girder._;
 
 /**
  * Convert a geojs polygon annotation to the large_image

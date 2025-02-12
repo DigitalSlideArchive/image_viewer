@@ -1,14 +1,13 @@
-import $ from 'jquery';
-import _ from 'underscore';
-
-import {restRequest} from '@girder/core/rest';
-import events from '@girder/core/events';
-import FileListWidget from '@girder/core/views/widgets/FileListWidget';
-import {wrap} from '@girder/core/utilities/PluginUtils';
-import {AccessType} from '@girder/core/constants';
-
 import largeImageFileAction from '../templates/largeImage_fileAction.pug';
 import '../stylesheets/fileList.styl';
+
+const $ = girder.$;
+const _ = girder._;
+const {restRequest} = girder.rest;
+const events = girder.events;
+const FileListWidget = girder.views.widgets.FileListWidget;
+const {wrap} = girder.utilities.PluginUtils;
+const {AccessType} = girder.constants;
 
 wrap(FileListWidget, 'render', function (render) {
     render.call(this);

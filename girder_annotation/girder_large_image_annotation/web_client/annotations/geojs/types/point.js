@@ -1,7 +1,7 @@
-import _ from 'underscore';
-
 import common from '../common';
 import pointCoordinate from '../coordinates/point';
+
+const _ = girder._;
 
 /**
  * Convert a geojs point annotation to the large_image

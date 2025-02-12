@@ -1,17 +1,3 @@
-import $ from 'jquery';
-import _ from 'underscore';
-import Backbone from 'backbone';
-
-import {wrap} from '@girder/core/utilities/PluginUtils';
-import {getApiRoot} from '@girder/core/rest';
-import {AccessType} from '@girder/core/constants';
-import {formatSize, parseQueryString, splitRoute} from '@girder/core/misc';
-import router from '@girder/core/router';
-import HierarchyWidget from '@girder/core/views/widgets/HierarchyWidget';
-import ItemCollection from '@girder/core/collections/ItemCollection';
-import FolderListWidget from '@girder/core/views/widgets/FolderListWidget';
-import ItemListWidget from '@girder/core/views/widgets/ItemListWidget';
-
 import largeImageConfig from './configView';
 import {addToRoute} from '../routes';
 
@@ -19,7 +5,20 @@ import '../stylesheets/itemList.styl';
 import ItemListTemplate from '../templates/itemList.pug';
 import {MetadatumWidget, validateMetadataValue} from './metadataWidget';
 
-ItemCollection.prototype.pageLimit = Math.max(250, ItemCollection.prototype.pageLimit);
+const {$, _, Backbone} = girder;
+const {wrap} = girder.utilities.PluginUtils;
+const {getApiRoot} = girder.rest;
+const {AccessType} = girder.constants;
+const {formatSize, parseQueryString, splitRoute} = girder.misc;
+const router = girder.router;
+const HierarchyWidget = girder.views.widgets.HierarchyWidget;
+const ItemCollection = girder.collections.ItemCollection;
+const FolderListWidget = girder.views.widgets.FolderListWidget;
+const ItemListWidget = girder.views.widgets.ItemListWidget;
+ItemCollection.prototype.pageLimit = Math.max(
+    250,
+    ItemCollection.prototype.pageLimit
+);
 
 function onItemClick(item) {
     if (this.itemListView && this.itemListView.onItemClick) {
@@ -46,20 +45,38 @@ wrap(HierarchyWidget, 'render', function (render) {
     if (this.parentModel.resourceName !== 'folder') {
         this.$('.g-folder-list-container').toggleClass('hidden', false);
     }
-    if (!this.$('#flattenitemlist').length && this.$('.g-item-list-container').length && this.itemListView && this.itemListView.setFlatten) {
-        $('button.g-checked-actions-button').parent().after(
-            '<div class="li-flatten-item-list" title="Check to show items in all subfolders in this list"><input type="checkbox" id="flattenitemlist"></input><label for="flattenitemlist">Flatten</label></div>'
-        );
-        if ((this.itemListView || {})._recurse && this.parentModel.resourceName === 'folder') {
+    if (
+        !this.$('#flattenitemlist').length &&
+        this.$('.g-item-list-container').length &&
+        this.itemListView &&
+        this.itemListView.setFlatten
+    ) {
+        $('button.g-checked-actions-button')
+            .parent()
+            .after(
+                '<div class="li-flatten-item-list" title="Check to show items in all subfolders in this list"><input type="checkbox" id="flattenitemlist"></input><label for="flattenitemlist">Flatten</label></div>'
+            );
+        if (
+            (this.itemListView || {})._recurse &&
+            this.parentModel.resourceName === 'folder'
+        ) {
             this.$('#flattenitemlist').prop('checked', true);
-            this.$('.g-folder-list-container').toggleClass('hidden', this.itemListView._hideFoldersOnFlatten);
+            this.$('.g-folder-list-container').toggleClass(
+                'hidden',
+                this.itemListView._hideFoldersOnFlatten
+            );
         }
         this.events['click #flattenitemlist'] = (evt) => {
-            this.itemListView.setFlatten(this.$('#flattenitemlist').is(':checked'));
+            this.itemListView.setFlatten(
+                this.$('#flattenitemlist').is(':checked')
+            );
         };
         this.delegateEvents();
     }
-    if (this.$('#flattenitemlist').length && this.parentModel.get('_modelType') !== 'folder') {
+    if (
+        this.$('#flattenitemlist').length &&
+        this.parentModel.get('_modelType') !== 'folder'
+    ) {
         this.$('.li-flatten-item-list').addClass('hidden');
     } else {
         this.$('.li-flatten-item-list').removeClass('hidden');
@@ -94,7 +111,11 @@ wrap(ItemListWidget, 'initialize', function (initialize, settings) {
         const namedList = this._namedList || this._liconfig.defaultItemList;
         if (this.$el.closest('.modal-dialog').length) {
             list = this._liconfig.itemListDialog;
-        } else if (namedList && this._liconfig.namedItemLists && this._liconfig.namedItemLists[namedList]) {
+        } else if (
+            namedList &&
+            this._liconfig.namedItemLists &&
+            this._liconfig.namedItemLists[namedList]
+        ) {
             list = this._liconfig.namedItemLists[namedList];
         } else {
             list = this._liconfig.itemList;
@@ -103,7 +124,9 @@ wrap(ItemListWidget, 'initialize', function (initialize, settings) {
             let group = list.group;
             group = !group.keys ? {keys: group} : group;
             group.keys = Array.isArray(group.keys) ? group.keys : [group.keys];
-            group.keys = group.keys.filter((g) => !g.includes(',') && !g.includes(':'));
+            group.keys = group.keys.filter(
+                (g) => !g.includes(',') && !g.includes(':')
+            );
             if (!group.keys.length) {
                 group = undefined;
             }
@@ -121,15 +144,25 @@ wrap(ItemListWidget, 'initialize', function (initialize, settings) {
             this.render();
             return;
         }
-        if (!_.isEqual(val, this._liconfig) && !this.$el.closest('.modal-dialog').length && val) {
+        if (
+            !_.isEqual(val, this._liconfig) &&
+            !this.$el.closest('.modal-dialog').length &&
+            val
+        ) {
             this._liconfig = val;
             const list = this._confList();
             if (list.layout && list.layout.flatten !== undefined) {
                 this._recurse = !!list.layout.flatten;
-                this.parentView.$('#flattenitemlist').prop('checked', this._recurse);
+                this.parentView
+                    .$('#flattenitemlist')
+                    .prop('checked', this._recurse);
             }
-            this._hideFoldersOnFlatten = !!(list.layout && list.layout.flatten === 'only');
-            this.parentView.$('.g-folder-list-container').toggleClass('hidden', this._hideFoldersOnFlatten);
+            this._hideFoldersOnFlatten = !!(
+                list.layout && list.layout.flatten === 'only'
+            );
+            this.parentView
+                .$('.g-folder-list-container')
+                .toggleClass('hidden', this._hideFoldersOnFlatten);
         }
         delete this._lastSort;
         this._liconfig = val;
@@ -148,7 +181,12 @@ wrap(ItemListWidget, 'initialize', function (initialize, settings) {
                 };
             });
             update = true;
-        } else if (this._confList && this._confList() && this._confList().defaultSort && this._confList().defaultSort.length) {
+        } else if (
+            this._confList &&
+            this._confList() &&
+            this._confList().defaultSort &&
+            this._confList().defaultSort.length
+        ) {
             this._lastSort = this._confList().defaultSort;
             update = true;
         }
@@ -164,16 +202,26 @@ wrap(ItemListWidget, 'initialize', function (initialize, settings) {
             this.render();
         }
     });
-    this.events['click .li-item-list-header.sortable'] = (evt) => sortColumn.call(this, evt);
-    this.events['click .li-item-list-cell-filter'] = (evt) => itemListCellFilter.call(this, evt);
-    this.events['click .large_image_metadata.lientry_edit'] = (evt) => itemListMetadataEdit.call(this, evt);
-    this.events['change .large_image_metadata.lientry_edit'] = (evt) => itemListMetadataEdit.call(this, evt);
-    this.events['input .large_image_metadata.lientry_edit'] = (evt) => itemListMetadataEdit.call(this, evt);
+    this.events['click .li-item-list-header.sortable'] = (evt) =>
+        sortColumn.call(this, evt);
+    this.events['click .li-item-list-cell-filter'] = (evt) =>
+        itemListCellFilter.call(this, evt);
+    this.events['click .large_image_metadata.lientry_edit'] = (evt) =>
+        itemListMetadataEdit.call(this, evt);
+    this.events['change .large_image_metadata.lientry_edit'] = (evt) =>
+        itemListMetadataEdit.call(this, evt);
+    this.events['input .large_image_metadata.lientry_edit'] = (evt) =>
+        itemListMetadataEdit.call(this, evt);
     this.delegateEvents();
     this.setFlatten = (flatten) => {
         if (!!flatten !== !!this._recurse) {
             this._recurse = !!flatten;
-            this.parentView.$('.g-folder-list-container').toggleClass('hidden', this._hideFoldersOnFlatten && this._recurse);
+            this.parentView
+                .$('.g-folder-list-container')
+                .toggleClass(
+                    'hidden',
+                    this._hideFoldersOnFlatten && this._recurse
+                );
             this._setFilter();
             this.render();
         }
@@ -184,7 +232,9 @@ wrap(ItemListWidget, 'initialize', function (initialize, settings) {
 wrap(ItemListWidget, 'render', function (render) {
     this.$el.closest('.modal-dialog').addClass('li-item-list-dialog');
     if (!this.$el.children().length) {
-        this.$el.html('<span class="icon-spin1 animate-spin" title="Loading item list"/>');
+        this.$el.html(
+            '<span class="icon-spin1 animate-spin" title="Loading item list"/>'
+        );
     }
 
     /* Chrome limits the number of connections to a single domain, which means
@@ -203,13 +253,21 @@ wrap(ItemListWidget, 'render', function (render) {
      *      thumbnails are located.
      */
     function _loadMoreImages(parent) {
-        var loading = $('.large_image_thumbnail img.loading,.large_image_associated img.loading', parent).length;
+        var loading = $(
+            '.large_image_thumbnail img.loading,.large_image_associated img.loading',
+            parent
+        ).length;
         if (maxSimultaneous > loading) {
-            $('.large_image_thumbnail img.waiting,.large_image_associated img.waiting', parent).slice(0, maxSimultaneous - loading).each(function () {
-                var img = $(this);
-                img.removeClass('waiting').addClass('loading');
-                img.attr('src', img.attr('deferred-src'));
-            });
+            $(
+                '.large_image_thumbnail img.waiting,.large_image_associated img.waiting',
+                parent
+            )
+                .slice(0, maxSimultaneous - loading)
+                .each(function () {
+                    var img = $(this);
+                    img.removeClass('waiting').addClass('loading');
+                    img.attr('src', img.attr('deferred-src'));
+                });
         }
     }
 
@@ -222,32 +280,52 @@ wrap(ItemListWidget, 'render', function (render) {
             this._needsFetch = false;
             if (this._lastSort) {
                 this.collection.comparator = _.constant(0);
-                this.collection.sortField = JSON.stringify(this._lastSort.map((e) => [
-                    (e.type === 'metadata' ? 'meta.' : '') + e.value,
-                    e.dir === 'down' ? 1 : -1
-                ]));
+                this.collection.sortField = JSON.stringify(
+                    this._lastSort.map((e) => [
+                        (e.type === 'metadata' ? 'meta.' : '') + e.value,
+                        e.dir === 'down' ? 1 : -1
+                    ])
+                );
             }
             this.collection._totalCount = 0;
-            this.collection.fetch(_.extend({}, {folderId: this.parentView.parentModel.id}, this.collection.params), true).done(() => {
-                const oldPages = this._totalPages;
-                const pages = Math.ceil(this.collection.getTotalCount() / this.collection.pageLimit);
-                this._totalPages = pages;
-                // recheck if this has large images
-                this._hasAnyLargeImage = !!_.some(this.collection.toArray(), function (item) {
-                    return item.has('largeImage');
+            this.collection
+                .fetch(
+                    _.extend(
+                        {},
+                        {folderId: this.parentView.parentModel.id},
+                        this.collection.params
+                    ),
+                    true
+                )
+                .done(() => {
+                    const oldPages = this._totalPages;
+                    const pages = Math.ceil(
+                        this.collection.getTotalCount() /
+                            this.collection.pageLimit
+                    );
+                    this._totalPages = pages;
+                    // recheck if this has large images
+                    this._hasAnyLargeImage = !!_.some(
+                        this.collection.toArray(),
+                        function (item) {
+                            return item.has('largeImage');
+                        }
+                    );
+                    this._inFetch = false;
+                    if (
+                        oldPages !== pages ||
+                        this.collection.offset !== this.collection.size()
+                    ) {
+                        this.collection.offset = this.collection.size();
+                        this.trigger('g:paginated');
+                        this.collection.trigger('g:changed');
+                    } else {
+                        itemListRender.apply(this, _.rest(arguments));
+                    }
+                    if (this._needsFetch) {
+                        this._setSort();
+                    }
                 });
-                this._inFetch = false;
-                if (oldPages !== pages || this.collection.offset !== this.collection.size()) {
-                    this.collection.offset = this.collection.size();
-                    this.trigger('g:paginated');
-                    this.collection.trigger('g:changed');
-                } else {
-                    itemListRender.apply(this, _.rest(arguments));
-                }
-                if (this._needsFetch) {
-                    this._setSort();
-                }
-            });
         } else {
             this._needsFetch = true;
         }
@@ -266,14 +344,20 @@ wrap(ItemListWidget, 'render', function (render) {
             if ((nav.name || '') === (this._namedList || '')) {
                 return false;
             }
-            if (!this._liconfig || !this._liconfig.namedItemLists || (nav.name && !this._liconfig.namedItemLists[nav.name])) {
+            if (
+                !this._liconfig ||
+                !this._liconfig.namedItemLists ||
+                (nav.name && !this._liconfig.namedItemLists[nav.name])
+            ) {
                 return false;
             }
             this._updateNamedList(nav.name, false);
             if (list.group) {
                 this._generalFilter = '';
                 list.group.keys.forEach((key) => {
-                    const cell = this.$el.find(`[g-item-cid="${item.cid}"] [column-value="${key}"]`);
+                    const cell = this.$el.find(
+                        `[g-item-cid="${item.cid}"] [column-value="${key}"]`
+                    );
                     if (cell.length) {
                         addCellToFilter.call(this, cell, false);
                     }
@@ -281,7 +365,10 @@ wrap(ItemListWidget, 'render', function (render) {
             }
             this._setFilter(false);
             this._setSort();
-            addToRoute({namedList: this._namedList, filter: this._generalFilter});
+            addToRoute({
+                namedList: this._namedList,
+                filter: this._generalFilter
+            });
             return true;
         }
         if (nav.type === 'open') {
@@ -318,7 +405,10 @@ wrap(ItemListWidget, 'render', function (render) {
 
     this._unescapePhrase = (val) => {
         if (val !== undefined) {
-            val = val.replace('\\\'', '\'').replace('\\"', '"').replace('\\\\', '\\');
+            val = val
+                .replace("\\'", "'")
+                .replace('\\"', '"')
+                .replace('\\\\', '\\');
         }
         return val;
     };
@@ -331,28 +421,46 @@ wrap(ItemListWidget, 'render', function (render) {
         if (val !== undefined && val !== '' && columns.length) {
             // a value can be surrounded by single or double quotes, which will
             // be removed.
-            const quotedValue = /((?:"((?:[^\\"]|\\\\|\\")*)(?:"|$)|'((?:[^\\']|\\\\|\\')*)(?:'|$)|([^:,\s]+)))/g;
+            const quotedValue =
+                /((?:"((?:[^\\"]|\\\\|\\")*)(?:"|$)|'((?:[^\\']|\\\\|\\')*)(?:'|$)|([^:,\s]+)))/g;
             const phraseRE = new RegExp(
                 new RegExp('((?:' + quotedValue.source + ':|))').source +
-                /(-?)/.source +
-                quotedValue.source +
-                new RegExp('((?:,' + quotedValue.source + ')*)').source, 'g');
+                    /(-?)/.source +
+                    quotedValue.source +
+                    new RegExp('((?:,' + quotedValue.source + ')*)').source,
+                'g'
+            );
             filter = [];
             [...val.matchAll(phraseRE)].forEach((match) => {
-                const coltag = this._unescapePhrase(match[5] || match[4] || match[3]);
-                const phrase = this._unescapePhrase(match[10] || match[9] || match[8]);
+                const coltag = this._unescapePhrase(
+                    match[5] || match[4] || match[3]
+                );
+                const phrase = this._unescapePhrase(
+                    match[10] || match[9] || match[8]
+                );
                 const negation = match[6] === '-';
-                var phrases = [{phrase: phrase, exact: match[8] !== undefined}];
+                var phrases = [
+                    {phrase: phrase, exact: match[8] !== undefined}
+                ];
                 if (match[11]) {
                     [...match[11].matchAll(quotedValue)].forEach((submatch) => {
-                        const subphrase = this._unescapePhrase(submatch[4] || submatch[3] || submatch[2]);
+                        const subphrase = this._unescapePhrase(
+                            submatch[4] || submatch[3] || submatch[2]
+                        );
                         // remove dupes?
                         if (subphrase && subphrase.length) {
-                            phrases.push({phrase: subphrase, exact: submatch[2] !== undefined});
+                            phrases.push({
+                                phrase: subphrase,
+                                exact: submatch[2] !== undefined
+                            });
                         }
                     });
                 }
-                const key = `${coltag || ''}:` + phrases.map((p) => p.phrase + (p.exact ? '__exact__' : '')).join('|||');
+                const key =
+                    `${coltag || ''}:` +
+                    phrases
+                        .map((p) => p.phrase + (p.exact ? '__exact__' : ''))
+                        .join('|||');
                 if (!phrases.length || usedPhrases[key]) {
                     return;
                 }
@@ -364,15 +472,27 @@ wrap(ItemListWidget, 'render', function (render) {
                      * notation, delta is the value of one for the least
                      * significant digit.  This will be NaN if phrase is not a
                      * number. */
-                    const delta = Math.abs(+numval.toString().replace(/\d(?=.*[1-9](0*\.|)0*$)/g, '0').replace(/[1-9]/, '1'));
+                    const delta = Math.abs(
+                        +numval
+                            .toString()
+                            .replace(/\d(?=.*[1-9](0*\.|)0*$)/g, '0')
+                            .replace(/[1-9]/, '1')
+                    );
                     // escape for regex
                     phrase = phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
                     columns.forEach((col) => {
                         let key;
-                        if (coltag &&
-                            coltag.localeCompare(col.title || col.value, undefined, {sensitivity: 'accent'}) &&
-                            coltag.localeCompare(col.value, undefined, {sensitivity: 'accent'})
+                        if (
+                            coltag &&
+                            coltag.localeCompare(
+                                col.title || col.value,
+                                undefined,
+                                {sensitivity: 'accent'}
+                            ) &&
+                            coltag.localeCompare(col.value, undefined, {
+                                sensitivity: 'accent'
+                            })
                         ) {
                             return;
                         }
@@ -382,24 +502,50 @@ wrap(ItemListWidget, 'render', function (render) {
                             key = 'meta.' + col.value;
                         }
                         if (!coltag && !exact) {
-                            const r = new RegExp('^' + (phrase.substr(phrase.length - 1) === ':' ? phrase.substr(0, phrase.length - 1) : phrase), 'i');
-                            if (r.exec(col.value) || r.exec(col.title || col.value)) {
+                            const r = new RegExp(
+                                '^' +
+                                    (phrase.substr(phrase.length - 1) === ':'
+                                        ? phrase.substr(0, phrase.length - 1)
+                                        : phrase),
+                                'i'
+                            );
+                            if (
+                                r.exec(col.value) ||
+                                r.exec(col.title || col.value)
+                            ) {
                                 clause.push({[key]: {$exists: true}});
                             }
                         }
                         if (key && exact) {
-                            clause.push({[key]: {$regex: '^' + phrase + '$', $options: 'i'}});
+                            clause.push({
+                                [key]: {
+                                    $regex: '^' + phrase + '$',
+                                    $options: 'i'
+                                }
+                            });
                             if (!_.isNaN(numval)) {
                                 clause.push({[key]: numval});
                             }
                         } else if (key) {
-                            clause.push({[key]: {$regex: phrase, $options: 'i'}});
+                            clause.push({
+                                [key]: {$regex: phrase, $options: 'i'}
+                            });
                             if (!_.isNaN(numval)) {
                                 clause.push({[key]: numval});
                                 if (numval > 0 && delta) {
-                                    clause.push({[key]: {$gte: numval, $lt: numval + delta}});
+                                    clause.push({
+                                        [key]: {
+                                            $gte: numval,
+                                            $lt: numval + delta
+                                        }
+                                    });
                                 } else if (numval < 0 && delta) {
-                                    clause.push({[key]: {$lte: numval, $gt: numval + delta}});
+                                    clause.push({
+                                        [key]: {
+                                            $lte: numval,
+                                            $gt: numval + delta
+                                        }
+                                    });
                                 }
                             }
                         }
@@ -408,7 +554,9 @@ wrap(ItemListWidget, 'render', function (render) {
                 if (clause.length > 0) {
                     filter.push(!negation ? {$or: clause} : {$nor: clause});
                 } else if (!negation) {
-                    filter.push({$or: [{_no_such_value_: '_no_such_value_'}]});
+                    filter.push({
+                        $or: [{_no_such_value_: '_no_such_value_'}]
+                    });
                 }
             });
             if (filter.length === 0) {
@@ -428,7 +576,12 @@ wrap(ItemListWidget, 'render', function (render) {
                 let grouping = '_group_:meta.' + group.keys.join(',meta.');
                 if (group.counts) {
                     for (let [gkey, gval] of Object.entries(group.counts)) {
-                        if (!gkey.includes(',') && !gkey.includes(':') && !gval.includes(',') && !gval.includes(':')) {
+                        if (
+                            !gkey.includes(',') &&
+                            !gkey.includes(':') &&
+                            !gval.includes(',') &&
+                            !gval.includes(':')
+                        ) {
                             if (gkey !== '_id') {
                                 gkey = `meta.${gkey}`;
                             }
@@ -442,7 +595,10 @@ wrap(ItemListWidget, 'render', function (render) {
         if (this._recurse) {
             filter = '_recurse_:' + (filter || '');
         }
-        if (filter !== this._filter || filter !== (this.collection.params || {}).text) {
+        if (
+            filter !== this._filter ||
+            filter !== (this.collection.params || {}).text
+        ) {
             this._filter = filter;
             this.collection.params = this.collection.params || {};
             this.collection.params.text = this._filter;
@@ -457,22 +613,34 @@ wrap(ItemListWidget, 'render', function (render) {
         const folders = [this.parentView.parentModel];
         const canHandle = {items: {}, folders: {}};
         // TODO: handle checked resources
-        Object.entries(ItemListWidget.registeredApplications).forEach(([appname, app]) => {
-            items.forEach((item) => {
-                const check = app.check('item', item, this.parentView.parentModel);
-                if (check) {
-                    canHandle.items[item.id] = canHandle.items[item.id] || {};
-                    canHandle.items[item.id][appname] = check;
-                }
-            });
-            folders.forEach((folder) => {
-                const check = app.check('item', folder, this.parentView.parentModel);
-                if (check) {
-                    canHandle.folders[folder.id] = canHandle.folders[folder.id] || {};
-                    canHandle.folders[folder.id][appname] = check;
-                }
-            });
-        });
+        Object.entries(ItemListWidget.registeredApplications).forEach(
+            ([appname, app]) => {
+                items.forEach((item) => {
+                    const check = app.check(
+                        'item',
+                        item,
+                        this.parentView.parentModel
+                    );
+                    if (check) {
+                        canHandle.items[item.id] =
+                            canHandle.items[item.id] || {};
+                        canHandle.items[item.id][appname] = check;
+                    }
+                });
+                folders.forEach((folder) => {
+                    const check = app.check(
+                        'item',
+                        folder,
+                        this.parentView.parentModel
+                    );
+                    if (check) {
+                        canHandle.folders[folder.id] =
+                            canHandle.folders[folder.id] || {};
+                        canHandle.folders[folder.id][appname] = check;
+                    }
+                });
+            }
+        );
         return canHandle;
     };
 
@@ -494,11 +662,17 @@ wrap(ItemListWidget, 'render', function (render) {
             if ((nav.name || '') === (this._namedList || '')) {
                 return;
             }
-            if (!this._liconfig || !this._liconfig.namedItemLists || (nav.name && !this._liconfig.namedItemLists[nav.name])) {
+            if (
+                !this._liconfig ||
+                !this._liconfig.namedItemLists ||
+                (nav.name && !this._liconfig.namedItemLists[nav.name])
+            ) {
                 return;
             }
             this.collection.forEach((item) => {
-                item._href = `#folder/${this.parentView.parentModel.id}?namedList=` + (nav.name ? encodeURIComponent(nav.name) : '');
+                item._href =
+                    `#folder/${this.parentView.parentModel.id}?namedList=` +
+                    (nav.name ? encodeURIComponent(nav.name) : '');
                 let filter = '';
                 if (list.group) {
                     list.group.keys.forEach((col) => {
@@ -507,7 +681,10 @@ wrap(ItemListWidget, 'render', function (render) {
                             val = (val || {})[part];
                         });
                         if (/[ '\\]/.exec(col)) {
-                            col = "'" + col.replace('\\', '\\\\').replace("'", "\\'") + "'";
+                            col =
+                                "'" +
+                                col.replace('\\', '\\\\').replace("'", "\\'") +
+                                "'";
                         }
                         if (val) {
                             val = val.replace('\\', '\\\\').replace('"', '\\"');
@@ -528,7 +705,23 @@ wrap(ItemListWidget, 'render', function (render) {
                     app = apps[nav.name];
                 }
                 if (!app) {
-                    apps = Object.entries(apps).sort(([name1, app1], [name2, app2]) => { const diff = (app1.priority || 0) - (app2.priority || 0); return diff || (ItemListWidget.registeredApplications[name1].name.toLowerCase() > ItemListWidget.registeredApplications[name2].name.toLowerCase() ? 1 : -1); });
+                    apps = Object.entries(apps).sort(
+                        ([name1, app1], [name2, app2]) => {
+                            const diff =
+                                (app1.priority || 0) - (app2.priority || 0);
+                            return (
+                                diff ||
+                                (ItemListWidget.registeredApplications[
+                                    name1
+                                ].name.toLowerCase() >
+                                ItemListWidget.registeredApplications[
+                                    name2
+                                ].name.toLowerCase()
+                                    ? 1
+                                    : -1)
+                            );
+                        }
+                    );
                     app = apps[0][1];
                 }
                 if (app.url && app.url !== true) {
@@ -545,68 +738,89 @@ wrap(ItemListWidget, 'render', function (render) {
         }
         const root = this.$el.closest('.g-hierarchy-widget');
         if (!root.find('.li-item-list-filter').length) {
-            let base = root.find('.g-hierarchy-actions-header .g-folder-header-buttons').eq(0);
+            let base = root
+                .find('.g-hierarchy-actions-header .g-folder-header-buttons')
+                .eq(0);
             const func = 'before';
             if (!base.length) {
-                base = root.find('.g-hierarchy-breadcrumb-bar>.breadcrumb>div').eq(0);
+                base = root
+                    .find('.g-hierarchy-breadcrumb-bar>.breadcrumb>div')
+                    .eq(0);
             }
             if (base.length) {
                 base.parent().addClass('li-item-list-filter-parent');
-                base[func]('<span class="li-item-list-filter">Filter:&nbsp;<input class="li-item-list-filter-input" title="' +
-                    'All specified terms must be included.  ' +
-                    'Surround with single quotes to include spaces, double quotes for exact value match.  ' +
-                    'Prefix with - to exclude that value.  ' +
-                    'By default, all columns are searched.  ' +
-                    'Use <column>:<value1>[,<value2>...] to require that a column matches a specified value or any of a list of specified values.  ' +
-                    'Column and value names can be quoted to include spaces (single quotes for substring match, double quotes for exact value match).  ' +
-                    'If <column>:-<value1>[,<value2>...] is specified, matches will exclude the list of values.  ' +
-                    'Non-exact matches without a column specifier will also match columns that start with the specified value.  ' +
-                    '"></input>' +
-                    '<span class="li-item-list-filter-clear"><i class="icon-cancel"></i></span>' +
-                    '</span>');
+                base[func](
+                    '<span class="li-item-list-filter">Filter:&nbsp;<input class="li-item-list-filter-input" title="' +
+                        'All specified terms must be included.  ' +
+                        'Surround with single quotes to include spaces, double quotes for exact value match.  ' +
+                        'Prefix with - to exclude that value.  ' +
+                        'By default, all columns are searched.  ' +
+                        'Use <column>:<value1>[,<value2>...] to require that a column matches a specified value or any of a list of specified values.  ' +
+                        'Column and value names can be quoted to include spaces (single quotes for substring match, double quotes for exact value match).  ' +
+                        'If <column>:-<value1>[,<value2>...] is specified, matches will exclude the list of values.  ' +
+                        'Non-exact matches without a column specifier will also match columns that start with the specified value.  ' +
+                        '"></input>' +
+                        '<span class="li-item-list-filter-clear"><i class="icon-cancel"></i></span>' +
+                        '</span>'
+                );
                 if (this._generalFilter) {
-                    root.find('.li-item-list-filter-input').val(this._generalFilter);
+                    root.find('.li-item-list-filter-input').val(
+                        this._generalFilter
+                    );
                 }
-                this.parentView.events['change .li-item-list-filter-input'] = this._updateFilter;
-                this.parentView.events['input .li-item-list-filter-input'] = this._updateFilter;
-                this.parentView.events['click .li-item-list-filter-clear'] = (evt) => {
-                    this.parentView.$el.find('.li-item-list-filter-input').val('');
+                this.parentView.events['change .li-item-list-filter-input'] =
+                    this._updateFilter;
+                this.parentView.events['input .li-item-list-filter-input'] =
+                    this._updateFilter;
+                this.parentView.events['click .li-item-list-filter-clear'] = (
+                    evt
+                ) => {
+                    this.parentView.$el
+                        .find('.li-item-list-filter-input')
+                        .val('');
                     this._clearFilter();
                 };
                 this.parentView.delegateEvents();
             }
         }
 
-        if (!this._lastSort && this._confList() && this._confList().defaultSort && this._confList().defaultSort.length) {
+        if (
+            !this._lastSort &&
+            this._confList() &&
+            this._confList().defaultSort &&
+            this._confList().defaultSort.length
+        ) {
             this._lastSort = this._confList().defaultSort;
             this._setSort();
             return;
         }
         const availableApps = this.checkApps();
         adjustItemHref.call(this, availableApps);
-        this.$el.html(ItemListTemplate({
-            items: this.collection.toArray(),
-            isParentPublic: this.public,
-            hasMore: this.collection.hasNextPage(),
-            formatSize: formatSize,
-            checkboxes: this._checkboxes,
-            downloadLinks: this._downloadLinks,
-            viewLinks: this._viewLinks,
-            showSizes: this._showSizes,
-            highlightItem: this._highlightItem,
-            selectedItemId: (this._selectedItem || {}).id,
-            paginated: this._paginated,
-            apiRoot: getApiRoot(),
-            hasAnyLargeImage: this._hasAnyLargeImage,
-            itemList: this._confList(),
-            sort: this._lastSort,
-            MetadatumWidget: MetadatumWidget,
-            accessLevel: this.accessLevel,
-            registeredApps: ItemListWidget.registeredApplications,
-            availableApps: availableApps,
-            parentView: this,
-            AccessType: AccessType
-        }));
+        this.$el.html(
+            ItemListTemplate({
+                items: this.collection.toArray(),
+                isParentPublic: this.public,
+                hasMore: this.collection.hasNextPage(),
+                formatSize: formatSize,
+                checkboxes: this._checkboxes,
+                downloadLinks: this._downloadLinks,
+                viewLinks: this._viewLinks,
+                showSizes: this._showSizes,
+                highlightItem: this._highlightItem,
+                selectedItemId: (this._selectedItem || {}).id,
+                paginated: this._paginated,
+                apiRoot: getApiRoot(),
+                hasAnyLargeImage: this._hasAnyLargeImage,
+                itemList: this._confList(),
+                sort: this._lastSort,
+                MetadatumWidget: MetadatumWidget,
+                accessLevel: this.accessLevel,
+                registeredApps: ItemListWidget.registeredApplications,
+                availableApps: availableApps,
+                parentView: this,
+                AccessType: AccessType
+            })
+        );
 
         const parent = this.$el;
         this.$el.find('.large_image_thumbnail').each(function () {
@@ -664,19 +878,31 @@ function sortColumn(evt) {
         type: header.attr('column_type'),
         value: header.attr('column_value')
     };
-    const curDir = header.hasClass('down') ? 'down' : header.hasClass('up') ? 'up' : null;
+    const curDir = header.hasClass('down')
+        ? 'down'
+        : header.hasClass('up')
+            ? 'up'
+            : null;
     const nextDir = curDir === 'down' ? 'up' : 'down';
-    header.toggleClass('down', nextDir === 'down').toggleClass('up', nextDir === 'up');
+    header
+        .toggleClass('down', nextDir === 'down')
+        .toggleClass('up', nextDir === 'up');
     entry.dir = nextDir;
     const oldSort = this._lastSort;
     if (!this._lastSort) {
         this._lastSort = [];
     }
-    this._lastSort = this._lastSort.filter((e) => e.type !== entry.type || e.value !== entry.value);
+    this._lastSort = this._lastSort.filter(
+        (e) => e.type !== entry.type || e.value !== entry.value
+    );
     this._lastSort.unshift(entry);
     this._setSort();
     if (!_.isEqual(this._lastSort, oldSort)) {
-        addToRoute({sort: this._lastSort.map((e) => `${e.type}:${e.value}:${e.dir}`).join(',')});
+        addToRoute({
+            sort: this._lastSort
+                .map((e) => `${e.type}:${e.value}:${e.dir}`)
+                .join(',')
+        });
     }
 }
 
@@ -690,7 +916,10 @@ function addCellToFilter(cell, update) {
     val = val.replace('\\', '\\\\').replace('"', '\\"');
     filter += ` ${col}:"${val}"`;
     filter = filter.trim();
-    this.$el.closest('.g-hierarchy-widget').find('.li-item-list-filter-input').val(filter);
+    this.$el
+        .closest('.g-hierarchy-widget')
+        .find('.li-item-list-filter-input')
+        .val(filter);
     this._generalFilter = filter;
     if (update !== false) {
         this._setFilter();
@@ -716,7 +945,11 @@ function itemListMetadataEdit(evt) {
     const column = columns[+ctrl.attr('column-idx')];
     let tempValue = ctrl.find('.g-widget-metadata-value-input').val();
     tempValue = tempValue.trim();
-    let valResult = validateMetadataValue(column, tempValue, this._lastValidationError || (tempValue === '' && !column.required));
+    let valResult = validateMetadataValue(
+        column,
+        tempValue,
+        this._lastValidationError || (tempValue === '' && !column.required)
+    );
     if (tempValue === '' && !column.required) {
         valResult = {value: tempValue};
     }
@@ -725,7 +958,9 @@ function itemListMetadataEdit(evt) {
         return false;
     }
     this._lastValidationError = false;
-    const item = this.collection.get(ctrl.closest('[g-item-cid]').attr('g-item-cid'));
+    const item = this.collection.get(
+        ctrl.closest('[g-item-cid]').attr('g-item-cid')
+    );
     let value = item.get('meta') || {};
     let meta;
     let key;

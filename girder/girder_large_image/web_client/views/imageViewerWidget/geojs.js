@@ -1,15 +1,13 @@
-/* global BUILD_TIMESTAMP */
-
-import $ from 'jquery';
-import _ from 'underscore';
 // Import hammerjs for geojs touch events
 import Hammer from '@egjs/hammerjs';
-import d3 from 'd3';
-
-import {restRequest} from '@girder/core/rest';
+import * as d3 from 'd3';
 
 import ImageViewerWidget from './base';
-import setFrameQuad from './setFrameQuad.js';
+import {setFrameQuad} from '../../utils.js';
+
+const $ = girder.$;
+const _ = girder._;
+const {restRequest} = girder.rest;
 
 window.hammerjs = Hammer;
 window.Hammer = Hammer;
@@ -20,42 +18,27 @@ var GeojsImageViewerWidget = ImageViewerWidget.extend({
         this._scale = settings.scale;
         this._setFrames = settings.setFrames;
 
-        let root = '/static/built';
-        try {
-            root = __webpack_public_path__ || root; // eslint-disable-line
-        } catch (err) { }
-        root = root.replace(/\/$/, '');
-        $(this.el).parent().find('.image-viewer-loading').removeClass('hidden');
-        $.when(
-            ImageViewerWidget.prototype.initialize.call(this, settings).then(() => {
-                if (this.metadata.geospatial) {
-                    this.tileWidth = this.tileHeight = null;
-                    return restRequest({
-                        type: 'GET',
-                        url: 'item/' + this.itemId + '/tiles',
-                        data: {projection: 'EPSG:3857'}
-                    }).done((resp) => {
-                        this.levels = resp.levels;
-                        this.tileWidth = resp.tileWidth;
-                        this.tileHeight = resp.tileHeight;
-                        this.sizeX = resp.sizeX;
-                        this.sizeY = resp.sizeY;
-                        this.metadata = resp;
-                    });
-                }
-                return this;
-            }),
-            !window.geo
-                ? $.ajax({ // like $.getScript, but allow caching
-                    url: root + '/plugins/large_image/extra/geojs.js' + (BUILD_TIMESTAMP ? '?_=' + BUILD_TIMESTAMP : ''),
-                    dataType: 'script',
-                    cache: true
-                })
-                : true)
-            .done(() => {
-                this.trigger('g:beforeFirstRender', this);
-                this.render();
-            });
+        ImageViewerWidget.prototype.initialize.call(this, settings).then(() => {
+            if (this.metadata.geospatial) {
+                this.tileWidth = this.tileHeight = null;
+                return restRequest({
+                    type: 'GET',
+                    url: 'item/' + this.itemId + '/tiles',
+                    data: {projection: 'EPSG:3857'}
+                }).done((resp) => {
+                    this.levels = resp.levels;
+                    this.tileWidth = resp.tileWidth;
+                    this.tileHeight = resp.tileHeight;
+                    this.sizeX = resp.sizeX;
+                    this.sizeY = resp.sizeY;
+                    this.metadata = resp;
+                });
+            }
+            return this;
+        }).then(() => {
+            this.trigger('g:beforeFirstRender', this);
+            return this.render();
+        });
     },
 
     render: function () {

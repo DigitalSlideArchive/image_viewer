@@ -1,7 +1,7 @@
-import Collection from '@girder/core/collections/Collection';
-import {SORT_DESC} from '@girder/core/constants';
-
 import AnnotationModel from '../models/AnnotationModel';
+
+const Collection = girder.collections.Collection;
+const {SORT_DESC} = girder.constants;
 
 export default Collection.extend({
     resourceName: 'annotation',

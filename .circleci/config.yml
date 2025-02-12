@@ -16,9 +16,6 @@ commands:
         default: ""
     steps:
       - run:
-          name: Upgrade pip
-          command: pip install -U pip
-      - run:
           name: Upgrade virtualenv and tox
           command: pip install -U virtualenv tox
       # - run:
@@ -61,6 +58,7 @@ commands:
         type: string
       node:
         type: string
+        default: v20
     steps:
       - switchpython:
           version: << parameters.version >>
@@ -129,6 +127,12 @@ commands:
             nvm alias default << parameters.node >>
             NODE_DIR=$(dirname $(which node))
             echo "export PATH=$NODE_DIR:\$PATH" >> $BASH_ENV
+      - run:
+          name: Install and build large_image plugin
+          command: |
+            npm ci
+            npm run build
+          working_directory: girder/girder_large_image/web_client
       - save_cache:
           name: Save nvm cache
           key: v1-nvm-cache-<< parameters.node >>
@@ -173,7 +177,6 @@ jobs:
       - checkout
       - allservices:
           version: "3.8"
-          node: v14
       - tox:
           toxenv: test-py38
       - coverage
@@ -187,7 +190,6 @@ jobs:
       - checkout
       - allservices:
           version: "3.9"
-          node: v14
       - tox:
           toxenv: test-py39
       - coverage
@@ -201,7 +203,6 @@ jobs:
       - checkout
       - allservices:
           version: "3.10"
-          node: v14
       - tox:
           toxenv: test-py310
       - coverage
@@ -215,7 +216,6 @@ jobs:
       - checkout
       - allservices:
           version: "3.11"
-          node: v14
       - tox:
           toxenv: test-py311
       - coverage
@@ -229,7 +229,6 @@ jobs:
       - checkout
       - allservices:
           version: "3.12"
-          node: v14
       - tox:
           toxenv: test-py312
       - coverage
@@ -243,7 +242,6 @@ jobs:
       - checkout
       - allservices:
           version: "3.13"
-          node: v14
       - tox:
           toxenv: test-py313
           # environ: TOX_VERBOSE=4 TOX_PREFER_BINARY=1
@@ -285,37 +283,58 @@ jobs:
       - checkout
       - tox:
           toxenv: type
-  wheels:
+  check_release:
     executor: toxandnode
+    parameters:
+      node:
+        type: string
+        default: v20
     steps:
       - checkout
       - run:
-          name: Build wheels
-          command: ./.circleci/make_wheels.sh
+          name: Setup virtual environment
+          command: |
+            if [ ! -d env ]; then python -m virtualenv env || python -m venv env; fi
+            echo ". $CIRCLE_WORKING_DIRECTORY/env/bin/activate" >> $BASH_ENV
+      - run:
+          name: Install python packages
+          command: pip install setuptools_scm twine
+      - run:
+          name: Use nvm
+          # see https://discuss.circleci.com/t/nvm-does-not-change-node-version-on-machine/28973/14
+          command: |
+            echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - restore_cache:
+          name: Restore nvm cache
+          key: v1-nvm-cache-<< parameters.node >>
+      - run:
+          name: Switch node versions
+          command: |
+            . ~/.bashrc
+            nvm install << parameters.node >>
+            nvm alias default << parameters.node >>
+            NODE_DIR=$(dirname $(which node))
+            echo "export PATH=$NODE_DIR:\$PATH" >> $BASH_ENV
+      - run:
+          name: Check node versions
+          command: |
+            node --version
+            npm --version
+      - run:
+          name: Check release to PyPi
+          command: ./.circleci/release_pypi.sh check
       - run:
           name: Make index file
           command: python ./.circleci/make_index.py ~/wheels
       - store_artifacts:
           path: ~/wheels
-  check_release:
-    docker:
-      - image: cimg/python:3.10
-    steps:
-      - checkout
-      - run:
-          name: Setup virtual environment
-          command: |
-            if [ ! -d env ]; then python -m virtualenv env || python -m venv env; fi
-            echo ". $CIRCLE_WORKING_DIRECTORY/env/bin/activate" >> $BASH_ENV
-      - run:
-          name: Install python packages
-          command: pip install setuptools_scm twine
-      - run:
-          name: Check release to PyPi
-          command: ./.circleci/release_pypi.sh check
   release:
-    docker:
-      - image: cimg/python:3.10
+    executor: toxandnode
+    parameters:
+      node:
+        type: string
+        default: v20
     steps:
       - checkout
       - run:
@@ -326,6 +345,28 @@ jobs:
       - run:
           name: Install python packages
           command: pip install setuptools_scm twine
+      - run:
+          name: Use nvm
+          # see https://discuss.circleci.com/t/nvm-does-not-change-node-version-on-machine/28973/14
+          command: |
+            echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - restore_cache:
+          name: Restore nvm cache
+          key: v1-nvm-cache-<< parameters.node >>
+      - run:
+          name: Switch node versions
+          command: |
+            . ~/.bashrc
+            nvm install << parameters.node >>
+            nvm alias default << parameters.node >>
+            NODE_DIR=$(dirname $(which node))
+            echo "export PATH=$NODE_DIR:\$PATH" >> $BASH_ENV
+      - run:
+          name: Check node versions
+          command: |
+            node --version
+            npm --version
       - run:
           name: Release to PyPi
           command: ./.circleci/release_pypi.sh upload
@@ -428,13 +469,6 @@ workflows:
             branches:
               ignore:
                 - gh-pages
-      - wheels:
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              ignore:
-                - gh-pages
       - check_release:
           filters:
             tags:
@@ -453,7 +487,6 @@ workflows:
             - py313
             - lint_and_docs
             - type
-            - wheels
           filters:
             tags:
               only: /^v.*/
@@ -469,7 +502,7 @@ workflows:
             - py313
             - lint_and_docs
             - type
-            - wheels
+            - check_release
           filters:
             tags:
               only: /^v.*/
@@ -496,4 +529,4 @@ workflows:
       - lint_and_docs
       - type
       - compare
-      - wheels
+      - check_release

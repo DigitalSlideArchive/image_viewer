@@ -11,21 +11,12 @@
         "type": "git",
         "url": "https://github.com/girder/large_image.git"
     },
-    "peerDependencies": {
-        "@girder/core": "*",
-        "@girder/large_image": "*"
-    },
     "dependencies": {
+        "@girder/core": "^5.0.0-beta.0",
         "tinycolor2": "~1.4.1"
     },
     "main": "./index.js",
-    "girderPlugin": {
-        "name": "large_image_annotation",
-        "main": "./main.js",
-        "dependencies": [
-            "large_image"
-        ]
-    },
+    "type": "module",
     "eslintConfig": {
         "extends": "@girder",
         "rules": {
@@ -47,7 +38,11 @@
             "promise/no-return-wrap": "error",
             "no-import-assign": "off"
         },
-        "root": true
+        "ignorePatterns": ["dist/**"],
+        "root": true,
+        "globals": {
+            "girder": "readonly"
+        }
     },
     "eslintIgnore": [
         "**/node_modules/"
@@ -75,10 +70,14 @@
         "eslint-plugin-import": "^2.25.3",
         "eslint-plugin-n": "^15.2.4",
         "eslint-plugin-promise": "^6.0.0",
+        "pug": "^3.0.3",
         "pug-lint": "^2.6.0",
-        "stylus-supremacy": "^2.17.5"
+        "stylus-supremacy": "^2.17.5",
+        "vite": "^5.3.1"
     },
     "scripts": {
+        "build": "vite build",
+        "watch": "vite build --watch",
         "lint": "eslint --cache . && eslint --no-eslintrc -c ./package.json --cache ../../test_annotation/web_client_specs && pug-lint . && stylus-supremacy format --compare ./**/*.styl --options package.json",
         "format": "eslint --cache --fix . && eslint --no-eslintrc -c ./package.json --cache --fix ../../test_annotation/web_client_specs && stylus-supremacy format ./**/*.styl --replace --options package.json"
     }

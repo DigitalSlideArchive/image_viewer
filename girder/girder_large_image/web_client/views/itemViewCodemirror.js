@@ -1,13 +1,3 @@
-import $ from 'jquery';
-import {getCurrentUser} from '@girder/core/auth';
-import {AccessType} from '@girder/core/constants';
-import {confirm} from '@girder/core/dialog';
-import events from '@girder/core/events';
-import {restRequest} from '@girder/core/rest';
-import {wrap} from '@girder/core/utilities/PluginUtils';
-import ItemView from '@girder/core/views/body/ItemView';
-import View from '@girder/core/views/View';
-
 /* This should all be refactored for codemirror 6 */
 import jsyaml from 'js-yaml';
 import jsonlint from 'jsonlint-mod';
@@ -28,6 +18,16 @@ import 'codemirror/mode/yaml/yaml';
 
 import itemViewCodemirror from '../templates/itemViewCodemirror.pug';
 import '../stylesheets/itemViewCodemirror.styl';
+
+const $ = girder.$;
+const {getCurrentUser} = girder.auth;
+const {AccessType} = girder.constants;
+const {confirm} = girder.dialog;
+const events = girder.events;
+const {restRequest} = girder.rest;
+const {wrap} = girder.utilities.PluginUtils;
+const ItemView = girder.views.body.ItemView;
+const View = girder.views.View;
 
 /* codemirror expects linters to be window level objects */
 window.jsonlint = jsonlint;

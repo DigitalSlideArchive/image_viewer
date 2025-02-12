@@ -1,5 +1,7 @@
 import AnnotationCollection from './AnnotationCollection';
+import ElementCollection from './ElementCollection';
 
 export {
-    AnnotationCollection
+    AnnotationCollection,
+    ElementCollection
 };

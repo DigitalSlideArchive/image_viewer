@@ -11,7 +11,7 @@ def unavailableWorker(db):
     """
     Make sure that Girder Worker can't be reached and times out quickly.
     """
-    from girder_worker.girder_plugin.constants import PluginSettings as WorkerSettings
+    from girder_plugin_worker.constants import PluginSettings as WorkerSettings
 
     from girder.models.setting import Setting
 
@@ -47,7 +47,7 @@ def girderWorker(db, girderWorkerProcess):
     Run an instance of Girder worker, connected to rabbitmq.  The rabbitmq
     service must be running.
     """
-    from girder_worker.girder_plugin.constants import PluginSettings as WorkerSettings
+    from girder_plugin_worker.constants import PluginSettings as WorkerSettings
 
     from girder.models.setting import Setting
 

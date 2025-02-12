@@ -16,7 +16,7 @@ try:
     from girder_jobs.models.job import Job
     from girder_large_image import constants
     from girder_large_image.models.image_item import ImageItem
-    from girder_worker.girder_plugin.status import CustomJobStatus
+    from girder_plugin_worker.status import CustomJobStatus
 
     from girder import events
     from girder.exceptions import ValidationException

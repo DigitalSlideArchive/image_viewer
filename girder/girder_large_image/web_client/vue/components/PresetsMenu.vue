@@ -1,6 +1,4 @@
 <script>
-import {restRequest} from '@girder/core/rest';
-
 export default {
     props: ['itemId', 'liConfig', 'imageMetadata', 'availableModes', 'currentMode', 'currentFrame', 'currentStyle'],
     emits: ['setCurrentMode', 'setCurrentFrame', 'updateStyle'],
@@ -95,7 +93,7 @@ export default {
             return true;
         },
         getPresets() {
-            restRequest({
+            girder.rest.restRequest({
                 type: 'GET',
                 url: 'item/' + this.itemId + '/internal_metadata/presets'
             }).then((presets) => {
@@ -146,7 +144,7 @@ export default {
             this.savePresetsList();
         },
         savePresetsList() {
-            restRequest({
+            girder.rest.restRequest({
                 type: 'PUT',
                 url: 'item/' + this.itemId + '/internal_metadata/presets',
                 data: JSON.stringify(this.itemPresets),

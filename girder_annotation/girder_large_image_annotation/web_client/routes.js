@@ -1,8 +1,8 @@
-import events from '@girder/core/events';
-import router from '@girder/core/router';
-import {exposePluginConfig} from '@girder/core/utilities/PluginUtils';
-
 import ConfigView from './views/configView';
+
+const events = girder.events;
+const router = girder.router;
+const {exposePluginConfig} = girder.utilities.PluginUtils;
 
 exposePluginConfig('large_image_annotation', 'plugins/large_image_annotation/config');
 

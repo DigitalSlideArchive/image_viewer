@@ -34,7 +34,11 @@
     },
     "eslintConfig": {
         "extends": "@girder",
-        "root": true
+        "root": true,
+        "ignorePatterns": ["dist/**"],
+        "globals": {
+            "girder": "readonly"
+        }
     },
     "eslintIgnore": [
         "build/",

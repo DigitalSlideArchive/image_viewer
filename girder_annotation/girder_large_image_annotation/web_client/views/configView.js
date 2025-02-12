@@ -1,11 +1,9 @@
-import View from '@girder/core/views/View';
-
-import PluginConfigBreadcrumbWidget from '@girder/core/views/widgets/PluginConfigBreadcrumbWidget';
-import {restRequest} from '@girder/core/rest';
-import events from '@girder/core/events';
-import largeImageConfig from '@girder/large_image/views/configView';
-
 import ConfigViewTemplate from '../templates/largeImageAnnotationConfig.pug';
+
+const View = girder.views.View;
+const PluginConfigBreadcrumbWidget = girder.views.widgets.PluginConfigBreadcrumbWidget;
+const {restRequest} = girder.rest;
+const events = girder.events;
 
 /**
  * Show the default quota settings for users and collections.
@@ -79,12 +77,16 @@ var ConfigView = View.extend({
      *      fetched.  If the settings are already present, this is called
      *      without any delay.
      */
-    getSettings: largeImageConfig.getSettings,
+    getSettings: function (callback) {
+        return girder.plugins.large_image.views.ConfigView.getSettings(callback);
+    },
 
     /**
      * Clear the settings so that getSettings will refetch them.
      */
-    clearSettings: largeImageConfig.clearSettings
+    clearSettings: function () {
+        return girder.plugins.large_image.views.ConfigView.clearSettings();
+    }
 });
 
 export default ConfigView;

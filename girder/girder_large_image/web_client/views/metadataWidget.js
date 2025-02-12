@@ -1,31 +1,21 @@
-import $ from 'jquery';
-import {wrap} from '@girder/core/utilities/PluginUtils';
-
-import _ from 'underscore';
-
-import View from '@girder/core/views/View';
-import {AccessType} from '@girder/core/constants';
-import {confirm} from '@girder/core/dialog';
-import events from '@girder/core/events';
-import {localeSort} from '@girder/core/misc';
-
-import JsonMetadatumEditWidgetTemplate from '@girder/core/templates/widgets/jsonMetadatumEditWidget.pug';
-
-import MetadatumViewTemplate from '@girder/core/templates/widgets/metadatumView.pug';
-
-import '@girder/core/stylesheets/widgets/metadataWidget.styl';
-
 import JSONEditor from 'jsoneditor/dist/jsoneditor.js'; // can't 'jsoneditor'
 import 'jsoneditor/dist/jsoneditor.css';
-
-import 'bootstrap/js/dropdown';
-
-import MetadataWidget from '@girder/core/views/widgets/MetadataWidget';
 
 import '../stylesheets/metadataWidget.styl';
 import MetadataWidgetTemplate from '../templates/metadataWidget.pug';
 import MetadatumEditWidgetTemplate from '../templates/metadatumEditWidget.pug';
+import MetadatumViewTemplate from '../templates/coreMetadatumView.pug';
+import JsonMetadatumEditWidgetTemplate from '../templates/coreJsonMetadatumEditWidget.pug';
 import largeImageConfig from './configView';
+
+const {$, _} = girder;
+const {wrap} = girder.utilities.PluginUtils;
+const {AccessType} = girder.constants;
+const events = girder.events;
+const {localeSort} = girder.misc;
+const {confirm} = girder.dialog;
+const View = girder.views.View;
+const MetadataWidget = girder.views.widgets.MetadataWidget;
 
 function getMetadataRecord(item, fieldName) {
     if (item[fieldName]) {
@@ -614,7 +604,7 @@ MetadataWidget.prototype.addMetadata = function (evt, mode) {
     });
     widget.$el.appendTo(this.$('.g-widget-metadata-container'));
 
-    new EditWidget({
+    EditWidget({
         item: this.item,
         key: '',
         value: value,
@@ -658,7 +648,7 @@ MetadataWidget.prototype.addMetadataByKey = function (evt) {
     });
     widget.$el.appendTo(this.$('.g-widget-metadata-container'));
 
-    new EditWidget({
+    EditWidget({
         item: this.item,
         key: key,
         value: value,

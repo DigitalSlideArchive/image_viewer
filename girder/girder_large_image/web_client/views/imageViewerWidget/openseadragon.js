@@ -1,7 +1,7 @@
-import $ from 'jquery';
-import _ from 'underscore';
-
 import ImageViewerWidget from './base';
+
+const $ = girder.$;
+const _ = girder._;
 
 var OpenseadragonImageViewerWidget = ImageViewerWidget.extend({
     initialize: function (settings) {

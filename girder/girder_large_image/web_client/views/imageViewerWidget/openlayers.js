@@ -1,8 +1,7 @@
-import $ from 'jquery';
-
-import {restRequest} from '@girder/core/rest';
-
 import ImageViewerWidget from './base';
+
+const $ = girder.$;
+const {restRequest} = girder.rest;
 
 var OpenlayersImageViewerWidget = ImageViewerWidget.extend({
     initialize: function (settings) {

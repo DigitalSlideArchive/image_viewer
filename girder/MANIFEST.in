@@ -1,0 +1,2 @@
+prune girder_large_image/web_client
+recursive-include girder_large_image/web_client/dist/ *

@@ -1,13 +1,4 @@
-import $ from 'jquery';
-import _ from 'underscore';
 import Vue from 'vue';
-
-import {wrap} from '@girder/core/utilities/PluginUtils';
-import eventStream from '@girder/core/utilities/EventStream';
-import ItemView from '@girder/core/views/body/ItemView';
-import View from '@girder/core/views/View';
-
-import {restRequest} from '@girder/core/rest';
 
 import largeImageConfig from './configView';
 import * as viewers from './imageViewerWidget';
@@ -21,6 +12,14 @@ import CompositeLayers from '../widgets/CompositeLayers.vue';
 import HistogramEditor from '../widgets/HistogramEditor.vue';
 import colors from '../widgets/colors.json';
 import PresetsMenu from '../vue/components/PresetsMenu.vue';
+
+const $ = girder.$;
+const _ = girder._;
+const {wrap} = girder.utilities.PluginUtils;
+const eventStream = girder.utilities.EventStream;
+const ItemView = girder.views.body.ItemView;
+const View = girder.views.View;
+const {restRequest} = girder.rest;
 
 wrap(ItemView, 'render', function (render) {
     // ItemView is a special case in which rendering is done asynchronously,

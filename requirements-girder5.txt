@@ -1,0 +1,6 @@
+# Dependencies needed from Girder 5 during prerelease
+--pre
+girder
+girder-jobs
+girder-worker
+girder-plugin-worker

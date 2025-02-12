@@ -1,13 +1,15 @@
 import collections
 import json
+import logging
 
-from girder import logger
 from girder.api import access
 from girder.api.describe import Description, autoDescribeRoute
 from girder.api.rest import boundHandler
 from girder.constants import AccessType, TokenScope
 from girder.models.folder import Folder
 from girder.models.item import Item
+
+logger = logging.getLogger(__name__)
 
 
 def addSystemEndpoints(apiRoot):  # noqa
